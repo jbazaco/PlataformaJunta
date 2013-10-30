@@ -1,9 +1,13 @@
 Recuento automático:
 
 
-Como un Jugador
+Como administrador
 
-Para que no tenga que preocuparme por los puntos acumulados
+Para que se contabilicen los puntos automáticamente
 
 
-Quiero que se realice un recuento automático de los puntos que consigo en la partida
+Quiero que se realice un recuento automático de los puntos que consigue cada jugador durante una partida
+
+
+Estimación: 2.
+Prioridad: 20
