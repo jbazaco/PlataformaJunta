@@ -7,4 +7,8 @@ Como un Usuario
 Para que se pueda ver una partida que ya se ha jugado, ya sea para aprender o por curiosidad
 
 
-Quiero poder guardar los pasos de una partida en la base de datos para poder verla mas adelante cualquier persona.
+Quiero poder ver partidas que se han jugado
+
+
+Estimación: 2 (una vez realizado Guardar_Partidas)
+Prioridad: 30
