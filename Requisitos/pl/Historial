@@ -6,6 +6,8 @@ Como un jugador
 Para que el jugador pueda hacer un seguimiento de sus partidas realizadas.
 
 
-Poder llevar un historial de partidas jugadas,últimos movimientos e historial en general del jugador.
+Poder llevar un historial de partidas jugadas, partidas ganadas, partidas perdidas y partidas abandonadas.
 
-Estimacion_jotacv: 10
+Estimacion: 15
+Prioridad: 20
+

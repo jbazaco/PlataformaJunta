@@ -7,15 +7,10 @@ Como Jefe
 Para que se puedan jugar torneos
 
 
-Quiero poder que los usuarios juegen torneos
+Quiero poder que los usuarios se registren para poder jugar torneos. 
 
+Se podrán generar torneos en base a las puntiaciones de los usuarios.
 
-Torneos por puntuación:
-    Torneos según la puntuación de cada uno.
-    Torneos mixtos.
-
-Torneos por eliminación o por puntos
-
-Estimacion_jotacv: 50
-
+Estimacion: 30
+Prioridad: 30
 

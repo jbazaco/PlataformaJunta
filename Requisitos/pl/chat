@@ -3,6 +3,11 @@ Título: chat
 Como usuario
 
 
-Para que los usuarios se puedan comunicar al menos por chat y opcionalmente audio y video.
+Para que los usuarios se puedan comunicar al menos por chat y opcionalmente audio.
 
-Estimacion_jotacv: 20
+Estimacion chat: 10
+Estimacion audio: 20
+
+Prioridad chat: 20
+Prioridad audio: 50
+ 
