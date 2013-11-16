@@ -77,16 +77,25 @@ startGame = function() {
 }
 
 //Es un singleton
-var FichaActual = new function() {
+FichaActual = new function() {
 	this.girada = false;
 	this.h = FICHA_H;
 	this.w = FICHA_W;
 	this.x = 990;
 	this.y = 100;
-	this.sprite = 'interrogante'; //Poner ficha '?'
-
-	//añadir girar ficha (llamado por un evento dblclick) que interactue con la ia y cambie this.sprite
+	this.sprite = 'interrogante';
+	
+	//Devuelve true si se gira la ficha
+	this.revelar_ficha = function(x, y) {
+		if (this.sprite === 'interrogante') {
+			this.sprite = 'm'; //PEDIR A LA IA!!!, de momento ponemos una ficha cualquiera
+			return true;
+		}
+        alert('Ya has girado la ficha');
+		return false;
+	}
 	//tendra que informar al resto de clientes que ficha le ha salido a este jugador
+	//tiene que comprobar que el que hace click es el jugador al que le toca jugar, si no no puede mover
 
 	this.draw = function(ctx) {
 		SpriteSheet.draw(ctx,this.sprite,this.x,this.y,0);

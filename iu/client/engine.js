@@ -11,6 +11,15 @@ Game = new function() {
 
 		this.loop(); 
 
+		this.canvas.addEventListener('click', function(event) {
+			var x = event.pageX - Game.canvas.offsetLeft;
+			var y = event.pageY - Game.canvas.offsetTop;
+			if (y > FichaActual.y && y < FichaActual.y+FichaActual.h 
+					&& x > FichaActual.x && x < FichaActual.x+FichaActual.w) {
+				FichaActual.revelar_ficha();
+			}
+		}, false);
+
 		SpriteSheet.load (sprite_data,callback);
 	};
 
