@@ -37,7 +37,7 @@ Game = new function() {
 SpriteSheet = new function() {
 
 	// Almacena nombre_de_sprite: rectángulo para que sea mas facil
-	// gestionar los sprites del fichero images/sprite.png
+	// gestionar los sprites del fichero public/fichas_carssonline.jpg
 	this.map = { }; 
 
 	// Para cargar hoja de sprites. 
@@ -49,7 +49,7 @@ SpriteSheet = new function() {
 		this.map = spriteData;
 		this.image = new Image();
 		this.image.onload = callback;
-		this.image.src = 'fichas_carcassonne.png';
+		this.image.src = 'fichas_carssonline.jpg';
 	};
 
  
