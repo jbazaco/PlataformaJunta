@@ -72,6 +72,9 @@ var FichaActual = new function() {
 	this.y = 100;
 	this.sprite = 'm'; //Poner ficha '?'
 
+	//añadir girar ficha (llamado por un evento dblclick) que interactue con la ia y cambie this.sprite
+	//tendra que informar al resto de clientes que ficha le ha salido a este jugador
+
 	this.draw = function(ctx) {
 		SpriteSheet.draw(ctx,this.sprite,this.x,this.y,0);
 	}

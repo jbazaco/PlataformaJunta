@@ -17,7 +17,7 @@ Game = new function() {
 	// Bucle del juego
 	var boards = [];
 
-	 this.loop = function() { 
+	this.loop = function() { 
 
 		for(var i=0,len = boards.length;i<len;i++) {
 			if(boards[i]) { 
