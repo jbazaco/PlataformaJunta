@@ -10,6 +10,10 @@ if (Meteor.isClient) {
         console.log("You pressed the button");
     }
   });
+
+   Accounts.ui.config({
+	  passwordSignupFields: 'USERNAME_AND_OPTIONAL_EMAIL'
+   });
 }
 
 if (Meteor.isServer) {
