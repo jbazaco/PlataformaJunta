@@ -27,7 +27,12 @@ var sprites = {
 	ciucame: { sx: 331, sy: 230, w: FICHA_W, h: FICHA_H},	//ciudad con un lado de campo con escudo
 	ciucam2: { sx: 640, sy: 137, w: FICHA_W, h: FICHA_H},	//ciudad con 2 lados opuestos de campo
 	ciucam2e: { sx: 408, sy: 230, w: FICHA_W, h: FICHA_H},	//ciudad con 2 lados opuestos de campo con escudo
-	interrogante: { sx: 253, sy: 230, w: FICHA_W, h: FICHA_H}	//ficha con un interrogante
+	interrogante: { sx: 253, sy: 230, w: FICHA_W, h: FICHA_H},	//ficha con un interrogante
+	s1: { sx: 511, sy: 242, w: 30, h: 30},			//seguidor amarillo
+	s2: { sx: 553, sy: 242, w: 30, h: 30},			//seguidor rosa
+	s3: { sx: 596, sy: 242, w: 30, h: 30},			//seguidor azul
+	s4: { sx: 640, sy: 242, w: 30, h: 30},			//seguidor verde
+	s5: { sx: 682, sy: 242, w: 30, h: 30},			//seguidor naranja
 };
 
 
@@ -72,6 +77,13 @@ startGame = function() {
 	SpriteSheet.draw(Game.ctx,"ciucam2e",240,330);
 	SpriteSheet.draw(Game.ctx,"interrogante",330,330);
 */
+	SpriteSheet.draw(Game.ctx,"s1",60,60);
+	SpriteSheet.draw(Game.ctx,"s2",120,60);
+	SpriteSheet.draw(Game.ctx,"s3",180,60);
+	SpriteSheet.draw(Game.ctx,"s4",240,60);
+	SpriteSheet.draw(Game.ctx,"s5",300,60);
+
+
 
 	Game.setBoard(0,FichaActual);
 	Game.setBoard(1,new GamePoints(0));

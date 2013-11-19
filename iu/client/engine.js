@@ -58,7 +58,7 @@ SpriteSheet = new function() {
 		this.map = spriteData;
 		this.image = new Image();
 		this.image.onload = callback;
-		this.image.src = 'fichas_carssonline.jpg';
+		this.image.src = 'fichas_carssonline.png';
 	};
 
  
