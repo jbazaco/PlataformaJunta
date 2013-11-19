@@ -108,6 +108,7 @@ FichaActual = new function() {
 	
 	//Devuelve true si se gira la ficha
 	this.revelar_ficha = function(x, y) {
+
 		if (this.sprite === 'interrogante') {
 			this.sprite = 'm'; //PEDIR A LA IA!!!, de momento ponemos una ficha cualquiera
 			return true;
