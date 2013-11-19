@@ -49,52 +49,52 @@ table {
 
 /* Center the container */
 #container {
-  width:950px;
-  height:377px;
-  overflow-x:scroll;
-  overflow-y:scroll;
+	width:950px;
+	height:377px;
+	overflow-x:scroll;
+	overflow-y:scroll;
 }
 
 #message {
-  width: 1000px;
+	border:1px solid #999999;
+	width: 950px;
 }
 
 /* Give canvas a background */
 canvas {
-  background-color:black;
-
+	background-color:black;
 }
 
 textarea
 {
-  border:1px solid #999999;
-  width:100%;
-  height: 150px; 
-  margin:5px 0;
-  padding:3px;
+	border:1px solid #999999;
+	width:100%;
+	height: 150px; 
+	margin:5px 0;
+	padding:3px;
 }
 
 .chatAreadiv
 {
-  overflow-y: scroll;
-  overflow-x: visible;
-  width: 950px;
-  height: 150px;
-  border: 2px solid black;
+	overflow-y: scroll;
+	overflow-x: visible;
+	width: 950px;
+	height: 150px;
+	border: 2px solid black;
 }
 
 .chatAreaTable
 {
-  width: 1000px;
-  table-layout:fixed
-  cell-padding: 0; 
-  cell-spacing: 0;
+	width: 1000px;
+	table-layout:fixed
+	cell-padding: 0; 
+	cell-spacing: 0;
 }
 
 .chatAreaTable td div
 {
-  width:1200px;
-  word-wrap: break-word;
+	width:1200px;
+	word-wrap: break-word;
 }
 
 

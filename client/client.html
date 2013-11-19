@@ -3,23 +3,32 @@
 </head>
 
 <body>
-  <script src='engine.js'></script>
-  <script src='game.js'></script>
-  <script src='jquery-1.10.2.js' type='text/javascript'></script>
-    <div style="float: right">
-	{{loginButtons align="right"}} <br>
-    </div>
+	<script src='engine.js'></script>
+	<script src='game.js'></script>
+	<script src='jquery-1.10.2.js' type='text/javascript'></script>
+
+	<div style="float: right">
+		{{loginButtons align="right"}} <br>
+	</div>
+
 	<h1>Chat Alien</h1>
+
 	{{>welcome}}
-    <div id='container'>
-	<canvas id='game' width='1150' height='1150'></canvas>
-    </div>
-    <div class="chatAreadiv">
-	<table class="chatAreaTable" id ="ChatArea">
-	    <tr id="firstRow"><td></td><td></td></tr>
-	</table>
-    </div>
-    {{>input}}
+
+	<div id='container'>
+		<canvas id='game' width='640' height='480'></canvas>
+	</div>
+
+	<div class="chatAreadiv">
+		<table class="chatAreaTable" id ="ChatArea">
+			<tr id="firstRow"><td></td><td></td></tr>
+		</table>
+	</div>
+
+	{{>input}}
+
+	{{>games}}
+
 </body>
 
 <template name="welcome">
@@ -29,5 +38,14 @@
 </template>
 
 <template name="input">
-    <p> Message: <input type="text" id="message"> </p>
+    <p> <strong> ::: <input type="text" id="message"> </p>
+</template>
+
+<template name="games">
+	<span><input type="button" class="inc" value="Create new game"/></span>
+	<span><input type="button" class="inc2" value="Insert Move"/></span>
+	<textarea id='Listapartidas' width='950' heigth='250'/>
+	{{#each games}}
+		{{> game}}
+    {{/each}}
 </template>
