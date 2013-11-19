@@ -1,2 +1,3 @@
 #Evita los archivos temporales ~
 *~
+.meteor/
