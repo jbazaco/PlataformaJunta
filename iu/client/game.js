@@ -35,15 +35,15 @@ startGame = function() {
 	
 	// Dibujar rectangulo azul
 	Game.ctx.fillStyle = "#44cbff";
-	Game.ctx.fillRect(50,50,850,650);
+	Game.ctx.fillRect(0,0,850,650);
 
 	//Dibujar barra separadora
 	Game.ctx.fillStyle = "#c9c9c9";
-	Game.ctx.fillRect(900,50,20,650);
+	Game.ctx.fillRect(850,0,20,650);
 
 	//Dibujar barra-menu
 	Game.ctx.fillStyle = "#000000";
-	Game.ctx.fillRect(920,50,200,650); 
+	Game.ctx.fillRect(870,0,200,650); 
 
 	//Quitar cuando avancemos
 	SpriteSheet.draw(Game.ctx,"m",60,60);
@@ -74,6 +74,7 @@ startGame = function() {
 
 
 	Game.setBoard(0,FichaActual);
+	Game.setBoard(1,new GamePoints(0));
 }
 
 //Es un singleton
@@ -81,8 +82,8 @@ FichaActual = new function() {
 	this.girada = false;
 	this.h = FICHA_H;
 	this.w = FICHA_W;
-	this.x = 990;
-	this.y = 100;
+	this.x = 940;
+	this.y = 80;
 	this.sprite = 'interrogante';
 	
 	//Devuelve true si se gira la ficha
