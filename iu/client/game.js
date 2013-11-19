@@ -32,7 +32,7 @@ var sprites = {
 	s2: { sx: 553, sy: 242, w: 30, h: 30},			//seguidor rosa
 	s3: { sx: 596, sy: 242, w: 30, h: 30},			//seguidor azul
 	s4: { sx: 640, sy: 242, w: 30, h: 30},			//seguidor verde
-	s5: { sx: 682, sy: 242, w: 30, h: 30},			//seguidor naranja
+	s5: { sx: 682, sy: 242, w: 30, h: 30}		//seguidor naranja
 };
 
 
@@ -76,18 +76,24 @@ startGame = function() {
 	SpriteSheet.draw(Game.ctx,"ciucame",150,330);
 	SpriteSheet.draw(Game.ctx,"ciucam2e",240,330);
 	SpriteSheet.draw(Game.ctx,"interrogante",330,330);
-*/
 	SpriteSheet.draw(Game.ctx,"s1",60,60);
 	SpriteSheet.draw(Game.ctx,"s2",120,60);
 	SpriteSheet.draw(Game.ctx,"s3",180,60);
 	SpriteSheet.draw(Game.ctx,"s4",240,60);
 	SpriteSheet.draw(Game.ctx,"s5",300,60);
 
+*/
+
 
 
 	Game.setBoard(0,FichaActual);
 	Game.setBoard(1,new GamePoints(0));
 	Game.setBoard(2,ColocarFichas);
+	var numjugadores=3; //nos lo tiene que dar la plataforma de momento es un ejemplo
+	for (i=1;i<=numjugadores;i++){	
+		Game.setBoard(i+2, new Seguidor("s"+i, i));
+	}
+	//proximo setboard a partir de 8
 }
 
 ColocarFichas = new function() {
@@ -103,7 +109,7 @@ FichaActual = new function() {
 	this.h = FICHA_H;
 	this.w = FICHA_W;
 	this.x = 940;
-	this.y = 80;
+	this.y = 120;
 	this.sprite = 'interrogante';
 	
 	//Devuelve true si se gira la ficha
@@ -124,6 +130,26 @@ FichaActual = new function() {
 	}
 
 };
+
+
+Seguidor = function(sprite, numjugador) {
+	
+	this.inicialx=900;
+	this.inicialy=200;
+	if(numjugador){
+		this.inicialy=this.inicialy + numjugador*60;
+	}
+	this.h = 30;
+	this.w = 30;
+	this.x=this.inicialx;
+	this.y=this.inicialy;
+	this.sprite=sprite;
+
+	this.draw = function(ctx) {
+		SpriteSheet.draw(ctx,this.sprite,this.x,this.y,0);
+	}
+};
+
 
 $(function() {
     Game.initialize("tablero",sprites,startGame);
