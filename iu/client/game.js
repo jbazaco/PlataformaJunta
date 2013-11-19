@@ -44,7 +44,7 @@ startGame = function() {
 	//Dibujar barra-menu
 	Game.ctx.fillStyle = "#000000";
 	Game.ctx.fillRect(870,0,200,650); 
-
+/*
 	//Quitar cuando avancemos
 	SpriteSheet.draw(Game.ctx,"m",60,60);
 	SpriteSheet.draw(Game.ctx,"mc",150,60);
@@ -71,10 +71,18 @@ startGame = function() {
 	SpriteSheet.draw(Game.ctx,"ciucame",150,330);
 	SpriteSheet.draw(Game.ctx,"ciucam2e",240,330);
 	SpriteSheet.draw(Game.ctx,"interrogante",330,330);
-
+*/
 
 	Game.setBoard(0,FichaActual);
 	Game.setBoard(1,new GamePoints(0));
+	Game.setBoard(2,ColocarFichas);
+}
+
+ColocarFichas = new function() {
+	this.draw = function(ctx) {
+		SpriteSheet.draw(ctx,"cmur",394, 263);
+	}
+	
 }
 
 //Es un singleton
