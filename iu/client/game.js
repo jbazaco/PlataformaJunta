@@ -27,44 +27,29 @@ var sprites = {
 	ciucame: { sx: 331, sy: 230, w: FICHA_W, h: FICHA_H},	//ciudad con un lado de campo con escudo
 	ciucam2: { sx: 640, sy: 137, w: FICHA_W, h: FICHA_H},	//ciudad con 2 lados opuestos de campo
 	ciucam2e: { sx: 408, sy: 230, w: FICHA_W, h: FICHA_H},	//ciudad con 2 lados opuestos de campo con escudo
-	interrogante: { sx: 253, sy: 230, w: FICHA_W, h: FICHA_H}	//ficha con un interrogante
+	interrogante: { sx: 253, sy: 230, w: FICHA_W, h: FICHA_H},	//ficha con un interrogante
+	s1: { sx: 511, sy: 242, w: 30, h: 30},			//seguidor amarillo
+	s2: { sx: 553, sy: 242, w: 30, h: 30},			//seguidor rosa
+	s3: { sx: 596, sy: 242, w: 30, h: 30},			//seguidor azul
+	s4: { sx: 640, sy: 242, w: 30, h: 30},			//seguidor verde
+	s5: { sx: 682, sy: 242, w: 30, h: 30}		//seguidor naranja
 };
 
 
 startGame = function() {
-	
-/*
-	//Quitar cuando avancemos
-	SpriteSheet.draw(Game.ctx,"m",60,60);
-	SpriteSheet.draw(Game.ctx,"mc",150,60);
-	SpriteSheet.draw(Game.ctx,"cr",240,60);
-	SpriteSheet.draw(Game.ctx,"cc",330,60);
-	SpriteSheet.draw(Game.ctx,"c3",420,60);
-	SpriteSheet.draw(Game.ctx,"c4",510,60);
-	SpriteSheet.draw(Game.ctx,"cmur",600,60);
-	SpriteSheet.draw(Game.ctx,"ccmur",60,150);
-	SpriteSheet.draw(Game.ctx,"chmur",150,150);
-	SpriteSheet.draw(Game.ctx,"c3mur",240,150);
-	SpriteSheet.draw(Game.ctx,"ccmur2",330,150);
-	SpriteSheet.draw(Game.ctx,"ccmur3",420,150);
-	SpriteSheet.draw(Game.ctx,"murcam",510,150);
-	SpriteSheet.draw(Game.ctx,"mur2",600,150);
-	SpriteSheet.draw(Game.ctx,"mur2c",60,240);
-	SpriteSheet.draw(Game.ctx,"mur1",150,240);
-	SpriteSheet.draw(Game.ctx,"ciudad",240,240);
-	SpriteSheet.draw(Game.ctx,"ciucam",330,240);
-	SpriteSheet.draw(Game.ctx,"ciucam2",420,240);
-	SpriteSheet.draw(Game.ctx,"chmure",510,240);
-	SpriteSheet.draw(Game.ctx,"ccmur2e",600,240);
-	SpriteSheet.draw(Game.ctx,"murcame",60,330);
-	SpriteSheet.draw(Game.ctx,"ciucame",150,330);
-	SpriteSheet.draw(Game.ctx,"ciucam2e",240,330);
-	SpriteSheet.draw(Game.ctx,"interrogante",330,330);
-*/
+
+
 	Game.setBoard(0,Fondo);
 	Game.setBoard(1,ColocarFichas);
-	Game.setBoard(2,FichaActual);
-	Game.setBoard(8,new GamePoints(0));
+	Game.setBoard(2,ColocarFichas);
+	var numjugadores=3; //nos lo tiene que dar la plataforma de momento es un ejemplo
+	for (i=1;i<=numjugadores;i++){	
+		Game.setBoard(i+2, new Seguidor("s"+i, i));
+	}
+	//proximo setboard a partir de 8
+	Game.setBoard(8,FichaActual);
+	Game.setBoard(9,new GamePoints(0));
+
 }
 
 ColocarFichas = new function() {
@@ -95,7 +80,7 @@ FichaActual = new function() {
 	this.h = FICHA_H;
 	this.w = FICHA_W;
 	this.x = 940;
-	this.y = 80;
+	this.y = 120;
 	this.sprite = 'interrogante';
 	
 	//Devuelve true si se gira la ficha
@@ -115,6 +100,26 @@ FichaActual = new function() {
 	}
 
 };
+
+
+Seguidor = function(sprite, numjugador) {
+	
+	this.inicialx=900;
+	this.inicialy=200;
+	if(numjugador){
+		this.inicialy=this.inicialy + numjugador*60;
+	}
+	this.h = 30;
+	this.w = 30;
+	this.x=this.inicialx;
+	this.y=this.inicialy;
+	this.sprite=sprite;
+
+	this.draw = function(ctx) {
+		SpriteSheet.draw(ctx,this.sprite,this.x,this.y,0);
+	}
+};
+
 
 $(function() {
     Game.initialize("tablero",sprites,startGame);

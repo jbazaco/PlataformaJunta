@@ -103,7 +103,7 @@ SpriteSheet = new function() {
 		this.map = spriteData;
 		this.image = new Image();
 		this.image.onload = callback;
-		this.image.src = 'fichas_carssonline.jpg';
+		this.image.src = 'fichas_carssonline.png';
 	};
 
  
@@ -122,27 +122,28 @@ SpriteSheet = new function() {
 					  s.w, s.h, 
 					  Math.floor(x), Math.floor(y),
 					  s.w, s.h);
-	};
-	GamePoints = function() {
-	  Game.points = 0;
-
-	  var pointsLength = 4;
-
-	  this.draw = function(ctx) {
-	    ctx.save();
-	    ctx.font = "bold 18px arial";
-	    ctx.fillStyle= "#FFFFFF";
-
-	    var txt = "" + Game.points;
-	    var i = pointsLength - txt.length, zeros = "";
-	    while(i-- > 0) { zeros += "0"; }
-
-	    ctx.fillText(zeros + txt,1000,30);
-	    ctx.restore();
-
-	  };
-
-	  
-	};
+	};  
 }
+
+
+GamePoints = function() {
+	Game.points = 0;
+
+	var pointsLength = 4;
+
+	this.draw = function(ctx) {
+	  	ctx.save();
+	  	ctx.font = "bold 18px arial";
+	    	ctx.fillStyle= "#FFFFFF";
+
+	 	var txt = "" + Game.points;
+	  	var i = pointsLength - txt.length, zeros = "";
+	  	while(i-- > 0) { zeros += "0"; }
+
+	    	ctx.fillText(zeros + txt,1000,30);
+	    	ctx.restore();
+	};
+};
+
+
 
