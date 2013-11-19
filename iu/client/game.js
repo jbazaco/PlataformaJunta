@@ -33,17 +33,6 @@ var sprites = {
 
 startGame = function() {
 	
-	// Dibujar rectangulo azul
-	Game.ctx.fillStyle = "#44cbff";
-	Game.ctx.fillRect(0,0,850,650);
-
-	//Dibujar barra separadora
-	Game.ctx.fillStyle = "#c9c9c9";
-	Game.ctx.fillRect(850,0,20,650);
-
-	//Dibujar barra-menu
-	Game.ctx.fillStyle = "#000000";
-	Game.ctx.fillRect(870,0,200,650); 
 /*
 	//Quitar cuando avancemos
 	SpriteSheet.draw(Game.ctx,"m",60,60);
@@ -72,10 +61,10 @@ startGame = function() {
 	SpriteSheet.draw(Game.ctx,"ciucam2e",240,330);
 	SpriteSheet.draw(Game.ctx,"interrogante",330,330);
 */
-
-	Game.setBoard(0,FichaActual);
-	Game.setBoard(1,new GamePoints(0));
-	Game.setBoard(2,ColocarFichas);
+	Game.setBoard(0,Fondo);
+	Game.setBoard(1,ColocarFichas);
+	Game.setBoard(2,FichaActual);
+	Game.setBoard(8,new GamePoints(0));
 }
 
 ColocarFichas = new function() {
@@ -85,9 +74,24 @@ ColocarFichas = new function() {
 	
 }
 
+Fondo = new function() {
+	this.draw = function(){
+		// Dibujar rectangulo azul
+		Game.ctx.fillStyle = "#44cbff";
+		Game.ctx.fillRect(0,0,850,650);
+
+		//Dibujar barra separadora
+		Game.ctx.fillStyle = "#c9c9c9";
+		Game.ctx.fillRect(850,0,20,650);
+
+		//Dibujar barra-menu
+		Game.ctx.fillStyle = "#000000";
+		Game.ctx.fillRect(870,0,200,650); 
+	}
+}
+
 //Es un singleton
 FichaActual = new function() {
-	this.girada = false;
 	this.h = FICHA_H;
 	this.w = FICHA_W;
 	this.x = 940;
@@ -96,7 +100,6 @@ FichaActual = new function() {
 	
 	//Devuelve true si se gira la ficha
 	this.revelar_ficha = function(x, y) {
-
 		if (this.sprite === 'interrogante') {
 			this.sprite = 'm'; //PEDIR A LA IA!!!, de momento ponemos una ficha cualquiera
 			return true;

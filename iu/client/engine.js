@@ -1,5 +1,6 @@
 Game = new function() {																  
 
+	this.selec_elem = null;
 	// Inicializa el juego
 	this.initialize = function(canvasElementId,sprite_data,callback) {
 		this.canvas = document.getElementById(canvasElementId)
@@ -10,6 +11,40 @@ Game = new function() {
 		if(!this.ctx) { return alert("Please upgrade your browser to play"); }
 
 		this.loop(); 
+
+
+		this.canvas.addEventListener('mousedown', function(event) {
+			var x = event.pageX - Game.canvas.offsetLeft;
+			var y = event.pageY - Game.canvas.offsetTop;
+			
+			//Aqui las acciones que no necesiten estar en tu turno
+
+			if (!Meteor.user() /*|| !IA.suTurno(Meteor.user().username))*/ ) { 
+				alert('No es tu turno');
+				return;
+			}
+
+			//Aqui las acciones que necesiten estar en tu turno
+			if (y > FichaActual.y && y < FichaActual.y+FichaActual.h 
+					&& x > FichaActual.x && x < FichaActual.x+FichaActual.w) {
+				this.selec_elem = FichaActual;
+				return;
+			}
+		}, false);
+
+		this.canvas.addEventListener('mouseup', function(event) {
+			this.selec_elem = null;
+		}, false);
+
+		this.canvas.addEventListener('mousemove', function(event) {
+			if(this.selec_elem) {
+				var x = event.pageX - Game.canvas.offsetLeft;
+				var y = event.pageY - Game.canvas.offsetTop;
+				this.selec_elem.x = x;
+				this.selec_elem.y = y;
+			}
+		}, false);
+
 
 		this.canvas.addEventListener('click', function(event) {
 			var x = event.pageX - Game.canvas.offsetLeft;
@@ -26,6 +61,7 @@ Game = new function() {
 			if (y > FichaActual.y && y < FichaActual.y+FichaActual.h 
 					&& x > FichaActual.x && x < FichaActual.x+FichaActual.w) {
 				FichaActual.revelar_ficha();
+				return;
 			}
 		}, false);
 
