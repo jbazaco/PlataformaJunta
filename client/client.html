@@ -1,0 +1,33 @@
+<head>
+    <title> Chat Alien </title>
+</head>
+
+<body>
+  <script src='engine.js'></script>
+  <script src='game.js'></script>
+  <script src='jquery-1.10.2.js' type='text/javascript'></script>
+    <div style="float: right">
+	{{loginButtons align="right"}} <br>
+    </div>
+	<h1>Chat Alien</h1>
+	{{>welcome}}
+    <div id='container'>
+	<canvas id='game' width='1150' height='1150'></canvas>
+    </div>
+    <div class="chatAreadiv">
+	<table class="chatAreaTable" id ="ChatArea">
+	    <tr id="firstRow"><td></td><td></td></tr>
+	</table>
+    </div>
+    {{>input}}
+</body>
+
+<template name="welcome">
+    <p>
+	Welcome to "UnnamedProject"! Please Log in.
+    </p>
+</template>
+
+<template name="input">
+    <p> Message: <input type="text" id="message"> </p>
+</template>
