@@ -42,9 +42,10 @@ startGame = function() {
 	Game.setBoard(0,Fondo);
 	Game.setBoard(1,new Ficha(394, 263,"cmur"));	//ficha inicial
 	var numjugadores=3; //nos lo tiene que dar la plataforma de momento es un ejemplo
+	j=1;
 	for (i=1;i<=numjugadores;i++){	
 		for (k=1;k<=7;k++){
-			Game.setBoard(i+2+k, new Seguidor("s"+i, i));
+			Game.setBoard(j++, new Seguidor("s"+i, i));
 		}
 	}
 	//proximo setboard a partir de 37
@@ -157,11 +158,13 @@ elemInPos = function(x, y) {
 		alert('No es tu turno');
 		return null;
 	}
-	for(var i=1,len = boards.length;i<len;i++) {
+	for(var i=1,len = Game.boards.length;i<len;i++) {
 	//Aqui las acciones que necesiten estar en tu turno
-		if (y > boards[i].y && y < boards[i].y+boards[i].h 
-				&& x > boards[i].x && x < boards[i].x+boards[i].w) {
-			return boards[i];
+		if (Game.boards[i]){
+			if (y > Game.boards[i].y && y < Game.boards[i].y+Game.boards[i].h 
+					&& x > Game.boards[i].x && x < Game.boards[i].x+Game.boards[i].w) {
+				return Game.boards[i];
+			}
 		}
 	}
 	return null;

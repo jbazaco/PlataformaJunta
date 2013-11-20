@@ -51,13 +51,13 @@ Game = new function() {
 	};
 
 	// Bucle del juego
-	var boards = [];
-
+	this.boards = [];
+	
 	this.loop = function() { 
 
-		for(var i=0,len = boards.length;i<len;i++) {
-			if(boards[i]) { 
-				boards[i].draw(Game.ctx);
+		for(var i=0,len = Game.boards.length;i<len;i++) {
+			if(Game.boards[i]) { 
+				Game.boards[i].draw(Game.ctx);
 			}
 		}
 
@@ -67,7 +67,7 @@ Game = new function() {
 	// Para cambiar el panel activo en el juego.
 	// Son capas: se dibujan de menor num a mayor
 	// Cada capa tiene que tener en su interfaz draw()
-	this.setBoard = function(num,board) { boards[num] = board; };
+	this.setBoard = function(num,board) { Game.boards[num] = board; };
 };
 
 SpriteSheet = new function() {
