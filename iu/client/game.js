@@ -84,7 +84,7 @@ FichaActual = new function() {
 	this.sprite = 'interrogante';
 	
 	//Devuelve true si se gira la ficha
-	this.revelar_ficha = function(x, y) {
+	this.pulsado = function() {
 		if (this.sprite === 'interrogante') {
 			this.sprite = 'm'; //PEDIR A LA IA!!!, de momento ponemos una ficha cualquiera
 			return true;
@@ -120,6 +120,23 @@ Seguidor = function(sprite, numjugador) {
 	}
 };
 
+//Devuelve el elemento dibujado en (x,y)
+//El elemento debe tener una funcion pulsado, mover y soltar
+elemInPos = function(x, y) {
+	//Aqui las acciones que no necesiten estar en tu turno
+
+	if (!Meteor.user() /*|| !IA.suTurno(Meteor.user().username))*/ ) { 
+		alert('No es tu turno');
+		return null;
+	}
+
+	//Aqui las acciones que necesiten estar en tu turno
+	if (y > FichaActual.y && y < FichaActual.y+FichaActual.h 
+				&& x > FichaActual.x && x < FichaActual.x+FichaActual.w) {
+		return FichaActual;
+	}
+	return null;
+}
 
 $(function() {
     Game.initialize("tablero",sprites,startGame);
