@@ -79,6 +79,8 @@ Fondo = new function() {
 FichaActual = new function() {
 	this.h = FICHA_H;
 	this.w = FICHA_W;
+	this.inicialx = 940;
+	this.inicialy = 120;
 	this.x = 940;
 	this.y = 120;
 	this.sprite = 'interrogante';
@@ -94,6 +96,19 @@ FichaActual = new function() {
 	}
 	//tendra que informar al resto de clientes que ficha le ha salido a este jugador
 	//tiene que comprobar que el que hace click es el jugador al que le toca jugar, si no no puede mover
+
+	this.mover = function(x,y) {
+		if (this.sprite !== 'interrogante') {
+			this.x = x;
+			this.y = y;
+		}
+	}
+
+	this.soltar = function(x,y) {
+		//CAMBIAR cuando se coloquen las fichas
+		this.x = this.inicialx;
+		this.y = this.inicialy;
+	}
 
 	this.draw = function(ctx) {
 		SpriteSheet.draw(ctx,this.sprite,this.x,this.y,0);

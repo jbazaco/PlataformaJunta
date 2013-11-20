@@ -21,7 +21,10 @@ Game = new function() {
 		}, false);
 
 		this.canvas.addEventListener('mouseup', function(event) {
-			//if this.selec_elem this.selec_elem.soltar 
+			var x = event.pageX - Game.canvas.offsetLeft;
+			var y = event.pageY - Game.canvas.offsetTop;
+
+			if (this.selec_elem) this.selec_elem.soltar(x,y);
 			this.selec_elem = null;
 		}, false);
 
@@ -29,9 +32,7 @@ Game = new function() {
 			if(this.selec_elem) {
 				var x = event.pageX - Game.canvas.offsetLeft;
 				var y = event.pageY - Game.canvas.offsetTop;
-				//cambiar por this.selec_elem.mover(x,y) 
-				this.selec_elem.x = x;
-				this.selec_elem.y = y;
+				this.selec_elem.mover(x,y) 
 			}
 		}, false);
 
