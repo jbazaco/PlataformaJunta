@@ -159,6 +159,23 @@ Seguidor = function(sprite, numjugador) {
 	this.x=this.inicialx;
 	this.y=this.inicialy;
 	this.sprite=sprite;
+	
+
+	this.pulsado = function() {}
+	//tiene que comprobar que el que hace click es el jugador al que le toca jugar, si no no puede mover
+
+	this.mover = function(x,y) {
+		//CAMBIAR Solo puedes mover tu seguidor
+		this.x = x;
+		this.y = y;
+	}
+	
+	this.soltar = function(x,y) {
+		//CAMBIAR cuando se coloquen las fichas
+		this.x = this.inicialx;
+		this.y = this.inicialy;
+	}
+
 
 	this.draw = function(ctx) {
 		SpriteSheet.draw(ctx,this.sprite,this.x,this.y,0);
