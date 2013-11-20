@@ -42,7 +42,7 @@ startGame = function() {
 	Game.setBoard(0,Fondo);
 	Game.setBoard(1,new Ficha(394, 263,"cmur"));	//ficha inicial
 	var numjugadores=3; //nos lo tiene que dar la plataforma de momento es un ejemplo
-	j=1;
+	j=2;
 	for (i=1;i<=numjugadores;i++){	
 		for (k=1;k<=7;k++){
 			Game.setBoard(j++, new Seguidor("s"+i, i));
