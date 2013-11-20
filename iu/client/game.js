@@ -38,10 +38,13 @@ var sprites = {
 
 startGame = function() {
 
+	var ficha_inicial = new Ficha(394, 263,"cmur");
 
 	Game.setBoard(0,Fondo);
 	Game.setBoard(1,new GamePoints(0));
-	Game.setBoard(2,new Ficha(394, 263,"cmur"));	//ficha inicial
+	Game.setBoard(2,ficha_inicial);	//ficha inicial
+	ficha_inicial.buscar_huecos();
+	
 	var numjugadores=3; //nos lo tiene que dar la plataforma de momento es un ejemplo
 	j=3;
 	for (i=1;i<=numjugadores;i++){	
@@ -79,32 +82,44 @@ Ficha = function(x, y, sprite) {
 	this.h = FICHA_H;
 	this.sprite = sprite;
 	
+	//busca en las posiciones adyacentes de una ficha colocada, y si no hay ninguna ficha, 
+	//pone la ficha "interrogante".
+	this.buscar_huecos = function(){	//guarda bien las fichas 'interrogante' pero no se muestra en pantalla
+		
+		var derecha = elemInPos(this.x+this.w, this.y) ;
+		if(derecha===null){
+			var ficha = new Ficha(this.x+this.w, this.y, "interrogante");
+			Game.setBoard(Game.boards.length,ficha);
+			ficha.draw(Game.ctx);
+		}
+		
+		var izquierda = elemInPos(this.x-this.w, this.y) ;
+		if(izquierda===null){
+			var ficha = new Ficha(this.x-this.w, this.y, "interrogante");
+			Game.setBoard(Game.boards.length,ficha);
+			ficha.draw(Game.ctx);
+		}
+		
+		var arriba = elemInPos(this.x, this.y-this.h) ;
+		if(arriba===null){
+			var ficha = new Ficha(this.x, this.y-this.h, "interrogante");
+			Game.setBoard(Game.boards.length,ficha);
+			ficha.draw(Game.ctx);
+		}
+		var abajo = elemInPos(this.x, this.y+this.h) ;
+		if(abajo===null){
+			var ficha = new Ficha(this.x, this.y+this.h, "interrogante");
+			Game.setBoard(Game.boards.length,ficha);
+			ficha.draw(Game.ctx);
+		}
+	}
+	
+	
 	this.draw = function(ctx) {
-		SpriteSheet.draw(ctx,this.sprite,this.x-this.w, this.y);
-	}
-	
-/*	
-	this.izq = function(){
-		return new Ficha(x-w, y, "interrogante");
-	}
-
-	this.drcha = function(){
-		return new Ficha(x+w, y, "interrogante");
-	}
-	
-	this.arriba = function(){
-		return new Ficha(x, y-h, "interrogante");
-	}
-	
-	this.abajo = function(){
-		return new Ficha(x, y+h, "interrogante");
-	}
-*/	
-
-	
-	
-	
+		SpriteSheet.draw(ctx,this.sprite,this.x, this.y);
+	}	
 }
+
 //Es un singleton
 FichaActual = new function() {
 	this.h = FICHA_H;
