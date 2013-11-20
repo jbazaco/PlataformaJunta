@@ -40,24 +40,19 @@ startGame = function() {
 
 
 	Game.setBoard(0,Fondo);
-	Game.setBoard(1,ColocarFichas);
-	Game.setBoard(2,ColocarFichas);
+	Game.setBoard(1,new Ficha(394, 263,"cmur"));	//ficha inicial
 	var numjugadores=3; //nos lo tiene que dar la plataforma de momento es un ejemplo
 	for (i=1;i<=numjugadores;i++){	
-		Game.setBoard(i+2, new Seguidor("s"+i, i));
+		for (k=1;k<=7;k++){
+			Game.setBoard(i+2+k, new Seguidor("s"+i, i));
+		}
 	}
-	//proximo setboard a partir de 8
-	Game.setBoard(8,FichaActual);
-	Game.setBoard(9,new GamePoints(0));
+	//proximo setboard a partir de 37
+	Game.setBoard(37,FichaActual);
+	Game.setBoard(38,new GamePoints(0));
 
 }
 
-ColocarFichas = new function() {
-	this.draw = function(ctx) {
-		SpriteSheet.draw(ctx,"cmur",394, 263);
-	}
-	
-}
 
 Fondo = new function() {
 	this.draw = function(){
@@ -75,6 +70,39 @@ Fondo = new function() {
 	}
 }
 
+Ficha = function(x, y, sprite) {
+	this.x = x;
+	this.y = y;
+	this.w = FICHA_W;
+	this.h = FICHA_H;
+	this.sprite = sprite;
+	
+	this.draw = function(ctx) {
+		SpriteSheet.draw(ctx,this.sprite,this.x-this.w, this.y);
+	}
+	
+/*	
+	this.izq = function(){
+		return new Ficha(x-w, y, "interrogante");
+	}
+
+	this.drcha = function(){
+		return new Ficha(x+w, y, "interrogante");
+	}
+	
+	this.arriba = function(){
+		return new Ficha(x, y-h, "interrogante");
+	}
+	
+	this.abajo = function(){
+		return new Ficha(x, y+h, "interrogante");
+	}
+*/	
+
+	
+	
+	
+}
 //Es un singleton
 FichaActual = new function() {
 	this.h = FICHA_H;
