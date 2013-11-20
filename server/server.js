@@ -71,6 +71,7 @@ Meteor.methods({
 		Meteor.publish('Partida'+id.toString(),function(){
 			return Partidas.find({id:id},{jugadores:1,invitados:1,opciones:1,jugadas:1});
 		})
+		return id;
 	}
 })
 
