@@ -40,24 +40,20 @@ startGame = function() {
 
 
 	Game.setBoard(0,Fondo);
-	Game.setBoard(1,ColocarFichas);
-	Game.setBoard(2,ColocarFichas);
+	Game.setBoard(1,new Ficha(394, 263,"cmur"));	//ficha inicial
 	var numjugadores=3; //nos lo tiene que dar la plataforma de momento es un ejemplo
+	j=2;
 	for (i=1;i<=numjugadores;i++){	
-		Game.setBoard(i+2, new Seguidor("s"+i, i));
+		for (k=1;k<=7;k++){
+			Game.setBoard(j++, new Seguidor("s"+i, i));
+		}
 	}
-	//proximo setboard a partir de 8
-	Game.setBoard(8,FichaActual);
-	Game.setBoard(9,new GamePoints(0));
+	//proximo setboard a partir de 37
+	Game.setBoard(37,FichaActual);
+	Game.setBoard(38,new GamePoints(0));
 
 }
 
-ColocarFichas = new function() {
-	this.draw = function(ctx) {
-		SpriteSheet.draw(ctx,"cmur",394, 263);
-	}
-	
-}
 
 Fondo = new function() {
 	this.draw = function(){
@@ -75,6 +71,39 @@ Fondo = new function() {
 	}
 }
 
+Ficha = function(x, y, sprite) {
+	this.x = x;
+	this.y = y;
+	this.w = FICHA_W;
+	this.h = FICHA_H;
+	this.sprite = sprite;
+	
+	this.draw = function(ctx) {
+		SpriteSheet.draw(ctx,this.sprite,this.x-this.w, this.y);
+	}
+	
+/*	
+	this.izq = function(){
+		return new Ficha(x-w, y, "interrogante");
+	}
+
+	this.drcha = function(){
+		return new Ficha(x+w, y, "interrogante");
+	}
+	
+	this.arriba = function(){
+		return new Ficha(x, y-h, "interrogante");
+	}
+	
+	this.abajo = function(){
+		return new Ficha(x, y+h, "interrogante");
+	}
+*/	
+
+	
+	
+	
+}
 //Es un singleton
 FichaActual = new function() {
 	this.h = FICHA_H;
@@ -144,11 +173,14 @@ elemInPos = function(x, y) {
 		alert('No es tu turno');
 		return null;
 	}
-
+	for(var i=1,len = Game.boards.length;i<len;i++) {
 	//Aqui las acciones que necesiten estar en tu turno
-	if (y > FichaActual.y && y < FichaActual.y+FichaActual.h 
-				&& x > FichaActual.x && x < FichaActual.x+FichaActual.w) {
-		return FichaActual;
+		if (Game.boards[i]){
+			if (y > Game.boards[i].y && y < Game.boards[i].y+Game.boards[i].h 
+					&& x > Game.boards[i].x && x < Game.boards[i].x+Game.boards[i].w) {
+				return Game.boards[i];
+			}
+		}
 	}
 	return null;
 }
