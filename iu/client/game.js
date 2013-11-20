@@ -44,11 +44,13 @@ startGame = function() {
 	Game.setBoard(2,ColocarFichas);
 	var numjugadores=3; //nos lo tiene que dar la plataforma de momento es un ejemplo
 	for (i=1;i<=numjugadores;i++){	
-		Game.setBoard(i+2, new Seguidor("s"+i, i));
+		for (k=1;k<=7;k++){
+			Game.setBoard(i+2+k, new Seguidor("s"+i, i));
+		}
 	}
-	//proximo setboard a partir de 8
-	Game.setBoard(8,FichaActual);
-	Game.setBoard(9,new GamePoints(0));
+	//proximo setboard a partir de 37
+	Game.setBoard(37,FichaActual);
+	Game.setBoard(38,new GamePoints(0));
 
 }
 
