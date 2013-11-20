@@ -84,33 +84,34 @@ Ficha = function(x, y, sprite) {
 	
 	//busca en las posiciones adyacentes de una ficha colocada, y si no hay ninguna ficha, 
 	//pone la ficha "interrogante".
-	this.buscar_huecos = function(){	//guarda bien las fichas 'interrogante' pero no se muestra en pantalla
+	this.buscar_huecos = function(){	//guarda bien las fichas 'interrogante' en boards[i] pero
+						//no se muestra en pantalla. 
 		
 		var derecha = elemInPos(this.x+this.w, this.y) ;
 		if(derecha===null){
 			var ficha = new Ficha(this.x+this.w, this.y, "interrogante");
 			Game.setBoard(Game.boards.length,ficha);
-			ficha.draw(Game.ctx);
+	//		ficha.draw(Game.ctx);
 		}
 		
 		var izquierda = elemInPos(this.x-this.w, this.y) ;
 		if(izquierda===null){
 			var ficha = new Ficha(this.x-this.w, this.y, "interrogante");
 			Game.setBoard(Game.boards.length,ficha);
-			ficha.draw(Game.ctx);
+	//		ficha.draw(Game.ctx);
 		}
 		
 		var arriba = elemInPos(this.x, this.y-this.h) ;
 		if(arriba===null){
 			var ficha = new Ficha(this.x, this.y-this.h, "interrogante");
 			Game.setBoard(Game.boards.length,ficha);
-			ficha.draw(Game.ctx);
+	//		ficha.draw(Game.ctx);
 		}
 		var abajo = elemInPos(this.x, this.y+this.h) ;
 		if(abajo===null){
 			var ficha = new Ficha(this.x, this.y+this.h, "interrogante");
 			Game.setBoard(Game.boards.length,ficha);
-			ficha.draw(Game.ctx);
+	//		ficha.draw(Game.ctx);
 		}
 	}
 	
@@ -151,8 +152,22 @@ FichaActual = new function() {
 
 	this.soltar = function(x,y) {
 		//CAMBIAR cuando se coloquen las fichas
+		var debajo = elemInPos(x,y);
+		if(debajo){
+			if (debajo instanceof Ficha){	
+				if (debajo.sprite === "interrogante"){
+					//¿borrar? Ficha "interrogante" para colocar la nueva en su lugar	
+			//		var nueva_ficha = new Ficha(debajo.x, debajo.y,this.sprite);
+			//		Game.setBoard(Game.boards.length,nueva_ficha);
+			//		nueva_ficha.buscar_huecos();
+			//		console.log("len: "+Game.boards.length);
+					this.sprite = "interrogante";
+				}
+			}		
+		}
 		this.x = this.inicialx;
 		this.y = this.inicialy;
+		
 	}
 
 	this.draw = function(ctx) {
@@ -202,10 +217,10 @@ Seguidor = function(sprite, numjugador) {
 elemInPos = function(x, y) {
 	//Aqui las acciones que no necesiten estar en tu turno
 
-	if (!Meteor.user() /*|| !IA.suTurno(Meteor.user().username))*/ ) { 
-		alert('No es tu turno');
-		return null;
-	}
+//	if (!Meteor.user() /*|| !IA.suTurno(Meteor.user().username))*/ ) { 
+//		alert('No es tu turno');
+//		return null;
+//	}
 	for(var i=2,len = Game.boards.length;i<len;i++) {
 	//Aqui las acciones que necesiten estar en tu turno
 		if (Game.boards[i]){
