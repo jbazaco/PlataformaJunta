@@ -48,20 +48,58 @@ table {
 
 
 /* Center the container */
+#containermain {
+	width:100%;
+	height:100%;
+	background-color:orange;
+}
 #container {
-  width:950px;
-  height:377px;
+  width:75%;
+  height:560px;
   overflow-x:scroll;
   overflow-y:scroll;
+	background-color:yellow;
+	float:left;
+}
+#container2 {
+  width:25%;
+  height:300px;
+	float:right;
+	background-color:green;
+
+}
+#container3 {
+  width:25%;
+  height:450px;
+	background-color:blue;
+	float:right;
+
+}
+#container4 {
+  width:74.6%;
+  height:185px;
+	background-color:red;
+
+}
+#container5 {
+  width:100%;
+	background-color:orange;
+
 }
 
 #message {
-  width: 1000px;
+  width: 74.6%;
+	float:left;
+}
+#login {
+ float: right;
 }
 
 /* Give canvas a background */
 canvas {
   background-color:black;
+	width:100%;
+	height:100%;
 
 }
 
