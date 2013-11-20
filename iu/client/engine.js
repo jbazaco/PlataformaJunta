@@ -17,22 +17,11 @@ Game = new function() {
 			var x = event.pageX - Game.canvas.offsetLeft;
 			var y = event.pageY - Game.canvas.offsetTop;
 			
-			//Aqui las acciones que no necesiten estar en tu turno
-
-			if (!Meteor.user() /*|| !IA.suTurno(Meteor.user().username))*/ ) { 
-				alert('No es tu turno');
-				return;
-			}
-
-			//Aqui las acciones que necesiten estar en tu turno
-			if (y > FichaActual.y && y < FichaActual.y+FichaActual.h 
-					&& x > FichaActual.x && x < FichaActual.x+FichaActual.w) {
-				this.selec_elem = FichaActual;
-				return;
-			}
+			this.selec_elem = elemInPos(x,y);
 		}, false);
 
 		this.canvas.addEventListener('mouseup', function(event) {
+			//if this.selec_elem this.selec_elem.soltar 
 			this.selec_elem = null;
 		}, false);
 
@@ -40,6 +29,7 @@ Game = new function() {
 			if(this.selec_elem) {
 				var x = event.pageX - Game.canvas.offsetLeft;
 				var y = event.pageY - Game.canvas.offsetTop;
+				//cambiar por this.selec_elem.mover(x,y) 
 				this.selec_elem.x = x;
 				this.selec_elem.y = y;
 			}
@@ -50,19 +40,11 @@ Game = new function() {
 			var x = event.pageX - Game.canvas.offsetLeft;
 			var y = event.pageY - Game.canvas.offsetTop;
 			
-			//Aqui las acciones que no necesiten estar en tu turno
-
-			if (!Meteor.user() /*|| !IA.suTurno(Meteor.user().username))*/ ) { 
-				alert('No es tu turno');
-				return;
+			this.selec_elem = elemInPos(x,y);
+			if (this.selec_elem) {
+				this.selec_elem.pulsado();
 			}
-
-			//Aqui las acciones que necesiten estar en tu turno
-			if (y > FichaActual.y && y < FichaActual.y+FichaActual.h 
-					&& x > FichaActual.x && x < FichaActual.x+FichaActual.w) {
-				FichaActual.revelar_ficha();
-				return;
-			}
+			this.selec_elem = null;
 		}, false);
 
 		SpriteSheet.load (sprite_data,callback);
