@@ -1,5 +1,10 @@
+/*Lineas mamada:
+ * Partidas.find({}).forEach(function(elem){Partidas.remove(elem._id)})
+ * Messages.find({}).forEach(function(elem){Messages.remove(elem._id)})
+ */
+
 Meteor.subscribe("messages");
-// Meteor.subscribe("partidas");
+Meteor.subscribe("partidas");
 
 var Clip = function(msg,maxlen){
 	if(msg.length>maxlen){
@@ -37,26 +42,25 @@ Template.input.events={
 
 Template.games.events={
 	'click input.inc': function () {
-		var seq = Session.get("seq");
-		if (!seq){
-			seq=1;
-			Session.set("seq",1)
-		}
+		Session.set("jug",0)
 		Partidas.insert({
-			id:"Partida"+seq.toString(),
-			jugadas:0
+			id:GetSeq(),
+			jugadas:[]
 		});
-		Session.set("seq",seq+1);
     },
 	'click input.inc2': function(){
-		var pid = Partidas.findOne({id: 'Partida'+Session.get("seq").toString()})._id
-		Partidas.update(pid,{$inc:{jugadas:1}});
+		var jug = Session.get("jug");
+		var pid = Partidas.findOne({id: (Session.get("seq"))})._id
+		Partidas.update(pid,{$push:{jugadas:jug}});
+		Session.set("jug",jug+1);
 	}
 }
 
 Accounts.ui.config({
 	passwordSignupFields:"USERNAME_AND_OPTIONAL_EMAIL"
 });
+
+
 
 Deps.autorun(function(){
 	var chatArea = $('#firstRow');
@@ -68,8 +72,25 @@ Deps.autorun(function(){
 
 Deps.autorun(function(){
 	var txtArea=$('#Listapartidas');
-	var gameslist=Partidas.find({},{sort:{partida:1, seq:1},limit:1})
+	txtArea.text('')
+	var gameslist=Partidas.find({},{sort:{partida:0}});
 	gameslist.forEach(function(partida){
 		txtArea.append("id:"+partida.id+" jugadas:"+partida.jugadas+"\n");
 	})
 });
+
+var GetSeq = function(){
+	var lst = Partidas.find({},{sort:{id:1}}).fetch();
+	for (var i=0; i<lst.length-1;i++){
+		if (Number(lst[i].id)+1 != Number(lst[i+1].id)){
+			var val = Number(lst[i].id)+1;
+			Session.set("seq",val);	//Gap!
+			return val;
+		}
+	}
+	var val= lst.length==0 ? 0 : lst[lst.length-1].id+1;
+	Session.set("seq",val)	//Not Gap..
+	return val;
+}
+
+
