@@ -1,5 +1,9 @@
 Meteor.subscribe("msgs");
 
+$(function() {
+	$( "#container2" ).tabs({ hide: { effect: "slide",direction:'up', duration: 100 }, show:{ effect: "slide",direction:'up', duration: 100 }  });
+});
+
 var Clip = function(msg,maxlen){
 	if(msg.length>maxlen){
 		var msgaux="";
@@ -33,6 +37,15 @@ Template.input.events={
 		}
 	}
 }
+Template.button.events={
+        'click input.b1': function () {
+                alert('hola')
+                
+    },
+        'click input.b2': function(){
+                alert('hola')
+        }
+}
 
 Accounts.ui.config({
 	passwordSignupFields:"USERNAME_AND_OPTIONAL_EMAIL"
@@ -44,4 +57,4 @@ Deps.autorun(function(){
 	msgs.forEach(function(message){
 		chatArea.prepend("<tr><td><strong>"+message['name']+"</strong>:</td><td><div>"+message['message']+"</div></td>");
 	});
-})
+});
