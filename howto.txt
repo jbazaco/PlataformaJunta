@@ -28,4 +28,7 @@ Para que funcione esto desde cero:
   cd <Tu_Proyecto>
   mrt add jquery-ui
   
-9.- Cruza los dedos, reza y ejecuta meteor.
+9.- Comprueba que aparece jquery-ui tras ejecutar esto:
+  meteor list
+  
+10.- Cruza los dedos, reza y ejecuta meteor.
