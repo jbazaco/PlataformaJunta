@@ -38,22 +38,23 @@ var sprites = {
 
 startGame = function() {
 
-	var ficha_inicial = new Ficha(394, 263,"cmur");
+	
 
 	Game.setBoard(0,Fondo);
 	Game.setBoard(1,new GamePoints(0));
-	Game.setBoard(2,ficha_inicial);	//ficha inicial
+	var ficha_inicial = new Ficha(394, 263,"cmur");
+	Game.setBoard(Game.boards.length,ficha_inicial);	//ficha inicial
 	ficha_inicial.buscar_huecos();
 	
 	var numjugadores=3; //nos lo tiene que dar la plataforma de momento es un ejemplo
-	j=3;
+	
 	for (i=1;i<=numjugadores;i++){	
 		for (k=1;k<=7;k++){
-			Game.setBoard(j++, new Seguidor("s"+i, i));
+			Game.setBoard(Game.boards.length, new Seguidor("s"+i, i));
 		}
 	}
 	//proximo setboard a partir de 38
-	Game.setBoard(38,FichaActual);
+	Game.setBoard(Game.boards.length,FichaActual);
 	
 
 }
@@ -84,34 +85,29 @@ Ficha = function(x, y, sprite) {
 	
 	//busca en las posiciones adyacentes de una ficha colocada, y si no hay ninguna ficha, 
 	//pone la ficha "interrogante".
-	this.buscar_huecos = function(){	//guarda bien las fichas 'interrogante' en boards[i] pero
-						//no se muestra en pantalla. 
+	this.buscar_huecos = function(){
 		
 		var derecha = elemInPos(this.x+this.w, this.y) ;
 		if(derecha===null){
 			var ficha = new Ficha(this.x+this.w, this.y, "interrogante");
 			Game.setBoard(Game.boards.length,ficha);
-	//		ficha.draw(Game.ctx);
 		}
 		
 		var izquierda = elemInPos(this.x-this.w, this.y) ;
 		if(izquierda===null){
 			var ficha = new Ficha(this.x-this.w, this.y, "interrogante");
 			Game.setBoard(Game.boards.length,ficha);
-	//		ficha.draw(Game.ctx);
 		}
 		
 		var arriba = elemInPos(this.x, this.y-this.h) ;
 		if(arriba===null){
 			var ficha = new Ficha(this.x, this.y-this.h, "interrogante");
 			Game.setBoard(Game.boards.length,ficha);
-	//		ficha.draw(Game.ctx);
 		}
 		var abajo = elemInPos(this.x, this.y+this.h) ;
 		if(abajo===null){
 			var ficha = new Ficha(this.x, this.y+this.h, "interrogante");
 			Game.setBoard(Game.boards.length,ficha);
-	//		ficha.draw(Game.ctx);
 		}
 	}
 	
@@ -156,11 +152,10 @@ FichaActual = new function() {
 		if(debajo){
 			if (debajo instanceof Ficha){	
 				if (debajo.sprite === "interrogante"){
-					//¿borrar? Ficha "interrogante" para colocar la nueva en su lugar	
-			//		var nueva_ficha = new Ficha(debajo.x, debajo.y,this.sprite);
-			//		Game.setBoard(Game.boards.length,nueva_ficha);
-			//		nueva_ficha.buscar_huecos();
-			//		console.log("len: "+Game.boards.length);
+					var nueva_ficha = new Ficha(debajo.x, debajo.y,this.sprite);
+					Game.setBoard(Game.boards.length,nueva_ficha);
+					nueva_ficha.buscar_huecos();
+					console.log("len: "+Game.boards.length);
 					this.sprite = "interrogante";
 				}
 			}		
