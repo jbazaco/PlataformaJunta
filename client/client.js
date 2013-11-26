@@ -58,13 +58,18 @@ Template.input.events={
 		}
 	}
 }
+
 Template.button.events={
         'click input.b1': function () {
-                alert('hola')
-                
-    },
+		var debugArea = $('#debug');
+		var user = Meteor.users.find({nombre:peter})
+		user.forEach(function(elem){debugArea.apend("<tr><td><strong>"+elem._id+"</strong>:</td><td><div>"+elem.nombre+"</div></td>")});
+	},
         'click input.b2': function(){
-                alert('hola')
+                Meteor.users.insert({
+		  nombre:peter,
+		  time:Date.now()
+		});
         }
 }
 
