@@ -62,30 +62,31 @@ table {
 	border-radius:5px; 
 }
 #container2 {
-background-color:#CBAD48;
+  background-color:#CBAD48;
+	background: #CBAD48;
   width:25%;
   height:30%;
-	float:right;
-	margin-right: 30px;
- overflow:auto;
-border-radius:20px; 
-opacity:0.6;
+  float:right;
+  margin-right: 20px;
+  overflow:auto;
+	border-radius:20px; 
+	opacity:0.6;
 }
 .tabs{
-	color: black;
-    filter:alpha(opacity=100); /* IE */
-    -moz-opacity:1; /* Mozilla */
-    opacity: 1; /* CSS3 */
+	color:black;
 }
 
 #container3 {
   width:25%;
   height:58%;
 	background-color:#CBAD48;
+	background: #CBAD48;
 	float:right;
-	margin-right: 30px;
+	margin-right: 20px;
 	margin-top: 20px;
-border-radius:20px; 
+	overflow:auto;
+	border-radius:20px; 
+	opacity:0.6;
 }
 #container4 {
   width:70%;
@@ -102,6 +103,7 @@ border-radius:20px;
   width: 88%;
 	float:right;
 	margin-right: 2px;
+	color: black;
 }
 #logo {
   width: 100%;
