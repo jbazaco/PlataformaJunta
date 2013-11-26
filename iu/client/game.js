@@ -191,8 +191,12 @@ Seguidor = function(sprite, numjugador) {
 
 	this.mover = function(x,y) {
 		//CAMBIAR Solo puedes mover tu seguidor
-		this.x = x;
-		this.y = y;
+		miJugador=1;
+		turno=1;//Falta funcion para saber de quien es el turno
+		if(turno==miJugador && this.sprite=="s"+miJugador){
+			this.x = x;
+			this.y = y;
+		}
 	}
 	
 	this.soltar = function(x,y) {
