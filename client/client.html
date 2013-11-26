@@ -38,27 +38,10 @@
                         </div>
                 </div>
                 <div id='container3'>
-                        {{>button}}
+                        
             <div class="games">
-                <h2 class="header"> Juegos</h2>
-                <ul class="list">
-                    <li class="item" >
-                        <a class="juego1" href="" title="AlienInvasion" align="left">
-                            <img src="../imagenes/alienInvasion.png"" width="60px" height="41px">
-                        </a>
-                    </li>
-                    <li class="item">
-                        <a class="juego2" href="" title="Angryfruits">
-                            <img src="../imagenes/agryfruits.png" width="60px" height="41px">
-                        </a>
-                    </li>
-                                        <li class="item">
-                        <a class="juego3" href="" title="Carcasone">
-                            <img src="../imagenes/carcassonne-logo.jpg" width="60px" height="41px">
-                        </a>
-                    </li>
-                                                                  
-                </ul>
+                <h2 class="header">Juegos</h2>
+				{{>button}}
             </div>
                 </div>
                 <div id='container4' class="chatAreadiv">
@@ -80,4 +63,31 @@
 <template name="button">
         <input type="button" class="b1" value="B1"/>
         <input type="button" class="b2" value="B2"/>
+		<ul class="list">
+			<li class="item" >
+				<a class="juego1" href="" title="AlienInvasion" align="left">
+					<img src="alienInvasion.png" width="60px" height="41px">
+				</a>
+				<div class="ListaPartidas" id='ListaPartidas1'>
+					Lista Alien
+				</div>
+			</li>
+			<li class="item">
+				<a class="juego2" href="" title="Angryfruits">
+					<img src="agryfruits.png" width="60px" height="41px">
+				</a>
+				<div class="ListaPartidas" id='ListaPartidas2'>
+					Lista Angry
+				</div>
+			</li>
+			<li class="item">
+				<a class="juego3" href="" title="Carcasone">
+					<img src="carcassonne-logo.jpg" width="60px" height="41px">
+				</a>
+				<div class="ListaPartidas" id='ListaPartidas3'>
+					Lista Carca
+				</div>
+			</li>                                                                  
+		</ul>
+
 </template>

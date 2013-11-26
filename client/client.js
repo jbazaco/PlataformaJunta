@@ -11,6 +11,12 @@ $(function() {
 	$( "#container2" ).tabs({ hide: { effect: "slide",direction:'up', duration: 100 }, show:{ effect: "slide",direction:'up', duration: 100 }  });
 });
 
+$(function(){
+	$("#ListaPartidas1").hide();
+	$("#ListaPartidas2").hide();
+	$("#ListaPartidas3").hide();
+});
+
 var Clip = function(msg,maxlen){
 	if(msg.length>maxlen){
 		var msgaux="";
@@ -59,13 +65,33 @@ Template.input.events={
 	}
 }
 Template.button.events={
-        'click input.b1': function () {
-                alert('hola')
-                
-    },
-        'click input.b2': function(){
-                alert('hola')
-        }
+	'click input.b1': function () {    
+		alert('hola')
+	},
+	'click input.b2': function(){
+		alert('hola')
+	},
+	'click a.juego1':function(){
+		Session.set("Current_Game_Type","AlienInvasion");
+		$("#ListaPartidas1").show(500);
+		$("#ListaPartidas2").hide(500);
+		$("#ListaPartidas3").hide(500);
+		return false
+	},
+	'click a.juego2':function(){
+		Session.set("Current_Game_Type","AngryFruits");
+		$("#ListaPartidas2").show(500);
+		$("#ListaPartidas1").hide(500);
+		$("#ListaPartidas3").hide(500);
+		return false
+	},
+	'click a.juego3':function(){
+		Session.set("Current_Game_Type","Carca");
+		$("#ListaPartidas3").show(500);
+		$("#ListaPartidas1").hide(500);
+		$("#ListaPartidas2").hide(500);
+		return false
+	}
 }
 
 Accounts.ui.config({
