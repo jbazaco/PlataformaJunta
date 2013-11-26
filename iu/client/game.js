@@ -40,11 +40,11 @@ startGame = function() {
 
 	
 
-	Game.setBoard(0,Fondo);
-	Game.setBoard(1,new GamePoints(0));
-	var ficha_inicial = new Ficha(394, 263,"cmur");
-	Game.setBoard(Game.boards.length,ficha_inicial);	//ficha inicial
-	ficha_inicial.buscar_huecos();
+	
+	Game.setBoard(0,new GamePoints(0));
+	
+	Game.setBoard(Game.boards.length,FichaActual);
+	
 	
 	var numjugadores=3; //nos lo tiene que dar la plataforma de momento es un ejemplo
 	
@@ -53,8 +53,11 @@ startGame = function() {
 			Game.setBoard(Game.boards.length, new Seguidor("s"+i, i));
 		}
 	}
-	//proximo setboard a partir de 38
-	Game.setBoard(Game.boards.length,FichaActual);
+	var ficha_inicial = new Ficha(394, 263,"cmur");
+	Game.setBoard(Game.boards.length,ficha_inicial);
+	Game.setBoard(Game.boards.length,Fondo);
+	ficha_inicial.buscar_huecos();
+	
 	
 
 }
@@ -87,27 +90,31 @@ Ficha = function(x, y, sprite) {
 	//pone la ficha "interrogante".
 	this.buscar_huecos = function(){
 		
-		var derecha = elemInPos(this.x+this.w, this.y) ;
+		var derecha = elemInPos(this.x+3/2*this.w, this.y +this.h/2);
 		if(derecha===null){
 			var ficha = new Ficha(this.x+this.w, this.y, "interrogante");
-			Game.setBoard(Game.boards.length,ficha);
+			Game.setBoard(Game.boards.length-1,ficha);
+			Game.setBoard(Game.boards.length,Fondo);
 		}
 		
-		var izquierda = elemInPos(this.x-this.w, this.y) ;
+		var izquierda = elemInPos(this.x-this.w/2, this.y+this.h/2);
 		if(izquierda===null){
 			var ficha = new Ficha(this.x-this.w, this.y, "interrogante");
-			Game.setBoard(Game.boards.length,ficha);
+			Game.setBoard(Game.boards.length-1,ficha);
+			Game.setBoard(Game.boards.length,Fondo);
 		}
 		
-		var arriba = elemInPos(this.x, this.y-this.h) ;
-		if(arriba===null){
+		var arriba = elemInPos(this.x+this.w/2, this.y-this.h/2);
+		if(!arriba){
 			var ficha = new Ficha(this.x, this.y-this.h, "interrogante");
-			Game.setBoard(Game.boards.length,ficha);
+			Game.setBoard(Game.boards.length-1,ficha);
+			Game.setBoard(Game.boards.length,Fondo);
 		}
-		var abajo = elemInPos(this.x, this.y+this.h) ;
+		var abajo = elemInPos(this.x+this.w/2, this.y+3/2*this.h);
 		if(abajo===null){
 			var ficha = new Ficha(this.x, this.y+this.h, "interrogante");
-			Game.setBoard(Game.boards.length,ficha);
+			Game.setBoard(Game.boards.length-1,ficha);
+			Game.setBoard(Game.boards.length,Fondo);
 		}
 	}
 	
@@ -152,10 +159,8 @@ FichaActual = new function() {
 		if(debajo){
 			if (debajo instanceof Ficha){	
 				if (debajo.sprite === "interrogante"){
-					var nueva_ficha = new Ficha(debajo.x, debajo.y,this.sprite);
-					Game.setBoard(Game.boards.length,nueva_ficha);
-					nueva_ficha.buscar_huecos();
-					console.log("len: "+Game.boards.length);
+					debajo.sprite = this.sprite;
+					debajo.buscar_huecos();
 					this.sprite = "interrogante";
 				}
 			}		
@@ -216,12 +221,13 @@ elemInPos = function(x, y) {
 //		alert('No es tu turno');
 //		return null;
 //	}
-	for(var i=2,len = Game.boards.length;i<len;i++) {
+	for(var i=1,len = Game.boards.length;i<len;i++) {
 	//Aqui las acciones que necesiten estar en tu turno
-		if (Game.boards[i]){
-			if (y > Game.boards[i].y && y < Game.boards[i].y+Game.boards[i].h 
-					&& x > Game.boards[i].x && x < Game.boards[i].x+Game.boards[i].w) {
-				return Game.boards[i];
+		var n= len - 1- i;
+		if (Game.boards[n]){
+			if (y >= Game.boards[n].y && y <= Game.boards[n].y+Game.boards[n].h 
+					&& x >= Game.boards[n].x && x <= Game.boards[n].x+Game.boards[n].w) {
+				return Game.boards[n];
 			}
 		}
 	}

@@ -57,8 +57,8 @@ Game = new function() {
 	this.loop = function() { 
 
 		for(var i=0,len = Game.boards.length;i<len;i++) {
-			if(Game.boards[i]) { 
-				Game.boards[i].draw(Game.ctx);
+			if(Game.boards[len - 1- i]) { 
+				Game.boards[len - 1- i].draw(Game.ctx);
 			}
 		}
 
