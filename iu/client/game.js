@@ -91,27 +91,28 @@ Ficha = function(x, y, sprite) {
 	this.buscar_huecos = function(){
 		
 		var derecha = elemInPos(this.x+3/2*this.w, this.y +this.h/2);
-		if(derecha===null){
+		
+		if(derecha===null || derecha===FichaActual){
 			var ficha = new Ficha(this.x+this.w, this.y, "interrogante");
 			Game.setBoard(Game.boards.length-1,ficha);
 			Game.setBoard(Game.boards.length,Fondo);
-		}
+		}	
 		
 		var izquierda = elemInPos(this.x-this.w/2, this.y+this.h/2);
-		if(izquierda===null){
+		if(izquierda===null || izquierda===FichaActual){
 			var ficha = new Ficha(this.x-this.w, this.y, "interrogante");
 			Game.setBoard(Game.boards.length-1,ficha);
 			Game.setBoard(Game.boards.length,Fondo);
 		}
 		
 		var arriba = elemInPos(this.x+this.w/2, this.y-this.h/2);
-		if(!arriba){
+		if(arriba===null || arriba===FichaActual){
 			var ficha = new Ficha(this.x, this.y-this.h, "interrogante");
 			Game.setBoard(Game.boards.length-1,ficha);
 			Game.setBoard(Game.boards.length,Fondo);
 		}
 		var abajo = elemInPos(this.x+this.w/2, this.y+3/2*this.h);
-		if(abajo===null){
+		if(abajo===null || abajo===FichaActual){
 			var ficha = new Ficha(this.x, this.y+this.h, "interrogante");
 			Game.setBoard(Game.boards.length-1,ficha);
 			Game.setBoard(Game.boards.length,Fondo);
@@ -156,15 +157,15 @@ FichaActual = new function() {
 	this.soltar = function(x,y) {
 		//CAMBIAR cuando se coloquen las fichas
 		var debajo = elemInPos(x,y);
-		if(debajo){
-			if (debajo instanceof Ficha){	
-				if (debajo.sprite === "interrogante"){
-					debajo.sprite = this.sprite;
-					debajo.buscar_huecos();
-					this.sprite = "interrogante";
-				}
-			}		
-		}
+
+		if (debajo instanceof Ficha){	
+			if (debajo.sprite === "interrogante"){
+				debajo.sprite = this.sprite;
+				debajo.buscar_huecos();
+				this.sprite = "interrogante";
+			}
+		}		
+
 		this.x = this.inicialx;
 		this.y = this.inicialy;
 		
