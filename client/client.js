@@ -5,7 +5,7 @@
  */
 
 Meteor.subscribe("messages");
-//Meteor.subscribe("partidas");
+Meteor.subscribe("partidas");
 
 $(function() {
 	$( "#container2" ).tabs({ hide: { effect: "slide",direction:'up', duration: 100 }, show:{ effect: "slide",direction:'up', duration: 100 }  });
@@ -54,7 +54,7 @@ Template.input.events={
 
 Template.button.events={
 	'click input.b1': function () {
-		Meteor.call("SuscribirPartida",[],{},[],function(error,result){
+		Meteor.call("SuscribirPartida",[],{},[],"",function(error,result){
 			console.log(error)
 			console.log(result)
 			Session.set("Current_Game",result.toString())
@@ -93,7 +93,20 @@ Template.button.events={
 		$("#game").show(500);
 	},
 	'click input.Lista1B2':function(){
-		alert("This will make something awesome in the near future...")
+		alert("This button will make something awesome in the near future. Just hang tight...")
+	}
+}
+
+Template.gamesList.gamesList = function(){
+	return Partidas.find({})
+};
+
+Template.gamesList.imIn = function(){
+	var usu = Meteor.userId()
+	if (usu){
+		return (usu in this.jugadores) | (usu in this.invitados)
+	}else{
+		return false;
 	}
 }
 
@@ -107,13 +120,6 @@ Deps.autorun(function(){
 	msgs.forEach(function(message){
 		chatArea.prepend("<tr><td><strong>"+message['name']+"</strong>:</td><td><div>"+message['message']+"</div></td>");
 	});
-});
-
-Deps.autorun(function(){
-	var listArea= $("#ListaPartidas3");
-	Partidas.find({}).forEach(function(elem){
-		listArea.append(elem.id+"<br>")
-	})
 });
 
 Deps.autorun(function(){

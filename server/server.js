@@ -3,7 +3,7 @@ Meteor.publish('messages', function(){
 	return Messages.find({}, {sort: {time:-1}});
 });
 Meteor.publish('partidas',function(){
-	return Partidas.find({});
+	return Partidas.find({},{nombre:1, jugadores:1,opciones:1});
 });
 
 Meteor.methods({
@@ -53,20 +53,23 @@ Meteor.methods({
 	// Jugadores es un array con el identificador de cada jugador (nombre?)
 	// Opciones es un map con las opciones que se quieran pasar a la partida.
 	// Invitados es un array con los jugadores que observan la partida.
-	SuscribirPartida : function(jugadores,opciones,invitados){
+	// Nombre es un nombre que le quieras dar a la partida.
+	SuscribirPartida : function(jugadores,opciones,invitados,nombre){
 		console.log("SubscribirPartida");
 	// 	if(permitido)?
 		var id =GetSeq();
 		Partidas.insert({
 			id:id,
+			nombre:nombre,
 			jugadores: jugadores,
 			invitados: [],
 			opciones: opciones,
+			empezada:false,
 			jugadas:[]
 		})
 		var sid = "__Partida."+id.toString();
 		Meteor.publish(sid,function(){
-			return Partidas.find({id:id},{jugadores:1,invitados:1,opciones:1,jugadas:1});
+			return Partidas.find({id:id},{nombre:1, jugadores:1,invitados:1,opciones:1,jugadas:1});
 		})
 		
 		return sid;

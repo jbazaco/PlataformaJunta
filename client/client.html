@@ -88,9 +88,19 @@
 				</a>
 				<div class="ListaPartidas" id='ListaPartidas3'>
 					Lista Carca
+					{{>gamesList}}
 				</div>
 			</li>                                                                  
 		</ul>
 
 </template>
 
+<template name="gamesList">
+	{{#each gamesList}}
+		{{#if imIn}}
+			<div><strong>{{nombre}}</strong>:{{jugadores}}</div>
+		{{else}}
+			<div>{{nombre}} : {{jugadores}}</div>
+		{{/if}}
+	{{/each}}
+</template>
