@@ -1,4 +1,11 @@
-Meteor.subscribe("msgs");
+
+/*Lineas mamada:
+ * Partidas.find({}).forEach(function(elem){Partidas.remove(elem._id)})
+ * Messages.find({}).forEach(function(elem){Messages.remove(elem._id)})
+ */
+
+Meteor.subscribe("messages");
+Meteor.subscribe("partidas");
 
 $(function() {
 	$( "#container2" ).tabs({ hide: { effect: "slide",direction:'up', duration: 100 }, show:{ effect: "slide",direction:'up', duration: 100 }  });
@@ -15,6 +22,20 @@ var Clip = function(msg,maxlen){
 		return msg
 	}
 };
+
+var GetSeq = function(){
+	var lst = Partidas.find({},{sort:{id:1}}).fetch();
+	for (var i=0; i<lst.length-1;i++){
+		if (Number(lst[i].id)+1 != Number(lst[i+1].id)){
+			var val = Number(lst[i].id)+1;
+			Session.set("seq",val);	//Gap!
+			return val;
+		}
+	}
+	var val= lst.length==0 ? 0 : lst[lst.length-1].id+1;
+	Session.set("seq",val)	//Not Gap..
+	return val;
+}
 
 Template.input.events={
 	'keydown input#message': function(event){
@@ -37,13 +58,18 @@ Template.input.events={
 		}
 	}
 }
+
 Template.button.events={
         'click input.b1': function () {
-                alert('hola')
-                
-    },
+		var debugArea = $('#debug');
+		var user = Meteor.users.find({nombre:peter})
+		user.forEach(function(elem){debugArea.apend("<tr><td><strong>"+elem._id+"</strong>:</td><td><div>"+elem.nombre+"</div></td>")});
+	},
         'click input.b2': function(){
-                alert('hola')
+                Meteor.users.insert({
+		  nombre:peter,
+		  time:Date.now()
+		});
         }
 }
 
@@ -58,3 +84,4 @@ Deps.autorun(function(){
 		chatArea.prepend("<tr><td><strong>"+message['name']+"</strong>:</td><td><div>"+message['message']+"</div></td>");
 	});
 });
+
