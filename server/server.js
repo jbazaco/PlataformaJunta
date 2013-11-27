@@ -18,7 +18,7 @@ Meteor.methods({
 		Partidas.update(id,{$push:{jugadas:movimiento}});
 	},
 
-	// Esta función devuelve el ultimo movimiento jugado en la partida
+	// Esta función devueiemQfx9dLJxDn6EsPlve el ultimo movimiento jugado en la partida
 	// AUN NO ESTA CLARO si cualquiera puede mirar el ultimo movimiento
 	// o debe estar en alguna de las listas de jugadores (usuarios, 
 	// jugadores de partida o invitados a partida).

@@ -51,6 +51,7 @@ Template.input.events={
 		}
 	}
 }
+
 Template.button.events={
 	'click input.b1': function () {
 		Meteor.call("SuscribirPartida",[],{},[],function(error,result){
