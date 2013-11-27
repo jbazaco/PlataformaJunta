@@ -54,7 +54,7 @@ Template.input.events={
 
 Template.button.events={
 	'click input.b1': function () {
-		Meteor.call("SuscribirPartida",[],{},[],"",function(error,result){
+		Meteor.call("SuscribirPartida",[],{},[],$("#entry_nombre_partida").val(),function(error,result){
 			console.log(error)
 			console.log(result)
 			Session.set("Current_Game",result.toString())
