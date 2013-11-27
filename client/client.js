@@ -7,6 +7,17 @@
 Meteor.subscribe("messages");
 Meteor.subscribe("partidas");
 
+Meteor.startup(function(){
+	screenauto();
+});
+
+var screenauto= function(){
+console.log("scrauto")
+	$("#containermain").css("width",document.documentElement.clientWidth.toString()+'px');
+	$("#containermain").css("height",document.documentElement.clientHeight.toString()+'px');
+	Meteor.setTimeout(screenauto,2000)
+};
+
 $(function() {
 	$( "#container2" ).tabs({ hide: { effect: "slide",direction:'up', duration: 100 }, show:{ effect: "slide",direction:'up', duration: 100 }  });
 });
