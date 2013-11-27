@@ -64,11 +64,12 @@ Meteor.methods({
 			opciones: opciones,
 			jugadas:[]
 		})
-		id = "__Partida."+id.toString();
-		Meteor.publish(id,function(){
+		var sid = "__Partida."+id.toString();
+		Meteor.publish(sid,function(){
 			return Partidas.find({id:id},{jugadores:1,invitados:1,opciones:1,jugadas:1});
 		})
-		return id;
+		
+		return sid;
 	}
 })
 

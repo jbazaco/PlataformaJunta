@@ -57,11 +57,10 @@ Template.button.events={
 			console.log(error)
 			console.log(result)
 			Session.set("Current_Game",result.toString())
-			Meteor.suscribe(result.toString())
 		})
 	},
 	'click input.b2': function(){
-		alert('hola')
+		alert('Not used debug button.')
 	},
 	'click a.juego1':function(){
 		Session.set("Current_Game_Type","AlienInvasion");
@@ -93,7 +92,7 @@ Template.button.events={
 		$("#game").show(500);
 	},
 	'click input.Lista1B2':function(){
-		alert("This will make something intredastin in the near future...")
+		alert("This will make something awesome in the near future...")
 	}
 }
 
@@ -110,9 +109,17 @@ Deps.autorun(function(){
 });
 
 Deps.autorun(function(){
-	var listArea= $("#ListaPartidas1");
+	var listArea= $("#ListaPartidas3");
 	Partidas.find({}).forEach(function(elem){
-		listArea.append(elem.id)
+		listArea.append(elem.id+"<br>")
 	})
 });
+
+Deps.autorun(function(){
+	var subs = Session.get("Current_Game");
+	console.log(subs)
+	if(subs){
+		Meteor.subscribe(subs);
+	}
+})
 
