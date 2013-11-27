@@ -5,7 +5,7 @@
  */
 
 Meteor.subscribe("messages");
-Meteor.subscribe("partidas");
+//Meteor.subscribe("partidas");
 
 $(function() {
 	$( "#container2" ).tabs({ hide: { effect: "slide",direction:'up', duration: 100 }, show:{ effect: "slide",direction:'up', duration: 100 }  });
@@ -15,6 +15,7 @@ $(function(){
 	$("#ListaPartidas1").hide();
 	$("#ListaPartidas2").hide();
 	$("#ListaPartidas3").hide();
+	$("#game").hide()
 });
 
 var Clip = function(msg,maxlen){
@@ -28,20 +29,6 @@ var Clip = function(msg,maxlen){
 		return msg
 	}
 };
-
-var GetSeq = function(){
-	var lst = Partidas.find({},{sort:{id:1}}).fetch();
-	for (var i=0; i<lst.length-1;i++){
-		if (Number(lst[i].id)+1 != Number(lst[i+1].id)){
-			var val = Number(lst[i].id)+1;
-			Session.set("seq",val);	//Gap!
-			return val;
-		}
-	}
-	var val= lst.length==0 ? 0 : lst[lst.length-1].id+1;
-	Session.set("seq",val)	//Not Gap..
-	return val;
-}
 
 Template.input.events={
 	'keydown input#message': function(event){
@@ -65,8 +52,13 @@ Template.input.events={
 	}
 }
 Template.button.events={
-	'click input.b1': function () {    
-		alert('hola')
+	'click input.b1': function () {
+		Meteor.call("SuscribirPartida",[],{},[],function(error,result){
+			console.log(error)
+			console.log(result)
+			Session.set("Current_Game",result.toString())
+			Meteor.suscribe(result.toString())
+		})
 	},
 	'click input.b2': function(){
 		alert('hola')
@@ -76,6 +68,7 @@ Template.button.events={
 		$("#ListaPartidas1").show(500);
 		$("#ListaPartidas2").hide(500);
 		$("#ListaPartidas3").hide(500);
+// 		$("#game_alien").show(500);
 		return false
 	},
 	'click a.juego2':function(){
@@ -83,6 +76,8 @@ Template.button.events={
 		$("#ListaPartidas2").show(500);
 		$("#ListaPartidas1").hide(500);
 		$("#ListaPartidas3").hide(500);
+// 		$("#game_angry").show(500)
+		$("#game").hide(500);
 		return false
 	},
 	'click a.juego3':function(){
@@ -90,7 +85,15 @@ Template.button.events={
 		$("#ListaPartidas3").show(500);
 		$("#ListaPartidas1").hide(500);
 		$("#ListaPartidas2").hide(500);
+// 		$("#game_carca").show(500)
+		$("#game").hide(500);
 		return false
+	},
+	'click input.Lista1B1':function(){
+		$("#game").show(500);
+	},
+	'click input.Lista1B2':function(){
+		alert("This will make something intredastin in the near future...")
 	}
 }
 
@@ -104,5 +107,12 @@ Deps.autorun(function(){
 	msgs.forEach(function(message){
 		chatArea.prepend("<tr><td><strong>"+message['name']+"</strong>:</td><td><div>"+message['message']+"</div></td>");
 	});
+});
+
+Deps.autorun(function(){
+	var listArea= $("#ListaPartidas1");
+	Partidas.find({}).forEach(function(elem){
+		listArea.append(elem.id)
+	})
 });
 
