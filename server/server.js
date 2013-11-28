@@ -2,9 +2,11 @@
 Meteor.publish('messages', function(){
 	return Messages.find({}, {sort: {time:-1}});
 });
+
 Meteor.publish('partidas',function(){
 	return Partidas.find({});
 });
+
 
 Meteor.methods({
 	//  Cada vez que se quiera almacenar un movimiento de una partida se llamará 
@@ -74,6 +76,21 @@ Meteor.methods({
 		return id;
 	}
 })
+
+//Definición de permisos de usuarios que intentan tocar dentro de la colección users.
+function adminUser(userId) {
+    var adminUser = Meteor.users.findOne({username: "admin"});
+    return (userId && adminUser && userId === adminUser._id);
+}
+
+Meteor.users.allow({
+	remove: function(userId,doc){		//Solo el administrador puede eliminar cuentas de jugadores.
+		return adminUser(userId);
+	},
+	update: function(userId,doc){		
+		return Meteor.userId();
+	}
+});
 
 
 var GetSeq = function(){

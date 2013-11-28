@@ -7,6 +7,7 @@
 Meteor.subscribe("messages");
 Meteor.subscribe("partidas");
 
+
 $(function() {
 	$( "#container2" ).tabs({ hide: { effect: "slide",direction:'up', duration: 100 }, show:{ effect: "slide",direction:'up', duration: 100 }  });
 });
@@ -61,15 +62,10 @@ Template.input.events={
 
 Template.button.events={
         'click input.b1': function () {
-		var debugArea = $('#debug');
-		var user = Meteor.users.find({nombre:peter})
-		user.forEach(function(elem){debugArea.apend("<tr><td><strong>"+elem._id+"</strong>:</td><td><div>"+elem.nombre+"</div></td>")});
+		
 	},
         'click input.b2': function(){
-                Meteor.users.insert({
-		  nombre:peter,
-		  time:Date.now()
-		});
+		
         }
 }
 
