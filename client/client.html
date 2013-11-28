@@ -3,83 +3,135 @@
 	<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0" />
 </head>
 
-<body>
 
-  <script src='engine.js'></script>
-  <script src='game.js'></script>
-  <script src='jquery-1.10.2.js' type='text/javascript'></script>
-  
-   <div id='containermain'>
-        <div id='logo'>
-                <div id='login'>
-                        {{loginButtons align="right"}}<br>
-                </div>
-                <h1>Plataforma Juegos</h1>
-                {{>welcome}}
-        </div>
-                <div id='container'>
-                        <canvas id='game' width='1150' height='1150'></canvas>
-                </div>
-                <div id='container2'>
-                 <ul>
-                        <li><a href="#tabs-1">1</a></li>
-                        <li><a href="#tabs-2">2</a></li>
-                        <li><a href="#tabs-3">3</a></li>
-                </ul>
-                        <div id="tabs-1" class="tabs">
-                        <p id="text">Proin elit arcu, rutrum commodo, vehicula tempus, commodo a, risus. Curabitur nec
-                        arcu.sollicitudin mi sit amet .<p>
-                        </div>
-                        <div id="tabs-2" class="tabs">
-                        <p>Mauris consectetur tortor et purus.</p>
-                        </div>
-                        <div id="tabs-3" class="tabs">
-                        <p>Quisque eu urna vel enim commodo pellentesque. Praesent eu risus hendrerit ligula tempus pretium.</p>
-                        <p>Duis cursus. Maecenas ligula eros.</p>
-                        </div>
-                </div>
-                <div id='container3'>
-                        {{>button}}
-            <div class="games">
-                <h2 class="header"> Juegos</h2>
-                <textarea id="debug"> </textarea>
-                <ul class="list">
-                    <li class="item" >
-                        <a class="juego1" href="" title="AlienInvasion" align="left">
-                            <img src="../imagenes/alienInvasion.png" width="60px" height="41px">
-                        </a>               
-                    </li>
-                    <li class="item">
-                        <a class="juego2" href="" title="Angryfruits">
-                            <img src="../imagenes/agryfruits.png" width="60px" height="41px">
-                        </a>
-                    </li>
-                                        <li class="item">
-                        <a class="juego3" href="" title="Carcasone">
-                            <img src="../imagenes/carcassonne-logo.jpg" width="60px" height="41px">
-                        </a>
-                    </li>
-                                                                  
-                </ul>
-            </div>
-                </div>
-                <div id='container4' class="chatAreadiv">
-                        <table class="chatAreaTable" id ="ChatArea">
-                                <tr id="firstRow"><td></td><td></td></tr>
-                        </table>
-                </div>
-                <div id='container5'>
-                        {{>input}}
-                </div>
-</div>
+<body>
+	<script src='engine.js'></script>
+	<script src='game.js'></script>
+	<script src='jquery-1.10.2.js' type='text/javascript'></script>
+
+	<div id='containermain'>
+		<div id='logo'>
+			<div id='login'>
+					{{loginButtons align="right"}}<br>
+			</div>
+			<h1>Plataforma Juegos</h1>
+			{{>welcome}}
+		</div>
+
+		<div id='container'>
+			<canvas id='game' width='1150' height='1150'></canvas>
+		</div>
+
+		<div id='container2'>
+			<ul>
+				<li><a href="#tabs-1">1</a></li>
+				<li><a href="#tabs-2">2</a></li>
+				<li><a href="#tabs-3">3</a></li>
+			</ul>
+			<div id="tabs-1" class="tabs">
+				<p id="text">Proin elit arcu, rutrum commodo, vehicula tempus, commodo a, risus. Curabitur nec
+				arcu.sollicitudin mi sit amet .<p>
+			</div>
+			<div id="tabs-2" class="tabs">
+				<p>Mauris consectetur tortor et purus.</p>
+			</div>
+			<div id="tabs-3" class="tabs">
+				<p>Quisque eu urna vel enim commodo pellentesque. Praesent eu risus hendrerit ligula tempus pretium.</p>
+				<p>Duis cursus. Maecenas ligula eros.</p>
+			</div>
+		</div>
+
+		<div id='container3'>			
+			<div class="games">
+				<h2 class="header">Juegos</h2>
+				<textarea id="debug"> </textarea>
+				<ul class="list">
+					<li class="item" >
+						<a class="juego1" href="" title="AlienInvasion" align="left">
+							<img src="../imagenes/alienInvasion.png" width="60px" height="41px">
+						</a>               
+					</li>
+					<li class="item">
+						<a class="juego2" href="" title="Angryfruits">
+							<img src="../imagenes/agryfruits.png" width="60px" height="41px">
+						</a>
+					</li>
+					<li class="item">
+						<a class="juego3" href="" title="Carcasone">
+							<img src="../imagenes/carcassonne-logo.jpg" width="60px" height="41px">
+						</a>
+					</li>
+				</ul>
+				{{>button}}
+			</div>
+		</div>
+
+		<div id='container4' class="chatAreadiv">
+			<table class="chatAreaTable" id ="ChatArea">
+				<tr id="firstRow"><td></td><td></td></tr>
+			</table>
+		</div>
+
+		<div id='container5'>
+			{{>input}}
+		</div>
+
+	</div>
 </body>
+
+
 <template name="welcome">
-        <p>Welcome to "UnnamedProject"! Please Log in.</p>
+	<p>Welcome to "UnnamedProject"! Please Log in.</p>
 </template>
+
+
 <template name="input">
-        <p> <strong>Message:</strong><input type="text" id="message"> </p>
+	<p> <strong>Message:</strong><input type="text" id="message"> </p>
 </template>
+
+
 <template name="button">
-        <input type="button" class="b1" value="B1"/>
-        <input type="button" class="b2" value="B2"/>
+	<input type="text" id="entry_nombre_partida"/>
+	<input type="button" class="b1" value="B1"/>
+	<input type="button" class="b2" value="B2"/>
+	<ul class="list">
+		<li class="item" >
+			<a class="juego1" href="" title="AlienInvasion" align="left">
+				<img src="alienInvasion.png" width="60px" height="41px">
+			</a>
+			<div class="ListaPartidas" id='ListaPartidas1'>
+				<input type="button" class="Lista1B1" value="Jugar a AlienInvasion"/>
+				<input type="button" class="Lista1B2" value="Reanudar Partida"/>
+			</div>
+		</li>
+		<li class="item">
+			<a class="juego2" href="" title="Angryfruits">
+				<img src="agryfruits.png" width="60px" height="41px">
+			</a>
+			<div class="ListaPartidas" id='ListaPartidas2'>
+				Lista Angry
+			</div>
+		</li>
+		<li class="item">
+			<a class="juego3" href="" title="Carcasone">
+				<img src="carcassonne-logo.jpg" width="60px" height="41px">
+			</a>
+			<div class="ListaPartidas" id='ListaPartidas3'>
+				Lista Carca
+				{{>gamesList}}
+			</div>
+		</li>                                                                  
+	</ul>
+
+</template>
+
+
+<template name="gamesList">
+	{{#each gamesList}}
+		{{#if imIn}}
+			<div><strong>{{nombre}}</strong>:{{jugadores}}</div>
+		{{else}}
+			<div>{{nombre}} : {{jugadores}}</div>
+		{{/if}}
+	{{/each}}
 </template>

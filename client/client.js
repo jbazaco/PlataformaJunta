@@ -15,11 +15,18 @@ var screenauto= function(){
 console.log("scrauto")
 	$("#containermain").css("width",document.documentElement.clientWidth.toString()+'px');
 	$("#containermain").css("height",document.documentElement.clientHeight.toString()+'px');
-	Meteor.setTimeout(screenauto,2000)
+	Meteor.setTimeout(screenauto,500)
 };
 
 $(function() {
 	$( "#container2" ).tabs({ hide: { effect: "slide",direction:'up', duration: 100 }, show:{ effect: "slide",direction:'up', duration: 100 }  });
+});
+
+$(function(){
+	$("#ListaPartidas1").hide();
+	$("#ListaPartidas2").hide();
+	$("#ListaPartidas3").hide();
+	$("#game").hide()
 });
 
 var Clip = function(msg,maxlen){
@@ -33,20 +40,6 @@ var Clip = function(msg,maxlen){
 		return msg
 	}
 };
-
-var GetSeq = function(){
-	var lst = Partidas.find({},{sort:{id:1}}).fetch();
-	for (var i=0; i<lst.length-1;i++){
-		if (Number(lst[i].id)+1 != Number(lst[i+1].id)){
-			var val = Number(lst[i].id)+1;
-			Session.set("seq",val);	//Gap!
-			return val;
-		}
-	}
-	var val= lst.length==0 ? 0 : lst[lst.length-1].id+1;
-	Session.set("seq",val)	//Not Gap..
-	return val;
-}
 
 Template.input.events={
 	'keydown input#message': function(event){
@@ -71,17 +64,61 @@ Template.input.events={
 }
 
 Template.button.events={
-        'click input.b1': function () {
-		var debugArea = $('#debug');
-		var user = Meteor.users.find({nombre:peter})
-		user.forEach(function(elem){debugArea.apend("<tr><td><strong>"+elem._id+"</strong>:</td><td><div>"+elem.nombre+"</div></td>")});
+	'click input.b1': function () {
+		Meteor.call("SuscribirPartida",[],{},[],$("#entry_nombre_partida").val(),function(error,result){
+			console.log(error)
+			console.log(result)
+			Session.set("Current_Game",result.toString())
+		})
 	},
-        'click input.b2': function(){
-                Meteor.users.insert({
-		  nombre:peter,
-		  time:Date.now()
-		});
-        }
+	'click input.b2': function(){
+		alert('Not used debug button.')
+	},
+	'click a.juego1':function(){
+		Session.set("Current_Game_Type","AlienInvasion");
+		$("#ListaPartidas1").show(500);
+		$("#ListaPartidas2").hide(500);
+		$("#ListaPartidas3").hide(500);
+// 		$("#game_alien").show(500);
+		return false
+	},
+	'click a.juego2':function(){
+		Session.set("Current_Game_Type","AngryFruits");
+		$("#ListaPartidas2").show(500);
+		$("#ListaPartidas1").hide(500);
+		$("#ListaPartidas3").hide(500);
+// 		$("#game_angry").show(500)
+		$("#game").hide(500);
+		return false
+	},
+	'click a.juego3':function(){
+		Session.set("Current_Game_Type","Carca");
+		$("#ListaPartidas3").show(500);
+		$("#ListaPartidas1").hide(500);
+		$("#ListaPartidas2").hide(500);
+// 		$("#game_carca").show(500)
+		$("#game").hide(500);
+		return false
+	},
+	'click input.Lista1B1':function(){
+		$("#game").show(500);
+	},
+	'click input.Lista1B2':function(){
+		alert("This button will make something awesome in the near future. Just hang tight...")
+	}
+}
+
+Template.gamesList.gamesList = function(){
+	return Partidas.find({})
+};
+
+Template.gamesList.imIn = function(){
+	var usu = Meteor.userId()
+	if (usu){
+		return (usu in this.jugadores) | (usu in this.invitados)
+	}else{
+		return false;
+	}
 }
 
 Accounts.ui.config({
@@ -95,4 +132,12 @@ Deps.autorun(function(){
 		chatArea.prepend("<tr><td><strong>"+message['name']+"</strong>:</td><td><div>"+message['message']+"</div></td>");
 	});
 });
+
+Deps.autorun(function(){
+	var subs = Session.get("Current_Game");
+	console.log(subs)
+	if(subs){
+		Meteor.subscribe(subs);
+	}
+})
 

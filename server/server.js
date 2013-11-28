@@ -3,7 +3,7 @@ Meteor.publish('messages', function(){
 	return Messages.find({}, {sort: {time:-1}});
 });
 Meteor.publish('partidas',function(){
-	return Partidas.find({});
+	return Partidas.find({},{nombre:1, jugadores:1,opciones:1});
 });
 
 Meteor.methods({
@@ -13,7 +13,6 @@ Meteor.methods({
 	//  jugada en la lista de jugadas de la partida.
 	RegistrarMovimiento : function(id_partida,jugador,movimiento){
 		console.log("Registrar Movimientos");
-		console.log(this.args);
 		var id = Partidas.findOne({id:id_partida})._id;
 		//if(jugadorpermitido)
 		Partidas.update(id,{$push:{jugadas:movimiento}});
@@ -25,7 +24,6 @@ Meteor.methods({
 	// jugadores de partida o invitados a partida).
 	UltimoMovimiento : function(id_partida){
 		console.log("Ultimo Movimiento");
-		console.log(this.args);
 		//if(jugadorpermitido)?
 		var jugadas = Partidas.findOne({id:id_partida}).jugadas;
 		return jugadas[jugadas.length-1];
@@ -39,7 +37,6 @@ Meteor.methods({
 	// de jugadores
 	VerTurno : function(id_partida){
 		console.log("VerTurno");
-		console.log(this.args);
 	// 	if(jugadorpermitido)?
 		var partida = Partidas.findOne({id:id_partida}).jugadas;
 		if (partida.jugadas.length()){
@@ -56,22 +53,26 @@ Meteor.methods({
 	// Jugadores es un array con el identificador de cada jugador (nombre?)
 	// Opciones es un map con las opciones que se quieran pasar a la partida.
 	// Invitados es un array con los jugadores que observan la partida.
-	SuscribirPartida : function(jugadores,opciones,invitados){
+	// Nombre es un nombre que le quieras dar a la partida.
+	SuscribirPartida : function(jugadores,opciones,invitados,nombre){
 		console.log("SubscribirPartida");
-		console.log(this.args);
 	// 	if(permitido)?
 		var id =GetSeq();
 		Partidas.insert({
 			id:id,
+			nombre:nombre,
 			jugadores: jugadores,
 			invitados: [],
-			opciones: op,
+			opciones: opciones,
+			empezada:false,
 			jugadas:[]
 		})
-		Meteor.publish('Partida'+id.toString(),function(){
-			return Partidas.find({id:id},{jugadores:1,invitados:1,opciones:1,jugadas:1});
+		var sid = "__Partida."+id.toString();
+		Meteor.publish(sid,function(){
+			return Partidas.find({id:id},{nombre:1, jugadores:1,invitados:1,opciones:1,jugadas:1});
 		})
-		return id;
+		
+		return sid;
 	}
 })
 
