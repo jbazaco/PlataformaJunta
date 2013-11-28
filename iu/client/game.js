@@ -32,18 +32,20 @@ var sprites = {
 	s2: { sx: 553, sy: 242, w: 30, h: 30},			//seguidor rosa
 	s3: { sx: 596, sy: 242, w: 30, h: 30},			//seguidor azul
 	s4: { sx: 640, sy: 242, w: 30, h: 30},			//seguidor verde
-	s5: { sx: 682, sy: 242, w: 30, h: 30}		//seguidor naranja
+	s5: { sx: 682, sy: 242, w: 30, h: 30},		//seguidor naranja
+	terminar: {sx: 727, sy: 44,w: 58,h: 20}		//Boton de temirnar
 };
 
 
 startGame = function() {
 
 	
-
-	
 	Game.setBoard(0,new GamePoints(0));
-	
+
 	Game.setBoard(Game.boards.length,FichaActual);
+	FichaActual.nextBoard = Game.boards.length;
+
+	Game.setBoard(Game.boards.length,BotonFinTurno);
 	
 	
 	var numjugadores=3; //nos lo tiene que dar la plataforma de momento es un ejemplo
@@ -59,9 +61,27 @@ startGame = function() {
 	ficha_inicial.buscar_huecos();
 	
 	
-
 }
 
+BotonFinTurno = new function() {
+	this.x = 940;
+	this.y = 200;
+	this.w = 58;
+	this.h = 20;
+	this.sprite = "terminar";
+
+	this.mover = function(x,y) {	}
+	
+	this.soltar = function(x,y) {	}
+
+	this.pulsado = function() {
+		FichaActual.finTurno();
+	}
+
+	this.draw = function(ctx) {
+		SpriteSheet.draw(ctx,this.sprite,this.x, this.y);
+	}	
+}
 
 Fondo = new function() {
 	this.draw = function(){
@@ -119,10 +139,22 @@ Ficha = function(x, y, sprite) {
 		}
 	}
 	
+	this.mover = function(x,y) {	}
 	
+	this.soltar = function(x,y) {	}
+
+	this.pulsado = function() {	}
+
+
 	this.draw = function(ctx) {
 		SpriteSheet.draw(ctx,this.sprite,this.x, this.y);
-	}	
+	}
+
+	this.establecerActual = function() {
+		//Se copiara tambien la orientacion
+		this.sprite = FichaActual.sprite;
+		this.buscar_huecos();
+	}
 }
 
 //Es un singleton
@@ -134,6 +166,7 @@ FichaActual = new function() {
 	this.x = 940;
 	this.y = 120;
 	this.sprite = 'interrogante';
+	this.nextBoard = 0;
 	
 	//Devuelve true si se gira la ficha
 	this.pulsado = function() {
@@ -141,7 +174,7 @@ FichaActual = new function() {
 			this.sprite = 'm'; //PEDIR A LA IA!!!, de momento ponemos una ficha cualquiera
 			return true;
 		}
-        alert('Ya has girado la ficha');
+        /*alert('Ya has girado la ficha');ARREGLAR CUANDO MOUSEUP QUE NO ENTRE EN CLICK*/
 		return false;
 	}
 	//tendra que informar al resto de clientes que ficha le ha salido a este jugador
@@ -156,23 +189,35 @@ FichaActual = new function() {
 
 	this.soltar = function(x,y) {
 		//CAMBIAR cuando se coloquen las fichas
-		var debajo = elemInPos(x,y);
+		var debajo = elemInPos(x,y, this.nextBoard);
 
-		if (debajo instanceof Ficha){	
-			if (debajo.sprite === "interrogante"){
-				debajo.sprite = this.sprite;
-				debajo.buscar_huecos();
-				this.sprite = "interrogante";
-			}
-		}		
-
-		this.x = this.inicialx;
-		this.y = this.inicialy;
-		
+		if (debajo instanceof Ficha && debajo.sprite === "interrogante"){
+			this.x = debajo.x;
+			this.y = debajo.y;
+		} else {	
+			this.x = this.inicialx;
+			this.y = this.inicialy;	
+		}
 	}
 
 	this.draw = function(ctx) {
 		SpriteSheet.draw(ctx,this.sprite,this.x,this.y,0);
+	}
+
+	this.finTurno = function() {
+		if (this.inicialx !== this.x) {
+			var debajo = elemInPos(this.x+this.w/2, this.y+this.h/2, this.nextBoard);
+			if (debajo instanceof Ficha && debajo.sprite === "interrogante"){
+				debajo.establecerActual();
+				this.resetear();	
+			}
+		}
+	}
+	
+	this.resetear = function() {
+		this.sprite = "interrogante";
+		this.x = this.inicialx;
+		this.y = this.inicialy;	
 	}
 
 };
@@ -217,22 +262,17 @@ Seguidor = function(sprite, numjugador) {
 	}
 };
 
-//Devuelve el elemento dibujado en (x,y)
+//Devuelve el elemento dibujado en (x,y) a partir del board n
 //El elemento debe tener una funcion pulsado, mover y soltar
-elemInPos = function(x, y) {
-	//Aqui las acciones que no necesiten estar en tu turno
+elemInPos = function(x, y, n) {
+	if (!n || n < 1) n = 1; //n<1 para ignorar GamePoints
 
-//	if (!Meteor.user() /*|| !IA.suTurno(Meteor.user().username))*/ ) { 
-//		alert('No es tu turno');
-//		return null;
-//	}
-	for(var i=1,len = Game.boards.length;i<len;i++) {
-	//Aqui las acciones que necesiten estar en tu turno
-		var n= len - 1- i;
-		if (Game.boards[n]){
-			if (y >= Game.boards[n].y && y <= Game.boards[n].y+Game.boards[n].h 
-					&& x >= Game.boards[n].x && x <= Game.boards[n].x+Game.boards[n].w) {
-				return Game.boards[n];
+	//len-1 para ignorar el fondo
+	for(var i=n,len = Game.boards.length-1;i<len;i++) {
+		if (Game.boards[i]){
+			if (y >= Game.boards[i].y && y <= Game.boards[i].y+Game.boards[i].h 
+					&& x >= Game.boards[i].x && x <= Game.boards[i].x+Game.boards[i].w) {
+				return Game.boards[i];
 			}
 		}
 	}
