@@ -204,7 +204,9 @@ FichaActual = new function() {
 			this.nombrar_lados();
 			return true;
 		}
-        /*alert('Ya has girado la ficha');ARREGLAR CUANDO MOUSEUP QUE NO ENTRE EN CLICK*/
+		if (this.x == this.inicialx && this.y == this.inicialy){
+			alert('Ya has girado la ficha');
+		}
 		return false;
 	}
 	//tendra que informar al resto de clientes que ficha le ha salido a este jugador

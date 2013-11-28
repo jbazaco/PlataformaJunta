@@ -1,5 +1,5 @@
 Game = new function() {																  
-
+	this.anularClick=false;
 	this.selec_elem = null;
 	// Inicializa el juego
 	this.initialize = function(canvasElementId,sprite_data,callback) {
@@ -18,6 +18,7 @@ Game = new function() {
 			var y = event.pageY - Game.canvas.offsetTop;
 			
 			this.selec_elem = elemInPos(x,y);
+			this.anularClick=false;
 		}, false);
 
 		this.canvas.addEventListener('mouseup', function(event) {
@@ -33,19 +34,23 @@ Game = new function() {
 				var x = event.pageX - Game.canvas.offsetLeft;
 				var y = event.pageY - Game.canvas.offsetTop;
 				this.selec_elem.mover(x,y) 
+				this.anularClick=true;
 			}
 		}, false);
 
 
 		this.canvas.addEventListener('click', function(event) {
-			var x = event.pageX - Game.canvas.offsetLeft;
-			var y = event.pageY - Game.canvas.offsetTop;
-			
-			this.selec_elem = elemInPos(x,y);
-			if (this.selec_elem) {
-				this.selec_elem.pulsado();
+			if(!this.anularClick){
+				var x = event.pageX - Game.canvas.offsetLeft;
+				var y = event.pageY - Game.canvas.offsetTop;
+				
+				this.selec_elem = elemInPos(x,y);
+				if (this.selec_elem) {
+					this.selec_elem.pulsado();
+				}
+				this.selec_elem = null;
+				this.anularClick=false;
 			}
-			this.selec_elem = null;
 		}, false);
 
 		SpriteSheet.load (sprite_data,callback);
