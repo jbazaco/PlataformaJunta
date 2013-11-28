@@ -9,6 +9,7 @@ Meteor.subscribe("partidas");
 
 Meteor.startup(function(){
 	screenauto();
+    $("#opciones").hide();
 });
 
 var screenauto= function(){
@@ -21,6 +22,10 @@ console.log("scrauto")
 $(function() {
 	$( "#container2" ).tabs({ hide: { effect: "slide",direction:'up', duration: 100 }, show:{ effect: "slide",direction:'up', duration: 100 }  });
 });
+
+function mostrar() {
+   $("#popup").fadeIn('slow');
+}
 
 var Clip = function(msg,maxlen){
 	if(msg.length>maxlen){
@@ -72,9 +77,8 @@ Template.input.events={
 
 Template.button.events={
         'click input.b1': function () {
-		var debugArea = $('#debug');
-		var user = Meteor.users.find({nombre:peter})
-		user.forEach(function(elem){debugArea.apend("<tr><td><strong>"+elem._id+"</strong>:</td><td><div>"+elem.nombre+"</div></td>")});
+		$( "#opciones" ).fadeToggle( "slow", "linear" );
+
 	},
         'click input.b2': function(){
                 Meteor.users.insert({

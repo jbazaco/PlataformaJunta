@@ -49,21 +49,21 @@ table {
 
 /* Center the container */
 #containermain {
-        width:100%;
-        height:100%;
-        position: absolute;
-        background-image: url(../imagenes/fondo3.jpg);
+  width:100%;
+  height:100%;
+  position: absolute;
+  background-image: url(../imagenes/fondo3.jpg);
 }
 #container {
   width:70%;
   height:65%;
-        float:left;
-        margin-left:2%;
-        border-radius:5px;
+  float:left;
+  margin-left:2%;
+  border-radius:5px;
 }
 #container2 {
   background-color:#CBAD48;
-        background: #CBAD48;
+  background: #CBAD48;
   width:25%;
   height:30%;
   float:right;
@@ -73,7 +73,7 @@ table {
         opacity:0.6;
 }
 .tabs{
-        color:black;
+  color:black;
 }
 
 #container3 {
@@ -99,7 +99,6 @@ table {
   height:5%;
   margin-left:2%;
 }
-
 #message {
 	width: 85%;
 	float:right;
@@ -116,7 +115,15 @@ table {
 	margin-top: 8px;
 	float: right;
 }
-
+#opciones {
+  padding: 2ex;
+  position: absolute;
+  border: 2px double grey;
+  background: wheat;
+	left: 400px;
+  width: 400px;
+ 	top: 100px;
+}
 /* Give canvas a background */
 canvas {
   	background-color:black;
@@ -158,4 +165,5 @@ textarea
         margin-top: 5px;
   word-wrap: break-word;
 }
+
 
