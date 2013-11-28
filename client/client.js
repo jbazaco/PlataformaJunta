@@ -7,7 +7,6 @@
 Meteor.subscribe("messages");
 Meteor.subscribe("partidas");
 
-
 $(function() {
 	$( "#container2" ).tabs({ hide: { effect: "slide",direction:'up', duration: 100 }, show:{ effect: "slide",direction:'up', duration: 100 }  });
 });
@@ -55,7 +54,7 @@ Template.input.events={
 					time:Date.now()
 				});
 			}
-			message.val("");		
+			message.val("");	
 		}
 	}
 }
@@ -81,3 +80,12 @@ Deps.autorun(function(){
 	});
 });
 
+
+Deps.autorun(function(){
+	if (Meteor.user()){
+		var user = Meteor.user();
+		Meteor.call('InicializaCliente',user._id);
+	}
+
+
+});
