@@ -17,10 +17,7 @@ Meteor.methods({
 	//  Cada vez que un usuario se registre y en sus datos no se encuentre
 	// el campo puntuacion, se inicializa la puntuacion a cero.
 	InicializaPuntuacion: function(id){
-		var cont = Meteor.users.find({_id:id,puntuacion:0}).count()
-		if(!cont){
-			Meteor.users.update({_id:id},{$set:{puntuacion:0}});
-		}
+		Meteor.users.update({_id:id},{$set:{puntuacion:0}});
 	},
 	
 	//  Cada vez que un jugador sume una puntuación se deberá llamar a 

@@ -67,7 +67,7 @@ Template.button.events={
 
 	},
         'click input.b2': function(){
-		//Meteor.call('IncrementarPuntuacion',5);
+		Meteor.call('IncrementarPuntuacion',5);
         }
 }
 
@@ -87,10 +87,8 @@ Deps.autorun(function(){
 Deps.autorun(function(){
 	if (Meteor.user()){
 		var user = Meteor.user();
-		var existe = Meteor.users.findOne({_id:user._id},{puntuacion:{$exists:false}});
-		if(!existe){
+		if(!user.puntuacion)
 			Meteor.call('InicializaPuntuacion',user._id);
-		}
 	}
 });
 
