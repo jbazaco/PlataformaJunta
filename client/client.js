@@ -6,6 +6,7 @@
 
 Meteor.subscribe("messages");
 Meteor.subscribe("partidas");
+Meteor.subscribe("DatosUsuarios");
 
 $(function() {
 	$( "#container2" ).tabs({ hide: { effect: "slide",direction:'up', duration: 100 }, show:{ effect: "slide",direction:'up', duration: 100 }  });
@@ -61,10 +62,14 @@ Template.input.events={
 
 Template.button.events={
         'click input.b1': function () {
+		var debugArea = $('#debug');
+		var punt = Meteor.users.findOne({username:Meteor.user().username}).puntuacion;
 		
+		debugArea.append("<tr><td><strong>"+Meteor.user().username+"</strong>:</td><td><div>"+punt+"</div></td>");
 	},
         'click input.b2': function(){
-		
+		var user = Meteor.user();
+		Meteor.users.findOne({username:user.username},{$inc:{puntuacion:5}});
         }
 }
 

@@ -7,6 +7,10 @@ Meteor.publish('partidas',function(){
 	return Partidas.find({});
 });
 
+// Publicacion del campo puntuacion para que puedan acceder los clientes.
+Meteor.publish("DatosUsuarios", function () {
+  return Meteor.users.find({},{fields: {'puntuacion': 1}});
+});
 
 Meteor.methods({
 	
