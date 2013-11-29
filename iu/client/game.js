@@ -237,10 +237,10 @@ FichaActual = new function() {
 		if (debajo instanceof Ficha && debajo.sprite === "interrogante"){
 			this.x = debajo.x;
 			this.y = debajo.y;
-			if (!this.comparar_lados()){			
+			/*if (!this.comparar_lados()){			
 				this.x = this.inicialx;
 				this.y = this.inicialy;
-			}
+			}*/
 		} else {	
 			this.x = this.inicialx;
 			this.y = this.inicialy;	

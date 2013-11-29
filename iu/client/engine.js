@@ -1,5 +1,6 @@
 Game = new function() {																  
 	this.anularClick=false;
+	this.moviendoRaton=false;
 	this.selec_elem = null;
 	// Inicializa el juego
 	this.initialize = function(canvasElementId,sprite_data,callback) {
@@ -22,11 +23,13 @@ Game = new function() {
 		}, false);
 
 		this.canvas.addEventListener('mouseup', function(event) {
-			var x = event.pageX - Game.canvas.offsetLeft;
-			var y = event.pageY - Game.canvas.offsetTop;
-
-			if (this.selec_elem) this.selec_elem.soltar(x,y);
-			this.selec_elem = null;
+			if(this.selec_elem && this.moviendoRaton) { //solo entra si el raton se ha estado moviendo
+				var x = event.pageX - Game.canvas.offsetLeft;
+				var y = event.pageY - Game.canvas.offsetTop;
+				this.selec_elem.soltar(x,y);
+				this.selec_elem = null;
+				this.moviendoRaton = false;
+			}
 		}, false);
 
 		this.canvas.addEventListener('mousemove', function(event) {
@@ -35,19 +38,18 @@ Game = new function() {
 				var y = event.pageY - Game.canvas.offsetTop;
 				this.selec_elem.mover(x,y) 
 				this.anularClick=true;
+				this.moviendoRaton = true;
 			}
 		}, false);
 
 
 		this.canvas.addEventListener('click', function(event) {
-			if(!this.anularClick){
+			if(!this.anularClick && this.selec_elem){
 				var x = event.pageX - Game.canvas.offsetLeft;
 				var y = event.pageY - Game.canvas.offsetTop;
 				
-				this.selec_elem = elemInPos(x,y);
-				if (this.selec_elem) {
-					this.selec_elem.pulsado();
-				}
+				this.selec_elem.pulsado();
+				
 				this.selec_elem = null;
 				this.anularClick=false;
 			}
