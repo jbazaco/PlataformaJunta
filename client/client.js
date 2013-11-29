@@ -62,14 +62,12 @@ Template.input.events={
 
 Template.button.events={
         'click input.b1': function () {
-		var debugArea = $('#debug');
-		var punt = Meteor.users.findOne({username:Meteor.user().username}).puntuacion;
-		
-		debugArea.append("<tr><td><strong>"+Meteor.user().username+"</strong>:</td><td><div>"+punt+"</div></td>");
+		//var debugArea = $('#debug');
+		//debugArea.prepend("<tr><td><strong>"+Meteor.user().username+"</strong> : </td><td><div>"+Meteor.user().puntuacion+"</div></td>");
+
 	},
         'click input.b2': function(){
-		var user = Meteor.user();
-		Meteor.users.findOne({username:user.username},{$inc:{puntuacion:5}});
+		//Meteor.call('IncrementarPuntuacion',5);
         }
 }
 
@@ -89,8 +87,10 @@ Deps.autorun(function(){
 Deps.autorun(function(){
 	if (Meteor.user()){
 		var user = Meteor.user();
-		Meteor.call('InicializaCliente',user._id);
+		var existe = Meteor.users.findOne({_id:user._id},{puntuacion:{$exists:false}});
+		if(!existe){
+			Meteor.call('InicializaCliente',user._id);
+		}
 	}
-
-
 });
+

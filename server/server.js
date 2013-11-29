@@ -15,14 +15,19 @@ Meteor.publish("DatosUsuarios", function () {
 Meteor.methods({
 	
 	InicializaCliente: function(id){
-		console.log('yuhuu')
 		var cont = Meteor.users.find({_id:id,puntuacion:0}).count()
 		if(!cont){
-			console.log("yuhuuuu2")
 			Meteor.users.update({_id:id},{$set:{puntuacion:0}});
 		}
 	},
 	
+	//  Cada vez que un jugador quiera sume una puntuacion se deberá llamar a 
+	//  esta función.
+	IncrementarPuntuacion: function(punt){
+		var user = Meteor.user();
+		var id = Meteor.users.findOne({_id:user._id})._id;
+		Meteor.users.update({_id:id},{$inc:{puntuacion:punt}});
+	},
 	//  Cada vez que se quiera almacenar un movimiento de una partida se llamará 
 	//  a esta funcion. Se comprueba que se el judgador que inicia el momimiento
 	//  está autorizado (está en la lista de jugadores), despues se almacena la 
