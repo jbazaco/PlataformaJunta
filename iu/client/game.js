@@ -42,12 +42,6 @@ startGame = function() {
 	
 	Game.setBoard(0,new GamePoints(0));
 
-	Game.setBoard(Game.boards.length,FichaActual);
-	FichaActual.nextBoard = Game.boards.length;
-
-	Game.setBoard(Game.boards.length,BotonFinTurno);
-	
-	
 	var numjugadores=3; //nos lo tiene que dar la plataforma de momento es un ejemplo
 	
 	for (i=1;i<=numjugadores;i++){	
@@ -55,6 +49,12 @@ startGame = function() {
 			Game.setBoard(Game.boards.length, new Seguidor("s"+i, i));
 		}
 	}
+	
+	Game.setBoard(Game.boards.length,FichaActual);
+	FichaActual.nextBoard = Game.boards.length;
+
+	Game.setBoard(Game.boards.length,BotonFinTurno);
+	
 	var ficha_inicial = new Ficha(394, 263,"cmur");
 	Game.setBoard(Game.boards.length,ficha_inicial);
 	Game.setBoard(Game.boards.length,Fondo);
@@ -212,6 +212,16 @@ FichaActual = new function() {
 	//tendra que informar al resto de clientes que ficha le ha salido a este jugador
 	//tiene que comprobar que el que hace click es el jugador al que le toca jugar, si no no puede mover
 
+	//Funcion para ver si las coordenadas que se le pasa estan sobre la FichaActual.
+	this.EstaEn = function(x, y){
+		if (x>=this.x && x<=this.x+FICHA_H && y>=this.y && y<=this.y+FICHA_W && this.x!=this.inicialx && this.y!=this.inicialy){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
+	
 	this.mover = function(x,y) {
 		if (this.sprite !== 'interrogante') {
 			this.x = x;
@@ -220,6 +230,7 @@ FichaActual = new function() {
 	}
 
 	this.soltar = function(x,y) {
+
 		//CAMBIAR cuando se coloquen las fichas
 		var debajo = elemInPos(x,y, this.nextBoard);
 
@@ -339,11 +350,11 @@ Seguidor = function(sprite, numjugador) {
 			this.y = y;
 		}
 	}
-	
 	this.soltar = function(x,y) {
-		//CAMBIAR cuando se coloquen las fichas
-		this.x = this.inicialx;
-		this.y = this.inicialy;
+		if (!FichaActual.EstaEn(this.x,this.y)){
+			this.x = this.inicialx;
+			this.y = this.inicialy;	
+		}
 	}
 
 
