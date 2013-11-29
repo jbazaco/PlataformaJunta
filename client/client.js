@@ -89,7 +89,7 @@ Deps.autorun(function(){
 		var user = Meteor.user();
 		var existe = Meteor.users.findOne({_id:user._id},{puntuacion:{$exists:false}});
 		if(!existe){
-			Meteor.call('InicializaCliente',user._id);
+			Meteor.call('InicializaPuntuacion',user._id);
 		}
 	}
 });
