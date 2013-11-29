@@ -60,20 +60,26 @@ Template.input.events={
 	}
 }
 
+
 Template.button.events={
         'click input.b1': function () {
 		//var debugArea = $('#debug');
 		//debugArea.prepend("<tr><td><strong>"+Meteor.user().username+"</strong> : </td><td><div>"+Meteor.user().puntuacion+"</div></td>");
-
+		
 	},
         'click input.b2': function(){
-		Meteor.call('IncrementarPuntuacion',5);
+		var user = Meteor.user();
+		//Meteor.call('InicializaPuntuacion',user._id);
+		Meteor.call('IncrementarPuntuacion',user._id,5);
+		Meteor.call('AgregarEquipo',user._id,"Atleti");
         }
 }
+
 
 Accounts.ui.config({
 	passwordSignupFields:"USERNAME_AND_OPTIONAL_EMAIL"
 });
+
 
 Deps.autorun(function(){
 	var chatArea = $('#firstRow');
