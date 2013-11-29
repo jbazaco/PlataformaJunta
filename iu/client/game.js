@@ -214,7 +214,8 @@ FichaActual = new function() {
 
 	//Funcion para ver si las coordenadas que se le pasa estan sobre la FichaActual.
 	this.EstaEn = function(x, y){
-		if (x>=this.x && x<=this.x+FICHA_H && y>=this.y && y<=this.y+FICHA_W && this.x!=this.inicialx && this.y!=this.inicialy){
+		if (x>=this.x && x<=this.x+FICHA_H && y>=this.y && y<=this.y+FICHA_W 
+				&& this.x!=this.inicialx && this.y!=this.inicialy){
 			return true;
 		}else{
 			return false;
@@ -230,20 +231,21 @@ FichaActual = new function() {
 	}
 
 	this.soltar = function(x,y) {
+		if (this.sprite !== "interrogante") {
+			//CAMBIAR cuando se coloquen las fichas
+			var debajo = elemInPos(x,y, this.nextBoard);
 
-		//CAMBIAR cuando se coloquen las fichas
-		var debajo = elemInPos(x,y, this.nextBoard);
-
-		if (debajo instanceof Ficha && debajo.sprite === "interrogante"){
-			this.x = debajo.x;
-			this.y = debajo.y;
-			/*if (!this.comparar_lados()){			
+			if (debajo instanceof Ficha && debajo.sprite === "interrogante"){
+				this.x = debajo.x;
+				this.y = debajo.y;
+				/*if (!this.comparar_lados()){			
+					this.x = this.inicialx;
+					this.y = this.inicialy;
+				}*/
+			} else {	
 				this.x = this.inicialx;
-				this.y = this.inicialy;
-			}*/
-		} else {	
-			this.x = this.inicialx;
-			this.y = this.inicialy;	
+				this.y = this.inicialy;	
+			}
 		}
 	}
 
