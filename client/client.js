@@ -72,6 +72,7 @@ Template.button.events={
 		//Meteor.call('InicializaPuntuacion',user._id);
 		Meteor.call('IncrementarPuntuacion',user._id,5);
 		Meteor.call('AgregarEquipo',user._id,"Atleti");
+		Meteor.call('AgregarTorneo',user._id,"champions");
         }
 }
 
@@ -93,8 +94,8 @@ Deps.autorun(function(){
 Deps.autorun(function(){
 	if (Meteor.user()){
 		var user = Meteor.user();
-		if(!user.puntuacion)
-			Meteor.call('InicializaPuntuacion',user._id);
+		if(!user.puntuacion && user.puntuacion!=0)
+			Meteor.call('InicializaCliente',user._id);
 	}
 });
 

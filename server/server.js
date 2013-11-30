@@ -16,7 +16,7 @@ Meteor.methods({
 	
 	//  Cada vez que un usuario se registre y en sus datos no se encuentre
 	// el campo puntuacion, se inicializa la puntuacion a cero.
-	InicializaPuntuacion: function(id){
+	InicializaCliente: function(id){
 		Meteor.users.update({_id:id},{$set:{puntuacion:0,equipos:[],torneos:[]}});
 	},
 	
@@ -27,10 +27,17 @@ Meteor.methods({
 	},
 	
 	// Cada vez que se cree un equipo, el equipo es guardado en la colección
-	// users. equipos es un campo de la colección de usuarios, que guarda la lista
+	// users. "equipos" es un campo de la colección de usuarios, que guarda la lista
 	// de equipos en los que participa.
 	AgregarEquipo: function(id,equipo){
 		Meteor.users.update(id,{$push:{equipos:equipo}});
+	},
+
+	// Cada vez que se cree un torneo, el torneo es guardado en la colección
+	// users. "torneos" es un campo de la colección de usuarios, que guarda la lista
+	// de torneos en los que participa.
+	AgregarTorneo: function(id,torneo){
+		Meteor.users.update(id,{$push:{torneos:torneo}});
 	},
 	//  Cada vez que se quiera almacenar un movimiento de una partida se llamará 
 	//  a esta funcion. Se comprueba que se el judgador que inicia el momimiento
