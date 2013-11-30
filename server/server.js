@@ -9,7 +9,7 @@ Meteor.publish('partidas',function(){
 
 // Publicacion del campo puntuacion para que puedan acceder los clientes.
 Meteor.publish("DatosUsuarios", function () {
-  return Meteor.users.find({},{fields: {'puntuacion': 1,'services': 1,'estado':1}});
+  return Meteor.users.find({},{fields: {'username':1,'puntuacion': 1,'services': 1,'estado':1}});
 });
 
 Meteor.methods({
@@ -38,6 +38,16 @@ Meteor.methods({
 		});
 	},
 
+	
+	ImprimirEstados: function(){
+		var estadoArea = $('#tabs-1');
+		var usuarios = Meteor.users.find({});
+		console.log(usuarios.count())
+		usuarios.forEach(function(usu){
+			console.log(usu.username+usu.estado)
+			estadoArea.append("<tr><td><strong>"+usu.username+"</strong> : </td><td><div>"+usu.estado+"</div></td>");		
+		});
+	},
 	//  Cada vez que un jugador sume una puntuación se deberá llamar a 
 	//  esta función.
 	IncrementarPuntuacion: function(id,punt){
