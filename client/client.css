@@ -54,6 +54,13 @@ table {
         position: absolute;
         background-image: url(../imagenes/fondo3.jpg);
 }
+
+.publi{
+        width: 165px;
+        height: 31px;
+        background-image: url(../imagenes/fondo3.jpg)
+}
+
 #container {
   width:70%;
   height:65%;
