@@ -99,5 +99,12 @@ Deps.autorun(function(){
 			Meteor.call('InicializaCliente',user._id);
 		}
 	}
+	Meteor.call('ActualizarEstado');
 });
+
+
+
+
+
+
 
