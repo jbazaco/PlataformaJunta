@@ -17,7 +17,7 @@ Meteor.methods({
 	//  Cada vez que un usuario se registre y en sus datos no se encuentre
 	// el campo puntuacion, se inicializa la puntuacion a cero.
 	InicializaCliente: function(id){
-		Meteor.users.update({_id:id},{$set:{puntuacion:0,equipos:[],torneos:[]}});
+		Meteor.users.update({_id:id},{$set:{puntuacion:0,equipos:[],torneos:[],penalizacion:0}});
 	},
 	
 	//  Cada vez que un jugador sume una puntuación se deberá llamar a 
@@ -39,6 +39,13 @@ Meteor.methods({
 	AgregarTorneo: function(id,torneo){
 		Meteor.users.update(id,{$push:{torneos:torneo}});
 	},
+
+	// Cada vez que un jugador pierde "x" tiempo en su turno se le penaliza. Igualmente
+	// si el jugador abandona el juego antes de que acabe la partida.
+	AgregarPenalizacion: function(id,penal){
+		Meteor.users.update(id,{$inc:{penalizacion:penal}});
+	},
+
 	//  Cada vez que se quiera almacenar un movimiento de una partida se llamará 
 	//  a esta funcion. Se comprueba que se el judgador que inicia el momimiento
 	//  está autorizado (está en la lista de jugadores), despues se almacena la 
@@ -51,7 +58,7 @@ Meteor.methods({
 		Partidas.update(id,{$push:{jugadas:movimiento}});
 	},
 
-	// Esta función devueiemQfx9dLJxDn6EsPlve el ultimo movimiento jugado en la partida
+	// Esta función devuelve el ultimo movimiento jugado en la partida
 	// AUN NO ESTA CLARO si cualquiera puede mirar el ultimo movimiento
 	// o debe estar en alguna de las listas de jugadores (usuarios, 
 	// jugadores de partida o invitados a partida).

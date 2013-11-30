@@ -69,10 +69,11 @@ Template.button.events={
 	},
         'click input.b2': function(){
 		var user = Meteor.user();
-		//Meteor.call('InicializaPuntuacion',user._id);
+		//Meteor.call('InicializaCliente',user._id);
 		Meteor.call('IncrementarPuntuacion',user._id,5);
 		Meteor.call('AgregarEquipo',user._id,"Atleti");
 		Meteor.call('AgregarTorneo',user._id,"champions");
+		Meteor.call('AgregarPenalizacion',user._id,1);
         }
 }
 
@@ -94,8 +95,9 @@ Deps.autorun(function(){
 Deps.autorun(function(){
 	if (Meteor.user()){
 		var user = Meteor.user();
-		if(!user.puntuacion && user.puntuacion!=0)
+		if(!user.puntuacion && user.puntuacion!=0){
 			Meteor.call('InicializaCliente',user._id);
+		}
 	}
 });
 
