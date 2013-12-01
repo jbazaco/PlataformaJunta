@@ -378,6 +378,10 @@ Seguidor = function(sprite, numjugador) {
 		}
 	}
 
+	//Devuelve true si no esta en la posicion inicial
+	this.seHaMovido = function(x, y) {
+		return (this.x !== this.inicialx || this.y !== this.inicialy);
+	}
 
 	this.draw = function(ctx) {
 		SpriteSheet.draw(ctx,this.sprite,this.x,this.y,0);
@@ -402,10 +406,13 @@ elemInPos = function(x, y, n) {
 }
 
 var desplazarTablero = function(difx, dify) {
-	 for(var i=FichaActual.nextBoard,len = Game.boards.length-1;i<len;i++) {
-		if (Game.boards[i] && Game.boards[i] instanceof Ficha){
-			Game.boards[i].x += difx;
-			Game.boards[i].y += dify;
+	 for(var i=0; i<Game.boards.length; i++) {
+		if (Game.boards[i]){
+			if (Game.boards[i] instanceof Ficha || 
+					(Game.boards[i] instanceof Seguidor && Game.boards[i].seHaMovido())) {
+				Game.boards[i].x += difx;
+				Game.boards[i].y += dify;
+			}
 		}
 	}
 
@@ -413,6 +420,8 @@ var desplazarTablero = function(difx, dify) {
 		FichaActual.x += difx;
 		FichaActual.y += dify;
 	}
+
+	
 }
 
 $(function() {
