@@ -408,6 +408,11 @@ var desplazarTablero = function(difx, dify) {
 			Game.boards[i].y += dify;
 		}
 	}
+
+	if (FichaActual.seHaMovido()) {
+		FichaActual.x += difx;
+		FichaActual.y += dify;
+	}
 }
 
 $(function() {
