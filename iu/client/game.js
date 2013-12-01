@@ -36,6 +36,7 @@ var sprites = {
 	terminar: {sx: 727, sy: 44,w: 58,h: 20}		//Boton de temirnar
 };
 
+var ficha_inicial;
 
 startGame = function() {
 
@@ -55,8 +56,8 @@ startGame = function() {
 
 	Game.setBoard(Game.boards.length,BotonFinTurno);
 	
-	var ficha_inicial = new Ficha(394, 263,"cmur");
-	Game.setBoard(Game.boards.length,ficha_inicial);
+	ficha_inicial = new Ficha(394, 263,"cmur");
+	Game.setBoard(Game.boards.length, ficha_inicial);
 	Game.setBoard(Game.boards.length,Fondo);
 	ficha_inicial.nombrar_lados();
 	ficha_inicial.buscar_huecos();
@@ -110,6 +111,9 @@ Ficha = function(x, y, sprite) {
 	this.ladoi;	//lado Izquierdo
 	this.ladoa;	//lado Arriba;
 	this.ladob;	//lado aBajo;
+
+	this.coordenadas = {x: !ficha_inicial ? 0:(this.x-ficha_inicial.x)/this.w,
+						y: !ficha_inicial ? 0:(ficha_inicial.y-this.y)/this.h};
 	
 	this.nombrar_lados = function(){
 		if (this.sprite === 'm'){ 
