@@ -222,6 +222,10 @@ FichaActual = new function() {
 		}
 	}
 	
+	//Devuelve true si no esta en la posicion inicial
+	this.seHaMovido = function(x, y) {
+		return (this.x !== this.inicialx || this.y !== this.inicialy);
+	}
 	
 	this.mover = function(x,y) {
 		if (this.sprite !== 'interrogante') {
@@ -353,7 +357,7 @@ Seguidor = function(sprite, numjugador) {
 		}
 	}
 	this.soltar = function(x,y) {
-		if (!FichaActual.EstaEn(this.x,this.y)){
+		if (!FichaActual.seHaMovido() || !FichaActual.EstaEn(this.x,this.y)){
 			this.x = this.inicialx;
 			this.y = this.inicialy;	
 		}
