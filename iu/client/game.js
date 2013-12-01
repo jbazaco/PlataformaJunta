@@ -164,11 +164,22 @@ Ficha = function(x, y, sprite) {
 		}
 	}
 	
-	this.mover = function(x,y) {	}
+	this.pulsado_en = {x:0, y:0};
+	this.mover = function(x,y) {
+		if (this.pulsado_en.x === 0 && this.pulsado_en.y === 0) {
+			this.pulsado_en = {x: x, y: y};	
+		} else {
+			desplazarTablero(x-this.pulsado_en.x,y-this.pulsado_en.y);
+			this.pulsado_en = {x: x, y: y};
+		}
+	}
 	
-	this.soltar = function(x,y) {	}
+	this.soltar = function(x,y) {
+		desplazarTablero(x-this.pulsado_en.x,y-this.pulsado_en.y);
+		this.pulsado_en = {x:0, y:0};
+	}
 
-	this.pulsado = function() {	}
+	this.pulsado = function(x, y) {	}
 
 
 	this.draw = function(ctx) {
@@ -388,6 +399,15 @@ elemInPos = function(x, y, n) {
 		}
 	}
 	return null;
+}
+
+var desplazarTablero = function(difx, dify) {
+	 for(var i=FichaActual.nextBoard,len = Game.boards.length-1;i<len;i++) {
+		if (Game.boards[i] && Game.boards[i] instanceof Ficha){
+			Game.boards[i].x += difx;
+			Game.boards[i].y += dify;
+		}
+	}
 }
 
 $(function() {
