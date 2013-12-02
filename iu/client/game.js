@@ -232,9 +232,21 @@ Ficha = function(x, y, sprite) {
 
 	this.pulsado = function(x, y) {	}
 
-
+	//Si se sale del espacio del tablero no se pinta la parte que
+	// sale de la pantalla
 	this.draw = function(ctx) {
-		SpriteSheet.draw(ctx,this.sprite,this.x, this.y);
+		var sw = this.w;
+		var dibujar = true;
+		if (this.x+this.w > 850) {
+			var dif = 850 - this.x;
+			if (dif < 0) {
+				dibujar = false;
+			} else {
+				sw = dif;
+			}
+			
+		}
+		if(dibujar) SpriteSheet.draw(ctx,this.sprite,this.x, this.y, sw);
 	}
 
 	this.establecerActual = function() {
@@ -289,11 +301,13 @@ FichaActual = new function() {
 	}
 	
 	//Devuelve true si no esta en la posicion inicial
-	this.seHaMovido = function(x, y) {
+	this.seHaMovido = function() {
 		return (this.x !== this.inicialx || this.y !== this.inicialy);
 	}
 	
+	this.moviendo = false;
 	this.mover = function(x,y) {
+		this.moviendo = true;
 		if (this.sprite !== 'interrogante') {
 			this.x = x;
 			this.y = y;
@@ -317,10 +331,23 @@ FichaActual = new function() {
 				this.y = this.inicialy;	
 			}
 		}
+		this.moviendo = false;
 	}
 
 	this.draw = function(ctx) {
-		SpriteSheet.draw(ctx,this.sprite,this.x,this.y,0);
+		var dibujar = true;
+		var sw = this.w;
+		//Si esta colocada en el tablero y se sale del espacio del tablero no 
+		//se pinta la parte que sale de la pantalla
+		if (!this.moviendo && this.seHaMovido() && this.x+this.w > 850) {
+			var dif = 850 - this.x;
+			if (dif < 0) {
+				dibujar = false;
+			} else {
+				sw = dif;
+			}	
+		}
+		if (dibujar) SpriteSheet.draw(ctx,this.sprite,this.x,this.y,sw);
 	}
 
 	this.finTurno = function() {
@@ -413,8 +440,9 @@ Seguidor = function(sprite, numjugador) {
 	this.pulsado = function() {}
 	//tiene que comprobar que el que hace click es el jugador al que le toca jugar, si no no puede mover
 
+	this.moviendo = false;
 	this.mover = function(x,y) {
-		//CAMBIAR Solo puedes mover tu seguidor
+		this.moviendo = true;
 		miJugador=1;
 		turno=1;//Falta funcion para saber de quien es el turno
 		if(turno==miJugador && this.sprite=="s"+miJugador){
@@ -427,15 +455,28 @@ Seguidor = function(sprite, numjugador) {
 			this.x = this.inicialx;
 			this.y = this.inicialy;	
 		}
+		this.moviendo = false;
 	}
 
 	//Devuelve true si no esta en la posicion inicial
-	this.seHaMovido = function(x, y) {
+	this.seHaMovido = function() {
 		return (this.x !== this.inicialx || this.y !== this.inicialy);
 	}
 
 	this.draw = function(ctx) {
-		SpriteSheet.draw(ctx,this.sprite,this.x,this.y,0);
+		var dibujar = true;
+		var sw = this.w;
+		//Si esta colocado en el tablero y se sale del espacio del tablero no 
+		//se pinta la parte que sale de la pantalla
+		if (!this.moviendo && this.seHaMovido() && this.x+this.w > 850) {
+			var dif = 850 - this.x;
+			if (dif < 0) {
+				dibujar = false;
+			} else {
+				sw = dif;
+			}	
+		}
+		if (dibujar) SpriteSheet.draw(ctx,this.sprite,this.x,this.y,sw);
 	}
 };
 

@@ -3,5 +3,5 @@ Un movimiento será unívocamente definido indicando:
 -Nick del jugador que efectúa el movimiento
 -Ficha que se coloca (id de la ficha)
 -Orientacion de la ficha (*falta definir como se indica la orientacion*)
--Lugar del tablero donde se sitúa (*falta implementarlo* *cada posición del tablero tiene una coordenada [x,y], empezando por la [0,0] que se relaciona con la ficha inicial y sumando +1 a la x por cada posición a la derecha, o -1 para la iquierda, lo mismo para la y -> +1 para arriba y -1 para abajo*)
+-Lugar del tablero donde se sitúa (cada posición del tablero tiene una coordenada [x,y], empezando por la [0,0] que se relaciona con la ficha inicial y sumando +1 a la x por cada posición a la derecha, o -1 para la iquierda, lo mismo para la y -> +1 para arriba y -1 para abajo)
 -Donde se coloca el seguidor (si se coloca, si no campos a "null" *concretar que es null*) (*falta definir como se indica donde se ha colocado*)
