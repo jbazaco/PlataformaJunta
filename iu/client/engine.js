@@ -57,6 +57,7 @@ Game = new function() {
 
 		SpriteSheet.load (sprite_data,callback);
 	};
+	
 
 	// Bucle del juego
 	this.boards = [];
@@ -118,6 +119,18 @@ SpriteSheet = new function() {
 
 GamePoints = function() {
 	Game.points = 0;
+
+	this.x = 0;
+	this.y = 0;
+	this.w = 0;
+	this.h = 0;
+	this.sprite = "";
+
+	this.mover = function(x,y) {	}
+	
+	this.soltar = function(x,y) {	}
+
+	this.pulsado = function() {	}
 
 	var pointsLength = 4;
 
