@@ -186,29 +186,30 @@ Ficha = function(x, y, sprite) {
 	//pone la ficha "interrogante".
 	this.buscar_huecos = function(){
 		
-		var derecha = elemInPos(this.x+3/2*this.w, this.y +this.h/2);
+		var derecha = elemInPos(this.x+3/2*this.w, this.y +this.h/2,
+								FichaActual.nextBoard);
 		
-		if(derecha === Fondo || derecha===FichaActual){
+		if(derecha === null || derecha === Fondo){
 			var ficha = new Ficha(this.x+this.w, this.y, "interrogante");
 			Game.setBoard(Game.boards.length-1,ficha);
 			Game.setBoard(Game.boards.length,Fondo);
 		}	
 		
 		var izquierda = elemInPos(this.x-this.w/2, this.y+this.h/2);
-		if(izquierda === Fondo || izquierda===FichaActual){
+		if(izquierda === null || izquierda === Fondo){
 			var ficha = new Ficha(this.x-this.w, this.y, "interrogante");
 			Game.setBoard(Game.boards.length-1,ficha);
 			Game.setBoard(Game.boards.length,Fondo);
 		}
 		
 		var arriba = elemInPos(this.x+this.w/2, this.y-this.h/2);
-		if(arriba === Fondo || arriba===FichaActual){
+		if(arriba === null || arriba === Fondo){
 			var ficha = new Ficha(this.x, this.y-this.h, "interrogante");
 			Game.setBoard(Game.boards.length-1,ficha);
 			Game.setBoard(Game.boards.length,Fondo);
 		}
 		var abajo = elemInPos(this.x+this.w/2, this.y+3/2*this.h);
-		if(abajo === Fondo  || abajo===FichaActual){
+		if(abajo === null || abajo === Fondo  || abajo===FichaActual){
 			var ficha = new Ficha(this.x, this.y+this.h, "interrogante");
 			Game.setBoard(Game.boards.length-1,ficha);
 			Game.setBoard(Game.boards.length,Fondo);
