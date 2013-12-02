@@ -41,6 +41,14 @@ var ficha_inicial;
 startGame = function() {
 
 	
+	Game.setBoard(0,new TitleScreen("Carcassone.", "Haga click para empezar.",playGame));
+
+	
+	
+	
+}
+playGame = function(){
+
 	Game.setBoard(0,new GamePoints(0));
 
 	var numjugadores=3; //nos lo tiene que dar la plataforma de momento es un ejemplo
@@ -62,9 +70,41 @@ startGame = function() {
 	ficha_inicial.nombrar_lados();
 	ficha_inicial.buscar_huecos();
 	
-	
-}
 
+}
+TitleScreen = function TitleScreen(title,subtitle,callback) {
+    
+	this.x = 0;
+	this.y = 0;
+	this.w = 1070;
+	this.h = 650;
+	this.sprite = "";
+
+	this.mover = function(x,y) {	}
+	
+	this.soltar = function(x,y) {	}
+
+	this.pulsado = function() {
+		callback();
+		//Informar a Plataforma que se ha metido un jugador a la partida y espera rivales si no estan todos.
+	}
+
+
+        this.draw = function(ctx) {
+	    ctx.fillStyle = "#FFFFFF";
+	    ctx.textAlign = "center";
+	
+	    Game.ctx.fillStyle = "#000000";
+	    Game.ctx.fillRect(0,0,1070,650);
+
+	    ctx.fillStyle= "#c9c9c9";
+	    ctx.font = "bold 100px arial";
+	    ctx.fillText(title,Game.width/2,Game.height/2);
+
+	    ctx.font = "bold 75px arial";
+	    ctx.fillText(subtitle,Game.width/2+5,Game.height/2 + 100);
+        }
+}
 BotonFinTurno = new function() {
 	this.x = 940;
 	this.y = 200;
@@ -86,6 +126,17 @@ BotonFinTurno = new function() {
 }
 
 Fondo = new function() {
+	this.x = 0;
+	this.y = 0;
+	this.w = 1070;
+	this.h = 650;
+	this.sprite = "";
+
+	this.mover = function(x,y) {	}
+	
+	this.soltar = function(x,y) {	}
+
+	this.pulsado = function() {	}
 	this.draw = function(){
 		// Dibujar rectangulo azul
 		Game.ctx.fillStyle = "#44cbff";
@@ -137,27 +188,27 @@ Ficha = function(x, y, sprite) {
 		
 		var derecha = elemInPos(this.x+3/2*this.w, this.y +this.h/2);
 		
-		if(derecha===null || derecha===FichaActual){
+		if(derecha === Fondo || derecha===FichaActual){
 			var ficha = new Ficha(this.x+this.w, this.y, "interrogante");
 			Game.setBoard(Game.boards.length-1,ficha);
 			Game.setBoard(Game.boards.length,Fondo);
 		}	
 		
 		var izquierda = elemInPos(this.x-this.w/2, this.y+this.h/2);
-		if(izquierda===null || izquierda===FichaActual){
+		if(izquierda === Fondo || izquierda===FichaActual){
 			var ficha = new Ficha(this.x-this.w, this.y, "interrogante");
 			Game.setBoard(Game.boards.length-1,ficha);
 			Game.setBoard(Game.boards.length,Fondo);
 		}
 		
 		var arriba = elemInPos(this.x+this.w/2, this.y-this.h/2);
-		if(arriba===null || arriba===FichaActual){
+		if(arriba === Fondo || arriba===FichaActual){
 			var ficha = new Ficha(this.x, this.y-this.h, "interrogante");
 			Game.setBoard(Game.boards.length-1,ficha);
 			Game.setBoard(Game.boards.length,Fondo);
 		}
 		var abajo = elemInPos(this.x+this.w/2, this.y+3/2*this.h);
-		if(abajo===null || abajo===FichaActual){
+		if(abajo === Fondo  || abajo===FichaActual){
 			var ficha = new Ficha(this.x, this.y+this.h, "interrogante");
 			Game.setBoard(Game.boards.length-1,ficha);
 			Game.setBoard(Game.boards.length,Fondo);
@@ -391,10 +442,10 @@ Seguidor = function(sprite, numjugador) {
 //Devuelve el elemento dibujado en (x,y) a partir del board n
 //El elemento debe tener una funcion pulsado, mover y soltar
 elemInPos = function(x, y, n) {
-	if (!n || n < 1) n = 1; //n<1 para ignorar GamePoints
+	if (!n || n < 0) n = 0; //n<1 para ignorar GamePoints
 
 	//len-1 para ignorar el fondo
-	for(var i=n,len = Game.boards.length-1;i<len;i++) {
+	for(var i=n,len = Game.boards.length;i<len;i++) {
 		if (Game.boards[i]){
 			if (y >= Game.boards[i].y && y <= Game.boards[i].y+Game.boards[i].h 
 					&& x >= Game.boards[i].x && x <= Game.boards[i].x+Game.boards[i].w) {
