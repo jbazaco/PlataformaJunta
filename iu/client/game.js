@@ -270,6 +270,8 @@ FichaActual = new function() {
 	this.y = 120;
 	this.sprite = 'interrogante';
 	this.nextBoard = 0;
+	this.haySeguidor=false;
+	this.colocado=null;
 	this.ladod;	//lado Derecho
 	this.ladoi;	//lado Izquierdo
 	this.ladoa;	//lado Arriba;
@@ -311,6 +313,11 @@ FichaActual = new function() {
 		if (this.sprite !== 'interrogante') {
 			this.x = x;
 			this.y = y;
+			if (this.colocado){	
+				this.colocado.x=this.colocado.inicialx;
+				this.colocado.y=this.colocado.inicialy;
+				this.colocado=null;
+			}
 		}
 	}
 
@@ -364,6 +371,8 @@ FichaActual = new function() {
 		this.sprite = "interrogante";
 		this.x = this.inicialx;
 		this.y = this.inicialy;	
+		this.haySeguidor=false;
+		this.colocado=false;
 	}
 	
 	this.comparar_lados = function(){
@@ -445,15 +454,21 @@ Seguidor = function(sprite, numjugador) {
 		this.moviendo = true;
 		miJugador=1;
 		turno=1;//Falta funcion para saber de quien es el turno
-		if(turno==miJugador && this.sprite=="s"+miJugador){
+		if(turno==miJugador && this.sprite=="s"+miJugador && (!FichaActual.colocado || FichaActual.colocado==this)){ 
 			this.x = x;
 			this.y = y;
+			
 		}
 	}
 	this.soltar = function(x,y) {
-		if (!FichaActual.seHaMovido() || !FichaActual.EstaEn(this.x,this.y)){
+		if ((!FichaActual.seHaMovido() || !FichaActual.EstaEn(this.x,this.y))){
 			this.x = this.inicialx;
 			this.y = this.inicialy;	
+			FichaActual.haySeguidor=false;
+
+		}else{
+			FichaActual.haySeguidor=true;
+			FichaActual.colocado=this;
 		}
 		this.moviendo = false;
 	}
