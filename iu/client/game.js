@@ -3,7 +3,8 @@ var FICHA_H = 62;
 var FICHA_W = 62;
 
 var sprites = {
-	m: { sx: 253, sy: 44, w: FICHA_W, h: FICHA_H},		//monasterio
+	m: { sx: 253, sy: 44, w: FICHA_W, h: FICHA_H, si:"campo", sc:"campo", sd:"campo",
+		ci:"campo", cc:"monasterio", cd:"campo", ii:"campo", ic:"campo", id:"campo"},		//monasterio
 	mc: { sx: 331, sy: 44, w: FICHA_W, h: FICHA_H},		//monasterio con camino
 	cr: { sx: 563, sy: 44, w: FICHA_W, h: FICHA_H},		//camino recto
 	cc: { sx: 485, sy: 44, w: FICHA_W, h: FICHA_H},		//camino curva
@@ -445,7 +446,7 @@ Seguidor = function(sprite, numjugador) {
 	this.x=this.inicialx;
 	this.y=this.inicialy;
 	this.sprite=sprite;
-	
+	this.zona="";
 
 	this.pulsado = function() {}
 	//tiene que comprobar que el que hace click es el jugador al que le toca jugar, si no no puede mover
@@ -455,12 +456,71 @@ Seguidor = function(sprite, numjugador) {
 		this.moviendo = true;
 		miJugador=1;
 		turno=1;//Falta funcion para saber de quien es el turno
-		if(turno==miJugador && this.sprite=="s"+miJugador && (!FichaActual.colocado || FichaActual.colocado==this)){ 
+		if(turno==miJugador && this.sprite=="s"+miJugador && FichaActual.seHaMovido() && (!FichaActual.colocado || FichaActual.colocado==this)){ 
 			this.x = x;
 			this.y = y;
-			
+			Game.ctx.fillStyle = "#000000";
+			Game.ctx.strokeRect(FichaActual.x,FichaActual.y,FICHA_H/3,FICHA_W/3);
+			Game.ctx.fillStyle = "#000000";
+			Game.ctx.strokeRect(FichaActual.x+FICHA_H/3,FichaActual.y,FICHA_H/3,FICHA_W/3);
+			Game.ctx.fillStyle = "#000000";
+			Game.ctx.strokeRect(FichaActual.x+2*FICHA_H/3,FichaActual.y,FICHA_H/3,FICHA_W/3);
+			Game.ctx.fillStyle = "#000000";
+			Game.ctx.strokeRect(FichaActual.x,FichaActual.y+FICHA_W/3,FICHA_H/3,FICHA_W/3);
+			Game.ctx.fillStyle = "#000000";
+			Game.ctx.strokeRect(FichaActual.x+FICHA_H/3,FichaActual.y+FICHA_W/3,FICHA_H/3,FICHA_W/3);
+			Game.ctx.fillStyle = "#000000";
+			Game.ctx.strokeRect(FichaActual.x+2*FICHA_H/3,FichaActual.y+FICHA_W/3,FICHA_H/3,FICHA_W/3);
+			Game.ctx.fillStyle = "#000000";
+			Game.ctx.strokeRect(FichaActual.x,FichaActual.y+2*FICHA_W/3,FICHA_H/3,FICHA_W/3);
+			Game.ctx.fillStyle = "#000000";
+			Game.ctx.strokeRect(FichaActual.x+FICHA_H/3,FichaActual.y+2*FICHA_W/3,FICHA_H/3,FICHA_W/3);
+			Game.ctx.fillStyle = "#000000";
+			Game.ctx.strokeRect(FichaActual.x+2*FICHA_H/3,FichaActual.y+2*FICHA_W/3,FICHA_H/3,FICHA_W/3);
 		}
 	}
+	
+	this.recalcular = function() {
+		if (this.x>FichaActual.x && this.x<FichaActual.x+FICHA_H/3 && this.y>FichaActual.y && this.y<FichaActual.y+FICHA_W/3){
+			this.x=FichaActual.x;
+			this.y=FichaActual.y;
+			this.zona=FichaActual.sprite.si;
+		}else if(this.x>FichaActual.x+FICHA_H/3 && this.x<FichaActual.x+2*FICHA_H/3 && this.y>FichaActual.y && this.y<FichaActual.y+FICHA_W/3){
+			this.x=FichaActual.x+FICHA_H/3;
+			this.y=FichaActual.y;
+			this.zona=FichaActual.sprite.sc;
+		}else if(this.x>FichaActual.x+2*FICHA_H/3 && this.x<FichaActual.x+3*FICHA_H/3 && this.y>FichaActual.y && this.y<FichaActual.y+FICHA_W/3){
+			this.x=FichaActual.x+2*FICHA_H/3;
+			this.y=FichaActual.y;
+			this.zona=FichaActual.sprite.sd;
+		}else if(this.x>FichaActual.x && this.x<FichaActual.x+FICHA_H/3 && this.y>FichaActual.y+FICHA_W/3 && this.y<FichaActual.y+2*FICHA_W/3){
+			this.x=FichaActual.x;
+			this.y=FichaActual.y+FICHA_W/3;
+			this.zona=FichaActual.sprite.ci;
+		}else if(this.x>FichaActual.x+FICHA_H/3 && this.x<FichaActual.x+2*FICHA_H/3 && this.y>FichaActual.y+FICHA_W/3 && this.y<FichaActual.y+2*FICHA_W/3){
+			this.x=FichaActual.x+FICHA_H/3;
+			this.y=FichaActual.y+FICHA_W/3;
+			this.zona=FichaActual.sprite.cc;
+		}else if(this.x>FichaActual.x+2*FICHA_H/3 && this.x<FichaActual.x+3*FICHA_H/3 && this.y>FichaActual.y+FICHA_W/3 && this.y<FichaActual.y+2*FICHA_W/3){
+			this.x=FichaActual.x+2*FICHA_H/3;
+			this.y=FichaActual.y+FICHA_W/3;
+			this.zona=FichaActual.sprite.cd;
+		}else if(this.x>FichaActual.x && this.x<FichaActual.x+FICHA_H/3 && this.y>FichaActual.y+2*FICHA_W/3 && this.y<FichaActual.y+3*FICHA_W/3){
+			this.x=FichaActual.x;
+			this.y=FichaActual.y+2*FICHA_W/3;
+			this.zona=FichaActual.sprite.ii;
+		}else if(this.x>FichaActual.x+FICHA_H/3 && this.x<FichaActual.x+2*FICHA_H/3 && this.y>FichaActual.y+2*FICHA_W/3 && this.y<FichaActual.y+3*FICHA_W/3){
+			this.x=FichaActual.x+FICHA_H/3;
+			this.y=FichaActual.y+2*FICHA_W/3;
+			this.zona=FichaActual.sprite.ic;
+		}else if(this.x>FichaActual.x+2*FICHA_H/3 && this.x<FichaActual.x+3*FICHA_H/3 && this.y>FichaActual.y+2*FICHA_W/3 && this.y<FichaActual.y+3*FICHA_W/3){
+			this.x=FichaActual.x+2*FICHA_H/3;
+			this.y=FichaActual.y+2*FICHA_W/3;
+			this.zona=FichaActual.sprite.id;
+		}
+	}
+	
+	
 	this.soltar = function(x,y) {
 		if ((!FichaActual.seHaMovido() || !FichaActual.EstaEn(this.x,this.y))){
 			this.x = this.inicialx;
@@ -468,6 +528,8 @@ Seguidor = function(sprite, numjugador) {
 			FichaActual.haySeguidor=false;
 
 		}else{
+			this.recalcular();
+			console.log(this.zona);
 			FichaActual.haySeguidor=true;
 			FichaActual.colocado=this;
 		}
