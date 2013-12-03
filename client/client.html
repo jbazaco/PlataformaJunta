@@ -71,28 +71,28 @@
                         {{>input}}
                 </div>
 			<div id='opciones'>
-			  	<form method="post">
+			  	<form method="post" id="form1">
 				 <p><label>Nombre de la Partida</label><input type="text" size="30" id="nombre" /></p>
 				<hr>
-				<input type="radio" name="n_jugadores" value="1"> 1 
-				<input type="radio" name="n_jugadores" value="2" checked> 2
-				<input type="radio" name="n_jugadores" value="3"> 3 
-				<input type="radio" name="n_jugadores" value="4"> 4 
-				<input type="radio" name="n_jugadores" value="5"> 5 
+				<input type="radio" name="n_jugadores" value="1" class='n_jugadores'> 1 
+				<input type="radio" name="n_jugadores" value="2" class='n_jugadores' checked> 2
+				<input type="radio" name="n_jugadores" value="3" class='n_jugadores'> 3 
+				<input type="radio" name="n_jugadores" value="4" class='n_jugadores'> 4 
+				<input type="radio" name="n_jugadores" value="5" class='n_jugadores'> 5 
 				<hr>
 				<input type="checkbox" name="tablero" value="tablero"><label>Tablero Inteligente</label>
 				<hr>	
 				<input type="checkbox" name="maquina" value="maquina"><label>Jugar contra la Máquina</label>
 				<hr>
-				<input type="radio" name="nivel" value="1"> Fácil
-				<input type="radio" name="nivel" value="2" checked> Medio
-				<input type="radio" name="nivel" value="3"> Difícil 
+				<input type="radio" name="nivel" value="1" class='nivel'> Fácil
+				<input type="radio" name="nivel" value="2" class='nivel' checked> Medio
+				<input type="radio" name="nivel" value="3" class='nivel'> Difícil 
 				<hr>
-				<input type="radio" name="escenario" value="1"> Clásico 
-				<input type="radio" name="escenario" value="2" checked> Invernal
-				<input type="radio" name="escenario" value="3"> Espacial
+				<input type="radio" name="escenario" value="1" checked> Clásico 
+				<input type="radio" name="escenario" value="2" class='escenario'> Invernal
+				<input type="radio" name="escenario" value="3" class='escenario'> Espacial
 				<hr>
-				<p><input type="submit" value="Empezar" name="empezar"/>
+				<p><input type="submit" value="Empezar" name="empezar"/></p>
 				</form>
 		  </div>
 </div>

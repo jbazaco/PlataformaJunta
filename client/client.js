@@ -13,7 +13,6 @@ Meteor.startup(function(){
 });
 
 var screenauto= function(){
-console.log("scrauto")
 	$("#containermain").css("width",document.documentElement.clientWidth.toString()+'px');
 	$("#containermain").css("height",document.documentElement.clientHeight.toString()+'px');
 	Meteor.setTimeout(screenauto,2000)
@@ -21,11 +20,24 @@ console.log("scrauto")
 
 $(function() {
 	$( "#container2" ).tabs({ hide: { effect: "slide",direction:'up', duration: 100 }, show:{ effect: "slide",direction:'up', duration: 100 }  });
+	$('.escenario').attr("disabled",true);
+	
+/*	var x = document.getElementById('form1');
+    //nombre_partida = document.getElementById('nombre');
+	//n_jugadores =document.getElementsByClassName('n_jugadores');
+	//form.onsubmit = function() {
+   	//	var variable = nombre_partida.value;
+	//	var variable2 = n_jugadores.value;
+    //	alert( variable2 );
+	//};
+	//for (var i=0;i<x.length;i++)
+  	{
+  		document.write(x.elements[i].value);
+  		document.write("<br>");
+  	}
+*/
 });
 
-function mostrar() {
-   $("#popup").fadeIn('slow');
-}
 
 var Clip = function(msg,maxlen){
 	if(msg.length>maxlen){
