@@ -12,9 +12,6 @@ $(function() {
 	$( "#container2" ).tabs({ hide: { effect: "slide",direction:'up', duration: 100 }, show:{ effect: "slide",direction:'up', duration: 100 }  });
 });
 
-var EliminarDiv = function() {
- 	document.getElementById('tabs-1').innerHTML='';
-} 
 
 var Clip = function(msg,maxlen){
 	if(msg.length>maxlen){
@@ -68,23 +65,10 @@ Template.input.events={
 
 Template.button.events={
         'click input.b1': function () {
-		//var debugArea = $('#debug');
-		//debugArea.prepend("<tr><td><strong>"+Meteor.user().username+"</strong> : </td><td><div>"+Meteor.user().puntuacion+"</div></td>");
-		var estadoArea = $('#tabs-1');
-		var usuarios = Meteor.users.find({});
-		EliminarDiv();
-		usuarios.forEach(function(usu){
-			console.log(usu.username+usu.estado)
-			estadoArea.append("<tr><td><strong>"+usu.username+"</strong> : </td><td><div>"+usu.estado+"</div></td>");		
-		});
+		
 	},
         'click input.b2': function(){
-		var user = Meteor.user();
-		//Meteor.call('InicializaCliente',user._id);
-		Meteor.call('IncrementarPuntuacion',user._id,5);
-		Meteor.call('AgregarEquipo',user._id,"Atleti");
-		Meteor.call('AgregarTorneo',user._id,"champions");
-		Meteor.call('AgregarPenalizacion',user._id,1);
+		
         }
 }
 
@@ -111,8 +95,6 @@ Deps.autorun(function(){
 			Meteor.call('InicializaCliente',user._id);
 		}
 	}
-	Meteor.call('ActualizarEstado');
-	//Meteor.call('ImprimirEstados');
 });
 
 

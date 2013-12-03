@@ -20,34 +20,6 @@ Meteor.methods({
 		Meteor.users.update({_id:id},{$set:{puntuacion:0,equipos:[],torneos:[],penalizacion:0,estado:"Conectado"}});
 	},
 	
-	// Actualiza el estado de todos los usuarios registrados cada vez que hay
-	// un cambio en la colección users.
-	ActualizarEstado: function(){
-		var usuarios = Meteor.users.find({});	
-		usuarios.forEach(function(user){
-			if(user.services.resume.loginTokens[0] === undefined){
-				//Usuario: No conectado
-				console.log("no conectado")
-				Meteor.users.update(user,{$set:{estado:"No conectado"}});
-			}
-			else{
-				//Usuario: Conectado
-				console.log("conectado")
-				Meteor.users.update(user,{$set:{estado:"Conectado"}});
-			}
-		});
-	},
-
-	
-	ImprimirEstados: function(){
-		var estadoArea = $('#tabs-1');
-		var usuarios = Meteor.users.find({});
-		console.log(usuarios.count())
-		usuarios.forEach(function(usu){
-			console.log(usu.username+usu.estado)
-			estadoArea.append("<tr><td><strong>"+usu.username+"</strong> : </td><td><div>"+usu.estado+"</div></td>");		
-		});
-	},
 	//  Cada vez que un jugador sume una puntuación se deberá llamar a 
 	//  esta función.
 	IncrementarPuntuacion: function(id,punt){
