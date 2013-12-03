@@ -8,6 +8,17 @@ Meteor.subscribe("messages");
 Meteor.subscribe("partidas");
 Meteor.subscribe("DatosUsuarios");
 
+Meteor.startup(function(){
+	screenauto();
+});
+
+var screenauto= function(){
+console.log("scrauto")
+	$("#containermain").css("width",document.documentElement.clientWidth.toString()+'px');
+	$("#containermain").css("height",document.documentElement.clientHeight.toString()+'px');
+	Meteor.setTimeout(screenauto,500)
+};
+
 $(function() {
 	$( "#container2" ).tabs({ hide: { effect: "slide",direction:'up', duration: 100 }, show:{ effect: "slide",direction:'up', duration: 100 }  });
 });
@@ -24,20 +35,6 @@ var Clip = function(msg,maxlen){
 		return msg
 	}
 };
-
-var GetSeq = function(){
-	var lst = Partidas.find({},{sort:{id:1}}).fetch();
-	for (var i=0; i<lst.length-1;i++){
-		if (Number(lst[i].id)+1 != Number(lst[i+1].id)){
-			var val = Number(lst[i].id)+1;
-			Session.set("seq",val);	//Gap!
-			return val;
-		}
-	}
-	var val= lst.length==0 ? 0 : lst[lst.length-1].id+1;
-	Session.set("seq",val)	//Not Gap..
-	return val;
-}
 
 Template.input.events={
 	'keydown input#message': function(event){
@@ -64,12 +61,12 @@ Template.input.events={
 
 
 Template.button.events={
-        'click input.b1': function () {
-		
+	'click input.b1': function () {
+
 	},
-        'click input.b2': function(){
-		
-        }
+	'click input.b2': function(){
+
+	}
 }
 
 
@@ -88,6 +85,7 @@ Deps.autorun(function(){
 });
 
 
+
 Deps.autorun(function(){
 	if (Meteor.user()){
 		var user = Meteor.user();
@@ -96,12 +94,6 @@ Deps.autorun(function(){
 		}
 	}
 });
-
-
-
-
-
-
 
 
 
