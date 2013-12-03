@@ -23,6 +23,12 @@ $(function() {
 	$( "#container2" ).tabs({ hide: { effect: "slide",direction:'up', duration: 100 }, show:{ effect: "slide",direction:'up', duration: 100 }  });
 });
 
+$(function(){
+	$("#ListaPartidas1").hide();
+	$("#ListaPartidas2").hide();
+	$("#ListaPartidas3").hide();
+	$("#game").hide()
+});
 
 var Clip = function(msg,maxlen){
 	if(msg.length>maxlen){
@@ -66,7 +72,56 @@ Template.button.events={
 	},
 	'click input.b2': function(){
 
+	},
+	'click a.juego1':function(){
+		Session.set("Current_Game_Type","AlienInvasion");
+		$("#ListaPartidas1").show(500);
+		$("#ListaPartidas2").hide(500);
+		$("#ListaPartidas3").hide(500);
+		//     $("#game_alien").show(500);
+		return false
+	},
+	'click a.juego2':function(){
+		Session.set("Current_Game_Type","AngryFruits");
+		$("#ListaPartidas2").show(500);
+		$("#ListaPartidas1").hide(500);
+		$("#ListaPartidas3").hide(500);
+		//     $("#game_angry").show(500)
+		$("#game").hide(500);
+		return false
+	},
+	'click a.juego3':function(){
+		Session.set("Current_Game_Type","Carca");
+		$("#ListaPartidas3").show(500);
+		$("#ListaPartidas1").hide(500);
+		$("#ListaPartidas2").hide(500);
+		//     $("#game_carca").show(500)
+		$("#game").hide(500);
+		return false
+	},
+	'click input.Lista1B1':function(){
+		$("#game").show(500);
+	},
+	'click input.Lista1B2':function(){
+		//alert("This button will make something awesome in the near future. Just hang tight...")
 	}
+}
+
+
+
+Template.gamesList.gamesList = function(){
+  return Partidas.find({})
+};
+
+
+
+Template.gamesList.imIn = function(){
+  var usu = Meteor.userId()
+  if (usu){
+    return (usu in this.jugadores) | (usu in this.invitados)
+  }else{
+    return false;
+  }
 }
 
 
