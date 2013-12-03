@@ -27,7 +27,7 @@
 			<li><a href="#tabs-3">3</a></li>
 			</ul>
 			<div id="tabs-1" class="tabs">
-				<!-- Contenido del template -->
+				{{>ListaEstados}}
 			</div>
 			<div id="tabs-2" class="tabs">
 				<p>Mauris consectetur tortor et purus.</p>
@@ -122,11 +122,22 @@
 
 
 <template name="gamesList">
-  {{#each gamesList}}
-    {{#if imIn}}
-      <div><strong>{{nombre}}</strong>:{{jugadores}}</div>
-    {{else}}
-      <div>{{nombre}} : {{jugadores}}</div>
-    {{/if}}
-  {{/each}}
+	{{#each gamesList}}
+		{{#if imIn}}
+			<div><strong>{{nombre}}</strong>:{{jugadores}}</div>
+		{{else}}
+			<div>{{nombre}} : {{jugadores}}</div>
+		{{/if}}
+	{{/each}}
+</template>
+
+
+<template name="ListaEstados">
+	{{#each ListaEstados}}
+		{{#if ColorEstado}}
+			<span class="NombreUsuario">{{username}} </span> : <span style="color:green"> {{estado}} </span><br />
+		{{else}}
+			<span class="NombreUsuario">{{username}} </span> : <span> {{estado}} </span><br />
+		{{/if}}
+	{{/each}}
 </template>

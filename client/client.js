@@ -108,11 +108,22 @@ Template.button.events={
 }
 
 
+Template.ListaEstados.ListaEstados = function(){
+	return Meteor.users.find({},{sort:{estado:1}})
+}
+
+Template.ListaEstados.ColorEstado = function(){
+	if (this.estado == "Conectado"){
+		return true;	
+	}
+	else{
+		return false;
+	}
+}
 
 Template.gamesList.gamesList = function(){
   return Partidas.find({})
-};
-
+}
 
 
 Template.gamesList.imIn = function(){
@@ -123,7 +134,6 @@ Template.gamesList.imIn = function(){
     return false;
   }
 }
-
 
 
 Accounts.ui.config({
@@ -148,6 +158,7 @@ Deps.autorun(function(){
 			Meteor.call('InicializaCliente',user._id);
 		}
 	}
+	Meteor.call('ActualizarEstado');
 });
 
 
