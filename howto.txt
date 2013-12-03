@@ -5,7 +5,8 @@ Para que funcione esto desde cero:
 1.- Añadir los widgets del accounts:
   meteor add accounts-ui
   meteor add accounts-password
-  
+  meteor add accounts-facebook
+
 2.- Quitar el autopublish:
   meteor remove autopublish
   
