@@ -6,6 +6,7 @@ Para que funcione esto desde cero:
   meteor add accounts-ui
   meteor add accounts-password
   meteor add accounts-facebook
+  meteor add accounts-twitter
 
 2.- Quitar el autopublish:
   meteor remove autopublish
