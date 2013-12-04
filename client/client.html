@@ -76,7 +76,7 @@
 
 
 <template name="button">
-	<input type="text" id="entry_nombre_partida"/>
+	<input type="text" id="entry"/>
 	<input type="button" class="b1" value="B1"/>
 	<input type="button" class="b2" value="B2"/>
 </template>
@@ -112,11 +112,10 @@
 
 
 <template name="gamesList">
-	{{#each gamesList}}
-		{{#if imIn}}
-			<a class='match'><strong>{{nombre}}</strong></a> :{{jugadores}}</br>
-		{{else}}
-			<a class='match'>{{nombre}} </a> :{{jugadores}}</br>
-		{{/if}}
+	{{#each gamesListIn}}
+		<a class='match'><strong>{{nombre}}</strong></a> :{{jugadores}}</br>
+	{{/each}}
+	{{#each gamesListOut}}
+		<a class='match'>{{nombre}}</a> :{{jugadores}}</br>
 	{{/each}}
 </template>

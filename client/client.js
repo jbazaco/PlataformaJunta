@@ -84,7 +84,12 @@ Template.input.events={
 
 Template.button.events={
 	'click input.b1': function () {
-
+		var usuid= Meteor.userId();
+		if (usuid){
+			var id = Partidas.findOne({nombre:$('#entry').val()}).id
+			var jugador = Meteor.users.findOne(usuid).username;
+			Meteor.call('IncluirJugador',id,jugador)
+		}
 	},
 	'click input.b2': function(){
 
@@ -115,28 +120,12 @@ Template.games.events={
 	} 
 }
 
-
-
-Meteor.autosrat
-Template.gamesList.gamesList = function(){
-  return Partidas.find({})
+Template.gamesList.gamesListIn = function(){
+	return Partidas.find({jugadores:{$all:['usu1']}})
 };
-
-
-
-Template.gamesList.imIn = function(){
-	var usu = Meteor.users.findOne(Meteor.userId()).username;
-	if (usu){
-		console.log("ttrue")
-		var val= ((usu in this.jugadores) | (usu in this.invitados))
-		console.log(val)
-		return val
-	}else{
-		console.log("ffalse")
-		return false;
-	}
-}
-
+Template.gamesList.gamesListOut = function(){
+	return Partidas.find({jugadores:{$not:{$all:['usu1']}}})
+};
 
 
 Accounts.ui.config({
