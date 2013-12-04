@@ -26,7 +26,8 @@ $(function(){
 	$("#ListaPartidas1").hide();
 	$("#ListaPartidas2").hide();
 	$("#ListaPartidas3").hide();
-	$("#game").hide()
+	$("#game").hide();
+  $("#game_angry").hide();
 });
 
 var Clip = function(msg,maxlen){
@@ -102,10 +103,19 @@ Template.button.events={
 	},
 	'click input.Lista1B1':function(){
 		$("#game").show(500);
+    $("#game_angry").hide(500);
 	},
 	'click input.Lista1B2':function(){
 		alert("This button will make something awesome in the near future. Just hang tight...")
-	}
+	},
+  'click input.Lista2B1':function(){
+		$("#game_angry").show(500);
+    alert("Muestro el canvas de angry fruits");
+    $("#game").hide(500);
+  },
+  'click input.Lista2B2':function(){
+		alert("This button will make something awesome in the near future. Just hang tight...");
+  }
 }
 
 Template.gamesList.gamesList = function(){
