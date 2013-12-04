@@ -112,6 +112,14 @@ Meteor.methods({
 		})
 		
 		return sid;
+	},
+	
+	IncuirJugador: function(id_partida, jugador){
+		Partidas.update({id:id_partida},{$push:{jugadores:jugador}})
+	},
+	
+	IncluirInvitado: function(id_partida, invitado){
+		Partidas.update({id:id_partida},{$push:{invitados:invitado}})
 	}
 })
 

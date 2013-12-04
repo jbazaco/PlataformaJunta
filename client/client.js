@@ -10,25 +10,18 @@ Meteor.subscribe("DatosUsuarios");
 
 Meteor.startup(function(){
 	screenauto();
+	$( "#container2" ).tabs({ hide: { effect: "slide",direction:'up', duration: 100 }, show:{ effect: "slide",direction:'up', duration: 100 }  });
+	$(".subtab").hide();
+	$(".canvas").hide()
+	Session.setDefault('Current_Game_id',0);
 });
 
 var screenauto= function(){
-console.log("scrauto")
 	$("#containermain").css("width",document.documentElement.clientWidth.toString()+'px');
 	$("#containermain").css("height",document.documentElement.clientHeight.toString()+'px');
 	Meteor.setTimeout(screenauto,500)
 };
 
-$(function() {
-	$( "#container2" ).tabs({ hide: { effect: "slide",direction:'up', duration: 100 }, show:{ effect: "slide",direction:'up', duration: 100 }  });
-});
-
-$(function(){
-	$("#ListaPartidas1").hide();
-	$("#ListaPartidas2").hide();
-	$("#ListaPartidas3").hide();
-	$("#game").hide()
-});
 
 var Clip = function(msg,maxlen){
 	if(msg.length>maxlen){
@@ -73,42 +66,35 @@ Template.button.events={
 	'click input.b2': function(){
 
 	},
-	'click a.juego1':function(){
-		Session.set("Current_Game_Type","AlienInvasion");
-		$("#ListaPartidas1").show(500);
-		$("#ListaPartidas2").hide(500);
-		$("#ListaPartidas3").hide(500);
-		//     $("#game_alien").show(500);
-		return false
+}
+
+Template.games.events={
+	'click a#game_1':function(){
+		Session.set('Current_Game_id',1);
+		$(".canvas").hide()
+		$('#game').show(500);
+		//$("#container2").tabs( "option", "active", 1 );
+		return false;
 	},
-	'click a.juego2':function(){
-		Session.set("Current_Game_Type","AngryFruits");
-		$("#ListaPartidas2").show(500);
-		$("#ListaPartidas1").hide(500);
-		$("#ListaPartidas3").hide(500);
-		//     $("#game_angry").show(500)
-		$("#game").hide(500);
-		return false
+	'click a#game_2':function(){
+		Session.set('Current_Game_id',2)
+		$(".canvas").hide()
+		$('#game2').show(500);
+		//$("#container2").tabs( "option", "active", 1 );
+		return false;
 	},
-	'click a.juego3':function(){
-		Session.set("Current_Game_Type","Carca");
-		$("#ListaPartidas3").show(500);
-		$("#ListaPartidas1").hide(500);
-		$("#ListaPartidas2").hide(500);
-		//     $("#game_carca").show(500)
-		$("#game").hide(500);
-		return false
-	},
-	'click input.Lista1B1':function(){
-		$("#game").show(500);
-	},
-	'click input.Lista1B2':function(){
-		//alert("This button will make something awesome in the near future. Just hang tight...")
-	}
+	'click a#game_3':function(){
+		Session.set('Current_Game_id',3)
+		$(".canvas").hide()
+		$('#game3').show(500);
+		//$("#container2").tabs( "option", "active", 1);
+		return false;
+	} 
 }
 
 
 
+Meteor.autosrat
 Template.gamesList.gamesList = function(){
   return Partidas.find({})
 };
@@ -149,6 +135,15 @@ Deps.autorun(function(){
 		}
 	}
 });
+
+Deps.autorun(function(){
+	var id = Session.get("Current_Game_id");
+	if (id){
+		var str="#tabs-2-"+id.toString();
+		$('.subtab').hide(500);
+		$(str).show(500);
+	}
+})
 
 
 
