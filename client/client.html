@@ -3,11 +3,13 @@
 	<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0" />
 </head>
 
-<body>
 
+<body>
 	<script src='engine.js'></script>
 	<script src='game.js'></script>
 	<script src='jquery-1.10.2.js' type='text/javascript'></script>
+  	<script src='fruit_wars.js' type='text/javascript'></script>
+
 	<div id='containermain'>
 		<div id='logo'>
 		    <div id='login'>
@@ -71,17 +73,24 @@
             </div>		
 	</div>
 	{{>options}}
+
 </body>
+
+
 <template name="welcome">
-    <p>Welcome to "UnnamedProject"! Please Log in.</p>
+	<p>Welcome to "UnnamedProject"! Please Log in.</p>
 </template>
+
+
 <template name="input">
 	<p> <strong>Message:</strong><input type="text" id="message"> </p>
 </template>
+
 <template name="button">
     <input type="button" class="b1" value="B1"  id="b1" />
     <input type="button" class="b2" value="B2"/>
 </template>
+
 <template name="options">
     <div id='opciones'>
 		 <p><label>Nombre de la Partida</label><input type="text" size="30" id="nombre" /></p>
@@ -111,5 +120,27 @@
 			<button class="reset">Reset</button>
 		</td>
 	</div>
+</template>
+
+
+<template name="gamesList">
+	{{#each gamesList}}
+		{{#if imIn}}
+			<div><strong>{{nombre}}</strong>:{{jugadores}}</div>
+		{{else}}
+			<div>{{nombre}} : {{jugadores}}</div>
+		{{/if}}
+	{{/each}}
+</template>
+
+
+<template name="ListaEstados">
+	{{#each ListaEstados}}
+		{{#if ColorEstado}}
+			<span class="NombreUsuario">{{username}} </span> : <span style="color:green"> {{estado}} </span><br />
+		{{else}}
+			<span class="NombreUsuario">{{username}} </span> : <span> {{estado}} </span><br />
+		{{/if}}
+	{{/each}}
 </template>
 

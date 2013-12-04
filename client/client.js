@@ -6,6 +6,7 @@
 
 Meteor.subscribe("messages");
 Meteor.subscribe("partidas");
+Meteor.subscribe("DatosUsuarios");
 
 Meteor.startup(function(){
 	screenauto();
@@ -15,12 +16,20 @@ Meteor.startup(function(){
 var screenauto= function(){
 	$("#containermain").css("width",document.documentElement.clientWidth.toString()+'px');
 	$("#containermain").css("height",document.documentElement.clientHeight.toString()+'px');
-	Meteor.setTimeout(screenauto,2000)
+	Meteor.setTimeout(screenauto,500)
 };
 
 $(function() {
 	$( "#container2" ).tabs({ hide: { effect: "slide",direction:'up', duration: 100 }, show:{ effect: "slide",direction:'up', duration: 100 }  });
 	$('.escenario').attr("disabled",true);
+});
+
+$(function(){
+	$("#ListaPartidas1").hide();
+	$("#ListaPartidas2").hide();
+	$("#ListaPartidas3").hide();
+	$("#game").hide();
+  $("#game_angry").hide();
 });
 
 var Clip = function(msg,maxlen){
@@ -34,20 +43,6 @@ var Clip = function(msg,maxlen){
 		return msg
 	}
 };
-
-var GetSeq = function(){
-	var lst = Partidas.find({},{sort:{id:1}}).fetch();
-	for (var i=0; i<lst.length-1;i++){
-		if (Number(lst[i].id)+1 != Number(lst[i+1].id)){
-			var val = Number(lst[i].id)+1;
-			Session.set("seq",val);	//Gap!
-			return val;
-		}
-	}
-	var val= lst.length==0 ? 0 : lst[lst.length-1].id+1;
-	Session.set("seq",val)	//Not Gap..
-	return val;
-}
 
 Template.input.events={
 	'keydown input#message': function(event){
@@ -66,22 +61,21 @@ Template.input.events={
 					time:Date.now()
 				});
 			}
-			message.val("");		
+			message.val("");	
 		}
 	}
 }
 
+
+
 Template.button.events={
-        'click input.b1': function () {
-		$( "#opciones" ).fadeToggle( "slow", "linear" );
+
+	'click input.b1': function () {
 
 	},
-        'click input.b2': function(){
-                Meteor.users.insert({
-		  nombre:peter,
-		  time:Date.now()
-		});
-        }
+	'click input.b2': function(){
+
+	}
 }
 Template.options.events={
 	'click .submit': function () {
@@ -116,9 +110,39 @@ Template.options.events={
       
 }
 
+
+Template.ListaEstados.ListaEstados = function(){
+	return Meteor.users.find({},{sort:{estado:1,username:1}})
+}
+
+Template.ListaEstados.ColorEstado = function(){
+	if (this.estado == "Conectado"){
+		return true;	
+	}
+	else{
+		return false;
+	}
+}
+
+Template.gamesList.gamesList = function(){
+  return Partidas.find({})
+}
+
+
+Template.gamesList.imIn = function(){
+  var usu = Meteor.userId()
+  if (usu){
+    return (usu in this.jugadores) | (usu in this.invitados)
+  }else{
+    return false;
+  }
+}
+
+
 Accounts.ui.config({
 	passwordSignupFields:"USERNAME_AND_OPTIONAL_EMAIL"
 });
+
 
 Deps.autorun(function(){
 	var chatArea = $('#firstRow');
@@ -127,4 +151,18 @@ Deps.autorun(function(){
 		chatArea.prepend("<tr><td><strong>"+message['name']+"</strong>:</td><td><div>"+message['message']+"</div></td>");
 	});
 });
+
+
+
+Deps.autorun(function(){
+	if (Meteor.user()){
+		var user = Meteor.user();
+		if(!user.puntuacion && user.puntuacion!=0){
+			Meteor.call('InicializaCliente',user._id);
+		}
+	}
+	Meteor.call('ActualizarEstado');
+});
+
+
 
