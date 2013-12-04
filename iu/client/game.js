@@ -5,29 +5,52 @@ var FICHA_W = 62;
 var sprites = {
 	m: { sx: 253, sy: 44, w: FICHA_W, h: FICHA_H, si:"campo", sc:"campo", sd:"campo",
 		ci:"campo", cc:"monasterio", cd:"campo", ii:"campo", ic:"campo", id:"campo"},		//monasterio
-	mc: { sx: 331, sy: 44, w: FICHA_W, h: FICHA_H},		//monasterio con camino
-	cr: { sx: 563, sy: 44, w: FICHA_W, h: FICHA_H},		//camino recto
-	cc: { sx: 485, sy: 44, w: FICHA_W, h: FICHA_H},		//camino curva
-	c3: { sx: 640, sy: 44, w: FICHA_W, h: FICHA_H},		//cruce de 3 caminos
-	c4: { sx: 408, sy: 44, w: FICHA_W, h: FICHA_H},		//cruce de 4 caminos
-	cmur: { sx: 408, sy: 137, w: FICHA_W, h: FICHA_H},	//camino recto con muralla al lado(una de las fichas es la inicial)
-	ccmur: { sx: 485, sy: 137, w: FICHA_W, h: FICHA_H},	//camino con curva y con muralla al lado
-	chmur: { sx: 175, sy: 137, w: FICHA_W, h: FICHA_H},	//camino hacia muralla
-	chmure: { sx: 21, sy: 230, w: FICHA_W, h: FICHA_H},	//camino hacia muralla con escudo
-	c3mur: { sx: 98, sy: 44, w: FICHA_W, h: FICHA_H},		//cruce de 3 caminos con muralla al lado
-	ccmur2: { sx: 717, sy: 137, w: FICHA_W, h: FICHA_H},	//camino con curva con 2 lados de ciudad contiguos
-	ccmur2e: { sx: 98, sy: 230, w: FICHA_W, h: FICHA_H},	//camino con curva con 2 lados de ciudad contiguos con escudo
-	ccmur3: { sx: 562, sy: 137, w: FICHA_W, h: FICHA_H},	//camino con curva y muralla al lado(otro)
-	murcam: { sx: 21, sy: 44, w: FICHA_W, h: FICHA_H},	//media ficha muralla media ficha campo
-	murcame: { sx: 176, sy: 230, w: FICHA_W, h: FICHA_H},	//media ficha muralla media ficha campo con escudo
-	mur2: { sx: 176, sy: 44, w: FICHA_W, h: FICHA_H},		//una muralla a cada lado de la ficha
-	mur2c: { sx: 253, sy: 137, w: FICHA_W, h: FICHA_H},	//2 murallas en lados contiguos
-	mur1: { sx: 330, sy: 137, w: FICHA_W, h: FICHA_H},	//1 muralla en un lado y el resto campo
-	ciudad: { sx: 21, sy: 137, w: FICHA_W, h: FICHA_H},	//todo ciudad con escudo
-	ciucam: { sx: 98, sy: 137, w: FICHA_W, h: FICHA_H},	//ciudad con un lado de campo
-	ciucame: { sx: 331, sy: 230, w: FICHA_W, h: FICHA_H},	//ciudad con un lado de campo con escudo
-	ciucam2: { sx: 640, sy: 137, w: FICHA_W, h: FICHA_H},	//ciudad con 2 lados opuestos de campo
-	ciucam2e: { sx: 408, sy: 230, w: FICHA_W, h: FICHA_H},	//ciudad con 2 lados opuestos de campo con escudo
+	mc: { sx: 331, sy: 44, w: FICHA_W, h: FICHA_H, si:"campo", sc:"campo", sd:"campo",
+		ci:"campo", cc:"monasterio", cd:"camino", ii:"campo", ic:"campo", id:"campo"},		//monasterio con camino
+	cr: { sx: 563, sy: 44, w: FICHA_W, h: FICHA_H, si:"campo", sc:"campo", sd:"campo",
+		ci:"camino", cc:"camino", cd:"camino", ii:"campo2", ic:"campo2", id:"campo2"},		//camino recto
+	cc: { sx: 485, sy: 44, w: FICHA_W, h: FICHA_H, si:"campo", sc:"camino", sd:"campo2",
+		ci:"campo", cc:"camino", cd:"camino", ii:"campo", ic:"campo", id:"campo"},		//camino curva
+	c3: { sx: 640, sy: 44, w: FICHA_W, h: FICHA_H, si:"campo", sc:"camino", sd:"campo2",
+		ci:"campo", cc:"no", cd:"camino2", ii:"campo", ic:"camino3", id:"campo3"},		//cruce de 3 caminos
+	c4: { sx: 408, sy: 44, w: FICHA_W, h: FICHA_H, si:"campo", sc:"camino", sd:"campo2",
+		ci:"camino2", cc:"no", cd:"camino3", ii:"campo3", ic:"camino4", id:"campo4"},		//cruce de 4 caminos
+	cmur: { sx: 408, sy: 137, w: FICHA_W, h: FICHA_H, si:"campo", sc:"camino", sd:"campo2",
+		ci:"ciudad", cc:"camino", cd:"campo2", ii:"campo", ic:"camino", id:"campo2"},	//camino recto con muralla al 												lado(una de las fichas es la inicial)
+	ccmur: { sx: 485, sy: 137, w: FICHA_W, h: FICHA_H, si:"campo", sc:"camino", sd:"campo2",
+		ci:"ciudad", cc:"camino", cd:"camino", ii:"campo", ic:"campo", id:"campo"},	//camino con curva y con muralla 													al lado
+	chmur: { sx: 175, sy: 137, w: FICHA_W, h: FICHA_H, si:"ciudad", sc:"ciudad", sd:"campo",
+		ci:"ciudad", cc:"ciudad", cd:"camino", ii:"ciudad", ic:"ciudad", id:"campo2"},	//camino hacia muralla
+	chmure: { sx: 21, sy: 230, w: FICHA_W, h: FICHA_H, si:"ciudad", sc:"ciudad", sd:"campo",
+		ci:"ciudad", cc:"ciudad", cd:"camino", ii:"ciudad", ic:"ciudad", id:"campo2"},	//camino hacia muralla con escudo
+	c3mur: { sx: 98, sy: 44, w: FICHA_W, h: FICHA_H, si:"campo", sc:"camino", sd:"campo2",
+		ci:"ciudad", cc:"no", cd:"camino2", ii:"campo", ic:"camino3", id:"campo3"},		//cruce de 3 caminos con 														muralla al lado
+	ccmur2: { sx: 717, sy: 137, w: FICHA_W, h: FICHA_H, si:"campo", sc:"camino", sd:"campo2",
+		ci:"ciudad", cc:"camino", cd:"camino", ii:"ciudad", ic:"ciudad", id:"campo"},	//camino con curva con 2 lados de 													ciudad contiguos
+	ccmur2e: { sx: 98, sy: 230, w: FICHA_W, h: FICHA_H, si:"campo", sc:"campo", sd:"campo",
+		ci:"ciudad", cc:"camino", cd:"camino", ii:"campo", ic:"camino", id:"campo2"},	//camino con curva con 2 lados de 												ciudad contiguos con escudo
+	ccmur3: { sx: 562, sy: 137, w: FICHA_W, h: FICHA_H, si:"campo", sc:"ciudad", sd:"campo",
+		ci:"campo", cc:"ciudad", cd:"campo", ii:"campo", ic:"ciudad", id:"campo"},	//camino con curva y muralla al 												lado(otro)
+	murcam: { sx: 21, sy: 44, w: FICHA_W, h: FICHA_H, si:"campo", sc:"campo", sd:"campo",
+		ci:"ciudad", cc:"no", cd:"campo", ii:"ciudad", ic:"ciudad", id:"campo"},	//media ficha muralla media ficha 													campo
+	murcame: { sx: 176, sy: 230, w: FICHA_W, h: FICHA_H, si:"campo", sc:"campo", sd:"campo",
+		ci:"ciudad", cc:"no", cd:"campo", ii:"ciudad", ic:"ciudad", id:"campo"},	//media ficha muralla media ficha 													campo con escudo
+	mur2: { sx: 176, sy: 44, w: FICHA_W, h: FICHA_H, si:"campo", sc:"campo", sd:"campo",
+		ci:"ciudad", cc:"campo", cd:"ciudad2", ii:"campo", ic:"campo", id:"campo"},		//una muralla a cada lado 														de la ficha
+	mur2c: { sx: 253, sy: 137, w: FICHA_W, h: FICHA_H, si:"campo", sc:"ciudad", sd:"campo",
+		ci:"ciudad2", cc:"campo", cd:"campo", ii:"campo", ic:"campo", id:"campo"},	//2 murallas en lados contiguos
+	mur1: { sx: 330, sy: 137, w: FICHA_W, h: FICHA_H, si:"campo", sc:"campo", sd:"campo",
+		ci:"ciudad", cc:"campo", cd:"campo", ii:"campo", ic:"campo", id:"campo"},	//1 muralla en un lado y el resto 													campo
+	ciudad: { sx: 21, sy: 137, w: FICHA_W, h: FICHA_H, si:"ciudad", sc:"ciudad", sd:"ciudad",
+		ci:"ciudad", cc:"ciudad", cd:"ciudad", ii:"ciudad", ic:"ciudad", id:"ciudad"},	//todo ciudad con escudo
+	ciucam: { sx: 98, sy: 137, w: FICHA_W, h: FICHA_H, si:"ciudad", sc:"ciudad", sd:"campo",
+		ci:"ciudad", cc:"ciudad", cd:"campo", ii:"ciudad", ic:"ciudad", id:"campo"},	//ciudad con un lado de campo
+	ciucame: { sx: 331, sy: 230, w: FICHA_W, h: FICHA_H, si:"ciudad", sc:"ciudad", sd:"campo",
+		ci:"ciudad", cc:"ciudad", cd:"campo", ii:"ciudad", ic:"ciudad", id:"campo"},	//ciudad con un lado de campo con 													escudo
+	ciucam2: { sx: 640, sy: 137, w: FICHA_W, h: FICHA_H, si:"campo", sc:"ciudad", sd:"campo",
+		ci:"campo", cc:"ciudad", cd:"campo", ii:"campo", ic:"ciudad", id:"campo"},	//ciudad con 2 lados opuestos de 													campo
+	ciucam2e: { sx: 408, sy: 230, w: FICHA_W, h: FICHA_H, si:"campo", sc:"ciudad", sd:"campo",
+		ci:"campo", cc:"ciudad", cd:"campo", ii:"campo", ic:"ciudad", id:"campo"},	//ciudad con 2 lados opuestos de 													campo con escudo
 	interrogante: { sx: 253, sy: 230, w: FICHA_W, h: FICHA_H},	//ficha con un interrogante
 	s1: { sx: 511, sy: 242, w: 30, h: 30},			//seguidor amarillo
 	s2: { sx: 553, sy: 242, w: 30, h: 30},			//seguidor rosa
@@ -452,13 +475,15 @@ Seguidor = function(sprite, numjugador) {
 	//tiene que comprobar que el que hace click es el jugador al que le toca jugar, si no no puede mover
 
 	this.moviendo = false;
+
 	this.mover = function(x,y) {
 		this.moviendo = true;
 		miJugador=1;
 		turno=1;//Falta funcion para saber de quien es el turno
-		if(turno==miJugador && this.sprite=="s"+miJugador && FichaActual.seHaMovido() && (!FichaActual.colocado || FichaActual.colocado==this)){ 
+		if(turno==miJugador && this.sprite=="s"+miJugador && FichaActual.seHaMovido() && (!FichaActual.colocado || 												FichaActual.colocado==this)){ 
 			this.x = x;
 			this.y = y;
+			
 			Game.ctx.fillStyle = "#000000";
 			Game.ctx.strokeRect(FichaActual.x,FichaActual.y,FICHA_H/3,FICHA_W/3);
 			Game.ctx.fillStyle = "#000000";
@@ -484,45 +509,45 @@ Seguidor = function(sprite, numjugador) {
 		if (this.x>FichaActual.x && this.x<FichaActual.x+FICHA_H/3 && this.y>FichaActual.y && this.y<FichaActual.y+FICHA_W/3){
 			this.x=FichaActual.x;
 			this.y=FichaActual.y;
-			this.zona=FichaActual.sprite.si;
+			this.zona=sprites[FichaActual.sprite].si;
 		}else if(this.x>FichaActual.x+FICHA_H/3 && this.x<FichaActual.x+2*FICHA_H/3 && this.y>FichaActual.y && this.y<FichaActual.y+FICHA_W/3){
 			this.x=FichaActual.x+FICHA_H/3;
 			this.y=FichaActual.y;
-			this.zona=FichaActual.sprite.sc;
+			this.zona=sprites[FichaActual.sprite].sc;
 		}else if(this.x>FichaActual.x+2*FICHA_H/3 && this.x<FichaActual.x+3*FICHA_H/3 && this.y>FichaActual.y && this.y<FichaActual.y+FICHA_W/3){
 			this.x=FichaActual.x+2*FICHA_H/3;
 			this.y=FichaActual.y;
-			this.zona=FichaActual.sprite.sd;
+			this.zona=sprites[FichaActual.sprite].sd;
 		}else if(this.x>FichaActual.x && this.x<FichaActual.x+FICHA_H/3 && this.y>FichaActual.y+FICHA_W/3 && this.y<FichaActual.y+2*FICHA_W/3){
 			this.x=FichaActual.x;
 			this.y=FichaActual.y+FICHA_W/3;
-			this.zona=FichaActual.sprite.ci;
+			this.zona=sprites[FichaActual.sprite].ci;
 		}else if(this.x>FichaActual.x+FICHA_H/3 && this.x<FichaActual.x+2*FICHA_H/3 && this.y>FichaActual.y+FICHA_W/3 && this.y<FichaActual.y+2*FICHA_W/3){
 			this.x=FichaActual.x+FICHA_H/3;
 			this.y=FichaActual.y+FICHA_W/3;
-			this.zona=FichaActual.sprite.cc;
+			this.zona=sprites[FichaActual.sprite].cc;
 		}else if(this.x>FichaActual.x+2*FICHA_H/3 && this.x<FichaActual.x+3*FICHA_H/3 && this.y>FichaActual.y+FICHA_W/3 && this.y<FichaActual.y+2*FICHA_W/3){
 			this.x=FichaActual.x+2*FICHA_H/3;
 			this.y=FichaActual.y+FICHA_W/3;
-			this.zona=FichaActual.sprite.cd;
+			this.zona=sprites[FichaActual.sprite].cd;
 		}else if(this.x>FichaActual.x && this.x<FichaActual.x+FICHA_H/3 && this.y>FichaActual.y+2*FICHA_W/3 && this.y<FichaActual.y+3*FICHA_W/3){
 			this.x=FichaActual.x;
 			this.y=FichaActual.y+2*FICHA_W/3;
-			this.zona=FichaActual.sprite.ii;
+			this.zona=sprites[FichaActual.sprite].ii;
 		}else if(this.x>FichaActual.x+FICHA_H/3 && this.x<FichaActual.x+2*FICHA_H/3 && this.y>FichaActual.y+2*FICHA_W/3 && this.y<FichaActual.y+3*FICHA_W/3){
 			this.x=FichaActual.x+FICHA_H/3;
 			this.y=FichaActual.y+2*FICHA_W/3;
-			this.zona=FichaActual.sprite.ic;
+			this.zona=sprites[FichaActual.sprite].ic;
 		}else if(this.x>FichaActual.x+2*FICHA_H/3 && this.x<FichaActual.x+3*FICHA_H/3 && this.y>FichaActual.y+2*FICHA_W/3 && this.y<FichaActual.y+3*FICHA_W/3){
 			this.x=FichaActual.x+2*FICHA_H/3;
 			this.y=FichaActual.y+2*FICHA_W/3;
-			this.zona=FichaActual.sprite.id;
+			this.zona=sprites[FichaActual.sprite].id;
 		}
 	}
 	
 	
 	this.soltar = function(x,y) {
-		if ((!FichaActual.seHaMovido() || !FichaActual.EstaEn(this.x,this.y))){
+		if ((!FichaActual.seHaMovido() || !FichaActual.EstaEn(this.x,this.y)) || sprites[FichaActual.sprite].cc=="no"){
 			this.x = this.inicialx;
 			this.y = this.inicialy;	
 			FichaActual.haySeguidor=false;
