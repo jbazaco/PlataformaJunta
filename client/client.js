@@ -109,7 +109,7 @@ Template.button.events={
 
 
 Template.ListaEstados.ListaEstados = function(){
-	return Meteor.users.find({},{sort:{estado:1}})
+	return Meteor.users.find({},{sort:{estado:1,username:1}})
 }
 
 Template.ListaEstados.ColorEstado = function(){

@@ -27,12 +27,10 @@ Meteor.methods({
 		usuarios.forEach(function(user){
 			if(user.services.resume.loginTokens[0] === undefined){
 				//Usuario: No conectado
-				console.log("no conectado")
 				Meteor.users.update(user,{$set:{estado:"No conectado"}});
 			}
 			else{
 				//Usuario: Conectado
-				console.log("conectado")
 				Meteor.users.update(user,{$set:{estado:"Conectado"}});
 			}
 		});
