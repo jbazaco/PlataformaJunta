@@ -114,9 +114,9 @@
 <template name="gamesList">
 	{{#each gamesList}}
 		{{#if imIn}}
-			<div><strong>{{nombre}}</strong>:{{jugadores}}</div>
+			<a class='match'><strong>{{nombre}}</strong></a> :{{jugadores}}</br>
 		{{else}}
-			<div>{{nombre}} : {{jugadores}}</div>
+			<a class='match'>{{nombre}} </a> :{{jugadores}}</br>
 		{{/if}}
 	{{/each}}
 </template>

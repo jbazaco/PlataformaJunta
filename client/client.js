@@ -4,17 +4,40 @@
  * Messages.find({}).forEach(function(elem){Messages.remove(elem._id)})
  */
 
+
 Meteor.subscribe("messages");
 Meteor.subscribe("partidas");
 Meteor.subscribe("DatosUsuarios");
-
 Meteor.startup(function(){
-	screenauto();
+	screenauto();	//Refresh automatico de la pantalla aunque el tamaño cambie
 	$( "#container2" ).tabs({ hide: { effect: "slide",direction:'up', duration: 100 }, show:{ effect: "slide",direction:'up', duration: 100 }  });
-	$(".subtab").hide();
-	$(".canvas").hide()
+	$(".subtab").hide();	//Esconde los subtans que se encuentran en la segunda pestaña del acordeon
+	$(".canvas").hide();	//Esconde todos los canvas
+// 	Meteor.setTimeout(function(){$(".match").click(ShowUserInfo)},500);		//Hacer click muestra estadisticas, otro click lo cierra.
+	Meteor.setTimeout(function(){$(".match").click(ShowMatchInfo)},500);	//Hacer click muestra estadisticas, otro click lo cierra.
 	Session.setDefault('Current_Game_id',0);
 });
+
+
+// var ShowUserInfo = function(){
+// 	console.log('Over User');
+// 	return false;
+// }
+// var HideUserInfo = function(){
+// 	console.log('Not Over User');
+// 	return false;
+// }
+ShowMatchInfo = function(){
+	$(".match").unbind("click",ShowMatchInfo)
+	console.log('Click open Match: '+this.innerHTML);
+	$(".match").click(HideMatchInfo)
+}
+HideMatchInfo = function(){
+	$(".match").unbind("click",HideMatchInfo)
+	console.log('Click close Match');
+	$(".match").click(ShowMatchInfo)
+}
+
 
 var screenauto= function(){
 	$("#containermain").css("width",document.documentElement.clientWidth.toString()+'px');
@@ -102,12 +125,16 @@ Template.gamesList.gamesList = function(){
 
 
 Template.gamesList.imIn = function(){
-  var usu = Meteor.userId()
-  if (usu){
-    return (usu in this.jugadores) | (usu in this.invitados)
-  }else{
-    return false;
-  }
+	var usu = Meteor.users.findOne(Meteor.userId()).username;
+	if (usu){
+		console.log("ttrue")
+		var val= ((usu in this.jugadores) | (usu in this.invitados))
+		console.log(val)
+		return val
+	}else{
+		console.log("ffalse")
+		return false;
+	}
 }
 
 

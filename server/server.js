@@ -113,11 +113,12 @@ Meteor.methods({
 		
 		return sid;
 	},
-	
-	IncuirJugador: function(id_partida, jugador){
+	//Comprobar, comentar, añadir a wiki
+	IncluirJugador: function(id_partida, jugador){
 		Partidas.update({id:id_partida},{$push:{jugadores:jugador}})
 	},
 	
+	//Comprobar, comentar, añadir a wiki
 	IncluirInvitado: function(id_partida, invitado){
 		Partidas.update({id:id_partida},{$push:{invitados:invitado}})
 	}
