@@ -65,7 +65,7 @@ Meteor.methods({
 			id:id,
 			jugadores: jugadores,
 			invitados: [],
-			opciones: op,
+			opciones: opciones,
 			jugadas:[]
 		})
 		Meteor.publish('Partida'+id.toString(),function(){

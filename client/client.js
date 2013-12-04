@@ -21,23 +21,7 @@ var screenauto= function(){
 $(function() {
 	$( "#container2" ).tabs({ hide: { effect: "slide",direction:'up', duration: 100 }, show:{ effect: "slide",direction:'up', duration: 100 }  });
 	$('.escenario').attr("disabled",true);
-	
-/*	var x = document.getElementById('form1');
-    //nombre_partida = document.getElementById('nombre');
-	//n_jugadores =document.getElementsByClassName('n_jugadores');
-	//form.onsubmit = function() {
-   	//	var variable = nombre_partida.value;
-	//	var variable2 = n_jugadores.value;
-    //	alert( variable2 );
-	//};
-	//for (var i=0;i<x.length;i++)
-  	{
-  		document.write(x.elements[i].value);
-  		document.write("<br>");
-  	}
-*/
 });
-
 
 var Clip = function(msg,maxlen){
 	if(msg.length>maxlen){
@@ -98,6 +82,38 @@ Template.button.events={
 		  time:Date.now()
 		});
         }
+}
+Template.options.events={
+	'click .submit': function () {
+     	var opciones=[];
+
+		if($("#nombre").val()==""){
+			alert("Debes introducir un nombre para la partida");
+			return false;
+		}
+		else{
+			opciones.push($("#nombre").val());
+			name=$("#nombre").val();		
+		}
+		opciones.push($('input[name=n_jugadores]:checked', '#opciones').val());
+		if($('#tablero').is(':checked')){
+			opciones.push('tablero');
+		}
+
+		opciones.push($('input[name=nivel]:checked', '#opciones').val());
+		opciones.push($('input[name=escenario]:checked', '#opciones').val());
+		alert(opciones);
+		Partida.insert({
+			name:name,
+		});
+	},
+	'click .reset': function () {	
+		$("#nombre").val("");
+		if($('#tablero').is(':checked')){
+			$('#tablero').prop('checked', false);
+		}		
+	}
+      
 }
 
 Accounts.ui.config({
