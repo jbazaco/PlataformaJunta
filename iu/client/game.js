@@ -141,7 +141,7 @@ BotonFinTurno = new function() {
 	this.soltar = function(x,y) {	}
 
 	this.pulsado = function() {
-		FichaActual.finTurno();
+		FichaActual.finTurno();	
 	}
 
 	this.draw = function(ctx) {
@@ -400,6 +400,7 @@ FichaActual = new function() {
 		this.y = this.inicialy;	
 		this.haySeguidor=false;
 		this.colocado=false;
+		this.rotacion=0;	
 	}
 	
 	this.comparar_lados = function(){
