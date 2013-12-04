@@ -182,6 +182,7 @@ Ficha = function(x, y, sprite) {
 	this.w = FICHA_W;
 	this.h = FICHA_H;
 	this.sprite = sprite;
+	this.rotacion=0;
 	this.ladod;	//lado Derecho
 	this.ladoi;	//lado Izquierdo
 	this.ladoa;	//lado Arriba;
@@ -271,12 +272,13 @@ Ficha = function(x, y, sprite) {
 			}
 			
 		}
-		if(dibujar) SpriteSheet.draw(ctx,this.sprite,this.x, this.y, sw);
+		if(dibujar) SpriteSheet.draw(ctx,this.sprite,this.x, this.y, sw,0,this.rotacion);
 	}
 
 	this.establecerActual = function() {
 		//Se copiara tambien la orientacion
 		this.sprite = FichaActual.sprite;
+		this.rotacion = FichaActual.rotacion;
 		this.ladod = FichaActual.ladod;
 		this.ladoi = FichaActual.ladoi;
 		this.ladoa = FichaActual.ladoa;
