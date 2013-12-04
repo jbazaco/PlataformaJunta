@@ -297,6 +297,7 @@ FichaActual = new function() {
 	this.nextBoard = 0;
 	this.haySeguidor=false;
 	this.colocado=null;
+	this.rotacion = 0;
 	this.ladod;	//lado Derecho
 	this.ladoi;	//lado Izquierdo
 	this.ladoa;	//lado Arriba;
@@ -304,13 +305,14 @@ FichaActual = new function() {
 	
 	//Devuelve true si se gira la ficha
 	this.pulsado = function() {
+	
 		if (this.sprite === 'interrogante') {
 			this.sprite = 'm'; //PEDIR A LA IA!!!, de momento ponemos una ficha cualquiera
 			this.nombrar_lados();
 			return true;
 		}
-		if (this.x == this.inicialx && this.y == this.inicialy){
-			alert('Ya has girado la ficha');
+		if (this.x == this.inicialx && this.y == this.inicialy){	
+			this.rotacion+=90;
 		}
 		return false;
 	}
@@ -379,7 +381,7 @@ FichaActual = new function() {
 				sw = dif;
 			}	
 		}
-		if (dibujar) SpriteSheet.draw(ctx,this.sprite,this.x,this.y,sw);
+		if (dibujar) SpriteSheet.draw(ctx,this.sprite,this.x,this.y,sw,0,this.rotacion);
 	}
 
 	this.finTurno = function() {
