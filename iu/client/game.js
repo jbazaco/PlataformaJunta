@@ -91,7 +91,6 @@ playGame = function(){
 	ficha_inicial = new Ficha(394, 263,"cmur");
 	Game.setBoard(Game.boards.length, ficha_inicial);
 	Game.setBoard(Game.boards.length,Fondo);
-	ficha_inicial.nombrar_lados();
 	ficha_inicial.buscar_huecos();
 	
 
@@ -183,29 +182,11 @@ Ficha = function(x, y, sprite) {
 	this.h = FICHA_H;
 	this.sprite = sprite;
 	this.rotacion=0;
-	this.ladod;	//lado Derecho
-	this.ladoi;	//lado Izquierdo
-	this.ladoa;	//lado Arriba;
-	this.ladob;	//lado aBajo;
 
 	this.coordenadas = {x: !ficha_inicial ? 0:(this.x-ficha_inicial.x)/this.w,
 						y: !ficha_inicial ? 0:(ficha_inicial.y-this.y)/this.h};
 	
-	this.nombrar_lados = function(){
-		if (this.sprite === 'm'){ 
-			this.ladod = 'campo';
-			this.ladoi = 'campo';
-			this.ladoa = 'campo';
-			this.ladob = 'campo';
-		}else if (this.sprite === 'cmur'){
-			this.ladod = 'campo';
-			this.ladoi = 'ciudad';
-			this.ladoa = 'camino';
-			this.ladob = 'camino';
-		}
-	
-	}
-	
+
 	
 	//busca en las posiciones adyacentes de una ficha colocada, y si no hay ninguna ficha, 
 	//pone la ficha "interrogante".
@@ -279,10 +260,6 @@ Ficha = function(x, y, sprite) {
 		//Se copiara tambien la orientacion
 		this.sprite = FichaActual.sprite;
 		this.rotacion = FichaActual.rotacion;
-		this.ladod = FichaActual.ladod;
-		this.ladoi = FichaActual.ladoi;
-		this.ladoa = FichaActual.ladoa;
-		this.ladob = FichaActual.ladob;
 		this.buscar_huecos();
 	}
 }
@@ -300,17 +277,12 @@ FichaActual = new function() {
 	this.haySeguidor=false;
 	this.colocado=null;
 	this.rotacion = 0;
-	this.ladod;	//lado Derecho
-	this.ladoi;	//lado Izquierdo
-	this.ladoa;	//lado Arriba;
-	this.ladob;	//lado aBajo;
 	
 	//Devuelve true si se gira la ficha
 	this.pulsado = function() {
 	
 		if (this.sprite === 'interrogante') {
 			this.sprite = 'm'; //PEDIR A LA IA!!!, de momento ponemos una ficha cualquiera
-			this.nombrar_lados();
 			return true;
 		}
 		if (this.x == this.inicialx && this.y == this.inicialy){	
@@ -357,10 +329,6 @@ FichaActual = new function() {
 			if (debajo instanceof Ficha && debajo.sprite === "interrogante"){
 				this.x = debajo.x;
 				this.y = debajo.y;
-				/*if (!this.comparar_lados()){			
-					this.x = this.inicialx;
-					this.y = this.inicialy;
-				}*/
 			} else {	
 				this.x = this.inicialx;
 				this.y = this.inicialy;	
@@ -402,60 +370,6 @@ FichaActual = new function() {
 		this.haySeguidor=false;
 		this.colocado=false;
 		this.rotacion=0;	
-	}
-	
-	this.comparar_lados = function(){
-		var drcha = false;	
-		var derecha = elemInPos(this.x+3/2*this.w, this.y +this.h/2);
-		if(derecha && derecha!=FichaActual){
-			if (derecha.ladoi === this.ladod || derecha.sprite ==='interrogante'){
-				drcha = true;
-			}
-		}else if (derecha===null || derecha===FichaActual){
-			drcha = true;
-		}	
-		
-		var izq = false;
-		var izquierda = elemInPos(this.x-this.w/2, this.y+this.h/2);
-		if(izquierda && izquierda!=FichaActual){
-			if (izquierda.ladod === this.ladoi || izquierda.sprite ==='interrogante'){
-				izq = true;
-			}
-		}else if (izquierda===null || izquierda===FichaActual){
-			izq = true;
-		}
-		
-		var arr = false;
-		var arriba = elemInPos(this.x+this.w/2, this.y-this.h/2);
-		if(arriba && arriba!=FichaActual){
-			if (arriba.ladob === this.ladoa || arriba.sprite ==='interrogante'){
-				arr = true;
-			}
-		}else if (arriba===null || arriba===FichaActual){
-			arr = true;
-		}
-		
-		var ab = false;
-		var abajo = elemInPos(this.x+this.w/2, this.y+3/2*this.h);
-		if(abajo && abajo!=FichaActual){
-			if (abajo.ladoa === this.ladob || abajo.sprite ==='interrogante'){
-				ab = true;
-			}
-		}else if (abajo===null || abajo===FichaActual){
-			ab = true;
-		}
-
-		return (drcha && izq && arr && ab);	//si devuelve true significa que puedo colocar la ficha en esa posición
-
-	}
-	
-	this.nombrar_lados = function(){
-		if (this.sprite === 'm'){
-			this.ladod = 'campo';
-			this.ladoi = 'campo';
-			this.ladoa = 'campo';
-			this.ladob = 'campo';
-		}
 	}
 
 };
