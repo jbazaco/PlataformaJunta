@@ -285,8 +285,11 @@ FichaActual = new function() {
 			this.sprite = 'm'; //PEDIR A LA IA!!!, de momento ponemos una ficha cualquiera
 			return true;
 		}
-		if (this.x == this.inicialx && this.y == this.inicialy){	
-			this.rotacion+=90;
+		if (this.x == this.inicialx && this.y == this.inicialy){
+			if (this.rotacion === 270)
+				this.rotacion = 0;
+			else	
+				this.rotacion+=90;
 		}
 		return false;
 	}
