@@ -6,6 +6,7 @@
 
 Meteor.subscribe("messages");
 Meteor.subscribe("partidas");
+Meteor.subscribe("DatosUsuarios");
 
 Meteor.startup(function(){
 	screenauto();
@@ -59,28 +60,26 @@ Template.input.events={
 					time:Date.now()
 				});
 			}
-			message.val("");		
+			message.val("");	
 		}
 	}
 }
 
+
+
 Template.button.events={
 	'click input.b1': function () {
-		Meteor.call("SuscribirPartida",[],{},[],$("#entry_nombre_partida").val(),function(error,result){
-			console.log(error)
-			console.log(result)
-			Session.set("Current_Game",result.toString())
-		})
+
 	},
 	'click input.b2': function(){
-		alert('Not used debug button.')
+
 	},
 	'click a.juego1':function(){
 		Session.set("Current_Game_Type","AlienInvasion");
 		$("#ListaPartidas1").show(500);
 		$("#ListaPartidas2").hide(500);
 		$("#ListaPartidas3").hide(500);
-// 		$("#game_alien").show(500);
+		//     $("#game_alien").show(500);
 		return false
 	},
 	'click a.juego2':function(){
@@ -88,7 +87,7 @@ Template.button.events={
 		$("#ListaPartidas2").show(500);
 		$("#ListaPartidas1").hide(500);
 		$("#ListaPartidas3").hide(500);
-// 		$("#game_angry").show(500)
+		//     $("#game_angry").show(500)
 		$("#game").hide(500);
 		return false
 	},
@@ -97,7 +96,7 @@ Template.button.events={
 		$("#ListaPartidas3").show(500);
 		$("#ListaPartidas1").hide(500);
 		$("#ListaPartidas2").hide(500);
-// 		$("#game_carca").show(500)
+		//     $("#game_carca").show(500)
 		$("#game").hide(500);
 		return false
 	},
@@ -118,22 +117,39 @@ Template.button.events={
   }
 }
 
-Template.gamesList.gamesList = function(){
-	return Partidas.find({})
-};
 
-Template.gamesList.imIn = function(){
-	var usu = Meteor.userId()
-	if (usu){
-		return (usu in this.jugadores) | (usu in this.invitados)
-	}else{
+Template.ListaEstados.ListaEstados = function(){
+	return Meteor.users.find({},{sort:{estado:1,username:1}})
+}
+
+Template.ListaEstados.ColorEstado = function(){
+	if (this.estado == "Conectado"){
+		return true;	
+	}
+	else{
 		return false;
 	}
 }
 
+Template.gamesList.gamesList = function(){
+  return Partidas.find({})
+}
+
+
+Template.gamesList.imIn = function(){
+  var usu = Meteor.userId()
+  if (usu){
+    return (usu in this.jugadores) | (usu in this.invitados)
+  }else{
+    return false;
+  }
+}
+
+
 Accounts.ui.config({
 	passwordSignupFields:"USERNAME_AND_OPTIONAL_EMAIL"
 });
+
 
 Deps.autorun(function(){
 	var chatArea = $('#firstRow');
@@ -143,11 +159,17 @@ Deps.autorun(function(){
 	});
 });
 
+
+
 Deps.autorun(function(){
-	var subs = Session.get("Current_Game");
-	console.log(subs)
-	if(subs){
-		Meteor.subscribe(subs);
+	if (Meteor.user()){
+		var user = Meteor.user();
+		if(!user.puntuacion && user.puntuacion!=0){
+			Meteor.call('InicializaCliente',user._id);
+		}
 	}
-})
+	Meteor.call('ActualizarEstado');
+});
+
+
 

@@ -54,6 +54,13 @@ table {
         position: absolute;
         background-image: url(../imagenes/fondo3.jpg);
 }
+
+.publi{
+        width: 165px;
+        height: 31px;
+        background-image: url(../imagenes/fondo3.jpg)
+}
+
 #container {
   width:70%;
   height:65%;
@@ -63,17 +70,19 @@ table {
 }
 #container2 {
   background-color:#CBAD48;
-        background: #CBAD48;
+  background: #CBAD48;
   width:25%;
   height:30%;
   float:right;
   margin-right: 2%;
-  overflow:auto;
-        border-radius:20px;
-        opacity:0.6;
+	overflow:auto;
+	border-radius:20px;
+    opacity:0.6;
 }
+
 .tabs{
-        color:black;
+	overflow:auto;
+	color:black;
 }
 
 #container3 {
@@ -159,3 +168,8 @@ textarea
   word-wrap: break-word;
 }
 
+.NombreUsuario
+{
+	color:black;
+	
+}

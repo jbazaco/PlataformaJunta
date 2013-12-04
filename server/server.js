@@ -2,11 +2,66 @@
 Meteor.publish('messages', function(){
 	return Messages.find({}, {sort: {time:-1}});
 });
+
 Meteor.publish('partidas',function(){
 	return Partidas.find({},{nombre:1, jugadores:1,opciones:1});
 });
 
+// Publicacion del campo puntuacion para que puedan acceder los clientes.
+Meteor.publish("DatosUsuarios", function () {
+  return Meteor.users.find({},{fields: {'username':1,'puntuacion': 1,'services': 1,'estado':1}});
+});
+
 Meteor.methods({
+	
+	//  Cada vez que un usuario se registre y en sus datos no se encuentre
+	// el campo puntuacion, se inicializa la puntuacion a cero.
+	InicializaCliente: function(id){
+		Meteor.users.update({_id:id},{$set:{puntuacion:0,equipos:[],torneos:[],penalizacion:0,estado:"Conectado"}});
+	},
+	
+	// Actualiza el estado de todos los usuarios registrados cada vez que hay
+	// un cambio en la colección users.
+	ActualizarEstado: function(){
+		var usuarios = Meteor.users.find({});	
+		usuarios.forEach(function(user){
+			if(user.services.resume.loginTokens[0] === undefined){
+				//Usuario: No conectado
+				Meteor.users.update(user,{$set:{estado:"No conectado"}});
+			}
+			else{
+				//Usuario: Conectado
+				Meteor.users.update(user,{$set:{estado:"Conectado"}});
+			}
+		});
+	},
+
+	//  Cada vez que un jugador sume una puntuación se deberá llamar a 
+	//  esta función.
+	IncrementarPuntuacion: function(id,punt){
+		Meteor.users.update(id,{$inc:{puntuacion:punt}});
+	},
+	
+	// Cada vez que se cree un equipo, el equipo es guardado en la colección
+	// users. "equipos" es un campo de la colección de usuarios, que guarda la lista
+	// de equipos en los que participa.
+	AgregarEquipo: function(id,equipo){
+		Meteor.users.update(id,{$push:{equipos:equipo}});
+	},
+
+	// Cada vez que se cree un torneo, el torneo es guardado en la colección
+	// users. "torneos" es un campo de la colección de usuarios, que guarda la lista
+	// de torneos en los que participa.
+	AgregarTorneo: function(id,torneo){
+		Meteor.users.update(id,{$push:{torneos:torneo}});
+	},
+
+	// Cada vez que un jugador pierde "x" tiempo en su turno se le penaliza. Igualmente
+	// si el jugador abandona el juego antes de que acabe la partida.
+	AgregarPenalizacion: function(id,penal){
+		Meteor.users.update(id,{$inc:{penalizacion:penal}});
+	},
+
 	//  Cada vez que se quiera almacenar un movimiento de una partida se llamará 
 	//  a esta funcion. Se comprueba que se el judgador que inicia el momimiento
 	//  está autorizado (está en la lista de jugadores), despues se almacena la 
@@ -18,7 +73,7 @@ Meteor.methods({
 		Partidas.update(id,{$push:{jugadas:movimiento}});
 	},
 
-	// Esta función devueiemQfx9dLJxDn6EsPlve el ultimo movimiento jugado en la partida
+	// Esta función devuelve el ultimo movimiento jugado en la partida
 	// AUN NO ESTA CLARO si cualquiera puede mirar el ultimo movimiento
 	// o debe estar en alguna de las listas de jugadores (usuarios, 
 	// jugadores de partida o invitados a partida).
@@ -75,6 +130,21 @@ Meteor.methods({
 		return sid;
 	}
 })
+
+//Definición de permisos de usuarios que intentan tocar dentro de la colección users.
+function adminUser(userId) {
+    var adminUser = Meteor.users.findOne({username: "admin"});
+    return (userId && adminUser && userId === adminUser._id);
+}
+
+Meteor.users.allow({
+	remove: function(userId,doc){		//Solo el administrador puede eliminar cuentas de jugadores.
+		return adminUser(userId);
+	},
+	update: function(userId,doc){		
+		return Meteor.userId();
+	}
+});
 
 
 var GetSeq = function(){
