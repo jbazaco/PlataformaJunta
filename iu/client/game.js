@@ -1,3 +1,9 @@
+var nfich = 0;
+
+Meteor.startup(function(){
+});
+
+
 //Altura y anchura de una ficha
 var FICHA_H = 62;
 var FICHA_W = 62;
@@ -64,13 +70,10 @@ var ficha_inicial;
 
 startGame = function() {
 
-	
 	Game.setBoard(0,new TitleScreen("Carcassone.", "Haga click para empezar.",playGame));
-
-	
-	
 	
 }
+
 playGame = function(){
 
 	Game.setBoard(0,new GamePoints(0));
@@ -92,9 +95,37 @@ playGame = function(){
 	Game.setBoard(Game.boards.length, ficha_inicial);
 	Game.setBoard(Game.boards.length,Fondo);
 	ficha_inicial.buscar_huecos();
-	
+	nfich++;
+
+	/*Se subscribe a la partida*/
+	Meteor.subscribe('mov_partida');
+	Deps.autorun(function(){
+		var nmovs = Movimientos.find().count();
+		var movs = Movimientos.find({}, 
+				{limit:nmovs-nfich, sort: {nmove:-1}});
+		//Se invierte el orden para que si le llegan varios movimientos
+		//los gestione en orden
+		var arr = new Array();
+        movs.forEach(function (m) {
+			nfich++;
+			arr.unshift(m);
+        });
+		arr.forEach(function(m) {
+			gestionarMov(m);
+		});
+	});
 
 }
+
+gestionarMov = function(m) {
+	var debajo = elemInPos(ficha_inicial.x+m.x*ficha_inicial.w+ficha_inicial.w/2,
+						ficha_inicial.y-m.y*ficha_inicial.h+ficha_inicial.h/2, 
+						FichaActual.nextBoard);
+	if (debajo instanceof Ficha && debajo.sprite === "interrogante"){
+		debajo.establecer(m.sprite, m.rotacion);
+	}
+};
+
 TitleScreen = function TitleScreen(title,subtitle,callback) {
     
 	this.x = 0;
@@ -256,10 +287,9 @@ Ficha = function(x, y, sprite) {
 		if(dibujar) SpriteSheet.draw(ctx,this.sprite,this.x, this.y, sw,0,this.rotacion);
 	}
 
-	this.establecerActual = function() {
-		//Se copiara tambien la orientacion
-		this.sprite = FichaActual.sprite;
-		this.rotacion = FichaActual.rotacion;
+	this.establecer = function(sprite, rotacion) {
+		this.sprite = sprite;
+		this.rotacion = rotacion;
 		this.buscar_huecos();
 	}
 }
@@ -360,7 +390,9 @@ FichaActual = new function() {
 		if (this.inicialx !== this.x) {
 			var debajo = elemInPos(this.x+this.w/2, this.y+this.h/2, this.nextBoard);
 			if (debajo instanceof Ficha && debajo.sprite === "interrogante"){
-				debajo.establecerActual();
+				Movimientos.insert({nmove: nfich-1, sprite: this.sprite, 
+									rotacion: this.rotacion, x: debajo.coordenadas.x , 
+									y: debajo.coordenadas.y});
 				this.resetear();	
 			}
 		}
