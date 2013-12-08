@@ -24,7 +24,7 @@ var sprites = {
 	cmur: { sx: 408, sy: 137, w: FICHA_W, h: FICHA_H, si:"campo", sc:"camino", sd:"campo2",
 		ci:"ciudad", cc:"camino", cd:"campo2", ii:"campo", ic:"camino", id:"campo2"},	//camino recto con muralla al 												lado(una de las fichas es la inicial)
 	ccmur: { sx: 485, sy: 137, w: FICHA_W, h: FICHA_H, si:"campo", sc:"camino", sd:"campo2",
-		ci:"ciudad", cc:"camino", cd:"camino", ii:"campo", ic:"campo", id:"campo"},	//camino con curva y con muralla 													al lado
+		ci:"ciudad", cc:"campo", cd:"camino", ii:"campo", ic:"campo", id:"campo"},	//camino con curva(de sc a cd) y 													con muralla al lado
 	chmur: { sx: 175, sy: 137, w: FICHA_W, h: FICHA_H, si:"ciudad", sc:"ciudad", sd:"campo",
 		ci:"ciudad", cc:"ciudad", cd:"camino", ii:"ciudad", ic:"ciudad", id:"campo2"},	//camino hacia muralla
 	chmure: { sx: 21, sy: 230, w: FICHA_W, h: FICHA_H, si:"ciudad", sc:"ciudad", sd:"campo",
@@ -35,8 +35,8 @@ var sprites = {
 		ci:"ciudad", cc:"camino", cd:"camino", ii:"ciudad", ic:"ciudad", id:"campo"},	//camino con curva con 2 lados de 													ciudad contiguos
 	ccmur2e: { sx: 98, sy: 230, w: FICHA_W, h: FICHA_H, si:"campo", sc:"campo", sd:"campo",
 		ci:"ciudad", cc:"camino", cd:"camino", ii:"campo", ic:"camino", id:"campo2"},	//camino con curva con 2 lados de 												ciudad contiguos con escudo
-	ccmur3: { sx: 562, sy: 137, w: FICHA_W, h: FICHA_H, si:"campo", sc:"ciudad", sd:"campo",
-		ci:"campo", cc:"ciudad", cd:"campo", ii:"campo", ic:"ciudad", id:"campo"},	//camino con curva y muralla al 												lado(otro)
+	ccmur3: { sx: 562, sy: 137, w: FICHA_W, h: FICHA_H, si:"campo", sc:"campo", sd:"campo",
+		ci:"ciudad", cc:"camino", cd:"camino", ii:"campo", ic:"camino", id:"campo2"},	//camino con curva(de ic a cd) y 													muralla al lado(otro)
 	murcam: { sx: 21, sy: 44, w: FICHA_W, h: FICHA_H, si:"campo", sc:"campo", sd:"campo",
 		ci:"ciudad", cc:"no", cd:"campo", ii:"ciudad", ic:"ciudad", id:"campo"},	//media ficha muralla media ficha 													campo
 	murcame: { sx: 176, sy: 230, w: FICHA_W, h: FICHA_H, si:"campo", sc:"campo", sd:"campo",
@@ -58,11 +58,11 @@ var sprites = {
 	ciucam2e: { sx: 408, sy: 230, w: FICHA_W, h: FICHA_H, si:"campo", sc:"ciudad", sd:"campo",
 		ci:"campo", cc:"ciudad", cd:"campo", ii:"campo", ic:"ciudad", id:"campo"},	//ciudad con 2 lados opuestos de 													campo con escudo
 	interrogante: { sx: 253, sy: 230, w: FICHA_W, h: FICHA_H},	//ficha con un interrogante
-	s1: { sx: 511, sy: 242, w: 30, h: 30},			//seguidor amarillo
-	s2: { sx: 553, sy: 242, w: 30, h: 30},			//seguidor rosa
-	s3: { sx: 596, sy: 242, w: 30, h: 30},			//seguidor azul
-	s4: { sx: 640, sy: 242, w: 30, h: 30},			//seguidor verde
-	s5: { sx: 682, sy: 242, w: 30, h: 30},		//seguidor naranja
+	s1: { sx: 535, sy: 248, w: 24, h: 24},			//seguidor amarillo
+	s2: { sx: 570, sy: 248, w: 24, h: 24},			//seguidor rosa
+	s3: { sx: 605, sy: 248, w: 24, h: 24},			//seguidor azul
+	s4: { sx: 640, sy: 248, w: 24, h: 24},			//seguidor verde
+	s5: { sx: 675, sy: 248, w: 24, h: 24},		//seguidor naranja
 	terminar: {sx: 727, sy: 44,w: 58,h: 20}		//Boton de temirnar
 };
 
@@ -78,7 +78,7 @@ playGame = function(){
 
 	Game.setBoard(0,new GamePoints(0));
 
-	var numjugadores=3; //nos lo tiene que dar la plataforma de momento es un ejemplo
+	var numjugadores=5; //nos lo tiene que dar la plataforma de momento es un ejemplo
 	
 	for (i=1;i<=numjugadores;i++){	
 		for (k=1;k<=7;k++){
@@ -312,7 +312,7 @@ FichaActual = new function() {
 	this.pulsado = function() {
 	
 		if (this.sprite === 'interrogante') {
-			this.sprite = 'ccmur2'; //PEDIR A LA IA!!!, de momento ponemos una ficha cualquiera
+			this.sprite = 'ccmur3'; //PEDIR A LA IA!!!, de momento ponemos una ficha cualquiera
 			return true;
 		}
 		if (this.x == this.inicialx && this.y == this.inicialy){
@@ -408,7 +408,7 @@ FichaActual = new function() {
 	}
 	
 	this.pintarRejilla = function(){
-	
+		
 		Game.ctx.fillStyle = "#000000";
 		Game.ctx.strokeRect(this.x,this.y,this.h/3,this.w/3);
 		Game.ctx.fillStyle = "#000000";
@@ -516,7 +516,7 @@ Seguidor = function(sprite, numjugador) {
 		}else if(x>FichaActual.x+FichaActual.h/3 && x<FichaActual.x+2*FichaActual.h/3 && y>FichaActual.y+FichaActual.w/3 && y<FichaActual.y+2*FichaActual.w/3){
 			this.x=FichaActual.x+FichaActual.h/3;
 			this.y=FichaActual.y+FichaActual.w/3;
-			this.zona=sprites[FichaActual.sprite].si;
+			this.zona=sprites[FichaActual.sprite].cc;
 			
 		}else if(x>FichaActual.x+2*FichaActual.h/3 && x<FichaActual.x+3*FichaActual.h/3 && y>FichaActual.y+FichaActual.w/3 && y<FichaActual.y+2*FichaActual.w/3){
 			this.x=FichaActual.x+2*FichaActual.h/3;
