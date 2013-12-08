@@ -312,7 +312,7 @@ FichaActual = new function() {
 	this.pulsado = function() {
 	
 		if (this.sprite === 'interrogante') {
-			this.sprite = 'm'; //PEDIR A LA IA!!!, de momento ponemos una ficha cualquiera
+			this.sprite = 'murcam'; //PEDIR A LA IA!!!, de momento ponemos una ficha cualquiera
 			return true;
 		}
 		if (this.x == this.inicialx && this.y == this.inicialy){
@@ -464,43 +464,145 @@ Seguidor = function(sprite, numjugador) {
 		}
 	}
 	
+	this.si = function(){
+		this.x=FichaActual.x;
+		this.y=FichaActual.y;
+		this.zona=sprites[FichaActual.sprite].si;
+	}
+	
+	this.sc = function(){
+		this.x=FichaActual.x+FichaActual.h/3;
+		this.y=FichaActual.y;
+		this.zona=sprites[FichaActual.sprite].sc;
+	}
+	
+	this.sd = function(){
+		this.x=FichaActual.x+2*FichaActual.h/3;
+		this.y=FichaActual.y;
+		this.zona=sprites[FichaActual.sprite].sd;
+	}
+	
+	this.ci = function(){
+		this.x=FichaActual.x;
+		this.y=FichaActual.y+FichaActual.w/3;
+		this.zona=sprites[FichaActual.sprite].ci;
+	}
+	
+	this.cc = function(){
+		this.x=FichaActual.x+FichaActual.h/3;
+		this.y=FichaActual.y+FichaActual.w/3;
+		this.zona=sprites[FichaActual.sprite].cc;
+	}
+	
+	this.cd = function(){
+		this.x=FichaActual.x+2*FichaActual.h/3;
+		this.y=FichaActual.y+FichaActual.w/3;
+		this.zona=sprites[FichaActual.sprite].cd;
+	}
+	
+	this.ii = function(){
+		this.x=FichaActual.x;
+		this.y=FichaActual.y+2*FichaActual.w/3;
+		this.zona=sprites[FichaActual.sprite].ii;
+	}
+	
+	this.ic = function(){
+		this.x=FichaActual.x+FichaActual.h/3;
+		this.y=FichaActual.y+2*FichaActual.w/3;
+		this.zona=sprites[FichaActual.sprite].ic;
+	}
+	
+	this.id = function(){
+		this.x=FichaActual.x+2*FichaActual.h/3;
+		this.y=FichaActual.y+2*FichaActual.w/3;
+		this.zona=sprites[FichaActual.sprite].id;
+	}
+	
+	
 	this.recalcular = function(x, y) {
 		if (x>FichaActual.x && x<FichaActual.x+FichaActual.h/3 && y>FichaActual.y && y<FichaActual.y+FichaActual.w/3){
-			this.x=FichaActual.x;
-			this.y=FichaActual.y;
-			this.zona=sprites[FichaActual.sprite].si;
+			if (!FichaActual.rotacion)
+				this.si();
+			else if (FichaActual.rotacion === 90)
+				this.ii();
+			else if (FichaActual.rotacion === 180)
+				this.id();
+			else if (FichaActual.rotacion === 270)
+				this.sd();
+				
 		}else if(x>FichaActual.x+FichaActual.h/3 && x<FichaActual.x+2*FichaActual.h/3 &&  y>FichaActual.y && y<FichaActual.y+FichaActual.w/3){
-			this.x=FichaActual.x+FichaActual.h/3;
-			this.y=FichaActual.y;
-			this.zona=sprites[FichaActual.sprite].sc;
+			if (!FichaActual.rotacion)
+				this.sc();
+			else if (FichaActual.rotacion === 90)
+				this.ci();
+			else if (FichaActual.rotacion === 180)
+				this.ic();
+			else if (FichaActual.rotacion === 270)
+				this.cd();	
+		
 		}else if(x>FichaActual.x+2*FichaActual.h/3 && x<FichaActual.x+3*FichaActual.h/3 && y>FichaActual.y && y<FichaActual.y+FichaActual.w/3){
-			this.x=FichaActual.x+2*FichaActual.h/3;
-			this.y=FichaActual.y;
-			this.zona=sprites[FichaActual.sprite].sd;
+			if (!FichaActual.rotacion)
+				this.sd();
+			else if (FichaActual.rotacion === 90)
+				this.si();
+			else if (FichaActual.rotacion === 180)
+				this.ii();
+			else if (FichaActual.rotacion === 270)
+				this.id();	
+
 		}else if(x>FichaActual.x && x<FichaActual.x+FichaActual.h/3 && y>FichaActual.y+FichaActual.w/3 && y<FichaActual.y+2*FichaActual.w/3){
-			this.x=FichaActual.x;
-			this.y=FichaActual.y+FichaActual.w/3;
-			this.zona=sprites[FichaActual.sprite].ci;
+			if (!FichaActual.rotacion)
+				this.ci();
+			else if (FichaActual.rotacion === 90)
+				this.ic();
+			else if (FichaActual.rotacion === 180)
+				this.cd();
+			else if (FichaActual.rotacion === 270)
+				this.sc();	
+
 		}else if(x>FichaActual.x+FichaActual.h/3 && x<FichaActual.x+2*FichaActual.h/3 && y>FichaActual.y+FichaActual.w/3 && y<FichaActual.y+2*FichaActual.w/3){
-			this.x=FichaActual.x+FichaActual.h/3;
-			this.y=FichaActual.y+FichaActual.w/3;
-			this.zona=sprites[FichaActual.sprite].cc;
+			this.cc();
+			
 		}else if(x>FichaActual.x+2*FichaActual.h/3 && x<FichaActual.x+3*FichaActual.h/3 && y>FichaActual.y+FichaActual.w/3 && y<FichaActual.y+2*FichaActual.w/3){
-			this.x=FichaActual.x+2*FichaActual.h/3;
-			this.y=FichaActual.y+FichaActual.w/3;
-			this.zona=sprites[FichaActual.sprite].cd;
+			if (!FichaActual.rotacion)
+				this.cd();
+			else if (FichaActual.rotacion === 90)
+				this.sc();
+			else if (FichaActual.rotacion === 180)
+				this.ci();
+			else if (FichaActual.rotacion === 270)
+				this.ic();	
+
 		}else if(x>FichaActual.x && x<FichaActual.x+FichaActual.h/3 && y>FichaActual.y+2*FichaActual.w/3 && y<FichaActual.y+3*FichaActual.w/3){
-			this.x=FichaActual.x;
-			this.y=FichaActual.y+2*FichaActual.w/3;
-			this.zona=sprites[FichaActual.sprite].ii;
+			if (!FichaActual.rotacion)
+				this.ii();
+			else if (FichaActual.rotacion === 90)
+				this.id();
+			else if (FichaActual.rotacion === 180)
+				this.sd();
+			else if (FichaActual.rotacion === 270)
+				this.si();	
+
 		}else if(x>FichaActual.x+FichaActual.h/3 && x<FichaActual.x+2*FichaActual.h/3 && y>FichaActual.y+2*FichaActual.w/3 && y<FichaActual.y+3*FichaActual.w/3){
-			this.x=FichaActual.x+FichaActual.h/3;
-			this.y=FichaActual.y+2*FichaActual.w/3;
-			this.zona=sprites[FichaActual.sprite].ic;
+			if (!FichaActual.rotacion)
+				this.ic();
+			else if (FichaActual.rotacion === 90)
+				this.cd();
+			else if (FichaActual.rotacion === 180)
+				this.sc();
+			else if (FichaActual.rotacion === 270)
+				this.ci();	
+
 		}else if(x>FichaActual.x+2*FichaActual.h/3 && x<FichaActual.x+3*FichaActual.h/3 && y>FichaActual.y+2*FichaActual.w/3 && y<FichaActual.y+3*FichaActual.w/3){
-			this.x=FichaActual.x+2*FichaActual.h/3;
-			this.y=FichaActual.y+2*FichaActual.w/3;
-			this.zona=sprites[FichaActual.sprite].id;
+			if (!FichaActual.rotacion)
+				this.id();
+			else if (FichaActual.rotacion === 90)
+				this.sd();
+			else if (FichaActual.rotacion === 180)
+				this.si();
+			else if (FichaActual.rotacion === 270)
+				this.ii();	
+
 		}
 	}
 	
