@@ -77,9 +77,10 @@ startGame = function() {
 playGame = function(){
 
 	Game.setBoard(0,new GamePoints(0));
-
 	var numjugadores=3; //nos lo tiene que dar la plataforma de momento es un ejemplo
-	
+	for (i=1;i<=numjugadores;i++){
+		Game.setBoard(Game.boards.length, new NumSeguidores(i));
+	}
 	for (i=1;i<=numjugadores;i++){	
 		for (k=1;k<=7;k++){
 			Game.setBoard(Game.boards.length, new Seguidor("s"+i, i));
@@ -172,6 +173,7 @@ BotonFinTurno = new function() {
 
 	this.pulsado = function() {
 		FichaActual.finTurno();	
+		Seguidor.restar=true;
 	}
 
 	this.draw = function(ctx) {
@@ -405,6 +407,7 @@ FichaActual = new function() {
 		this.haySeguidor=false;
 		this.colocado=false;
 		this.rotacion=0;	
+		Seguidor.resetear();
 	}
 	
 	this.pintarRejilla = function(){
@@ -446,23 +449,14 @@ Seguidor = function(sprite, numjugador) {
 	this.y=this.inicialy;
 	this.sprite=sprite;
 	this.zona="";
-
+	this.restar=true;
+	this.sumar=false;
+	
 	this.pulsado = function() {}
 	//tiene que comprobar que el que hace click es el jugador al que le toca jugar, si no no puede mover
 
 	this.moviendo = false;
 
-	this.mover = function(x,y) {
-		this.moviendo = true;
-		miJugador=1;
-		turno=1;//Falta funcion para saber de quien es el turno
-		if(turno==miJugador && this.sprite=="s"+miJugador && FichaActual.seHaMovido() && (!FichaActual.colocado || FichaActual.colocado==this)){ 
-			this.x = x - this.w/2;
-			this.y = y - this.h/2;
-			FichaActual.pintarRejilla();
-			
-		}
-	}
 	
 	this.recalcular = function(x, y) {
 		if (x>FichaActual.x && x<FichaActual.x+FichaActual.h/3 && y>FichaActual.y && y<FichaActual.y+FichaActual.w/3){
@@ -569,23 +563,56 @@ Seguidor = function(sprite, numjugador) {
 		}
 	}
 	
+	this.mover = function(x,y) {
+		this.moviendo = true;
+		miJugador=1;
+		turno=1;//Falta funcion para saber de quien es el turno
+		if(turno==miJugador && this.sprite=="s"+miJugador && FichaActual.seHaMovido() && (!FichaActual.colocado || FichaActual.colocado==this)){ 
+			this.x = x - this.w/2;
+			this.y = y - this.h/2;
+			FichaActual.pintarRejilla();
+			
+		}
+	}
 	
 	this.soltar = function(x,y) {
-		if ((!FichaActual.seHaMovido() || !FichaActual.EstaEn(x,y))){
-			this.resetear();
-			FichaActual.haySeguidor=false;
-
+		if (!FichaActual.haySeguidor){
+			if ((!FichaActual.seHaMovido() || !FichaActual.EstaEn(x,y))){
+				this.resetear();
+				FichaActual.colocado=null;
+				FichaActual.haySeguidor=false;
+			}else{
+				miJugador=1;
+				turno=1;//Falta funcion para saber de quien es el turno
+				if(turno==miJugador && this.sprite=="s"+miJugador && FichaActual.seHaMovido() && !FichaActual.haySeguidor){
+					this.recalcular(x,y);
+					if (this.zona==="no"){
+						this.resetear();
+					}else{
+						console.log(this.zona);
+						FichaActual.haySeguidor=true;
+						this.sumar=true;
+						FichaActual.colocado=this;
+						if (this.restar){
+							Game.boards[numjugador].num--;
+							this.restar=false;
+						}
+					}
+				}
+			}	
+			this.moviendo = false;
 		}else{
-			this.recalcular(x,y);
-			if (this.zona==="no"){
+			if ((!FichaActual.seHaMovido() || !FichaActual.EstaEn(x,y))){
 				this.resetear();
 			}else{
-				console.log(this.zona);
-				FichaActual.haySeguidor=true;
-				FichaActual.colocado=this;
+				if(this.seHaMovido()){
+					this.recalcular(x,y);
+					if (this.zona==="no"){
+						this.resetear();
+					}
+				}
 			}
 		}
-		this.moviendo = false;
 	}
 
 	//Devuelve true si no esta en la posicion inicial
@@ -596,6 +623,12 @@ Seguidor = function(sprite, numjugador) {
 	this.resetear = function() {
 		this.x=this.inicialx;
 		this.y=this.inicialy;
+		this.restar=true;
+		FichaActual.haySeguidor=false;
+		if (FichaActual.colocado && this.sumar){
+			Game.boards[numjugador].num++;	
+			this.sumar=false;
+		}
 	}
 
 	this.draw = function(ctx) {
@@ -650,6 +683,35 @@ var desplazarTablero = function(difx, dify) {
 
 	
 }
+
+
+NumSeguidores = function(numjugador) {
+	this.num = 7;
+	this.x = 0;
+	this.y = 0;
+	this.w = 0;
+	this.h = 0;
+	this.sprite = "";
+
+	this.mover = function(x,y) {	}
+	
+	this.soltar = function(x,y) {	}
+
+	this.pulsado = function() {	}
+
+	this.draw = function(ctx) {
+	  	ctx.save();
+	  	ctx.font = "bold 18px arial";
+	    	ctx.fillStyle= "#FFFFFF";
+
+	 	var txt = "" + this.num;
+	    	ctx.fillText(txt,950, 220 +numjugador*60);
+	    	ctx.restore();
+		
+	};
+};
+
+
 
 $(function() {
     Game.initialize("tablero",sprites,startGame);
