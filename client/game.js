@@ -125,6 +125,8 @@ winGame = function() {
     Game.setBoard(3,new TitleScreen("You win!", 
                                     "Press fire to play again",
                                     playGame));
+	$("#points").html(Game.points);
+	Meteor.call("IncrementarPuntuacion", Meteor.user()._id, Game.points);
 };
 
 
@@ -134,6 +136,8 @@ loseGame = function() {
     Game.setBoard(3,new TitleScreen("You lose!", 
                                     "Press fire to play again",
                                     playGame));
+
+	Meteor.call("IncrementarPuntuacion", Meteor.user()._id, Game.points);
 };
 
 // Si se construye con clear==true no se pintan estrellas con fondo

@@ -12,6 +12,11 @@ Meteor.publish("DatosUsuarios", function () {
   return Meteor.users.find({},{fields: {'username':1,'puntuacion': 1,'services': 1,'estado':1}});
 });
 
+Meteor.publish("allGames", function () {
+    // publish every field of every game
+    return Games.find();
+});
+
 Meteor.methods({
 	
 	//  Cada vez que un usuario se registre y en sus datos no se encuentre
@@ -40,6 +45,7 @@ Meteor.methods({
 	//  esta función.
 	IncrementarPuntuacion: function(id,punt){
 		Meteor.users.update(id,{$inc:{puntuacion:punt}});
+		alert('hola');
 	},
 	
 	// Cada vez que se cree un equipo, el equipo es guardado en la colección
@@ -167,3 +173,13 @@ var GetSeq = function(){
 	var val= lst.length==0 ? 0 : lst[lst.length-1].id+1;
 	return val;				//Not Gap. Return the last+1 or 0 if no Games.
 };
+
+Meteor.startup(function() {
+   
+    if (Games.find().count() == 0) {
+		Games.insert({name: "AlienInvasion"});
+		Games.insert({name: "FrootWars"});
+		Games.insert({name: "Carcassone"});
+    };
+
+});

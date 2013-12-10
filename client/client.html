@@ -49,8 +49,14 @@
 			</div>
 		</div>
 		<div id='container3'>
-			{{>button}}
-			{{>games}}
+			<div>
+				{{>button}}
+				{{>games}}
+			</div>
+			<div>
+				<h3>Ranking</h3>
+				{{>best_players}}
+			</div>
 		</div>
 		<div id='container4' class="chatAreadiv">
 			<table class="chatAreaTable" id ="ChatArea">
@@ -112,34 +118,40 @@
 </template>
 
 <template name="games">
-	<ul class="list">
-		<li class="item" >
-			<a id="game_1" href="" title="AlienInvasion" align="left">
-				<img src="alienInvasion.png" width="60px" height="41px">
-			</a>
-			<div class="ListaPartidas" id='ListaPartidas_1'>
-				<!-- Slideshow de capturas de pantalla del alien-->
-			</div>
-		</li>
-		<li class="item">
-			<a id="game_2" href="" title="Angryfruits">
-				<img src="agryfruits.png" width="60px" height="41px">
-			</a>
-			<div class="ListaPartidas" id='ListaPartidas_2'>
-				<!-- Slideshow de capturas de pantalla del fruits-->
-			</div>
-		</li>
-		<li class="item">
-			<a id="game_3" href="" title="Carcassonne">
-				<img src="carcassonne-logo.jpg" width="60px" height="41px">
-			</a>
-			<div class="ListaPartidas" id='ListaPartidas_3'>
-				<!-- Slideshow de capturas de pantalla del carca-->
-			</div>
-		</li>                                                                  
-	</ul>
+	<div>	
+		<ul class="list">
+			<li class="item" >
+				<a id="game_1" href="" title="AlienInvasion" align="left">
+					<img src="alienInvasion.png" width="60px" height="41px">
+				</a>
+				<div class="ListaPartidas" id='ListaPartidas_1'>
+					<!-- Slideshow de capturas de pantalla del alien-->
+				</div>
+			</li>
+			<li class="item">
+				<a id="game_2" href="" title="Angryfruits">
+					<img src="agryfruits.png" width="60px" height="41px">
+				</a>
+				<div class="ListaPartidas" id='ListaPartidas_2'>
+					<!-- Slideshow de capturas de pantalla del fruits-->
+				</div>
+			</li>
+			<li class="item">
+				<a id="game_3" href="" title="Carcassonne">
+					<img src="carcassonne-logo.jpg" width="60px" height="41px">
+				</a>
+				<div class="ListaPartidas" id='ListaPartidas_3'>
+					<!-- Slideshow de capturas de pantalla del carca-->
+				</div>
+			</li>                                                                  
+		</ul>
+	</div>
 </template>
 
+<template name="ranking">
+	<h3> Ranking </h3>
+	
+</template>
 
 <template name="gamesList">
 	{{#each gamesListIn}}
@@ -159,5 +171,22 @@
 			<span class="NombreUsuario">{{username}} </span> : <span> {{estado}} </span><br />
 		{{/if}}
 	{{/each}}
+</template>
+
+<template name="best_players">
+
+  <h3>{{gameName}} </h3>
+  
+  <table>  
+    <tbody>
+      {{#each best_players}}
+      <tr>
+	<td><strong>{{name}}</strong></td>
+	<td id="points">{{points}}</td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+
 </template>
 

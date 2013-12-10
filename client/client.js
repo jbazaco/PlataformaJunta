@@ -7,6 +7,7 @@
 Meteor.subscribe("messages");
 Meteor.subscribe("partidas");
 Meteor.subscribe("DatosUsuarios");
+Meteor.subscribe("allGames");
 
 Meteor.startup(function(){
 	screenauto();
@@ -20,7 +21,6 @@ Meteor.startup(function(){
 	Meteor.setTimeout(function(){$(".match").click(ShowMatchInfo)},500);	//Hacer click muestra estadisticas de partida, otro click lo cierra.
 	Session.setDefault('Current_Game_id',0);
 });
-
 
 // var ShowUserInfo = function(){
 // 	console.log('Over User');
@@ -113,9 +113,6 @@ Template.options.events={
 		opciones.push($('input[name=nivel]:checked', '#opciones').val());
 		opciones.push($('input[name=escenario]:checked', '#opciones').val());
 		alert(opciones);
-		Partida.insert({
-			name:name,
-		});
 	},
 	'click .reset': function () {	
 		$("#nombre").val("");
@@ -157,27 +154,53 @@ Template.gamesList.imIn = function(){
 
 Template.games.events={
 	'click a#game_1':function(){
-		Session.set('Current_Game_id',1);
+		//Session.set('Current_Game_id',1);
 		$(".canvas").hide()
 		$('#game').show(500);
+		
+		var game = Games.findOne({name:"AlienInvasion"});
+		Session.set('Current_Game_id', game._id);
 		//$("#container2").tabs( "option", "active", 1 );
 		return false;
 	},
 	'click a#game_2':function(){
-		Session.set('Current_Game_id',2)
+		//Session.set('Current_Game_id',2)
 		$(".canvas").hide()
 		$('#game2').show(500);
+		
+		var game = Games.findOne({name:"FrootWars"});
+		Session.set("Current_Game_id", game._id);
 		//$("#container2").tabs( "option", "active", 1 );
 		return false;
 	},
 	'click a#game_3':function(){
-		Session.set('Current_Game_id',3)
+		//Session.set('Current_Game_id',3)
 		$(".canvas").hide()
 		$('#game3').show(500);
+		var game = Games.findOne({name:"Carcassone"});
+		Session.set("Current_Game_id", game._id);		
 		//$("#container2").tabs( "option", "active", 1);
 		return false;
 	} 
 }
+
+Template.best_players.gameName = function (){
+    var game_id = Session.get("Current_Game_id");
+    if (game_id)
+	var game_name = Games.findOne({_id: game_id}).name;
+    return game_name;
+};
+
+Template.best_players.best_players = function (){
+    var users_data = [];
+	
+	var usu = Meteor.user();
+  	if (usu){
+   	    users_data.push({name:usu.username, points:usu.puntuacion});
+  	}
+	return users_data;
+}
+
 
 Template.gamesList.gamesListIn = function(){
 	return Partidas.find({jugadores:{$all:['usu1']}})
