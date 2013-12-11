@@ -75,11 +75,11 @@ startGame = function() {
 }
 
 playGame = function(){
-
-	Game.setBoard(0,new GamePoints(0));
+	Game.boards.length=0;
 	var numjugadores=3; //nos lo tiene que dar la plataforma de momento es un ejemplo
 	for (i=1;i<=numjugadores;i++){
 		Game.setBoard(Game.boards.length, new NumSeguidores(i));
+		Game.setBoard(Game.boards.length, new GamePoints(i));
 	}
 	for (i=1;i<=numjugadores;i++){	
 		for (k=1;k<=7;k++){
@@ -567,10 +567,10 @@ Seguidor = function(sprite, numjugador) {
 		this.moviendo = true;
 		miJugador=1;
 		turno=1;//Falta funcion para saber de quien es el turno
-		if(turno==miJugador && this.sprite=="s"+miJugador && FichaActual.seHaMovido() && (!FichaActual.colocado || FichaActual.colocado==this)){ 
-			this.x = x - this.w/2;
-			this.y = y - this.h/2;
-			FichaActual.pintarRejilla();
+		if(turno==miJugador && this.sprite=="s"+miJugador && FichaActual.seHaMovido() && (!FichaActual.colocado || FichaActual.colocado==this)){
+				this.x = x - this.w/2;
+				this.y = y - this.h/2;
+				FichaActual.pintarRejilla();
 			
 		}
 	}
@@ -687,8 +687,8 @@ var desplazarTablero = function(difx, dify) {
 
 NumSeguidores = function(numjugador) {
 	this.num = 7;
-	this.x = 0;
-	this.y = 0;
+	this.x = 890;
+	this.y = 220 +numjugador*60;
 	this.w = 0;
 	this.h = 0;
 	this.sprite = "";
@@ -705,13 +705,41 @@ NumSeguidores = function(numjugador) {
 	    	ctx.fillStyle= "#FFFFFF";
 
 	 	var txt = "" + this.num;
-	    	ctx.fillText(txt,950, 220 +numjugador*60);
+	    	ctx.fillText(txt,this.x,this.y);
 	    	ctx.restore();
 		
 	};
 };
 
+GamePoints = function(numjugador) {
+	this.points = 0;
+	this.x = 960;
+	this.y = 220 +numjugador*60;
+	this.w = 0;
+	this.h = 0;
+	this.sprite = "";
 
+	this.mover = function(x,y) {	}
+	
+	this.soltar = function(x,y) {	}
+
+	this.pulsado = function() {	}
+
+	var pointsLength = 3;
+
+	this.draw = function(ctx) {
+	  	ctx.save();
+	  	ctx.font = "bold 18px arial";
+	    	ctx.fillStyle= "#FFFFFF";
+
+	 	var txt = "" + this.points;
+	  	var i = pointsLength - txt.length, zeros = "";
+	  	while(i-- > 0) { zeros += "0"; }
+
+	    	ctx.fillText(zeros + txt,this.x,this.y);
+	    	ctx.restore();
+	};
+};
 
 $(function() {
     Game.initialize("tablero",sprites,startGame);

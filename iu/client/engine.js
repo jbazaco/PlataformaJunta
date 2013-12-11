@@ -133,37 +133,3 @@ SpriteSheet = new function() {
 	};  
 }
 
-
-GamePoints = function() {
-	Game.points = 0;
-
-	this.x = 0;
-	this.y = 0;
-	this.w = 0;
-	this.h = 0;
-	this.sprite = "";
-
-	this.mover = function(x,y) {	}
-	
-	this.soltar = function(x,y) {	}
-
-	this.pulsado = function() {	}
-
-	var pointsLength = 4;
-
-	this.draw = function(ctx) {
-	  	ctx.save();
-	  	ctx.font = "bold 18px arial";
-	    	ctx.fillStyle= "#FFFFFF";
-
-	 	var txt = "" + Game.points;
-	  	var i = pointsLength - txt.length, zeros = "";
-	  	while(i-- > 0) { zeros += "0"; }
-
-	    	ctx.fillText(zeros + txt,1000,30);
-	    	ctx.restore();
-	};
-};
-
-
-
