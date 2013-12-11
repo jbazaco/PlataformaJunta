@@ -55,7 +55,7 @@
 			</div>
 			<div>
 				<h3>Ranking</h3>
-				{{>best_players}}
+				{{>ranking}}
 			</div>
 		</div>
 		<div id='container4' class="chatAreadiv">
@@ -148,11 +148,6 @@
 	</div>
 </template>
 
-<template name="ranking">
-	<h3> Ranking </h3>
-	
-</template>
-
 <template name="gamesList">
 	{{#each gamesListIn}}
 		<a class='match'><strong>{{nombre}}</strong></a> :{{jugadores}}</br>
@@ -173,16 +168,14 @@
 	{{/each}}
 </template>
 
-<template name="best_players">
-
-  <h3>{{gameName}} </h3>
-  
+<template name="ranking">
+  <h3 id="selectedgame"></h3>
   <table>  
     <tbody>
-      {{#each best_players}}
+      {{#each ranking}}
       <tr>
 	<td><strong>{{name}}</strong></td>
-	<td id="points">{{points}}</td>
+	<td>{{points}}</td>
       </tr>
       {{/each}}
     </tbody>

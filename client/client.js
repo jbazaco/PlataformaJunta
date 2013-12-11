@@ -7,7 +7,6 @@
 Meteor.subscribe("messages");
 Meteor.subscribe("partidas");
 Meteor.subscribe("DatosUsuarios");
-Meteor.subscribe("allGames");
 
 Meteor.startup(function(){
 	screenauto();
@@ -154,44 +153,35 @@ Template.gamesList.imIn = function(){
 
 Template.games.events={
 	'click a#game_1':function(){
-		//Session.set('Current_Game_id',1);
+		Session.set('Current_Game_id',1);
 		$(".canvas").hide()
 		$('#game').show(500);
 		
-		var game = Games.findOne({name:"AlienInvasion"});
-		Session.set('Current_Game_id', game._id);
-		//$("#container2").tabs( "option", "active", 1 );
+		$("#selectedgame").html("Alien Invasion");
+		$("#container2").tabs( "option", "active", 1 );
 		return false;
 	},
 	'click a#game_2':function(){
-		//Session.set('Current_Game_id',2)
+		Session.set('Current_Game_id',2)
 		$(".canvas").hide()
 		$('#game2').show(500);
 		
-		var game = Games.findOne({name:"FrootWars"});
-		Session.set("Current_Game_id", game._id);
-		//$("#container2").tabs( "option", "active", 1 );
+		$("#selectedgame").html("Angry Fruits");
+		$("#container2").tabs( "option", "active", 1 );
 		return false;
 	},
 	'click a#game_3':function(){
-		//Session.set('Current_Game_id',3)
+		Session.set('Current_Game_id',3)
 		$(".canvas").hide()
 		$('#game3').show(500);
-		var game = Games.findOne({name:"Carcassone"});
-		Session.set("Current_Game_id", game._id);		
-		//$("#container2").tabs( "option", "active", 1);
+
+		$("#selectedgame").html("Carcassonne");	
+		$("#container2").tabs( "option", "active", 1);
 		return false;
 	} 
 }
 
-Template.best_players.gameName = function (){
-    var game_id = Session.get("Current_Game_id");
-    if (game_id)
-	var game_name = Games.findOne({_id: game_id}).name;
-    return game_name;
-};
-
-Template.best_players.best_players = function (){
+Template.ranking.ranking = function (){
     var users_data = [];
 	
 	var usu = Meteor.user();

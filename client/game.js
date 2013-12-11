@@ -125,7 +125,7 @@ winGame = function() {
     Game.setBoard(3,new TitleScreen("You win!", 
                                     "Press fire to play again",
                                     playGame));
-	$("#points").html(Game.points);
+	//$("#points").html(Game.points);
 	Meteor.call("IncrementarPuntuacion", Meteor.user()._id, Game.points);
 };
 
