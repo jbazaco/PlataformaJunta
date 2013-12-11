@@ -16,6 +16,9 @@ Meteor.startup(function(){
 	$(".subtab").hide();	//Esconde los subtans que se encuentran en la segunda pestaña del acordeon
 	$(".canvas").hide();	//Esconde todos los canvas
 	$('.escenario').attr("disabled",true);
+	$( ".startgame" ).click(function() {
+		$( "#opciones" ).fadeToggle( "slow", "linear" );
+	});
 // 	Meteor.setTimeout(function(){$(".match").click(ShowUserInfo)},500);		//Hacer click muestra estadisticas de usuario, otro click lo cierra.
 	Meteor.setTimeout(function(){$(".match").click(ShowMatchInfo)},500);	//Hacer click muestra estadisticas de partida, otro click lo cierra.
 	Session.setDefault('Current_Game_id',0);
@@ -94,24 +97,43 @@ Template.button.events={
 }
 Template.options.events={
 	'click .submit': function () {
-     	var opciones=[];
+		$('#opciones').hide();
+     	
+		var opciones={
+			jugadores_maquina: 0,
+			tablero_inteligente: false,
+			niveles: 'facil',
+			escenario: 'normal'
+		};
 
 		if($("#nombre").val()==""){
 			alert("Debes introducir un nombre para la partida");
 			return false;
 		}
 		else{
-			opciones.push($("#nombre").val());
-			name=$("#nombre").val();		
+			name=$("#nombre").val();	
 		}
-		opciones.push($('input[name=n_jugadores]:checked', '#opciones').val());
+		n_players= parseInt($('input[name=n_jugadores]:checked', '#opciones').val());	
+			opciones.jugadores_maquina=n_players;
+		
 		if($('#tablero').is(':checked')){
-			opciones.push('tablero');
+			opciones.tablero_inteligente= true;
 		}
+		
+		nivel=$('input[name=nivel]:checked', '#opciones').val();
+		escenario=$('input[name=escenario]:checked', '#opciones').val();
+		opciones.niveles= nivel;
+		opciones.escenario= escenario;
+	
+		Meteor.call("SuscribirPartida",[],opciones,[],name,function(error,result){
+    		if(error){
+        		console.log(error.reason);
+    		}
+    		else{
+				console.log('Hola');
+    		}
+});
 
-		opciones.push($('input[name=nivel]:checked', '#opciones').val());
-		opciones.push($('input[name=escenario]:checked', '#opciones').val());
-		alert(opciones);
 	},
 	'click .reset': function () {	
 		$("#nombre").val("");

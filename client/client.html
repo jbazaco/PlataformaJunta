@@ -25,21 +25,22 @@
 		</div>
 		<div id='container2'>
 			<ul>
-			<li><a href="#tabs-1">Usuarios</a></li>
-			<li><a href="#tabs-2">Juego</a></li>
-			<li><a href="#tabs-3">Ajustes</a></li>
+			<li><a href="#tabs-1" >Usuarios</a></li>
+			<li><a href="#tabs-2" >Juego</a></li>
+			<li><a href="#tabs-3" >Ajustes</a></li>
 			</ul>
 			<div id="tabs-1" class="tabs">
 				{{>ListaEstados}}
 			</div>
 			<div id="tabs-2" class="tabs">
 				<div id="tabs-2-1" class="subtab">
-					No se que pollas meter aqui. Podriamos meter una especie de ranking personal.
+					<a class="startgame"><strong>Empezar partida</strong></a>
 				</div>
 				<div id="tabs-2-2" class="subtab">
-					No se que pollas meter aqui. Podriamos meter una especie de ranking personal.
+					<a class="startgame"><strong>Empezar partida</strong></a>				
 				</div>
 				<div id="tabs-2-3" class="subtab">
+					<a class="startgame"><strong>Empezar partida</strong></a>
 					{{>gamesList}}
 				</div>				
 			</div>
@@ -84,25 +85,24 @@
     <div id='opciones'>
 		 <p><label>Nombre de la Partida</label><input type="text" size="30" id="nombre" /></p>
 		<hr>
-		<label>Número de Jugadores</label><br>
-		<input type="radio" name="n_jugadores" value="1" checked> 1 
-		<input type="radio" name="n_jugadores" value="2"> 2
+		<label>Número de Jugadores Máquina</label><br>
+		<input type="radio" name="n_jugadores" value="0" checked> 0 
+		<input type="radio" name="n_jugadores" value="1"> 1
+		<input type="radio" name="n_jugadores" value="2"> 2 
 		<input type="radio" name="n_jugadores" value="3"> 3 
 		<input type="radio" name="n_jugadores" value="4"> 4 
-		<input type="radio" name="n_jugadores" value="5"> 5 
-		<input type="radio" name="n_jugadores" value="maquina">Jugar contra la Máquina
 		<hr>
 		<input type="checkbox" name="tablero" id="tablero"><label>Tablero Inteligente</label>
 		<hr>
 		<label>Dificultad</label><br>
-		<input type="radio" name="nivel" value="1"> Fácil
-		<input type="radio" name="nivel" value="2" checked> Medio
-		<input type="radio" name="nivel" value="3"> Difícil 
+		<input type="radio" name="nivel" value="Facil" checked> Fácil
+		<input type="radio" name="nivel" value="Medio"> Medio
+		<input type="radio" name="nivel" value="Dificil"> Difícil 
 		<hr>
 		<label>Escenario</label><br>
-		<input type="radio" name="escenario" value="1" checked> Clásico 
-		<input type="radio" name="escenario" value="2" class="escenario" > Invernal
-		<input type="radio" name="escenario" value="3" class="escenario"> Espacial
+		<input type="radio" name="escenario" value="Clásico" checked> Clásico 
+		<input type="radio" name="escenario" value="Invernal" class="escenario" > Invernal
+		<input type="radio" name="escenario" value="Espacial" class="escenario"> Espacial
 		<hr>
 		<td colspan="2">
 			<button class="submit">Submit</button>
