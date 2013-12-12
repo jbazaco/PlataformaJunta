@@ -16,8 +16,8 @@ Meteor.startup(function(){
 	$(".subtab").hide();	//Esconde los subtans que se encuentran en la segunda pestaña del acordeon
 	$(".canvas").hide();	//Esconde todos los canvas
 	$('.escenario').attr("disabled",true);
-// 	Meteor.setTimeout(function(){$(".match").click(ShowUserInfo)},500);		//Hacer click muestra estadisticas de usuario, otro click lo cierra.
-	Meteor.setTimeout(function(){$(".match").click(ShowMatchInfo)},500);	//Hacer click muestra estadisticas de partida, otro click lo cierra.
+// 	Meteor.setTimeout(function(){$(".user").click(ShowUserInfo)},500);		//Hacer click muestra estadisticas de usuario, otro click lo cierra.
+// 	Meteor.setTimeout(function(){$(".match").click(ShowMatchInfo)},500);	//Hacer click muestra estadisticas de partida, otro click lo cierra.
 	Session.setDefault('Current_Game_id',0);
 });
 
@@ -26,20 +26,6 @@ Meteor.startup(function(){
 // 	console.log('Over User');
 // 	return false;
 // }
-// var HideUserInfo = function(){
-// 	console.log('Not Over User');
-// 	return false;
-// }
-ShowMatchInfo = function(){
-	$(".match").unbind("click",ShowMatchInfo)
-	console.log('Click open Match: '+this.innerHTML);
-	$(".match").click(HideMatchInfo)
-}
-HideMatchInfo = function(){
-	$(".match").unbind("click",HideMatchInfo)
-	console.log('Click close Match');
-	$(".match").click(ShowMatchInfo)
-}
 
 
 var screenauto= function(){
@@ -180,10 +166,41 @@ Template.games.events={
 }
 
 Template.gamesList.gamesListIn = function(){
-	return Partidas.find({jugadores:{$all:['usu1']}})
+	var usuid = Meteor.userId();
+	if (usuid){
+		var usu = Meteor.users.findOne(usuid);
+		if (usu){
+			return Partidas.find({jugadores:{$all:[usu.username]}})
+		}
+	}
 };
 Template.gamesList.gamesListOut = function(){
-	return Partidas.find({jugadores:{$not:{$all:['usu1']}}})
+	var usuid = Meteor.userId();
+	if (usuid){
+		var usu = Meteor.users.findOne(usuid);
+		if (usu){
+			return Partidas.find({jugadores:{$not:{$all:[usu.username]}}});
+		}else{
+			return Partidas.find();
+		}
+	}else{
+		return Partidas.find();
+	}
+};
+
+Template.gamesList.events={
+	'click div.match':function(){
+		$(".matchinfo").hide(100);
+		$('#'+this.nombre).show();
+	},
+	'click a.watch_match':function(){
+		console.log(this)
+		return false;
+	},
+	'click a.join_match':function(){
+		console.log(this)
+		return false;
+	}
 };
 
 Accounts.ui.config({
