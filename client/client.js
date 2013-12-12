@@ -17,10 +17,11 @@ Meteor.startup(function(){
 	$(".canvas").hide();	//Esconde todos los canvas
 	$('.escenario').attr("disabled",true);
 // 	Meteor.setTimeout(function(){$(".user").click(ShowUserInfo)},500);		//Hacer click muestra estadisticas de usuario, otro click lo cierra.
-// 	Meteor.setTimeout(function(){$(".match").click(ShowMatchInfo)},500);	//Hacer click muestra estadisticas de partida, otro click lo cierra.
+	$( ".startgame" ).click(function() {
+		$( "#opciones" ).fadeToggle( "slow", "linear" );
+	});
 	Session.setDefault('Current_Game_id',0);
 });
-
 
 // var ShowUserInfo = function(){
 // 	console.log('Over User');
@@ -81,27 +82,55 @@ Template.button.events={
 }
 Template.options.events={
 	'click .submit': function () {
-     	var opciones=[];
+     	var jugadores=[];
+		var opciones={
+			jugadores_maquina: 0,
+			tablero_inteligente: false,
+			niveles: 'facil',
+			escenario: 'normal'
+		};
 
 		if($("#nombre").val()==""){
 			alert("Debes introducir un nombre para la partida");
 			return false;
 		}
 		else{
-			opciones.push($("#nombre").val());
-			name=$("#nombre").val();		
+			name=$("#nombre").val();	
 		}
-		opciones.push($('input[name=n_jugadores]:checked', '#opciones').val());
+		n_players= parseInt($('input[name=n_jugadores]:checked', '#opciones').val());	
+		opciones.jugadores_maquina=n_players;
+		
 		if($('#tablero').is(':checked')){
-			opciones.push('tablero');
+			opciones.tablero_inteligente= true;
 		}
+		
+		nivel=$('input[name=nivel]:checked', '#opciones').val();
+		escenario=$('input[name=escenario]:checked', '#opciones').val();
+		opciones.niveles= nivel;
+		opciones.escenario= escenario;
 
-		opciones.push($('input[name=nivel]:checked', '#opciones').val());
-		opciones.push($('input[name=escenario]:checked', '#opciones').val());
-		alert(opciones);
-		Partida.insert({
-			name:name,
-		});
+
+		if(Meteor.users.findOne(Meteor.userId) != undefined){
+			user=Meteor.users.findOne(Meteor.userId()).username;
+			jugadores.push(user);
+			if(n_players>0){
+				for(var i=0; i<n_players; i++){
+					jugadores.push('" "');				
+				}
+			}
+			Meteor.call("SuscribirPartida",jugadores,opciones,[],name,function(error,result){
+				if(error){
+		    		console.log(error.reason);
+				}
+				else{
+					Meteor.subscribe(result);
+				}
+			});
+			$('#opciones').hide();
+		}
+		else
+			alert('Debes estar registrado para crear una partida');
+
 	},
 	'click .reset': function () {	
 		$("#nombre").val("");
@@ -146,24 +175,41 @@ Template.games.events={
 		Session.set('Current_Game_id',1);
 		$(".canvas").hide()
 		$('#game').show(500);
-		//$("#container2").tabs( "option", "active", 1 );
+		
+		$("#selectedgame").html("Alien Invasion");
+		$("#container2").tabs( "option", "active", 1 );
 		return false;
 	},
 	'click a#game_2':function(){
 		Session.set('Current_Game_id',2)
 		$(".canvas").hide()
 		$('#game2').show(500);
-		//$("#container2").tabs( "option", "active", 1 );
+		
+		$("#selectedgame").html("Angry Fruits");
+		$("#container2").tabs( "option", "active", 1 );
 		return false;
 	},
 	'click a#game_3':function(){
 		Session.set('Current_Game_id',3)
 		$(".canvas").hide()
 		$('#game3').show(500);
-		//$("#container2").tabs( "option", "active", 1);
+
+		$("#selectedgame").html("Carcassonne");	
+		$("#container2").tabs( "option", "active", 1);
 		return false;
 	} 
 }
+
+Template.ranking.ranking = function (){
+    var users_data = [];
+	
+	var usu = Meteor.user();
+  	if (usu){
+   	    users_data.push({name:usu.username, points:usu.puntuacion});
+  	}
+	return users_data;
+}
+
 
 Template.gamesList.gamesListIn = function(){
 	var usuid = Meteor.userId();

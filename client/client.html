@@ -25,21 +25,20 @@
 		</div>
 		<div id='container2'>
 			<ul>
-			<li><a href="#tabs-1">Usuarios</a></li>
-			<li><a href="#tabs-2">Juego</a></li>
-			<li><a href="#tabs-3">Ajustes</a></li>
+			<li><a href="#tabs-1" >Usuarios</a></li>
+			<li><a href="#tabs-2" >Juego</a></li>
+			<li><a href="#tabs-3" >Ajustes</a></li>
 			</ul>
 			<div id="tabs-1" class="tabs">
 				{{>ListaEstados}}
 			</div>
 			<div id="tabs-2" class="tabs">
 				<div id="tabs-2-1" class="subtab">
-					No se que pollas meter aqui. Podriamos meter una especie de ranking personal.
 				</div>
-				<div id="tabs-2-2" class="subtab">
-					No se que pollas meter aqui. Podriamos meter una especie de ranking personal.
+				<div id="tabs-2-2" class="subtab">				
 				</div>
 				<div id="tabs-2-3" class="subtab">
+					<a class="startgame"><strong>Empezar partida</strong></a>
 					{{>gamesList}}
 				</div>				
 			</div>
@@ -49,8 +48,14 @@
 			</div>
 		</div>
 		<div id='container3'>
-			{{>button}}
-			{{>games}}
+			<div>
+				{{>button}}
+				{{>games}}
+			</div>
+			<div>
+				<h3>Ranking</h3>
+				{{>ranking}}
+			</div>
 		</div>
 		<div id='container4' class="chatAreadiv">
 			<table class="chatAreaTable" id ="ChatArea">
@@ -78,25 +83,24 @@
     <div id='opciones'>
 		 <p><label>Nombre de la Partida</label><input type="text" size="30" id="nombre" /></p>
 		<hr>
-		<label>Número de Jugadores</label><br>
-		<input type="radio" name="n_jugadores" value="1" checked> 1 
-		<input type="radio" name="n_jugadores" value="2"> 2
+		<label>Número de Jugadores Máquina</label><br>
+		<input type="radio" name="n_jugadores" value="0" checked> 0 
+		<input type="radio" name="n_jugadores" value="1"> 1
+		<input type="radio" name="n_jugadores" value="2"> 2 
 		<input type="radio" name="n_jugadores" value="3"> 3 
 		<input type="radio" name="n_jugadores" value="4"> 4 
-		<input type="radio" name="n_jugadores" value="5"> 5 
-		<input type="radio" name="n_jugadores" value="maquina">Jugar contra la Máquina
 		<hr>
 		<input type="checkbox" name="tablero" id="tablero"><label>Tablero Inteligente</label>
 		<hr>
 		<label>Dificultad</label><br>
-		<input type="radio" name="nivel" value="1"> Fácil
-		<input type="radio" name="nivel" value="2" checked> Medio
-		<input type="radio" name="nivel" value="3"> Difícil 
+		<input type="radio" name="nivel" value="Facil" checked> Fácil
+		<input type="radio" name="nivel" value="Medio"> Medio
+		<input type="radio" name="nivel" value="Dificil"> Difícil 
 		<hr>
 		<label>Escenario</label><br>
-		<input type="radio" name="escenario" value="1" checked> Clásico 
-		<input type="radio" name="escenario" value="2" class="escenario" > Invernal
-		<input type="radio" name="escenario" value="3" class="escenario"> Espacial
+		<input type="radio" name="escenario" value="Clásico" checked> Clásico 
+		<input type="radio" name="escenario" value="Invernal" class="escenario" > Invernal
+		<input type="radio" name="escenario" value="Espacial" class="escenario"> Espacial
 		<hr>
 		<td colspan="2">
 			<button class="submit">Submit</button>
@@ -112,34 +116,35 @@
 </template>
 
 <template name="games">
-	<ul class="list">
-		<li class="item" >
-			<a id="game_1" href="" title="AlienInvasion" align="left">
-				<img src="alienInvasion.png" width="60px" height="41px">
-			</a>
-			<div class="ListaPartidas" id='ListaPartidas_1'>
-				<!-- Slideshow de capturas de pantalla del alien-->
-			</div>
-		</li>
-		<li class="item">
-			<a id="game_2" href="" title="Angryfruits">
-				<img src="agryfruits.png" width="60px" height="41px">
-			</a>
-			<div class="ListaPartidas" id='ListaPartidas_2'>
-				<!-- Slideshow de capturas de pantalla del fruits-->
-			</div>
-		</li>
-		<li class="item">
-			<a id="game_3" href="" title="Carcassonne">
-				<img src="carcassonne-logo.jpg" width="60px" height="41px">
-			</a>
-			<div class="ListaPartidas" id='ListaPartidas_3'>
-				<!-- Slideshow de capturas de pantalla del carca-->
-			</div>
-		</li>                                                                  
-	</ul>
+	<div>	
+		<ul class="list">
+			<li class="item" >
+				<a id="game_1" href="" title="AlienInvasion" align="left">
+					<img src="alienInvasion.png" width="60px" height="41px">
+				</a>
+				<div class="ListaPartidas" id='ListaPartidas_1'>
+					<!-- Slideshow de capturas de pantalla del alien-->
+				</div>
+			</li>
+			<li class="item">
+				<a id="game_2" href="" title="Angryfruits">
+					<img src="agryfruits.png" width="60px" height="41px">
+				</a>
+				<div class="ListaPartidas" id='ListaPartidas_2'>
+					<!-- Slideshow de capturas de pantalla del fruits-->
+				</div>
+			</li>
+			<li class="item">
+				<a id="game_3" href="" title="Carcassonne">
+					<img src="carcassonne-logo.jpg" width="60px" height="41px">
+				</a>
+				<div class="ListaPartidas" id='ListaPartidas_3'>
+					<!-- Slideshow de capturas de pantalla del carca-->
+				</div>
+			</li>                                                                  
+		</ul>
+	</div>
 </template>
-
 
 <template name="gamesList">
 	{{#each gamesListIn}}
@@ -170,5 +175,20 @@
 			<span class="NombreUsuario">{{username}} </span> : <span> {{estado}} </span><br />
 		{{/if}}
 	{{/each}}
+</template>
+
+<template name="ranking">
+  <h3 id="selectedgame"></h3>
+  <table>  
+    <tbody>
+      {{#each ranking}}
+      <tr>
+	<td><strong>{{name}}</strong></td>
+	<td>{{points}}</td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+
 </template>
 

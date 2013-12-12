@@ -1,16 +1,20 @@
 // Publicaciones de las colecciones
+
+
 Meteor.publish('messages', function(){
 	return Messages.find({}, {sort: {time:-1}});
 });
 
 Meteor.publish('partidas',function(){
-	return Partidas.find({},{fields:{nombre:1, jugadores:1,opciones:1}});
+	return Partidas.find({},{fields: {nombre:1, jugadores:1,opciones:1}});
 });
 
 // Publicacion del campo puntuacion para que puedan acceder los clientes.
 Meteor.publish("DatosUsuarios", function () {
-  return Meteor.users.find({},{fields: {'username':1,'puntuacion': 1,'services': 1,'estado':1}});
+	return Meteor.users.find({},{fields: {username:1,puntuacion: 1,services: 1,estado:1}});
 });
+
+
 
 Meteor.methods({
 	
@@ -166,3 +170,5 @@ var GetSeq = function(){
 	var val= lst.length==0 ? 0 : lst[lst.length-1].id+1;
 	return val;				//Not Gap. Return the last+1 or 0 if no Games.
 };
+
+
