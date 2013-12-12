@@ -97,8 +97,7 @@ Template.button.events={
 }
 Template.options.events={
 	'click .submit': function () {
-		$('#opciones').hide();
-     	
+     	var jugadores=[];
 		var opciones={
 			jugadores_maquina: 0,
 			tablero_inteligente: false,
@@ -114,7 +113,7 @@ Template.options.events={
 			name=$("#nombre").val();	
 		}
 		n_players= parseInt($('input[name=n_jugadores]:checked', '#opciones').val());	
-			opciones.jugadores_maquina=n_players;
+		opciones.jugadores_maquina=n_players;
 		
 		if($('#tablero').is(':checked')){
 			opciones.tablero_inteligente= true;
@@ -124,15 +123,28 @@ Template.options.events={
 		escenario=$('input[name=escenario]:checked', '#opciones').val();
 		opciones.niveles= nivel;
 		opciones.escenario= escenario;
-	
-		Meteor.call("SuscribirPartida",[],opciones,[],name,function(error,result){
-    		if(error){
-        		console.log(error.reason);
-    		}
-    		else{
-				console.log('Hola');
-    		}
-});
+
+
+		if(Meteor.users.findOne(Meteor.userId) != undefined){
+			user=Meteor.users.findOne(Meteor.userId()).username;
+			jugadores.push(user);
+			if(n_players>0){
+				for(var i=0; i<n_players; i++){
+					jugadores.push('" "');				
+				}
+			}
+			Meteor.call("SuscribirPartida",jugadores,opciones,[],name,function(error,result){
+				if(error){
+		    		console.log(error.reason);
+				}
+				else{
+					Meteor.subscribe(result);
+				}
+			});
+			$('#opciones').hide();
+		}
+		else
+			alert('Debes estar registrado para crear una partida');
 
 	},
 	'click .reset': function () {	
