@@ -4,7 +4,7 @@ Meteor.publish('messages', function(){
 });
 
 Meteor.publish('partidas',function(){
-	return Partidas.find({},{nombre:1, jugadores:1,opciones:1});
+	return Partidas.find({},{fields:{nombre:1, jugadores:1,opciones:1}});
 });
 
 // Publicacion del campo puntuacion para que puedan acceder los clientes.
@@ -66,9 +66,8 @@ Meteor.methods({
 	//  a esta funcion. Se comprueba que se el judgador que inicia el momimiento
 	//  está autorizado (está en la lista de jugadores), despues se almacena la 
 	//  jugada en la lista de jugadas de la partida.
-	RegistrarMovimiento : function(id_partida,jugador,movimiento){
+	RegistrarMovimiento : function(id,jugador,movimiento){
 		console.log("Registrar Movimientos");
-		var id = Partidas.findOne({id:id_partida})._id;
 		//if(jugadorpermitido)
 		Partidas.update(id,{$push:{jugadas:movimiento}});
 	},
@@ -77,10 +76,10 @@ Meteor.methods({
 	// AUN NO ESTA CLARO si cualquiera puede mirar el ultimo movimiento
 	// o debe estar en alguna de las listas de jugadores (usuarios, 
 	// jugadores de partida o invitados a partida).
-	UltimoMovimiento : function(id_partida){
+	UltimoMovimiento : function(id){
 		console.log("Ultimo Movimiento");
 		//if(jugadorpermitido)?
-		var jugadas = Partidas.findOne({id:id_partida}).jugadas;
+		var jugadas = Partidas.findOne(id).jugadas;
 		return jugadas[jugadas.length-1];
 	},
 
@@ -90,10 +89,10 @@ Meteor.methods({
 	// El jugador al que le toca es EL SIGUIENTE al que ha jugado la ultima jugada,
 	// en la lista de jugadores según el orden en el que están almacenados en el array
 	// de jugadores
-	VerTurno : function(id_partida){
+	VerTurno : function(id){
 		console.log("VerTurno");
 	// 	if(jugadorpermitido)?
-		var partida = Partidas.findOne({id:id_partida}).jugadas;
+		var partida = Partidas.findOne(id).jugadas;
 		if (partida.jugadas.length()){
 			return partida.jugadores[(partida.jugadores.indexOf(partida.jugadas[jugadas.length-1].jugador)+1)%partida.jugadores.length];
 		}else{
@@ -103,7 +102,7 @@ Meteor.methods({
 
 
 	// Mete una nueva partida en el servidor. Devuelve un identificador
-	// de partida UNICO no coincidente con el idenificador foráneo al que 
+	// de partida UNICO no coincidente con la clave primaria al que 
 	// el cliente debe suscribirse en su Deps.autorun().
 	// Jugadores es un array con el identificador de cada jugador (nombre?)
 	// Opciones es un map con las opciones que se quieran pasar a la partida.
@@ -112,9 +111,7 @@ Meteor.methods({
 	SuscribirPartida : function(jugadores,opciones,invitados,nombre){
 		console.log("SubscribirPartida");
 	// 	if(permitido)?
-		var id =GetSeq();
-		Partidas.insert({
-			id:id,
+		var id = Partidas.insert({
 			nombre:nombre,
 			jugadores: jugadores,
 			invitados: [],
@@ -122,21 +119,23 @@ Meteor.methods({
 			empezada:false,
 			jugadas:[]
 		})
-		var sid = "__Partida."+id.toString();
+		var sid = "__Partida."+id+"__";
 		Meteor.publish(sid,function(){
-			return Partidas.find({id:id},{nombre:1, jugadores:1,invitados:1,opciones:1,jugadas:1});
+			return Partidas.find(id,{nombre:1, jugadores:1,invitados:1,opciones:1,jugadas:1});
 		})
 		
 		return sid;
 	},
 	//Comprobar, comentar, añadir a wiki
-	IncluirJugador: function(id_partida, jugador){
-		Partidas.update({id:id_partida},{$addToSet:{jugadores:jugador}})
+	IncluirJugador: function(id, jugador){
+		Partidas.update(id,{$addToSet:{jugadores:jugador}})
+		return ("__Partida."+id+"__");
 	},
 	
 	//Comprobar, comentar, añadir a wiki
-	IncluirInvitado: function(id_partida, invitado){
-		Partidas.update({id:id_partida},{$addToSet:{invitados:invitado}})
+	IncluirInvitado: function(id, invitado){
+		Partidas.update(id,{$addToSet:{invitados:invitado}})
+		return ("__Partida."+id+"__");
 	}
 })
 

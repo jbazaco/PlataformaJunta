@@ -194,12 +194,34 @@ Template.gamesList.events={
 		$('#'+this.nombre).show();
 	},
 	'click a.watch_match':function(){
-		console.log(this)
+		var usuid = Meteor.userId();
+		if (usuid){
+			var usu = Meteor.users.findOne(usuid);
+			if (usu){
+				Meteor.call('IncluirInvitado',this._id,usu.username,function(err,res){
+					if(! err){Meteor.subscribe(res)}
+				})
+			}
+		}else{
+			Meteor.call('IncluirInvitado',this._id,"Invitado",function(err,res){
+				console.log(res)
+				if(! err){Meteor.subscribe(res)}
+			})
+		}
 		return false;
 	},
 	'click a.join_match':function(){
-		console.log(this)
+		var usuid = Meteor.userId();
+		if (usuid){
+			var usu = Meteor.users.findOne(usuid);
+			if (usu){
+				Meteor.call('IncluirJugador',this._id,usu.username,function(err,res){
+					console.log(res)
+					if(! err){Meteor.subscribe(res)}
+				})
+			}
 		return false;
+		}
 	}
 };
 
