@@ -121,7 +121,8 @@ Meteor.methods({
 			invitados: [],
 			opciones: opciones,
 			empezada:false,
-			jugadas:[]
+			jugadas:[],
+			estado: "Lobby"
 		})
 		var sid = "__Partida."+id+"__";
 		Meteor.publish(sid,function(){
@@ -130,16 +131,30 @@ Meteor.methods({
 		
 		return sid;
 	},
-	//Comprobar, comentar, añadir a wiki
+	// Incluye jugadores en el array de jugadores dado el identificador primario de
+	// la partida. Solo los incluye si no están ya incluidos. Aun no tiene un
+	// máximo de jugadores.
 	IncluirJugador: function(id, jugador){
 		Partidas.update(id,{$addToSet:{jugadores:jugador}})
 		return ("__Partida."+id+"__");
 	},
 	
-	//Comprobar, comentar, añadir a wiki
+	// Incluye observadores en el array de invitados dado el identificador primario de
+	// la partida. Solo los incluye si no están ya incluidos. No tiene un
+	// máximo de invitados.  
 	IncluirInvitado: function(id, invitado){
 		Partidas.update(id,{$addToSet:{invitados:invitado}})
 		return ("__Partida."+id+"__");
+	},
+	
+	// Cambia el estado de una partida a "Empezada" dado su identificador.
+	EmpezarPartida:function(id){
+		Partidas.update(id,{$set:{estado:"Empezada"}});
+	},
+	
+	// Cambia el estado de una partida a "Terminada" dado su identificador.
+	TerminarPartida:function(id){
+		Partidas.update(id,{$set:{estado:"Terminada"}});
 	}
 })
 
