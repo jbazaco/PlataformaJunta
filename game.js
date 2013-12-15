@@ -17,10 +17,8 @@
 		x = 37;	
 		y = 36;
 		//Hago una función para posicionar la ficha en la posición que me pasan		
-		 var Tablibres = DarPosiciones(Tablero, FichaPrueba);
-		//var sol = PosicionarFicha(Tablero, FichaPrueba, x, y);
-		
-		alert("Termina");
+		var Tablibres = colocarficha(Tablero, FichaPrueba, x, y);
+		alert(Tablibres);
 	};
 
 $(function() {

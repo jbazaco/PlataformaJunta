@@ -61,32 +61,32 @@ CrearTablero = function(){
 	return x;
 };
 
-DarPosiciones = function(Tablero, Ficha){
-	var TableroProv = CrearTablero;
-	for (i = 0; i<=72; i++){
-		for (j = 0; j<=72; j++){
-			if (Tablero[i][j] != 0){
-				if (Tablero[(i-1)][j] == 0){
-					if (Tablero[i][j].u == Ficha.d)
-						TableroProv[(i-1)][j] = Ficha;
-				}	
-				else if (Tablero[i][(j+1)] == 0){
-					if (Tablero[i][j].r == Ficha.l)
-						TableroProv[i][(j+1)] = Ficha;
+colocarficha = function(Tablero, Ficha, X, Y){
+		var colocado = true;
+		if (Tablero[X][Y] == 0){
+			if (Tablero[(X-1)][Y] == 0){
+				if (Tablero[X][Y].u != Ficha.d){
+					colocado = false;
 				}
-				else if (Tablero[(i+1)][j] == 0){
-					if (Tablero[i][j].d == Ficha.u)	
-						TableroProv[(i+1)][j] = Ficha;		
+			}	
+			else if (Tablero[X][(Y+1)] == 0){
+				if (Tablero[X][Y].r != Ficha.l){
+					colocado = false;
 				}
-				else if (Tablero[i][(j-1)] == 0){
-					if (Tablero[i][j].l == Ficha.r)
-						TableroProv[i][(j-1)] = Ficha;	
-				}		
 			}
+			else if (Tablero[(X+1)][Y] == 0){
+				if (Tablero[X][Y].d != Ficha.u)	{
+					colocado = false;
+				}
+			}
+			else if (Tablero[X][(Y-1)] == 0){
+				if (Tablero[X][Y].l != Ficha.r){
+					colocado = false;				
+				}
+			}		
 		}
-	}
-	return TableroProv;
-	};
+		return colocado;			
+};
 
 
 

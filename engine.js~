@@ -61,61 +61,37 @@ CrearTablero = function(){
 	return x;
 };
 
-DarPosiciones = function(Tablero, Ficha){
-	var TableroProv = CrearTablero;
-	for (i = 0; i<=72; i++){
-		for (j = 0; j<=72; j++){
-			if (Tablero[i][j] != 0){
-				if (Tablero[(i-1)][j] == 0){
-					if (Tablero[i][j].u == Ficha.d)
-						TableroProv[(i-1)][j] = Ficha;
-				}	
-				else if (Tablero[i][(j+1)] == 0){
-					if (Tablero[i][j].r == Ficha.l)
-						TableroProv[i][(j+1)] = Ficha;
+DarPosicion = function(Tablero, Ficha, X, Y){
+		var colocado = true;
+		if (Tablero[X][Y] == 0){
+			alert("Entramos a comprobar tablero");
+			if (Tablero[(X-1)][Y] == 0){
+				if (Tablero[X][Y].u != Ficha.d){
+					alert("No se coloca");
+					colocado = false;
 				}
-				else if (Tablero[(i+1)][j] == 0){
-					if (Tablero[i][j].d == Ficha.u)	
-						TableroProv[(i+1)][j] = Ficha;		
+			}	
+			else if (Tablero[X][(Y+1)] == 0){
+				if (Tablero[X][Y].r != Ficha.l){
+					alert("No se coloca");
+					colocado = false;
 				}
-				else if (Tablero[i][(j-1)] == 0){
-					if (Tablero[i][j].l == Ficha.r)
-						TableroProv[i][(j-1)] = Ficha;	
-				}		
 			}
+			else if (Tablero[(X+1)][Y] == 0){
+				if (Tablero[X][Y].d != Ficha.u)	{
+					colocado = false;		
+					alert("No se coloca");
+				}
+			}
+			else if (Tablero[X][(Y-1)] == 0){
+				if (Tablero[X][Y].l != Ficha.r){
+					colocado = false;	
+					alert("No se coloca");				
+				}
+			}		
 		}
-	}
-	return TableroProv;
-	};
-	
-	//Desde aquí ejecutamos todo el código.
-	EjecutaTotal = function(){
-		var Ficha1 = Aleatorio();
-		var Ficha2 = Aleatorio();
-		var FichaPrueba = Aleatorio();
-
-		//Comparar(Ficha1, Ficha2);
-		alert("Ficha1: " + Ficha1.nombre);
-		alert("Ficha2: " + Ficha2.nombre);
-		alert("FichaPrueba: " + FichaPrueba.nombre);
-		//Creamos tablero
-		Tablero = CrearTablero();
-		//Posicionamos ficha		
-		Tablero[36][36] = Ficha1;
-		Tablero[37][35] = Ficha2;
-		//Nos pasan una posición en el tablero mediante los ejes x e y
-		x = 37;	
-		y = 36;
-		//Hago una función para posicionar la ficha en la posición que me pasan		
-		 var Tablibres = DarPosiciones(Tablero, FichaPrueba);
-		//var sol = PosicionarFicha(Tablero, FichaPrueba, x, y);
-		
-		alert("Termina");
-	};
-
-$(function() {
-	EjecutaTotal();
-});
+		return colocado;			
+};
 
 
 
