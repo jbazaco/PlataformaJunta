@@ -66,7 +66,7 @@ var game = {
 		$('#gamestartscreen').show();
 
 		//Get handler for game canvas and context
-		game.canvas = document.getElementById('game2');
+		game.canvas = document.getElementById('gamecanvas');
 		game.context = game.canvas.getContext('2d');
 	},	  
 	startBackgroundMusic:function(){
@@ -807,13 +807,13 @@ var mouse = {
 	y:0,
 	down:false,
 	init:function(){
-		$('#game2').mousemove(mouse.mousemovehandler);
-		$('#game2').mousedown(mouse.mousedownhandler);
-		$('#game2').mouseup(mouse.mouseuphandler);
-		$('#game2').mouseout(mouse.mouseuphandler);
+		$('#gamecanvas').mousemove(mouse.mousemovehandler);
+		$('#gamecanvas').mousedown(mouse.mousedownhandler);
+		$('#gamecanvas').mouseup(mouse.mouseuphandler);
+		$('#gamecanvas').mouseout(mouse.mouseuphandler);
 	},
 	mousemovehandler:function(ev){
-		var offset = $('#game2').offset();
+		var offset = $('#gamecanvas').offset();
 		
 		mouse.x = ev.pageX - offset.left;
 		mouse.y = ev.pageY - offset.top;

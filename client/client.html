@@ -8,7 +8,8 @@
 	<script src='engine.js'></script>
 	<script src='game.js'></script>
 	<script src='jquery-1.10.2.js' type='text/javascript'></script>
-  	<script src='fruit_wars.js' type='text/javascript'></script>
+  <script src='Box2dWeb-2.1.a.3.min.js' type='text/javascript'></script>
+  <script src='fruit_wars.js' type='text/javascript'></script>
 
 	<div id='containermain'>
 		<div id='logo'>
@@ -20,7 +21,28 @@
 		</div>
 		<div id='container'>
 			<canvas id='game' class='canvas' width='1150' height='1150'></canvas>
-			<canvas id='game2' class='canvas' width='1150' height='1150'></canvas>
+      <canvas id="gamecanvas" width="1150" height="1150" class="gamelayer"></canvas>
+      <div id="scorescreen" class="gamelayer">
+        <img id="togglemusic" src="images/icons/sound.png" onclick="game.toggleBackgroundMusic();">
+        <img src="images/icons/prev.png" onclick="game.restartLevel();">
+        <span id="score">Score: 0</span>
+      </div>
+      <div id="gamestartscreen" class="gamelayer">
+        <img src="images/icons/play.png" alt="Play Game" onclick = "game.showLevelScreen();"><br>
+        <img src="images/icons/settings.png" alt="Settings">
+      </div>
+      <div id="levelselectscreen" class="gamelayer"></div>
+        <div id="loadingscreen" class="gamelayer">
+          <div id="loadingmessage"></div>
+          </div>
+          <div id="endingscreen" class="gamelayer">
+          </div>
+          <p id="endingmessage">The Level Is Over Message</p>
+          <p id="playcurrentlevel" onclick="game.restartLevel();"><img src="images/icons/prev.png"> Replay Current Level</p>
+          <p id="playnextlevel" onclick="game.startNextLevel();"><img src="images/icons/next.png"> Play Next Level </p>
+          <p id="returntolevelscreen"onclick="game.showLevelScreen();"><img src="images/icons/return.png"> Return to Level Screen</p>
+        </div>
+      </div>
 			<canvas id='game3' class='canvas' width='1150' height='1150'></canvas>
 		</div>
 		<div id='container2'>
