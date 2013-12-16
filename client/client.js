@@ -247,11 +247,20 @@ Template.gamesList.events={
 	},
 	'click a.watch_match':function(){
 		var usuid = Meteor.userId();
+		
 		if (usuid){
 			var usu = Meteor.users.findOne(usuid);
 			if (usu){
 				Meteor.call('IncluirInvitado',this._id,usu.username,function(err,res){
-					if(! err){Meteor.subscribe(res)}
+					if(! err){
+						Meteor.subscribe(res)
+						Session.set("Current_Game",res);
+						var canvas = "Canvas"+res;
+						$(".canvas").hide();
+						$("#container").append("<canvas id='"+canvas+"' class='canvas' width='1150' height='1150'></canvas>");
+						console.log(canvas);
+						$("#"+canvas).show();
+					}
 				})
 			}
 		}else{

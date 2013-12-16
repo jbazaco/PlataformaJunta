@@ -139,13 +139,13 @@ Meteor.methods({
 	//Comprobar, comentar, añadir a wiki
 	IncluirJugador: function(id, jugador){
 		Partidas.update(id,{$addToSet:{jugadores:jugador}})
-		return ("__Partida."+id+"__");
+		return ("__Partida"+id+"__");
 	},
 	
 	//Comprobar, comentar, añadir a wiki
 	IncluirInvitado: function(id, invitado){
 		Partidas.update(id,{$addToSet:{invitados:invitado}})
-		return ("__Partida."+id+"__");
+		return ("__Partida"+id+"__");
 	}
 })
 
