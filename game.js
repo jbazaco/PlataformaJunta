@@ -36,7 +36,8 @@
 		var Tablibres = colocarficha(Tablero, FichaPrueba, x, y);
 		alert(Tablibres);
 		alert("Terminamos Prueba");
-		*/	
+		*/
+		var FichaIsra1 = Prueba(9);	
 	};
 
 $(function() {
