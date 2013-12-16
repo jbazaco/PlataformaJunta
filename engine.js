@@ -38,6 +38,43 @@ var FichaPropiedades = {
   	ciucam2e:{nombre:"ciucam2e", u:CASTILLO, r:CAMPO,    d:CASTILLO, l:CAMPO,    cont:2 }        		//ciudad con 2 lados opuestos de campo con escudo
 }; 
 
+//defino los campos de las fichas. tengo que comprobar con el dibujo de las fichas ahora mismo no lo tengo.
+//       1
+//    -------
+//  4 |1 2 3| 2
+//    |4 5 6|
+//    |7 8 9|
+//    -------
+//       3
+
+var CampoFicha = {
+	murcam:  {nombre:"murcam", uno:1, dos:2, tres:3, cuatro:4, cinco:5, seis:6, siete:7, ocho:8, nueve:9 },
+	c3mur: 	 {nombre:"c3mur", uno:1, dos:2, tres:3, cuatro:4, cinco:5, seis:6, siete:7, ocho:8, nueve:9 },
+	mur2: 	 {nombre:"mur2", uno:1, dos:2, tres:3, cuatro:4, cinco:5, seis:6, siete:7, ocho:8, nueve:9 },
+	m: 		 {nombre:"m", uno:1, dos:2, tres:3, cuatro:4, cinco:5, seis:6, siete:7, ocho:8, nueve:9 },
+  	mc: 	 {nombre:"mc", uno:1, dos:2, tres:3, cuatro:4, cinco:5, seis:6, siete:7, ocho:8, nueve:9 },
+	c4: 	 {nombre:"c4", uno:1, dos:2, tres:3, cuatro:4, cinco:5, seis:6, siete:7, ocho:8, nueve:9 },
+	cc: 	 {nombre:"cc", uno:1, dos:2, tres:3, cuatro:4, cinco:5, seis:6, siete:7, ocho:8, nueve:9 },
+ 	cr: 	 {nombre:"cr", uno:1, dos:2, tres:3, cuatro:4, cinco:5, seis:6, siete:7, ocho:8, nueve:9 },
+ 	c3: 	 {nombre:"c3", uno:1, dos:2, tres:3, cuatro:4, cinco:5, seis:6, siete:7, ocho:8, nueve:9 },
+	ciudad:  {nombre:"ciudad", uno:1, dos:2, tres:3, cuatro:4, cinco:5, seis:6, siete:7, ocho:8, nueve:9 },
+	ciucam:  {nombre:"ciucam", uno:1, dos:2, tres:3, cuatro:4, cinco:5, seis:6, siete:7, ocho:8, nueve:9 },
+	chmur: 	 {nombre:"chmur", uno:1, dos:2, tres:3, cuatro:4, cinco:5, seis:6, siete:7, ocho:8, nueve:9 },
+	mur2c: 	 {nombre:"mur2c", uno:1, dos:2, tres:3, cuatro:4, cinco:5, seis:6, siete:7, ocho:8, nueve:9 },
+	mur1: 	 {nombre:"mur1", uno:1, dos:2, tres:3, cuatro:4, cinco:5, seis:6, siete:7, ocho:8, nueve:9 },
+ 	cmur: 	 {nombre:"cmur", uno:1, dos:2, tres:3, cuatro:4, cinco:5, seis:6, siete:7, ocho:8, nueve:9 },
+ 	ccmur: 	 {nombre:"ccmur", uno:1, dos:2, tres:3, cuatro:4, cinco:5, seis:6, siete:7, ocho:8, nueve:9 },
+	ccmur3:  {nombre:"ccmur3", uno:1, dos:2, tres:3, cuatro:4, cinco:5, seis:6, siete:7, ocho:8, nueve:9 },
+	ciucam2: {nombre:"ciucam2", uno:1, dos:2, tres:3, cuatro:4, cinco:5, seis:6, siete:7, ocho:8, nueve:9 },
+	ccmur2:  {nombre:"ccmur2", uno:1, dos:2, tres:3, cuatro:4, cinco:5, seis:6, siete:7, ocho:8, nueve:9 },
+ 	chmure:  {nombre:"chmure", uno:1, dos:2, tres:3, cuatro:4, cinco:5, seis:6, siete:7, ocho:8, nueve:9 },
+  	ccmur2e: {nombre:"ccmur2e", uno:1, dos:2, tres:3, cuatro:4, cinco:5, seis:6, siete:7, ocho:8, nueve:9 },
+  	murcame: {nombre:"murcame", uno:1, dos:2, tres:3, cuatro:4, cinco:5, seis:6, siete:7, ocho:8, nueve:9 },
+  	ciucame: {nombre:"ciucame", uno:1, dos:2, tres:3, cuatro:4, cinco:5, seis:6, siete:7, ocho:8, nueve:9 },
+  	ciucam2e:{nombre:"ciucam2e", uno:1, dos:2, tres:3, cuatro:4, cinco:5, seis:6, siete:7, ocho:8, nueve:9 }
+
+};
+
 //Creo el array y luego hago el random del número que le pasamos al array
 var Aleatorio = function(){
 	var conjunto = _.toArray(FichaPropiedades);
@@ -88,6 +125,17 @@ colocarficha = function(Tablero, Ficha, X, Y){
 		return colocado;			
 };
 
+//añado la funcion colocar seguidor. NECESITARE QUE LO COMPROBEIS CHICOS.
+// X e Y son la posicion de la ficha.
+//campoficha es dentro de una ficha las 9 posiciones empezando desde arriba a la izquierda que tiene una ficha 
+//tengo que ver que ficha es para saber que valor CampoFicha es el correspondiente ya que no es lo mismo el campo uno
+//de la ficha m que de la ficha murcam. tambien hay que tener en cuenta si hay rotacion o no.
 
+//tengo que definir los 9 campos de todas las fichas. lo hago arriba para seguir estructura.
+
+colocarseguidor = function(Ficha, CampoFicha, Rotacion, X, Y){
+	var nombreficha = Ficha.nombre;
+	var campoficha = CampoFicha;
+};
 
 

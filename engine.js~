@@ -61,32 +61,27 @@ CrearTablero = function(){
 	return x;
 };
 
-DarPosicion = function(Tablero, Ficha, X, Y){
+colocarficha = function(Tablero, Ficha, X, Y){
 		var colocado = true;
 		if (Tablero[X][Y] == 0){
-			alert("Entramos a comprobar tablero");
 			if (Tablero[(X-1)][Y] == 0){
 				if (Tablero[X][Y].u != Ficha.d){
-					alert("No se coloca");
 					colocado = false;
 				}
 			}	
 			else if (Tablero[X][(Y+1)] == 0){
 				if (Tablero[X][Y].r != Ficha.l){
-					alert("No se coloca");
 					colocado = false;
 				}
 			}
 			else if (Tablero[(X+1)][Y] == 0){
 				if (Tablero[X][Y].d != Ficha.u)	{
-					colocado = false;		
-					alert("No se coloca");
+					colocado = false;
 				}
 			}
 			else if (Tablero[X][(Y-1)] == 0){
 				if (Tablero[X][Y].l != Ficha.r){
-					colocado = false;	
-					alert("No se coloca");				
+					colocado = false;				
 				}
 			}		
 		}
