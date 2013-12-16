@@ -60,7 +60,7 @@ CrearTablero = function(){
 	}
 	return x;
 };
-
+//Procedimiento que mira las posiciones del tablero para ver si se puede colocar la ficha
 colocarficha = function(Tablero, Ficha, X, Y){
 		var colocado = true;
 		if (Tablero[X][Y] == 0){
