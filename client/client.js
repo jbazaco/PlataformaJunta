@@ -266,7 +266,15 @@ Template.gamesList.events={
 		}else{
 			Meteor.call('IncluirInvitado',this._id,"Invitado",function(err,res){
 				console.log(res)
-				if(! err){Meteor.subscribe(res)}
+				if(! err){
+					Meteor.subscribe(res)
+					Session.set("Current_Game",res);
+						var canvas = "Canvas"+res;
+						$(".canvas").hide();
+						$("#container").append("<canvas id='"+canvas+"' class='canvas' width='1150' height='1150'></canvas>");
+						console.log(canvas);
+						$("#"+canvas).show();
+				}
 			})
 		}
 		return false;
@@ -282,6 +290,8 @@ Template.gamesList.events={
 				})
 			}
 		return false;
+		}else{
+				alert('Debes estar registrado para unirte a una partida');
 		}
 	}
 };
