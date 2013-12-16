@@ -58,11 +58,11 @@ var sprites = {
 	ciucam2e: { sx: 408, sy: 230, w: FICHA_W, h: FICHA_H, si:"campo", sc:"ciudad", sd:"campo",
 		ci:"campo", cc:"ciudad", cd:"campo", ii:"campo", ic:"ciudad", id:"campo"},	//ciudad con 2 lados opuestos de 													campo con escudo
 	interrogante: { sx: 253, sy: 230, w: FICHA_W, h: FICHA_H},	//ficha con un interrogante
-	s1: { sx: 511, sy: 242, w: 30, h: 30},			//seguidor amarillo
-	s2: { sx: 553, sy: 242, w: 30, h: 30},			//seguidor rosa
-	s3: { sx: 596, sy: 242, w: 30, h: 30},			//seguidor azul
-	s4: { sx: 640, sy: 242, w: 30, h: 30},			//seguidor verde
-	s5: { sx: 682, sy: 242, w: 30, h: 30},		//seguidor naranja
+	s1: { sx: 532, sy: 245, w: 23, h: 23},			//seguidor amarillo
+	s2: { sx: 558, sy: 245, w: 23, h: 23},			//seguidor rosa
+	s3: { sx: 586, sy: 245, w: 22, h: 22},			//seguidor azul
+	s4: { sx: 613, sy: 245, w: 25, h: 25},			//seguidor verde
+	s5: { sx: 639, sy: 245, w: 25, h: 25},		//seguidor naranja
 	terminar: {sx: 727, sy: 44,w: 58,h: 20}		//Boton de temirnar
 };
 
@@ -443,8 +443,8 @@ Seguidor = function(sprite, numjugador) {
 	if(numjugador){
 		this.inicialy=this.inicialy + numjugador*60;
 	}
-	this.h = 30;
-	this.w = 30;
+	this.h = 23;
+	this.w = 23;
 	this.x=this.inicialx;
 	this.y=this.inicialy;
 	this.sprite=sprite;
