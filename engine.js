@@ -117,10 +117,10 @@ colocarseguidor = function(Ficha, CampoFicha, Rotacion, X, Y){
 	
 	if (nombreficha == "murcam" && Rotacion==0){
 		if (CampoFicha==1){
-			//el seguidor esta arriba a la izquierda
+			alert("el seguidor esta arriba a la izquierda");
 		}
 		if (CampoFicha==2){
-			//el seguidor esta arriba en el medio
+			alert("el seguidor esta arriba en el medio");
 		}
 		//asi con las 9 posiciones y sin estar rotado
 		//no se que hacer cuando me meto dentro de if en el sentido que no se que devolver o saber si el seguidor

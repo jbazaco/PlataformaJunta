@@ -108,10 +108,24 @@ colocarficha = function(Tablero, Ficha, X, Y){
 //de la ficha m que de la ficha murcam. tambien hay que tener en cuenta si hay rotacion o no.
 
 //tengo que definir los 9 campos de todas las fichas. lo hago arriba para seguir estructura.
+//Si campoficha es un numero no necesito la estructura mencionada. De momento la dejo porque no lo tengo claro pero ahora no la
+//voy a usar.
 
 colocarseguidor = function(Ficha, CampoFicha, Rotacion, X, Y){
 	var nombreficha = Ficha.nombre;
 	var campoficha = CampoFicha;
+	
+	if (nombreficha == "murcam" && Rotacion==0){
+		if (CampoFicha==1){
+			//el seguidor esta arriba a la izquierda
+		}
+		if (CampoFicha==2){
+			//el seguidor esta arriba en el medio
+		}
+		//asi con las 9 posiciones y sin estar rotado
+		//no se que hacer cuando me meto dentro de if en el sentido que no se que devolver o saber si el seguidor
+		//se puede colocar o no. 
+	}  
 };
 
 
