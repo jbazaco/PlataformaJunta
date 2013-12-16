@@ -101,17 +101,9 @@ playGame = function(){
 	/*Se subscribe a la partida*/
 	Meteor.subscribe('mov_partida');
 	Deps.autorun(function(){
-		var nmovs = Movimientos.find().count();
-		var movs = Movimientos.find({}, 
-				{limit:nmovs-nfich, sort: {nmove:-1}});
-		//Se invierte el orden para que si le llegan varios movimientos
-		//los gestione en orden
-		var arr = new Array();
-        movs.forEach(function (m) {
+		var movs = Movimientos.find({nmove: {$gte: nfich-1}}, {sort: {nmove:1}});
+        movs.forEach(function(m) {
 			nfich++;
-			arr.unshift(m);
-        });
-		arr.forEach(function(m) {
 			gestionarMov(m);
 		});
 	});
