@@ -204,4 +204,3 @@ var GetSeq = function(){
 	return val;				//Not Gap. Return the last+1 or 0 if no Games.
 };
 
-

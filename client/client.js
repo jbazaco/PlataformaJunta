@@ -179,7 +179,8 @@ Template.gamesList.imIn = function(){
 Template.games.events={
 	'click a#game_1':function(){
 		Session.set('Current_Game_id',1);
-		$(".canvas").hide()
+		$(".canvas").hide();
+		$(".gamelayer").hide();
 		$('#game').show(500);
 		
 		$("#selectedgame").html("Alien Invasion");
@@ -188,8 +189,8 @@ Template.games.events={
 	},
 	'click a#game_2':function(){
 		Session.set('Current_Game_id',2)
-		$(".canvas").hide()
-		$('#game2').show(500);
+		$(".canvas").hide();
+		$('#gamecanvas').show(500);
 		
 		$("#selectedgame").html("Angry Fruits");
 		$("#container2").tabs( "option", "active", 1 );
@@ -197,7 +198,7 @@ Template.games.events={
 	},
 	'click a#game_3':function(){
 		Session.set('Current_Game_id',3)
-		$(".canvas").hide()
+		$(".canvas").hide();
 		$('#game3').show(500);
 
 		$("#selectedgame").html("Carcassonne");	
