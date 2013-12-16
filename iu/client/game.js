@@ -179,6 +179,9 @@ Fondo = new function() {
 	this.w = 1070;
 	this.h = 650;
 	this.sprite = "";
+	this.tablero_w = 850;
+	this.separacion = 20;
+	this.menu_w = this.w-this.tablero_w-this.separacion;
 
 	this.mover = function(x,y) {	}
 	
@@ -188,15 +191,15 @@ Fondo = new function() {
 	this.draw = function(){
 		// Dibujar rectangulo azul
 		Game.ctx.fillStyle = "#44cbff";
-		Game.ctx.fillRect(0,0,850,650);
+		Game.ctx.fillRect(0,0,this.tablero_w,this.h);
 
 		//Dibujar barra separadora
 		Game.ctx.fillStyle = "#c9c9c9";
-		Game.ctx.fillRect(850,0,20,650);
+		Game.ctx.fillRect(this.tablero_w,0,this.separacion,this.h);
 
 		//Dibujar barra-menu
 		Game.ctx.fillStyle = "#000000";
-		Game.ctx.fillRect(870,0,200,650); 
+		Game.ctx.fillRect(this.tablero_w+this.separacion,0,this.menu_w,this.h); 
 	}
 }
 
@@ -252,13 +255,20 @@ Ficha = function(x, y, sprite) {
 		if (this.pulsado_en.x === 0 && this.pulsado_en.y === 0) {
 			this.pulsado_en = {x: x, y: y};	
 		} else {
-			desplazarTablero(x-this.pulsado_en.x,y-this.pulsado_en.y);
-			this.pulsado_en = {x: x, y: y};
+			//En cuanto se sale del menu el raton ya no se mueve mas
+			//Tambien evita que puedas mover pulsando sobre la parte del
+			// tablero que estaría sobre el menu pero que no se pinta
+			if(this.pulsado_en.x < Fondo.tablero_w) {
+				desplazarTablero(x-this.pulsado_en.x,y-this.pulsado_en.y);
+				this.pulsado_en = {x: x, y: y};
+			}
 		}
 	}
 	
 	this.soltar = function(x,y) {
-		desplazarTablero(x-this.pulsado_en.x,y-this.pulsado_en.y);
+		if(this.pulsado_en.x < Fondo.tablero_w) {
+			desplazarTablero(x-this.pulsado_en.x,y-this.pulsado_en.y);
+		}
 		this.pulsado_en = {x:0, y:0};
 	}
 
