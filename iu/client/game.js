@@ -270,7 +270,9 @@ Ficha = function(x, y, sprite) {
 		this.pulsado_en = {x:0, y:0};
 	}
 
-	this.pulsado = function(x, y) {	}
+	this.pulsado = function(x, y) {
+		if (this.sprite === "interrogante") FichaActual.soltar(this.x+this.w/2,this.y+this.h/2);
+	}
 
 	//Si se sale del espacio del tablero no se pinta la parte que
 	// sale de la pantalla
@@ -367,6 +369,10 @@ FichaActual = new function() {
 			} else {	
 				this.x = this.inicialx;
 				this.y = this.inicialy;	
+			}
+			if (this.colocado){	
+				this.colocado.resetear();
+				this.colocado=null;
 			}
 		}
 		this.moviendo = false;
