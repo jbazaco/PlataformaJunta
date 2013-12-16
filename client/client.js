@@ -258,8 +258,10 @@ Template.gamesList.events={
 						Session.set("Current_Game",res);
 						var canvas = "Canvas"+res;
 						$(".canvas").hide();
-						$("#container").append("<canvas id='"+canvas+"' class='canvas' width='1150' height='1150'></canvas>");
-						console.log(canvas);
+						if(!$("#"+canvas).length){
+							$("#container").append("<canvas id='"+canvas+"' class='canvas' width='1150' height='1150'></canvas>");
+							console.log(canvas);
+						}
 						$("#"+canvas).show();
 					}
 				})
