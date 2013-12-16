@@ -1,4 +1,3 @@
-// Hacemos primero un objeto dummy
 
 //       1
 //    -------
@@ -47,25 +46,33 @@ var FichaPropiedades = {
 //    -------
 //       3
 // no necesito un array porque el nombre lo consigo de la estructura de arriba.
-var CampoFicha = {
+/*var CampoFicha = {
 uno:1, dos:2, tres:3, cuatro:4, cinco:5, seis:6, siete:7, ocho:8, nueve:9
-};
+};*/
 
 //Creo el array y luego hago el random del número que le pasamos al array
 var Aleatorio = function(){
 	var conjunto = _.toArray(FichaPropiedades);
 	var a = Math.floor(Math.random()*24);
-	//alert("Numero aleatorio: " + a);
-	//alert("Sprite aleatorio: " + conjunto[a]);
+	while (conjunto[a].cont == 0){
+		a = Math.floor(Math.random()*24);
+	}
+	// Les restamos uno de la que usamos
+	conjunto[a].cont = conjunto[a].cont -1;	
 	return conjunto[a];
 };
+
+/*var Prueba = function(A){
+	var conjunto = _.toArray(FichaPropiedades);
+	return conjunto[A];
+}*/
 	
 //Creamos tablero
 CrearTablero = function(){
 	var x = new Array(72);
 	for (var i = 0; i < 72; i++){
 		x[i] = new Array(72);
-	}
+	}//Rellenamos el tablero con cero para identificar posiciones vacías
 	for (var i = 0; i < 72; i++){
 		for (var j = 0; j < 72; j++){
 			x[i][j] = 0;
@@ -74,58 +81,38 @@ CrearTablero = function(){
 	return x;
 };
 //Procedimiento que mira las posiciones del tablero para ver si se puede colocar la ficha
+//Terminología: U: Up, R:Right, D: Down, L:Left. 
 colocarficha = function(Tablero, Ficha, X, Y){
 		var colocado = true;
 		if (Tablero[X][Y] == 0){
-			if (Tablero[(X-1)][Y] == 0){
-				if (Tablero[X][Y].u != Ficha.d){
-					colocado = false;
-				}
-			}	
-			else if (Tablero[X][(Y+1)] == 0){
-				if (Tablero[X][Y].r != Ficha.l){
-					colocado = false;
+			if ((X != 0 && Y != 0) || (X != 72 && Y != 0) || (Y != 0)){ //En cada una comprobamos las esquinas y los bordes(L-U,U,R-A)
+				if (Tablero[X][(Y-1)] != 0){//Arriba
+					if (Tablero[X][(Y-1)].d != Ficha.u)
+						colocado = 'arriba';
 				}
 			}
-			else if (Tablero[(X+1)][Y] == 0){
-				if (Tablero[X][Y].d != Ficha.u)	{
-					colocado = false;
+			if ((X != 72 && Y != 0) || (X != 72 && Y != 72) || (X != 0)){// (R-U,R,R-D)
+				if (Tablero[(X+1)][Y] != 0){//Derecha
+					if (Tablero[(X+1)][Y].l != Ficha.r)
+						colocado = 'derecha';				
 				}
 			}
-			else if (Tablero[X][(Y-1)] == 0){
-				if (Tablero[X][Y].l != Ficha.r){
-					colocado = false;				
+			if ((X != 0 && Y != 72) || (X != 72 && Y != 72) || (Y != 72)){//(R-D, D, L-D)
+				if (Tablero[X][(Y+1)] != 0){ //Abajo
+					if (Tablero[X][(Y+1)].u != Ficha.d)
+						colocado = 'Abajo';
 				}
-			}		
+			}
+			if ((X != 0 && Y != 0) || (X != 0 && Y != 72) || (X != 0)){//(L-D, L, L-U)
+				if (Tablero[(X-1)][Y] != 0){ //Izquierda
+					if (Tablero[(X-1)][Y].r != Ficha.l)
+						colocado = 'Izquierda';
+				}
+			}			
 		}
 		return colocado;			
 };
 
-//añado la funcion colocar seguidor. NECESITARE QUE LO COMPROBEIS CHICOS.
-// X e Y son la posicion de la ficha.
-//campoficha es dentro de una ficha las 9 posiciones empezando desde arriba a la izquierda que tiene una ficha 
-//tengo que ver que ficha es para saber que valor CampoFicha es el correspondiente ya que no es lo mismo el campo uno
-//de la ficha m que de la ficha murcam. tambien hay que tener en cuenta si hay rotacion o no.
 
-//tengo que definir los 9 campos de todas las fichas. lo hago arriba para seguir estructura.
-//Si campoficha es un numero no necesito la estructura mencionada. De momento la dejo porque no lo tengo claro pero ahora no la
-//voy a usar.
-
-colocarseguidor = function(Ficha, CampoFicha, Rotacion, X, Y){
-	var nombreficha = Ficha.nombre;
-	var campoficha = CampoFicha;
-	
-	if (nombreficha == "murcam" && Rotacion==0){
-		if (CampoFicha==1){
-			alert("el seguidor esta arriba a la izquierda");
-		}
-		if (CampoFicha==2){
-			alert("el seguidor esta arriba en el medio");
-		}
-		//asi con las 9 posiciones y sin estar rotado
-		//no se que hacer cuando me meto dentro de if en el sentido que no se que devolver o saber si el seguidor
-		//se puede colocar o no. 
-	}  
-};
 
 
