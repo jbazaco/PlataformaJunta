@@ -76,6 +76,7 @@ startGame = function() {
 
 playGame = function(){
 	Game.boards.length=0;
+	Game.setBoard(Game.boards.length, BotonAyuda);
 	var numjugadores=5; //nos lo tiene que dar la plataforma de momento es un ejemplo
 	for (i=1;i<=numjugadores;i++){
 		Game.setBoard(Game.boards.length, new NumSeguidores(i));
@@ -118,7 +119,51 @@ gestionarMov = function(m) {
 		debajo.establecer(m.sprite, m.rotacion);
 	}
 };
+BotonAyuda = new function() {
+	this.x = 1000;
+	this.y = 40;
+	this.w = 50;
+	this.h = 20;
+	this.sprite = "";
+	this.mover = function(x,y) {	}
+	this.soltar = function(x,y) {	}
+	this.pulsado = function() {	
+		Game.setBoard(0, MenuAyuda);
+	}
+        this.draw = function(ctx) {
+		Game.ctx.fillStyle = "#44cbff";
+		Game.ctx.fillRect(this.x,this.y,this.w,this.h);
 
+		ctx.fillStyle= "#000000";
+	    	ctx.font = "bold 13px arial";
+	    	ctx.fillText("Ayuda", this.x+22, this.y+15);	
+	}    
+}
+MenuAyuda = new function(){
+	this.x = 0;
+	this.y = 0;
+	this.w = 1070;
+	this.h = 650;
+	this.sprite = "";
+	this.mover = function(x,y) {	}
+	this.soltar = function(x,y) {	}
+	this.pulsado = function() {Game.setBoard(0, BotonAyuda);}
+        this.draw = function(ctx) {
+	    ctx.fillStyle = "#FFFFFF";
+	    ctx.textAlign = "center";
+	
+	    Game.ctx.fillStyle = "#000000";
+	    Game.ctx.fillRect(0,0,1070,650);
+
+	    ctx.fillStyle= "#c9c9c9";
+	    ctx.font = "bold 10px arial";
+	    ctx.fillText("AYUDA.",Game.width/2,Game.height/2);
+
+	    ctx.font = "bold 7px arial";
+	    ctx.fillText("Aqui cuento la ayuda...",Game.width/2+5,Game.height/2 + 100);
+        }
+
+}
 TitleScreen = function TitleScreen(title,subtitle,callback) {
     
 	this.x = 0;
