@@ -38,6 +38,19 @@ var FichaPropiedades = {
   	ciucam2e:{nombre:"ciucam2e", u:CASTILLO, r:CAMPO,    d:CASTILLO, l:CAMPO,    cont:2 }        		//ciudad con 2 lados opuestos de campo con escudo
 }; 
 
+//defino los campos de las fichas. tengo que comprobar con el dibujo de las fichas ahora mismo no lo tengo.
+//       1
+//    -------
+//  4 |1 2 3| 2
+//    |4 5 6|
+//    |7 8 9|
+//    -------
+//       3
+// no necesito un array porque el nombre lo consigo de la estructura de arriba.
+var CampoFicha = {
+uno:1, dos:2, tres:3, cuatro:4, cinco:5, seis:6, siete:7, ocho:8, nueve:9
+};
+
 //Creo el array y luego hago el random del número que le pasamos al array
 var Aleatorio = function(){
 	var conjunto = _.toArray(FichaPropiedades);
@@ -88,6 +101,31 @@ colocarficha = function(Tablero, Ficha, X, Y){
 		return colocado;			
 };
 
+//añado la funcion colocar seguidor. NECESITARE QUE LO COMPROBEIS CHICOS.
+// X e Y son la posicion de la ficha.
+//campoficha es dentro de una ficha las 9 posiciones empezando desde arriba a la izquierda que tiene una ficha 
+//tengo que ver que ficha es para saber que valor CampoFicha es el correspondiente ya que no es lo mismo el campo uno
+//de la ficha m que de la ficha murcam. tambien hay que tener en cuenta si hay rotacion o no.
 
+//tengo que definir los 9 campos de todas las fichas. lo hago arriba para seguir estructura.
+//Si campoficha es un numero no necesito la estructura mencionada. De momento la dejo porque no lo tengo claro pero ahora no la
+//voy a usar.
+
+colocarseguidor = function(Ficha, CampoFicha, Rotacion, X, Y){
+	var nombreficha = Ficha.nombre;
+	var campoficha = CampoFicha;
+	
+	if (nombreficha == "murcam" && Rotacion==0){
+		if (CampoFicha==1){
+			//el seguidor esta arriba a la izquierda
+		}
+		if (CampoFicha==2){
+			//el seguidor esta arriba en el medio
+		}
+		//asi con las 9 posiciones y sin estar rotado
+		//no se que hacer cuando me meto dentro de if en el sentido que no se que devolver o saber si el seguidor
+		//se puede colocar o no. 
+	}  
+};
 
 

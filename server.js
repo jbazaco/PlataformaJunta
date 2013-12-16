@@ -13,7 +13,7 @@
 
 Meteor.methods({
 
-	devolverficha = function(){	
+	devolverficha = function(){	//habría que definir una coleccion de fichas que es de donde hay que devolver?? definida en models.js
 		return aleatorio;
 	}
 
@@ -22,7 +22,7 @@ Meteor.methods({
 		return posiciones{} ;
 	}
 	
-	colocarseguidor = function(ficha, campoficha, rotacion, posicionficha){
+	colocarseguidor = function(ficha, campoficha, rotacion, x, y){
 	return Boolean;	//funcion que devuelve si se puede poner un seguidor en la posicion de la ficha correspondiente.
 	}
 
