@@ -111,18 +111,38 @@ SpriteSheet = new function() {
 		if(!frame) frame = 0;
 		
 		if (rotacion){
-     			ctx.save();
-           		ctx.translate(x+sw/2, y+sh/2);
-            		ctx.rotate(rotacion*Math.PI/180); 
-            		ctx.drawImage(this.image,
-						  s.sx + frame * s.w, 
-						  s.sy, 
+			ctx.save();
+           	ctx.translate(x+sw/2, y+sh/2);
+
+			//recalcula para el caso de compresion en anchura
+			//si hiciese falta en altura habria que implementarlo
+			var dw = 0;
+			var dy = 0;
+			if(s.w !== sw) {
+				if (rotacion === 180) {
+					dw = s.w-sw;
+				} else if (rotacion === 270) {
+					var stmp = sw;
+					sw = sh;
+					sh = stmp;
+				} else if (rotacion === 90) {
+					dy = s.w-sw;
+					var stmp = sw;
+					sw = sh;
+					sh = stmp;
+				}
+			}
+
+            ctx.rotate(rotacion*Math.PI/180); 
+            ctx.drawImage(this.image,
+						  s.sx + frame * s.w + dw, 
+						  s.sy + dy, 
 						  sw, sh, 
 						  Math.floor(-sw/2), Math.floor(-sh/2),
 						  sw, sh);
 			
-         		ctx.restore();
-        	}else{
+         	ctx.restore();
+        }else{
 			ctx.drawImage(this.image,
 						  s.sx + frame * s.w, 
 						  s.sy, 
