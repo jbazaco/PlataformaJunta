@@ -13,7 +13,7 @@
 
 Meteor.methods({
 
-	devolverficha = function(){	//habría que definir una coleccion de fichas que es de donde hay que devolver??
+	devolverficha = function(){	//habría que definir una coleccion de fichas que es de donde hay que devolver?? definida en models.js
 		return aleatorio;
 	}
 
