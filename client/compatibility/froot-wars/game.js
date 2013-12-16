@@ -62,7 +62,7 @@ var game = {
 
 
 		// Hide all game layers and display the start screen
-		$('.gamelayer').hide();
+		$('.canvas').hide();
 		$('#gamestartscreen').show();
 
 		//Get handler for game canvas and context
@@ -91,7 +91,7 @@ var game = {
 		}
 	},
 	showLevelScreen:function(){
-		$('.gamelayer').hide();
+		$('.canvas').hide();
 		$('#levelselectscreen').show('slow');
 	},
 	restartLevel:function(){
@@ -110,7 +110,7 @@ var game = {
 	slingshotX:140,
 	slingshotY:280,
 	start:function(){
-		$('.gamelayer').hide();
+		$('.canvas').hide();
 		// Display the game canvas and score 
 		$('#gamecanvas').show();
 		$('#scorescreen').show();
