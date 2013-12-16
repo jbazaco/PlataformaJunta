@@ -121,11 +121,17 @@ Meteor.methods({
 			invitados: [],
 			opciones: opciones,
 			empezada:false,
-			jugadas:[]
+			jugadas:[],
+			canvas: mycanvas
 		})
-		var sid = "__Partida."+id+"__";
+
+		var sid = "__Partida"+id+"__";
+		var mycanvas= "Canvas_"+sid;
+		console.log(mycanvas)
+		Partidas.update(id,{$set:{canvas:mycanvas}})
+
 		Meteor.publish(sid,function(){
-			return Partidas.find(id,{nombre:1, jugadores:1,invitados:1,opciones:1,jugadas:1});
+			return Partidas.find(id,{nombre:1, jugadores:1,invitados:1,opciones:1,jugadas:1,canvas:1});
 		})
 		
 		return sid;

@@ -120,10 +120,16 @@ Template.options.events={
 			}
 			Meteor.call("SuscribirPartida",jugadores,opciones,[],name,function(error,result){
 				if(error){
-		    		console.log(error.reason);
+		    			console.log(error.reason);
 				}
 				else{
 					Meteor.subscribe(result);
+					Session.set("Current_Game",result);
+					var canvas = "Canvas"+result;
+					$("#container").append("<canvas id='"+canvas+"' class='canvas' width='1150' height='1150'></canvas>");
+					$(".canvas").hide();
+					console.log(canvas)
+					$("#"+canvas).show();
 				}
 			});
 			$('#opciones').hide();
