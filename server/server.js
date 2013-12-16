@@ -104,7 +104,6 @@ Meteor.methods({
 		}
 	},
 
-
 	// Mete una nueva partida en el servidor. Devuelve un identificador
 	// de partida UNICO no coincidente con la clave primaria al que 
 	// el cliente debe suscribirse en su Deps.autorun().
@@ -123,7 +122,8 @@ Meteor.methods({
 			empezada:false,
 			jugadas:[],
 			canvas: mycanvas,
-			estado: "Lobby"
+			estado: "Lobby",
+			puntuacion:[0]
 		})
 
 		var sid = "__Partida"+id+"__";
@@ -137,10 +137,20 @@ Meteor.methods({
 		
 		return sid;
 	},
+
+	PuntuacionJugadorPartida: function(id,jugador,punt){
+	
+		var p = Partidas.findOne(id).puntuacion
+		var idx = Partidas.findOne(id).jugadores.indexOf(jugador)
+		p[idx]+=punt
+		Partidas.update(id,{$set:{puntuacion:p}});
+	},
+
 	// Incluye jugadores en el array de jugadores dado el identificador primario de
 	// la partida. Solo los incluye si no están ya incluidos. Aun no tiene un
 	// máximo de jugadores.
 	IncluirJugador: function(id, jugador){
+
 		Partidas.update(id,{$addToSet:{jugadores:jugador}})
 		return ("__Partida"+id+"__");
 	},
@@ -150,8 +160,7 @@ Meteor.methods({
 	// máximo de invitados.  
 	IncluirInvitado: function(id, invitado){
 		Partidas.update(id,{$addToSet:{invitados:invitado}})
-<<<<<<< HEAD
-		return ("__Partida."+id+"__");
+		return ("__Partida"+id+"__");
 	},
 	
 	// Cambia el estado de una partida a "Empezada" dado su identificador.
@@ -162,9 +171,8 @@ Meteor.methods({
 	// Cambia el estado de una partida a "Terminada" dado su identificador.
 	TerminarPartida:function(id){
 		Partidas.update(id,{$set:{estado:"Terminada"}});
-=======
+
 		return ("__Partida"+id+"__");
->>>>>>> GR_idcanvas
 	}
 })
 
