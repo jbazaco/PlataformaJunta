@@ -60,9 +60,9 @@ var sprites = {
 	interrogante: { sx: 253, sy: 230, w: FICHA_W, h: FICHA_H},	//ficha con un interrogante
 	s1: { sx: 532, sy: 245, w: 23, h: 23},			//seguidor amarillo
 	s2: { sx: 558, sy: 245, w: 23, h: 23},			//seguidor rosa
-	s3: { sx: 586, sy: 245, w: 22, h: 22},			//seguidor azul
-	s4: { sx: 613, sy: 245, w: 25, h: 25},			//seguidor verde
-	s5: { sx: 639, sy: 245, w: 25, h: 25},		//seguidor naranja
+	s3: { sx: 586, sy: 245, w: 23, h: 23},			//seguidor azul
+	s4: { sx: 613, sy: 245, w: 23, h: 23},			//seguidor verde
+	s5: { sx: 639, sy: 245, w: 23, h: 23},		//seguidor naranja
 	terminar: {sx: 727, sy: 44,w: 58,h: 20}		//Boton de temirnar
 };
 
@@ -76,7 +76,7 @@ startGame = function() {
 
 playGame = function(){
 	Game.boards.length=0;
-	var numjugadores=3; //nos lo tiene que dar la plataforma de momento es un ejemplo
+	var numjugadores=5; //nos lo tiene que dar la plataforma de momento es un ejemplo
 	for (i=1;i<=numjugadores;i++){
 		Game.setBoard(Game.boards.length, new NumSeguidores(i));
 		Game.setBoard(Game.boards.length, new GamePoints(i));
