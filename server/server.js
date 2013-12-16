@@ -142,7 +142,7 @@ Meteor.methods({
 	// máximo de jugadores.
 	IncluirJugador: function(id, jugador){
 		Partidas.update(id,{$addToSet:{jugadores:jugador}})
-		return ("__Partida."+id+"__");
+		return ("__Partida"+id+"__");
 	},
 	
 	// Incluye observadores en el array de invitados dado el identificador primario de
@@ -150,6 +150,7 @@ Meteor.methods({
 	// máximo de invitados.  
 	IncluirInvitado: function(id, invitado){
 		Partidas.update(id,{$addToSet:{invitados:invitado}})
+<<<<<<< HEAD
 		return ("__Partida."+id+"__");
 	},
 	
@@ -161,6 +162,9 @@ Meteor.methods({
 	// Cambia el estado de una partida a "Terminada" dado su identificador.
 	TerminarPartida:function(id){
 		Partidas.update(id,{$set:{estado:"Terminada"}});
+=======
+		return ("__Partida"+id+"__");
+>>>>>>> GR_idcanvas
 	}
 })
 
