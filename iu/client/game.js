@@ -210,7 +210,6 @@ BotonFinTurno = new function() {
 
 	this.pulsado = function() {
 		FichaActual.finTurno();	
-		Seguidor.restar=true;
 	}
 
 	this.draw = function(ctx) {
@@ -355,8 +354,7 @@ FichaActual = new function() {
 	this.y = 120;
 	this.sprite = 'interrogante';
 	this.nextBoard = 0;
-	this.haySeguidor=false;
-	this.colocado=null;
+	this.seguidor=null;
 	this.rotacion = 0;
 	
 	//Devuelve true si se gira la ficha
@@ -398,9 +396,9 @@ FichaActual = new function() {
 		if (this.sprite !== 'interrogante') {
 			this.x = x - this.w/2;
 			this.y = y - this.h/2;
-			if (this.colocado){	
-				this.colocado.resetear();
-				this.colocado=null;
+			if (this.seguidor){	
+				this.seguidor.resetear();
+				this.seguidor=null;
 			}
 		}
 	}
@@ -417,9 +415,9 @@ FichaActual = new function() {
 				this.x = this.inicialx;
 				this.y = this.inicialy;	
 			}
-			if (this.colocado){	
-				this.colocado.resetear();
-				this.colocado=null;
+			if (this.seguidor){	
+				this.seguidor.resetear();
+				this.seguidor=null;
 			}
 		}
 		this.moviendo = false;
@@ -457,8 +455,7 @@ FichaActual = new function() {
 		this.sprite = "interrogante";
 		this.x = this.inicialx;
 		this.y = this.inicialy;	
-		this.haySeguidor=false;
-		this.colocado=false;
+		this.seguidor=null;
 		this.rotacion=0;	
 		Seguidor.resetear();
 	}
@@ -502,8 +499,7 @@ Seguidor = function(sprite, numjugador) {
 	this.y=this.inicialy;
 	this.sprite=sprite;
 	this.zona="";
-	this.restar=true;
-	this.sumar=false;
+	this.restado = false;
 	
 	this.pulsado = function() {}
 	//tiene que comprobar que el que hace click es el jugador al que le toca jugar, si no no puede mover
@@ -620,41 +616,37 @@ Seguidor = function(sprite, numjugador) {
 		this.moviendo = true;
 		miJugador=1;
 		turno=1;//Falta funcion para saber de quien es el turno
-		if(turno==miJugador && this.sprite=="s"+miJugador && FichaActual.seHaMovido() && (!FichaActual.colocado || FichaActual.colocado==this)){
+		if(turno==miJugador && this.sprite=="s"+miJugador && FichaActual.seHaMovido() 
+							&& (!FichaActual.seguidor || FichaActual.seguidor==this)){
 				this.x = x - this.w/2;
 				this.y = y - this.h/2;
 				FichaActual.pintarRejilla();
-			
 		}
 	}
 	
 	this.soltar = function(x,y) {
-		if (!FichaActual.haySeguidor){
+		if (!FichaActual.seguidor){
 			if ((!FichaActual.seHaMovido() || !FichaActual.EstaEn(x,y))){
 				this.resetear();
-				FichaActual.colocado=null;
-				FichaActual.haySeguidor=false;
+				FichaActual.seguidor=null;
 			}else{
 				miJugador=1;
 				turno=1;//Falta funcion para saber de quien es el turno
-				if(turno==miJugador && this.sprite=="s"+miJugador && FichaActual.seHaMovido() && !FichaActual.haySeguidor){
+				if(turno==miJugador && this.sprite=="s"+miJugador && FichaActual.seHaMovido() && !FichaActual.seguidor){
 					this.recalcular(x,y);
 					if (this.zona==="no"){
 						this.resetear();
 					}else{
 						console.log(this.zona);
-						FichaActual.haySeguidor=true;
-						this.sumar=true;
-						FichaActual.colocado=this;
-						if (this.restar){
+						FichaActual.seguidor=this;
+						if (!this.restado){
 							Game.boards[numjugador].num--;
-							this.restar=false;
+							this.restado=true;
 						}
 					}
 				}
 			}	
-			this.moviendo = false;
-		}else{
+		}else {
 			if ((!FichaActual.seHaMovido() || !FichaActual.EstaEn(x,y))){
 				this.resetear();
 			}else{
@@ -666,6 +658,7 @@ Seguidor = function(sprite, numjugador) {
 				}
 			}
 		}
+		this.moviendo = false;
 	}
 
 	//Devuelve true si no esta en la posicion inicial
@@ -676,11 +669,11 @@ Seguidor = function(sprite, numjugador) {
 	this.resetear = function() {
 		this.x=this.inicialx;
 		this.y=this.inicialy;
-		this.restar=true;
-		FichaActual.haySeguidor=false;
-		if (FichaActual.colocado && this.sumar){
+		this.zona = "";
+		if (FichaActual.seguidor === this) FichaActual.seguidor = null;
+		if (this.restado){
 			Game.boards[numjugador].num++;	
-			this.sumar=false;
+			this.restado=false;
 		}
 	}
 
