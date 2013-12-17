@@ -3,27 +3,28 @@
 		var Ficha1 = Aleatorio();
 		var Ficha2 = Aleatorio();
 		var FichaPrueba = Aleatorio();
-
-		//Comparar(Ficha1, Ficha2);
+			////////////////////////////// COMPROBAMOS TABLERO ///////////
+			//Comparar(Ficha1, Ficha2);
 		
-		alert("Ficha1: " + Ficha1.nombre);
-		alert("Ficha2: " + Ficha2.nombre);
-		alert("FichaPrueba: " + FichaPrueba.nombre);
-		//Creamos tablero
+		//alert("Ficha1: " + Ficha1.nombre);
+		//alert("Ficha2: " + Ficha2.nombre);
+		//alert("FichaPrueba: " + FichaPrueba.nombre);
+		
+			//Creamos tablero
 		
 		Tablero = CrearTablero();
-		//Nos pasan una posición en el tablero mediante los ejes x e y
+			//Nos pasan una posición en el tablero mediante los ejes x e y
 		x = 0;	
 		y = 0;
 		
-		//Posicionamos ficha		
+			//Posicionamos ficha		
 		Tablero[1][0] = Ficha1;
 		Tablero[0][1] = Ficha2;
-		//Hago una función para posicionar la ficha en la posición que me pasan		
+			//Hago una función para posicionar la ficha en la posición que me pasan		
 		var Tablibres = colocarficha(Tablero, FichaPrueba, x, y);
-		alert(Tablibres);
+		//alert(Tablibres);
 		/*
-		////////////////////////PRUEBA CON FICHA DADA//////
+			////////////////////////PRUEBA CON FICHA DADA//////
 		var FichaP1 = Prueba(3);
 		var FichaP2 = Prueba(9);
 		var FichaPrueba = Prueba(0);
@@ -37,7 +38,11 @@
 		alert(Tablibres);
 		alert("Terminamos Prueba");
 		*/
-		var FichaIsra1 = Prueba(9);	
+
+		///////////PROBAMOS CIERRACAMINO //////////
+		
+		var PuntosCam = CuentaPCamino(Tablero, FichaPrueba, 1);
+		alert(PuntosCam);
 	};
 
 $(function() {

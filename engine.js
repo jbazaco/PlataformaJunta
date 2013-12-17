@@ -37,7 +37,7 @@ var FichaPropiedades = {
   	ciucam2e:{nombre:"ciucam2e", u:CASTILLO, r:CAMPO,    d:CASTILLO, l:CAMPO,    cont:2 }        		//ciudad con 2 lados opuestos de campo con escudo
 }; 
 
-//defino los campos de las fichas. tengo que comprobar con el dibujo de las fichas ahora mismo no lo tengo.
+//Defino los campos de las fichas. tengo que comprobar con el dibujo de las fichas ahora mismo no lo tengo.
 //       1
 //    -------
 //  4 |1 2 3| 2
@@ -46,9 +46,6 @@ var FichaPropiedades = {
 //    -------
 //       3
 // no necesito un array porque el nombre lo consigo de la estructura de arriba.
-/*var CampoFicha = {
-uno:1, dos:2, tres:3, cuatro:4, cinco:5, seis:6, siete:7, ocho:8, nueve:9
-};*/
 
 //Creo el array y luego hago el random del número que le pasamos al array
 var Aleatorio = function(){
@@ -62,10 +59,10 @@ var Aleatorio = function(){
 	return conjunto[a];
 };
 
-/*var Prueba = function(A){
+var Prueba = function(A){
 	var conjunto = _.toArray(FichaPropiedades);
 	return conjunto[A];
-}*/
+}
 	
 //Creamos tablero
 CrearTablero = function(){
@@ -88,29 +85,100 @@ colocarficha = function(Tablero, Ficha, X, Y){
 			if ((X != 0 && Y != 0) || (X != 72 && Y != 0) || (Y != 0)){ //En cada una comprobamos las esquinas y los bordes(L-U,U,R-A)
 				if (Tablero[X][(Y-1)] != 0){//Arriba
 					if (Tablero[X][(Y-1)].d != Ficha.u)
-						colocado = 'arriba';
+						colocado = false;
 				}
 			}
 			if ((X != 72 && Y != 0) || (X != 72 && Y != 72) || (X != 0)){// (R-U,R,R-D)
 				if (Tablero[(X+1)][Y] != 0){//Derecha
 					if (Tablero[(X+1)][Y].l != Ficha.r)
-						colocado = 'derecha';				
+						colocado = false;				
 				}
 			}
 			if ((X != 0 && Y != 72) || (X != 72 && Y != 72) || (Y != 72)){//(R-D, D, L-D)
 				if (Tablero[X][(Y+1)] != 0){ //Abajo
 					if (Tablero[X][(Y+1)].u != Ficha.d)
-						colocado = 'Abajo';
+						colocado = false;
 				}
 			}
 			if ((X != 0 && Y != 0) || (X != 0 && Y != 72) || (X != 0)){//(L-D, L, L-U)
 				if (Tablero[(X-1)][Y] != 0){ //Izquierda
 					if (Tablero[(X-1)][Y].r != Ficha.l)
-						colocado = 'Izquierda';
+						colocado = false;
 				}
 			}			
 		}
 		return colocado;			
+};
+
+
+//funcion a la que se llamara a la hora de poner una ficha y comprobar si se pueden
+//atribuir puntos a ese jugador o todavía no para ello tendremos dos objetivos a cumplir:
+//			- Se cierra el castillo
+//			- Hay algun seguidor en ese castillo
+//Num = Posicion del seguidor dentro de la ficha(1..4)
+//X = Posicion inicial de la ficha eje X.   Y = Posicione inicial de la ficha eje Y. 
+CuentaPCamino = function(Tablero, Ficha, Num, X, Y){
+	var fincamino = [ //Fichas que cierran camino
+		'c3mur',
+		'mc',
+		'c4',
+		'c3',
+		'chmur',
+		'chmure'
+	];
+	var contcamino = [ //Fichas que continuan camino
+		'cc',
+		'cr',
+		'cmur',
+		'ccmur',
+		'ccmur3',
+		'ccmur2',
+		'ccmur2e'
+	];
+	puntos = 0;
+	flag = 0;
+	//Saber que aquí para probarlo solo van a entrar las fichas que estén en cont y fin camino
+	//Comprobamos donde esta la ficha -- 4 Posibilidades (U-R-D-L)
+	if(Num == 1){ //Miro Arriba
+		if (fincamino.indexOf(Ficha.nombre) != -1){ //Buscamos si la ficha esta en fincamino
+			flag = flag + 1; // Le sumamos uno porque va a ser un extremo del cierra camino
+			Recursiva(Tablero[X][(Y-1)], "abajo", flag); // Llamamos a la funcion Recursiva pasandole la siguiente ficha y donde tiene que ir
+		}
+		else if (contcamino.indexOf(Ficha.nombre) != -1)
+			Recursiva(Tablero[X][(Y-1)], "abajo", flag);
+	}	
+	else if (Num == 2){ //Miro Derecha
+		if (fincamino.indexOf(Ficha.nombre) != -1){
+			flag = flag + 1;
+			Recursiva(Tablero[(X+1)][Y], "izquerda", flag);
+		}
+		else if (contcamino.indexOf(Ficha.nombre) != -1)
+			Recursiva(Tablero[(X+1)][Y], "izquierda", flag);
+	}
+	else if (Num == 3){ //Miro Abajo
+		if (fincamino.indexOf(Ficha.nombre) != -1){
+			flag = flag + 1;
+			Recursiva(Tablero[X][(Y+1)], "arriba", flag);
+		}
+		else if (contcamino.indexOf(Ficha.nombre) != -1)
+			Recursiva(Tablero[X][(Y+1)], "arriba", flag);
+	}
+	else if (Num == 4){ //Miro Izquierda
+		if (fincamino.indexOf(Ficha.nombre) != -1){
+			flag = flag + 1;
+			Recursiva(Tablero[(X-1)][Y], "derecha", flag);			
+		}
+		else if (contcamino.indexOf(Ficha.nombre) != -1)
+			Recursiva(Tablero[(X+1)][Y], "derecha", flag);
+	}
+	else
+		alert("El Num es incorrecto");
+
+	//Funcion recursiva a la que le voy pasando la ficha siguiente
+	Recursiva = function(){
+
+	};
+	return puntos;
 };
 
 
