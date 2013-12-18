@@ -110,13 +110,23 @@ colocarficha = function(Tablero, Ficha, X, Y){
 		return colocado;			
 };
 
-
+direccamino = function(Ficha){ //Funcion que dada una ficha nos dice donde tiene los caminos
+	var direc[];
+	if (Ficha.u == 'camino')
+		direc.push('arriba');
+	else if(Ficha.r == 'camino')
+		direc.push('derecha');
+	else if(Ficha.d == 'camino')
+		direc.push('abajo');
+	else if(Ficha.l == 'camino')
+		direc.push('izquierda');
+}
 //funcion a la que se llamara a la hora de poner una ficha y comprobar si se pueden
 //atribuir puntos a ese jugador o todavía no para ello tendremos dos objetivos a cumplir:
 //			- Se cierra el castillo
 //			- Hay algun seguidor en ese castillo
 //Num = Posicion del seguidor dentro de la ficha(1..4)
-//X = Posicion inicial de la ficha eje X.   Y = Posicione inicial de la ficha eje Y. 
+//X = Posicion inicial de la ficha eje X.   Y = Posicion inicial de la ficha eje Y. 
 CuentaPCamino = function(Tablero, Ficha, Num, X, Y){
 	var fincamino = [ //Fichas que cierran camino
 		'c3mur',
@@ -135,48 +145,69 @@ CuentaPCamino = function(Tablero, Ficha, Num, X, Y){
 		'ccmur2',
 		'ccmur2e'
 	];
+	
 	puntos = 0;
 	flag = 0;
 	//Saber que aquí para probarlo solo van a entrar las fichas que estén en cont y fin camino
 	//Comprobamos donde esta la ficha -- 4 Posibilidades (U-R-D-L)
 	if(Num == 1){ //Miro Arriba
-		if (fincamino.indexOf(Ficha.nombre) != -1){ //Buscamos si la ficha esta en fincamino
-			flag = flag + 1; // Le sumamos uno porque va a ser un extremo del cierra camino
-			Recursiva(Tablero[X][(Y-1)], "abajo", flag); // Llamamos a la funcion Recursiva pasandole la siguiente ficha y donde tiene que ir
+		if ((fincamino.indexOf(Ficha.nombre) != -1) && (Tablero[X][(Y-1)] != 0)){ //Buscamos si la ficha esta en fincamino
+			flag = flag + 1; // Le sumamos uno porque va a ser un extremo del cierra camino(Va a haber dos)
+			Y = Y - 1; //Vamos para arriba
+			Recursiva(Tablero, "abajo", flag, X, Y); // Llamamos a la funcion Recursiva pasandole la siguiente ficha y donde tiene que ir
 		}
-		else if (contcamino.indexOf(Ficha.nombre) != -1)
-			Recursiva(Tablero[X][(Y-1)], "abajo", flag);
+		else if (contcamino.indexOf(Ficha.nombre) != -1){ //Aquí le diremos para donde tiene que tirar cada camino
+			Continua(Tablero, Ficha, X, Y);//Funcion para las fichas iniciales continuas(Con dos posibles direcciones).
+		}		
 	}	
 	else if (Num == 2){ //Miro Derecha
-		if (fincamino.indexOf(Ficha.nombre) != -1){
+		if ((fincamino.indexOf(Ficha.nombre) != -1) && (Tablero[(X+1)][Y] != 0)){
 			flag = flag + 1;
-			Recursiva(Tablero[(X+1)][Y], "izquerda", flag);
+			X = X + 1; //Vamos para la derecha
+			Recursiva(Tablero, "izquerda", flag, X, Y);
 		}
-		else if (contcamino.indexOf(Ficha.nombre) != -1)
-			Recursiva(Tablero[(X+1)][Y], "izquierda", flag);
+		else if (contcamino.indexOf(Ficha.nombre) != -1){
+			Continua(Tablero, Ficha, X, Y);
+		}
 	}
 	else if (Num == 3){ //Miro Abajo
-		if (fincamino.indexOf(Ficha.nombre) != -1){
+		if ((fincamino.indexOf(Ficha.nombre) != -1) && (Tablero[X][(Y+1)] != 0)){
 			flag = flag + 1;
-			Recursiva(Tablero[X][(Y+1)], "arriba", flag);
+			Y = Y + 1; //Vamos para abajo
+			Recursiva(Tablero, "arriba", flag, X, Y);
 		}
-		else if (contcamino.indexOf(Ficha.nombre) != -1)
-			Recursiva(Tablero[X][(Y+1)], "arriba", flag);
+		else if (contcamino.indexOf(Ficha.nombre) != -1){
+			Continua(Tablero, Ficha, X, Y);
+		}			
 	}
 	else if (Num == 4){ //Miro Izquierda
-		if (fincamino.indexOf(Ficha.nombre) != -1){
+		if ((fincamino.indexOf(Ficha.nombre) != -1) && (Tablero[(X-1)][Y] != 0)){
 			flag = flag + 1;
-			Recursiva(Tablero[(X-1)][Y], "derecha", flag);			
+			X = X - 1; //Vamos para la izquierda
+			Recursiva(Tablero, "derecha", flag, X, Y);			
 		}
-		else if (contcamino.indexOf(Ficha.nombre) != -1)
-			Recursiva(Tablero[(X+1)][Y], "derecha", flag);
+		else if (contcamino.indexOf(Ficha.nombre) != -1){
+			Continua(Tablero, Ficha, X, Y);
+		}	
 	}
 	else
 		alert("El Num es incorrecto");
 
 	//Funcion recursiva a la que le voy pasando la ficha siguiente
-	Recursiva = function(){
+	Recursiva = function(Tablero, prohibido, flag, X, Y){
 
+	};
+	Continua = function(Tablero, Ficha, X, Y){ 
+		var direc = direccamino(Ficha);
+		if (direc == ''){
+		
+		}
+		else if () {
+		
+		}
+		else if () {
+
+		}
 	};
 	return puntos;
 };
