@@ -70,7 +70,7 @@ var ficha_inicial;
 var seguidores = {
 		buscarLibre: function(name) {
 			return _.find(this[name], function(seg) {
-				return !seg.seHaMovido();
+				return !seg.fijado;
 			});
 		}
 };
@@ -524,6 +524,7 @@ Seguidor = function(sprite, numjugador) {
 	this.sprite=sprite;
 	this.zona="";
 	this.restado = false;
+	this.fijado = false;
 	
 	this.pulsado = function() {}
 	//tiene que comprobar que el que hace click es el jugador al que le toca jugar, si no no puede mover
@@ -685,19 +686,21 @@ Seguidor = function(sprite, numjugador) {
 	}
 	
 	this.mover = function(x,y) {
-		this.moviendo = true;
-		miJugador=1;
-		turno=1;//Falta funcion para saber de quien es el turno
-		if(turno==miJugador && this.sprite=="s"+miJugador && FichaActual.seHaMovido() 
-							&& (!FichaActual.seguidor || FichaActual.seguidor==this)){
-				this.x = x - this.w/2;
-				this.y = y - this.h/2;
-				FichaActual.pintarRejilla();
+		if (!this.fijado) {
+			this.moviendo = true;
+			miJugador=1;
+			turno=1;//Falta funcion para saber de quien es el turno
+			if(turno==miJugador && this.sprite=="s"+miJugador && FichaActual.seHaMovido() 
+								&& (!FichaActual.seguidor || FichaActual.seguidor==this)){
+					this.x = x - this.w/2;
+					this.y = y - this.h/2;
+					FichaActual.pintarRejilla();
+			}
 		}
 	}
 	
 	this.soltar = function(x,y) {
-		if (!FichaActual.seguidor){
+		if (!this.fijado && !FichaActual.seguidor){
 			if ((!FichaActual.seHaMovido() || !FichaActual.EstaEn(x,y))){
 				this.resetear();
 				FichaActual.seguidor=null;
@@ -719,7 +722,7 @@ Seguidor = function(sprite, numjugador) {
 					}
 				}
 			}	
-		}else {
+		}else if (!this.fijado) {
 			if ((!FichaActual.seHaMovido() || !FichaActual.EstaEn(x,y))){
 				this.resetear();
 			}else{
@@ -744,6 +747,7 @@ Seguidor = function(sprite, numjugador) {
 		this.x=this.inicialx;
 		this.y=this.inicialy;
 		this.zona = "";
+		this.fijado = false;
 		if (FichaActual.seguidor === this) FichaActual.seguidor = null;
 		if (this.restado){
 			Game.boards[numjugador].num++;	
@@ -773,6 +777,7 @@ Seguidor = function(sprite, numjugador) {
 		this.resetear();
 		this.cuadrado = cuadrado;
 		this.zona = zona;
+		this.fijado = true;
 		Game.boards[numjugador].num--;
 		this.restado=true;
 		this.recalcular(ficha);
