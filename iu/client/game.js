@@ -85,15 +85,14 @@ playGame = function(){
 	Game.boards.length=0;
 	Game.setBoard(Game.boards.length, BotonAyuda);
 	var numjugadores=5; //nos lo tiene que dar la plataforma de momento es un ejemplo
+	var numseg;
 	for (i=1;i<=numjugadores;i++){
-		Game.setBoard(Game.boards.length, new NumSeguidores(i));
+		numseg = new NumSeguidores(i);
+		Game.setBoard(Game.boards.length, numseg);
 		Game.setBoard(Game.boards.length, new GamePoints(i));
-	}
-	
-	for (i=1;i<=numjugadores;i++){
 		seguidores["s"+i] = [];
 		for (k=1;k<=7;k++){
-			seguidores["s"+i][k-1] = new Seguidor("s"+i, i);
+			seguidores["s"+i][k-1] = new Seguidor("s"+i, i, numseg);
 			Game.setBoard(Game.boards.length, seguidores["s"+i][k-1]);
 		}
 	}
@@ -510,7 +509,7 @@ FichaActual = new function() {
 };
 
 
-Seguidor = function(sprite, numjugador) {
+Seguidor = function(sprite, numjugador, contador) {
 	
 	this.inicialx=900;
 	this.inicialy=200;
@@ -525,6 +524,7 @@ Seguidor = function(sprite, numjugador) {
 	this.zona="";
 	this.restado = false;
 	this.fijado = false;
+	this.contador = contador;
 	
 	this.pulsado = function() {}
 	//tiene que comprobar que el que hace click es el jugador al que le toca jugar, si no no puede mover
@@ -716,7 +716,7 @@ Seguidor = function(sprite, numjugador) {
 						console.log(this.zona);
 						FichaActual.seguidor=this;
 						if (!this.restado){
-							Game.boards[numjugador].num--;
+							this.contador.decrementar();
 							this.restado=true;
 						}
 					}
@@ -750,7 +750,7 @@ Seguidor = function(sprite, numjugador) {
 		this.fijado = false;
 		if (FichaActual.seguidor === this) FichaActual.seguidor = null;
 		if (this.restado){
-			Game.boards[numjugador].num++;	
+			this.contador.incrementar();	
 			this.restado=false;
 		}
 	}
@@ -778,7 +778,7 @@ Seguidor = function(sprite, numjugador) {
 		this.cuadrado = cuadrado;
 		this.zona = zona;
 		this.fijado = true;
-		Game.boards[numjugador].num--;
+		this.contador.decrementar();
 		this.restado=true;
 		this.recalcular(ficha);
 	}
@@ -834,6 +834,14 @@ NumSeguidores = function(numjugador) {
 	this.soltar = function(x,y) {	}
 
 	this.pulsado = function() {	}
+	
+	this.decrementar = function() {
+		this.num--;
+	}
+
+	this.incrementar = function() {
+		this.num++;
+	}
 
 	this.draw = function(ctx) {
 	  	ctx.save();
