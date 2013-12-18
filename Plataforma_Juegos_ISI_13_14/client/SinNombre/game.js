@@ -76,9 +76,7 @@ var seguidores = {
 };
 
 startGame = function() {
-console.log('8');
 	Game.setBoard(0,new TitleScreen("Carcassone.", "Haga click para empezar.",playGame));
-console.log('9');	
 }
 
 
