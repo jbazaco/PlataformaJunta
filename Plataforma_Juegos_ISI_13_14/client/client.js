@@ -199,7 +199,7 @@ Template.games.events={
 	'click a#game_3':function(){
 		Session.set('Current_Game_id',3)
 		$(".canvas").hide();
-		$('#game3').show(500);
+		$('#tablero').show(500);
 
 		$("#selectedgame").html("Carcassonne");	
 		$("#container2").tabs( "option", "active", 1);
