@@ -85,7 +85,7 @@ console.log('9');
 
 playGame = function(){
 	Game.boards.length=0;
-	Game.setBoard(Game.boards.length, BotonAyuda);
+	/*Game.setBoard(Game.boards.length, BotonAyuda);
 	var numjugadores=5; //nos lo tiene que dar la plataforma de momento es un ejemplo
 	var numseg;
 	for (i=1;i<=numjugadores;i++){
@@ -104,12 +104,12 @@ playGame = function(){
 	Game.setBoard(Game.boards.length,BotonFinTurno);
 	
 	ficha_inicial = new Ficha(394, 263,"cmur");
-	Game.setBoard(Game.boards.length, ficha_inicial);
+	Game.setBoard(Game.boards.length, ficha_inicial);*/
 	Game.setBoard(Game.boards.length,Fondo);
-	ficha_inicial.buscar_huecos();
+	//ficha_inicial.buscar_huecos();
 	nfich++;
 
-	Deps.autorun(function(){
+	/*Deps.autorun(function(){
 		var idpartida = Session.get("Current_Game");
 		var movs = Partidas.findOne(idpartida).jugadas;
 		console.log(movs);
@@ -117,8 +117,8 @@ playGame = function(){
         movs.forEach(function(m) {
 			nfich++;
 			gestionarMov(m);
-		});*/
-	});
+		});
+	});*/
 
 }
 

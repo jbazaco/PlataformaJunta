@@ -6,14 +6,13 @@ Game = new function() {
 	this.initialize = function(canvasElementId,sprite_data,callback) {
 		console.log('2');
 		this.canvas = document.getElementById(canvasElementId);
-		//console.log(canvas)
 		console.log("2.5");
 		this.width = this.canvas.width;
 		console.log("2.6");
 		this.height= this.canvas.height;
-		console.log("2.7");
+		console.log("2.5");
+
 		this.ctx = this.canvas.getContext && this.canvas.getContext('2d');
-		console.log("2.8");
 		if(!this.ctx) { return alert("Please upgrade your browser to play"); }
 		console.log('3');
 		this.loop(); 
