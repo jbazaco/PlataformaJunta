@@ -125,7 +125,7 @@ Template.options.events={
 				else{
 					Meteor.subscribe(result);
 					Session.set("Current_Game",result);
-					var canvas = "Canvas"+result;
+					var canvas = "Canvas_"+result;
 					$("#container").append("<canvas id='"+canvas+"' class='canvas' width='1150' height='1150'></canvas>");
 					$(".canvas").hide();
 					console.log(canvas)

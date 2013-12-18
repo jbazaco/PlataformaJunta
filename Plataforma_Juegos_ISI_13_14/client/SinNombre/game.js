@@ -8,7 +8,7 @@ Meteor.startup(function(){
 const FICHA_H = 62;
 const FICHA_W = 62;
 
-var sprites = {
+sprites = {
 	m: { sx: 253, sy: 44, w: FICHA_W, h: FICHA_H, si:"campo", sc:"campo", sd:"campo",
 		ci:"campo", cc:"monasterio", cd:"campo", ii:"campo", ic:"campo", id:"campo"},		//monasterio
 	mc: { sx: 331, sy: 44, w: FICHA_W, h: FICHA_H, si:"campo", sc:"campo", sd:"campo",
@@ -81,6 +81,8 @@ console.log('8');
 console.log('9');	
 }
 
+
+
 playGame = function(){
 	Game.boards.length=0;
 	Game.setBoard(Game.boards.length, BotonAyuda);
@@ -107,14 +109,15 @@ playGame = function(){
 	ficha_inicial.buscar_huecos();
 	nfich++;
 
-	/*Se subscribe a la partida*/
-	Meteor.subscribe('mov_partida');
 	Deps.autorun(function(){
-		var movs = Movimientos.find({nmove: {$gte: nfich-1}}, {sort: {nmove:1}});
+		var idpartida = Session.get("Current_Game");
+		var movs = Partidas.findOne(idpartida).jugadas;
+		console.log(movs);
+ /*Movimientos.find({nmove: {$gte: nfich-1}}, {sort: {nmove:1}});
         movs.forEach(function(m) {
 			nfich++;
 			gestionarMov(m);
-		});
+		});*/
 	});
 
 }
@@ -885,9 +888,20 @@ GamePoints = function(numjugador) {
 	};
 };
 
-//!! LLAMADA AL CANVAS AQUI
-$(function() {
-	console.log('1')
-    Game.initialize("tablero",sprites,startGame);
-	console.log('1.5');
-});
+
+	Deps.autorun(function(){
+		console.log("01");
+		var idpartida = Session.get("Current_Game");
+		if (idpartida){
+			var partida = Partidas.findOne(idpartida);
+			console.log(partida);
+			var canv = partida.canvas;
+			console.log(canv);
+			Game.initialize(canv,sprites,startGame);
+			console.log("04");
+		}
+		console.log("02");
+	});
+
+
+

@@ -126,7 +126,7 @@ Meteor.methods({
 			puntuacion:[0]
 		})
 
-		var sid = "__Partida"+id+"__";
+		var sid = id.toString();
 		var mycanvas= "Canvas_"+sid;
 		console.log(mycanvas)
 		Partidas.update(id,{$set:{canvas:mycanvas}})
