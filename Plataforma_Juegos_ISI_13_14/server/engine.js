@@ -111,7 +111,7 @@ colocarficha = function(Tablero, Ficha, X, Y){
 };
 
 direccamino = function(Ficha){ //Funcion que dada una ficha nos dice donde tiene los caminos
-	var direc[];
+	var direc=[];
 	if (Ficha.u == 'camino')
 		direc.push('arriba');
 	else if(Ficha.r == 'camino')

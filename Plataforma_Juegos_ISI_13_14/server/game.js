@@ -44,7 +44,3 @@
 		var PuntosCam = CuentaPCamino(Tablero, FichaPrueba, 1);
 		alert(PuntosCam);
 	};
-
-$(function() {
-	EjecutaTotal();
-});

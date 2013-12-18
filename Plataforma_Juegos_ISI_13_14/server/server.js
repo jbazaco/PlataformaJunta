@@ -173,16 +173,16 @@ Meteor.methods({
 		Partidas.update(id,{$set:{estado:"Terminada"}});
 
 		return ("__Partida"+id+"__");
-	}
+	},
 	//Disponible
 	DevuelveFicha:function(){
 		return Aleatorio();
-	}
+	},
 	//Hay que pasar una Tablero dado de momento, hare que nosotros cojamos el tablero de plataforma
 	ColocaFicha:function(Tablero, Ficha, x, y){  // Dado una ficha y dos posiciones, se devuelve un booleano para si se puede o no colocar esa ficha
 										 
 		return colocarficha();
-	}
+	},
 	
 	ColocarSeguidor:function(ficha, campoficha, rotacion, x, y){
 		return 1;	//funcion que devuelve si se puede poner un seguidor en la posicion de la ficha correspondiente.

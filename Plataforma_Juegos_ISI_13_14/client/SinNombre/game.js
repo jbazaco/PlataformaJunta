@@ -888,7 +888,7 @@ GamePoints = function(numjugador) {
 	};
 };
 
-
+var idcanvas;
 	Deps.autorun(function(){
 		console.log("01");
 		var idpartida = Session.get("Current_Game");
@@ -897,8 +897,11 @@ GamePoints = function(numjugador) {
 			console.log(partida);
 			var canv = partida.canvas;
 			console.log(canv);
-			Game.initialize(canv,sprites,startGame);
-			console.log("04");
+			if (idcanvas !== canv) {
+				idcanvas = canv;
+				Game.initialize(canv,sprites,startGame);
+				console.log("04");
+			}
 		}
 		console.log("02");
 	});
