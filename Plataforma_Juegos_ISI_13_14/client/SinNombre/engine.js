@@ -19,8 +19,10 @@ Game = new function() {
 		console.log('4');
 
 		this.canvas.addEventListener('mousedown', function(event) {
-			var x = event.pageX - Game.canvas.offsetLeft;
-			var y = event.pageY - Game.canvas.offsetTop;
+
+var x = event.pageX - Game.canvas.offsetLeft;
+
+				var y = event.pageY - Game.canvas.offsetTop;
 			
 			this.selec_elem = elemInPos(x,y);
 			this.anularClick=false;
@@ -28,7 +30,8 @@ Game = new function() {
 
 		this.canvas.addEventListener('mouseup', function(event) {
 			if(this.selec_elem && this.moviendoRaton) { //solo entra si el raton se ha estado moviendo
-				var x = event.pageX - Game.canvas.offsetLeft;
+var x = event.pageX - Game.canvas.offsetLeft;
+
 				var y = event.pageY - Game.canvas.offsetTop;
 				this.selec_elem.soltar(x,y);
 				this.selec_elem = null;
@@ -38,7 +41,8 @@ Game = new function() {
 
 		this.canvas.addEventListener('mousemove', function(event) {
 			if(this.selec_elem) {
-				var x = event.pageX - Game.canvas.offsetLeft;
+var x = event.pageX - Game.canvas.offsetLeft;
+
 				var y = event.pageY - Game.canvas.offsetTop;
 				this.selec_elem.mover(x,y) 
 				this.anularClick=true;
@@ -49,7 +53,8 @@ Game = new function() {
 
 		this.canvas.addEventListener('click', function(event) {
 			if(!this.anularClick && this.selec_elem){
-				var x = event.pageX - Game.canvas.offsetLeft;
+var x = event.pageX - Game.canvas.offsetLeft;
+
 				var y = event.pageY - Game.canvas.offsetTop;
 				
 				this.selec_elem.pulsado();
