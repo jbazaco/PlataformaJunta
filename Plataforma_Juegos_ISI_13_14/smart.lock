@@ -1,0 +1,19 @@
+{
+  "meteor": {},
+  "dependencies": {
+    "basePackages": {
+      "jquery-ui": {},
+      "jquery-ui-bootstrap": {}
+    },
+    "packages": {
+      "jquery-ui": {
+        "git": "https://github.com/TimHeckel/meteor-jquery-ui.git",
+        "tag": "v1.9.2"
+      },
+      "jquery-ui-bootstrap": {
+        "git": "https://github.com/TimHeckel/meteor-jquery-ui-bootstrap.git",
+        "tag": "v0.1.2"
+      }
+    }
+  }
+}
