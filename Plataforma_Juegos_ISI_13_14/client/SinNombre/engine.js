@@ -26,6 +26,7 @@ Game = new function() {
 			
 			this.selec_elem = elemInPos(x,y);
 			this.anularClick=false;
+			this.moviendoRaton=false;
 		}, false);
 
 		this.canvas.addEventListener('mouseup', function(event) {
