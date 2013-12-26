@@ -264,5 +264,14 @@ CierraCastillo = function(Tablero, Ficha, Num, X, Y){
 		'ciudad'
 	];
 	
+	var fichasConEscudo = [
+		'ciudad',
+		'chmure',
+		'ccmur2e',
+		'murcame',
+		'ciucame',
+		'ciucam2e'
+	];
+	
 	
 };
