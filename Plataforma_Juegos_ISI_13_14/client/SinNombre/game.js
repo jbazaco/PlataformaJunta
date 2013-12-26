@@ -105,18 +105,17 @@ playGame = function(){
 	Game.setBoard(Game.boards.length, ficha_inicial);
 	Game.setBoard(Game.boards.length,Fondo);
 	ficha_inicial.buscar_huecos();
-	nfich++;
+	nfich = 1;
 
-	/*Deps.autorun(function(){
+	Deps.autorun(function(){
 		var idpartida = Session.get("Current_Game");
 		var movs = Partidas.findOne(idpartida).jugadas;
 		console.log(movs);
- /*Movimientos.find({nmove: {$gte: nfich-1}}, {sort: {nmove:1}});
-        movs.forEach(function(m) {
+		for (i = nfich-1; i < movs.length; i++) { 
 			nfich++;
-			gestionarMov(m);
-		});
-	});*/
+			gestionarMov(movs[i]);
+		}
+	});
 
 }
 
@@ -209,6 +208,8 @@ TitleScreen = function TitleScreen(title,subtitle,callback) {
 	    ctx.fillText(subtitle,Game.width/2+5,Game.height/2 + 100);
         }
 }
+
+
 BotonFinTurno = new function() {
 	this.x = 940;
 	this.y = 200;
@@ -235,7 +236,8 @@ BotonFinTurno = new function() {
 					scuadrado = FichaActual.seguidor.cuadrado;
 					sszona = FichaActual.seguidor.zona;
 				}
-				Movimientos.insert({nmove: nfich-1, sprite: FichaActual.sprite, 
+				Meteor.call('RegistrarMovimiento', Session.get("Current_Game"),
+									'minick',{nmove: nfich-1, sprite: FichaActual.sprite, 
 									rotacion: FichaActual.rotacion, x: debajo.coordenadas.x , 
 									y: debajo.coordenadas.y, ssprite: ssprite, scuadrado: scuadrado,
 									szona: szona});
@@ -479,7 +481,7 @@ FichaActual = new function() {
 		this.sprite = "interrogante";
 		this.x = this.inicialx;
 		this.y = this.inicialy;
-		this.seguidor.resetear();
+		if(this.seguidor) this.seguidor.resetear();
 		this.seguidor=null;
 		this.rotacion=0;	
 	}
@@ -887,22 +889,22 @@ GamePoints = function(numjugador) {
 };
 
 var idcanvas;
-	Deps.autorun(function(){
-		console.log("01");
-		var idpartida = Session.get("Current_Game");
-		if (idpartida){
-			var partida = Partidas.findOne(idpartida);
-			console.log(partida);
-			var canv = partida.canvas;
-			console.log(canv);
-			if (idcanvas !== canv) {
-				idcanvas = canv;
-				Game.initialize(canv,sprites,startGame);
-				console.log("04");
-			}
+Deps.autorun(function(){
+	console.log("01");
+	var idpartida = Session.get("Current_Game");
+	if (idpartida){
+		var partida = Partidas.findOne(idpartida);
+		console.log(partida);
+		var canv = partida.canvas;
+		console.log(canv);
+		if (idcanvas !== canv) {
+			idcanvas = canv;
+			Game.initialize(canv,sprites,startGame);
+			console.log("04");
 		}
-		console.log("02");
-	});
+	}
+	console.log("02");
+});
 
 
 

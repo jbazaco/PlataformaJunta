@@ -58,7 +58,6 @@ Game = new function() {
 				this.selec_elem.pulsado();
 				
 				this.selec_elem = null;
-				this.anularClick=false;
 			}
 		}, false);
 		SpriteSheet.load (sprite_data,callback);
