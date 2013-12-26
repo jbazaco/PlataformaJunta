@@ -253,4 +253,12 @@ CierraCastillo = function(Tablero, Ficha, Num, X, Y){
 		'murcame'
 	];
 	
+	var fichas3Lados = [
+		'ciucam',
+		'chmur',
+		'chmure',
+		'ciucame'
+	];
+	
+	
 };
