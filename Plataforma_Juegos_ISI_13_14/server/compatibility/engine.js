@@ -225,6 +225,29 @@ CuentaPCamino = function(Tablero, Ficha, Num, X, Y){
 	return puntos;
 };
 
-
-
-
+//función que comprueba si se ha cerrado el castillo y devuelve la puntuación.
+//Para ello dos pasos:
+	//ver si se ha cerrado el castillo.
+	//ver si hay un caballero en el castillo cerrado.
+CierraCastillo = function(Tablero, Ficha, Num, X, Y){
+	var fichaCastillo =[
+		'murcam',
+		'c3mur',
+		'mur2',
+		'ciudad',
+		'ciucam',
+		'chmur',
+		'mur2c',
+		'mur1',
+		'cmur',
+		'ccmur',
+		'ccmur3',
+		'ciucam2',
+		'ccmur2',
+		'chmure',
+		'ccmur2e',
+		'murcame',
+		'ciucame',
+		'ciucam2e'
+	];
+};
