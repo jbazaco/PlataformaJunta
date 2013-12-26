@@ -260,5 +260,9 @@ CierraCastillo = function(Tablero, Ficha, Num, X, Y){
 		'ciucame'
 	];
 	
+	var ficha4Lados = [
+		'ciudad'
+	];
+	
 	
 };
