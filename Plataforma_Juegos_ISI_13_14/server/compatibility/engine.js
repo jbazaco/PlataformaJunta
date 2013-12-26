@@ -239,9 +239,18 @@ CierraCastillo = function(Tablero, Ficha, Num, X, Y){
 		'ccmur3'
 	];
 	
-	var fichas2Ladoscastillo = [
+	var fichas2LadosCastillo = [
 		'mur2',
 		'ciucam2',
 		'ciucam2e'
 	];
+	
+	var fichas2LadosCastilloConsecutivo = [
+		'murcam',
+		'mur2c',
+		'ccmur2',
+		'ccmur2e',
+		'murcame'
+	];
+	
 };
