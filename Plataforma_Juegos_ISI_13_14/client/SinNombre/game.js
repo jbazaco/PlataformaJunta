@@ -106,18 +106,8 @@ playGame = function(){
 	Game.setBoard(Game.boards.length,Fondo);
 	ficha_inicial.buscar_huecos();
 	nfich = 1;
-
-	Deps.autorun(function(){
-		var idpartida = Session.get("Current_Game");
-		var movs = Partidas.findOne(idpartida).jugadas;
-		console.log(movs);
-		for (i = nfich-1; i < movs.length; i++) { 
-			nfich++;
-			gestionarMov(movs[i]);
-		}
-	});
-
 }
+
 
 gestionarMov = function(m) {
 	var debajo = elemInPos(ficha_inicial.x+m.x*ficha_inicial.w+ficha_inicial.w/2,
@@ -888,9 +878,8 @@ GamePoints = function(numjugador) {
 	};
 };
 
-var idcanvas;
+var idcanvas = null;
 Deps.autorun(function(){
-	console.log("01");
 	var idpartida = Session.get("Current_Game");
 	if (idpartida){
 		var partida = Partidas.findOne(idpartida);
@@ -898,13 +887,19 @@ Deps.autorun(function(){
 		var canv = partida.canvas;
 		console.log(canv);
 		if (idcanvas !== canv) {
+			//Carga el tablero de la partida seleccionada
+			nfich = 0;
 			idcanvas = canv;
 			Game.initialize(canv,sprites,startGame);
-			console.log("04");
+		} else if (nfich > 0) {
+			//Actualiza las fichas segun los movimientos registrados
+			var movs = Partidas.findOne(idpartida).jugadas;
+			for (i = nfich-1; i < movs.length; i++) { 
+				nfich++;
+				gestionarMov(movs[i]);
+			}
 		}
 	}
-	console.log("02");
 });
-
 
 
