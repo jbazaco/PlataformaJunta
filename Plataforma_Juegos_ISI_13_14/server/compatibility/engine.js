@@ -231,6 +231,7 @@ CuentaPCamino = function(Tablero, Ficha, Num, X, Y){
 	//ver si hay un caballero en el castillo cerrado.
 CierraCastillo = function(Tablero, Ficha, Num, X, Y){
 	
+	//POSIBLES ESTRUCTURAS DE DATOS A USAR.
 	var fichas1LadoCastillo =[
 		'c3mur',
 		'mur1',
@@ -273,5 +274,19 @@ CierraCastillo = function(Tablero, Ficha, Num, X, Y){
 		'ciucam2e'
 	];
 	
+	var fichasSinEscudo = [
+		'murcam',
+		'c3mur',
+		'mur2',
+		'ciucam',
+		'chmur',
+		'mur2c',
+		'mur1',
+		'cmur',
+		'ccmur',
+		'ccmur3',
+		'ciucam2',
+		'ccmur2'
+	];
 	
 };
