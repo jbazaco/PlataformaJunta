@@ -7,6 +7,7 @@ Meteor.startup(function(){
 //Altura y anchura de una ficha
 const FICHA_H = 62;
 const FICHA_W = 62;
+const MAX_JUGADORES = 5;
 
 sprites = {
 	m: { sx: 253, sy: 44, w: FICHA_W, h: FICHA_H, si:"campo", sc:"campo", sd:"campo",
@@ -923,6 +924,9 @@ Deps.autorun(function(){
 		if (board1 instanceof TitleScreen) {
 			if (partida.estado === "Lobby") {
 				board1.jugadores = partida.jugadores;
+				if(partida.jugadores.length >= MAX_JUGADORES) {
+					board1.pulsado();
+				}
 			} else {
 				playGame();
 			}
