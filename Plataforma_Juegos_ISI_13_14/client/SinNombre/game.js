@@ -182,6 +182,7 @@ TitleScreen = function TitleScreen(title,subtitle,callback) {
 	this.soltar = function(x,y) {	}
 
 	this.pulsado = function() {
+		Meteor.call("EmpezarPartida", Session.get("Current_Game"));
 		callback();
 		//Informar a Plataforma que se ha metido un jugador a la partida y espera rivales si no estan todos.
 	}
