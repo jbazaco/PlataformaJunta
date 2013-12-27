@@ -166,6 +166,7 @@ MenuAyuda = new function(){
         }
 
 }
+
 TitleScreen = function TitleScreen(title,subtitle,callback) {
     
 	this.x = 0;
@@ -174,11 +175,7 @@ TitleScreen = function TitleScreen(title,subtitle,callback) {
 	this.h = 650;
 	this.sprite = "";
 	this.jugadores = [];
-	this.jugadores[0] = Meteor.user().username + " (yo)";
-	
-	this.nuevoJugador = function(nombre) {
-		this.jugadores[this.jugadores.length] = nombre;
-	}
+	this.jugadores[0] = Meteor.user().username;
 
 	this.mover = function(x,y) {	}
 	
@@ -898,20 +895,35 @@ Deps.autorun(function(){
 	var idpartida = Session.get("Current_Game");
 	if (idpartida){
 		var partida = Partidas.findOne(idpartida);
-		console.log(partida);
 		var canv = partida.canvas;
-		console.log(canv);
 		if (idcanvas !== canv) {
 			//Carga el tablero de la partida seleccionada
 			nfich = 0;
 			idcanvas = canv;
-			Game.initialize(canv,sprites,startGame);
+			Game.initialize(canv,sprites,startGame);//NO DIFERENCIA SI OBSERVA PARTIDA O LA JUEGA POR AHORA/TODO/
 		} else if (nfich > 0) {
 			//Actualiza las fichas segun los movimientos registrados
-			var movs = Partidas.findOne(idpartida).jugadas;
+			var movs = partida.jugadas;
 			for (i = nfich-1; i < movs.length; i++) { 
 				nfich++;
 				gestionarMov(movs[i]);
+			}
+		}
+	}
+});
+
+//Si esta en la pantalla de inicio se encarga de añadir jugadores nuevos
+//o ejecuta playGame si la partida ya está empezada o ha acabado
+Deps.autorun(function(){
+	var idpartida = Session.get("Current_Game");
+	if (idpartida){
+		var partida = Partidas.findOne(idpartida);
+		var board1 = Game.boards[0];
+		if (board1 instanceof TitleScreen) {
+			if (partida.estado === "Lobby") {
+				board1.jugadores = partida.jugadores;
+			} else {
+				playGame();
 			}
 		}
 	}
