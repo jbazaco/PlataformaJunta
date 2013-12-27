@@ -76,7 +76,8 @@ var seguidores = {
 };
 
 startGame = function() {
-	Game.setBoard(0,new TitleScreen("Carcassone.", "Haga click para empezar.",playGame));
+	Game.setBoard(0,new TitleScreen("Carcassonline.",
+				"Haga click para empezar sin esperar a más jugadores.",playGame));
 }
 
 
@@ -172,6 +173,12 @@ TitleScreen = function TitleScreen(title,subtitle,callback) {
 	this.w = 1070;
 	this.h = 650;
 	this.sprite = "";
+	this.jugadores = [];
+	this.jugadores[0] = Meteor.user().username + " (yo)";
+	
+	this.nuevoJugador = function(nombre) {
+		this.jugadores[this.jugadores.length] = nombre;
+	}
 
 	this.mover = function(x,y) {	}
 	
@@ -183,20 +190,28 @@ TitleScreen = function TitleScreen(title,subtitle,callback) {
 	}
 
 
-        this.draw = function(ctx) {
-	    ctx.fillStyle = "#FFFFFF";
-	    ctx.textAlign = "center";
-	
-	    Game.ctx.fillStyle = "#000000";
-	    Game.ctx.fillRect(0,0,1070,650);
+	this.draw = function(ctx) {
+		ctx.fillStyle = "#FFFFFF";
+		ctx.textAlign = "center";
 
-	    ctx.fillStyle= "#c9c9c9";
-	    ctx.font = "bold 100px arial";
-	    ctx.fillText(title,Game.width/2,Game.height/2);
+		Game.ctx.fillStyle = "#000000";
+		Game.ctx.fillRect(0,0,Game.width,Game.height);
+		ctx.fillStyle= "#c9c9c9";
+		ctx.font = "bold 100px arial";
+		ctx.fillText(title,Game.width/2, 150);
+		ctx.font = "bold 40px arial";
 
-	    ctx.font = "bold 75px arial";
-	    ctx.fillText(subtitle,Game.width/2+5,Game.height/2 + 100);
-        }
+		ctx.textAlign = "left";
+		ctx.fillText(subtitle,20, 230);
+		ctx.font = "bold 40px arial";
+		
+		ctx.fillText("Jugadores actuales:", 20, 300);
+		
+		ctx.font = "bold 30px arial";
+		for (i = 0; i<this.jugadores.length; i++) {
+			ctx.fillText(this.jugadores[i],30,360 + 50*i);
+		}
+	}
 }
 
 
