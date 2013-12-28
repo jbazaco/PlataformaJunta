@@ -86,12 +86,15 @@ startGame = function() {
 playGame = function(){
 	Game.boards.length=0;
 	Game.setBoard(Game.boards.length, BotonAyuda);
-	var numjugadores=5; //nos lo tiene que dar la plataforma de momento es un ejemplo
+	var jugadores = Partidas.findOne(Session.get("Current_Game")).jugadores;
+	var numjugadores = jugadores.length <= MAX_JUGADORES ? jugadores.length:MAX_JUGADORES;
 	var numseg;
+	var nick;
 	for (i=1;i<=numjugadores;i++){
 		numseg = new NumSeguidores(i);
 		Game.setBoard(Game.boards.length, numseg);
-		Game.setBoard(Game.boards.length, new GamePoints(i));
+		nick = jugadores[i-1]||"Maquina"+i;
+		Game.setBoard(Game.boards.length, new GamePoints(i, nick));
 		seguidores["s"+i] = [];
 		for (k=1;k<=7;k++){
 			seguidores["s"+i][k-1] = new Seguidor("s"+i, i, numseg);
@@ -794,7 +797,7 @@ Seguidor = function(sprite, numjugador, contador) {
 //Devuelve el elemento dibujado en (x,y) a partir del board n
 //El elemento debe tener una funcion pulsado, mover y soltar
 elemInPos = function(x, y, n) {
-	if (!n || n < 0) n = 0; //n<1 para ignorar GamePoints
+	if (!n || n < 0) n = 0;
 
 	//len-1 para ignorar el fondo
 	for(var i=n,len = Game.boards.length;i<len;i++) {
@@ -862,13 +865,14 @@ NumSeguidores = function(numjugador) {
 	};
 };
 
-GamePoints = function(numjugador) {
+GamePoints = function(numjugador, nick) {
 	this.points = 0;
-	this.x = 960;
+	this.x = 940;
 	this.y = 220 +numjugador*60;
 	this.w = 0;
 	this.h = 0;
 	this.sprite = "";
+	this.nick = nick;
 
 	this.mover = function(x,y) {	}
 	
@@ -886,7 +890,7 @@ GamePoints = function(numjugador) {
 	 	var txt = "" + this.points;
 	  	var i = pointsLength - txt.length, zeros = "";
 	  	while(i-- > 0) { zeros += "0"; }
-
+			ctx.fillText(this.nick, this.x, this.y-20);
 	    	ctx.fillText(zeros + txt,this.x,this.y);
 	    	ctx.restore();
 	};

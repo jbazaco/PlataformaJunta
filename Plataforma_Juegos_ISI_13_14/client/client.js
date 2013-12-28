@@ -115,7 +115,7 @@ Template.options.events={
 			jugadores.push(user);
 			if(n_players>0){
 				for(var i=0; i<n_players; i++){
-					jugadores.push('" "');				
+					jugadores.push('');				
 				}
 			}
 			Meteor.call("SuscribirPartida",jugadores,opciones,[],name,function(error,result){
