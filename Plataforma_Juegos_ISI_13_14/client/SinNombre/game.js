@@ -92,7 +92,7 @@ playGame = function(){
 	for (i=1;i<=numjugadores;i++){
 		numseg = new NumSeguidores(i);
 		Game.setBoard(Game.boards.length, numseg);
-		Game.setBoard(Game.boards.length, new GamePoints(i, jugadores[i]));
+		Game.setBoard(Game.boards.length, new GamePoints(i, jugadores[i-1]));
 		seguidores["s"+i] = [];
 		for (k=1;k<=7;k++){
 			seguidores["s"+i][k-1] = new Seguidor("s"+i, i, numseg);
@@ -888,8 +888,8 @@ GamePoints = function(numjugador, nick) {
 	 	var txt = "" + this.points;
 	  	var i = pointsLength - txt.length, zeros = "";
 	  	while(i-- > 0) { zeros += "0"; }
-
-	    	ctx.fillText(this.nick + " " + zeros + txt,this.x,this.y);
+			ctx.fillText(this.nick, this.x, this.y-20);
+	    	ctx.fillText(zeros + txt,this.x,this.y);
 	    	ctx.restore();
 	};
 };
