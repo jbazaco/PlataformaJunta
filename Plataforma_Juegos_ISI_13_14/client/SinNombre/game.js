@@ -92,7 +92,7 @@ playGame = function(){
 	for (i=1;i<=numjugadores;i++){
 		numseg = new NumSeguidores(i);
 		Game.setBoard(Game.boards.length, numseg);
-		Game.setBoard(Game.boards.length, new GamePoints(i));
+		Game.setBoard(Game.boards.length, new GamePoints(i, jugadores[i]));
 		seguidores["s"+i] = [];
 		for (k=1;k<=7;k++){
 			seguidores["s"+i][k-1] = new Seguidor("s"+i, i, numseg);
@@ -795,7 +795,7 @@ Seguidor = function(sprite, numjugador, contador) {
 //Devuelve el elemento dibujado en (x,y) a partir del board n
 //El elemento debe tener una funcion pulsado, mover y soltar
 elemInPos = function(x, y, n) {
-	if (!n || n < 0) n = 0; //n<1 para ignorar GamePoints
+	if (!n || n < 0) n = 0;
 
 	//len-1 para ignorar el fondo
 	for(var i=n,len = Game.boards.length;i<len;i++) {
@@ -863,13 +863,14 @@ NumSeguidores = function(numjugador) {
 	};
 };
 
-GamePoints = function(numjugador) {
+GamePoints = function(numjugador, nick) {
 	this.points = 0;
 	this.x = 960;
 	this.y = 220 +numjugador*60;
 	this.w = 0;
 	this.h = 0;
 	this.sprite = "";
+	this.nick = nick;
 
 	this.mover = function(x,y) {	}
 	
@@ -888,7 +889,7 @@ GamePoints = function(numjugador) {
 	  	var i = pointsLength - txt.length, zeros = "";
 	  	while(i-- > 0) { zeros += "0"; }
 
-	    	ctx.fillText(zeros + txt,this.x,this.y);
+	    	ctx.fillText(this.nick + " " + zeros + txt,this.x,this.y);
 	    	ctx.restore();
 	};
 };
