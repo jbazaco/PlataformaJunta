@@ -89,10 +89,12 @@ playGame = function(){
 	var jugadores = Partidas.findOne(Session.get("Current_Game")).jugadores;
 	var numjugadores = jugadores.length <= MAX_JUGADORES ? jugadores.length:MAX_JUGADORES;
 	var numseg;
+	var nick;
 	for (i=1;i<=numjugadores;i++){
 		numseg = new NumSeguidores(i);
 		Game.setBoard(Game.boards.length, numseg);
-		Game.setBoard(Game.boards.length, new GamePoints(i, jugadores[i-1]));
+		nick = jugadores[i-1]||"Maquina"+i;
+		Game.setBoard(Game.boards.length, new GamePoints(i, nick));
 		seguidores["s"+i] = [];
 		for (k=1;k<=7;k++){
 			seguidores["s"+i][k-1] = new Seguidor("s"+i, i, numseg);
@@ -865,7 +867,7 @@ NumSeguidores = function(numjugador) {
 
 GamePoints = function(numjugador, nick) {
 	this.points = 0;
-	this.x = 960;
+	this.x = 940;
 	this.y = 220 +numjugador*60;
 	this.w = 0;
 	this.h = 0;
