@@ -188,9 +188,12 @@ TitleScreen = function TitleScreen(title,subtitle,callback) {
 	this.pulsado = function() {
 		Meteor.call("EmpezarPartida", Session.get("Current_Game"));
 		callback();
-		//Informar a Plataforma que se ha metido un jugador a la partida y espera rivales si no estan todos.
 	}
-
+	
+	//Si estan todos los jugadores se empieza (para el caso de todos jugadores maquina)
+	if(Partidas.findOne(Session.get("Current_Game")).jugadores.length >= MAX_JUGADORES) {
+		this.pulsado();
+	}
 
 	this.draw = function(ctx) {
 		ctx.fillStyle = "#FFFFFF";
