@@ -178,8 +178,7 @@ TitleScreen = function TitleScreen(title,subtitle,callback) {
 	this.w = 1070;
 	this.h = 650;
 	this.sprite = "";
-	this.jugadores = [];
-	this.jugadores[0] = Meteor.user().username;
+	this.jugadores = Partidas.findOne(Session.get("Current_Game")).jugadores;
 
 	this.mover = function(x,y) {	}
 	
@@ -191,9 +190,9 @@ TitleScreen = function TitleScreen(title,subtitle,callback) {
 	}
 	
 	//Si estan todos los jugadores se empieza (para el caso de todos jugadores maquina)
-	if(Partidas.findOne(Session.get("Current_Game")).jugadores.length >= MAX_JUGADORES) {
+	if(this.jugadores.length >= MAX_JUGADORES) {
 		this.pulsado();
-	}
+	} 
 
 	this.draw = function(ctx) {
 		ctx.fillStyle = "#FFFFFF";
@@ -213,8 +212,10 @@ TitleScreen = function TitleScreen(title,subtitle,callback) {
 		ctx.fillText("Jugadores actuales:", 20, 300);
 		
 		ctx.font = "bold 30px arial";
+		var nick;
 		for (i = 0; i<this.jugadores.length; i++) {
-			ctx.fillText(this.jugadores[i],30,360 + 50*i);
+			nick = this.jugadores[i]||"Maquina"+i;
+			ctx.fillText(nick,30,360 + 50*i);
 		}
 	}
 }
