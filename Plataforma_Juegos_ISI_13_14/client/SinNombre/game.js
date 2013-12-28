@@ -86,7 +86,8 @@ startGame = function() {
 playGame = function(){
 	Game.boards.length=0;
 	Game.setBoard(Game.boards.length, BotonAyuda);
-	var numjugadores=5; //nos lo tiene que dar la plataforma de momento es un ejemplo
+	var jugadores = Partidas.findOne(Session.get("Current_Game")).jugadores;
+	var numjugadores = jugadores.length <= MAX_JUGADORES ? jugadores.length:MAX_JUGADORES;
 	var numseg;
 	for (i=1;i<=numjugadores;i++){
 		numseg = new NumSeguidores(i);
