@@ -53,31 +53,39 @@
 			///////////////////////////////////////////////////
 		
 		///////////PROBAMOS CIERRACAMINO //////////
-		/*
+		
 			//Creamos Tablero
 		Tablero = CrearTablero();
 			//Asignamos unas determinadas fichas para ver si funciona la función y cuenta los puntos correctamente.
-		var Ficha1 = Prueba();
-		var Ficha2 = Prueba();
-		var Ficha3 = Prueba();
-		var Ficha4 = Prueba();
-		var Ficha5 = Prueba();
-		var Ficha6 = Prueba();
-		var Ficha7 = Prueba();
-		var Ficha8 = Prueba();
-			//Colocamos las Fichas
-		Tablero[][] = Ficha1;
-		Tablero[][] = Ficha2;
-		Tablero[][] = Ficha3;
-		Tablero[][] = Ficha4;
-		Tablero[][] = Ficha5;
-		Tablero[][] = Ficha6;
-		Tablero[][] = Ficha7;
-		Tablero[][] = Ficha8;
-			//Le pasamos a la funcion la ficha donde este el seguidor y en que posición determinada está. 		
-		var PuntosCamino = CuentaPCamino(Tablero, Ficha, Num, X, Y);
+			//Preguntar porqué aquí si igualo diferentes fichas
+		var Ficha1 = Prueba(16); //ccmur
+		Tablero[0][0] = Ficha1;
+
+		var Ficha2 = Prueba(15); //ccmur3
+		Ficha2.gir = 2;
+		Ficha2 = GirarFicha(Ficha2)
+		Tablero[1][0] = Ficha2;
+		
+		var Ficha3 = Prueba(6); //cc [girar1]
+		Ficha3.gir = 3;	
+		Ficha3 = GirarFicha(Ficha3);
+		Tablero[1][1] = Ficha3;
+	
+		var Ficha4 = Prueba(18); //ccmur2e [girar3]
+		//alert("Ficha4SG: " + Ficha4.u + Ficha4.r + Ficha4.d + Ficha4.l + Ficha4.gir);
+		//Ficha4.gir = 3;
+		//Ficha4 = GirarFicha(Ficha4);
+		//alert("Ficha4G: " + Ficha4.u + Ficha4.r + Ficha4.d + Ficha4.l + Ficha4.gir);
+			
+		
+			//Le pasamos a la funcion la ficha donde este el seguidor y en que posición determinada está. 
+		var Num = 1;
+		var X = 0;
+		var Y = 1; 		
+		var PuntosCamino = CuentaPCamino(Tablero, Ficha4, Num, X, Y);
+		alert("Puntos que tengo: " + PuntosCamino);
 		////////////////////////////////////////////	
-		*/
+		
 	};
 
 $(EjecutaTotal);
