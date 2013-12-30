@@ -104,6 +104,19 @@ Meteor.methods({
 		}
 	},
 
+	//Este metodo se llama después de crearse la partida (una vez se sabe el numero de jugadores que van
+	//a participar en ella. Se inicializan las puntuaciones de todos los jugadores a cero en la colección
+	//partidas.
+	InicializarPuntuacionesEnPartida: function(id){
+		var numeroJugadores = Partidas.findOne(id).jugadores.length
+		console.log(numeroJugadores)
+		var puntuacion = Partidas.findOne(id).puntuacion
+		for(i=0;i<numeroJugadores;i++){
+			puntuacion.push(0);
+		}
+		return puntuacion
+	},
+
 	// Mete una nueva partida en el servidor. Devuelve un identificador
 	// de partida UNICO no coincidente con la clave primaria al que 
 	// el cliente debe suscribirse en su Deps.autorun().
@@ -123,7 +136,7 @@ Meteor.methods({
 			jugadas:[],
 			canvas: mycanvas,
 			estado: "Lobby",
-			puntuacion:[0]
+			puntuacion:[]
 		})
 
 		var sid = id.toString();
@@ -134,12 +147,11 @@ Meteor.methods({
 		Meteor.publish(sid,function(){
 			return Partidas.find(id,{nombre:1, jugadores:1,invitados:1,opciones:1,jugadas:1,canvas:1});
 		})
-		
 		return sid;
 	},
 
+
 	PuntuacionJugadorPartida: function(id,jugador,punt){
-	
 		var p = Partidas.findOne(id).puntuacion
 		var idx = Partidas.findOne(id).jugadores.indexOf(jugador)
 		p[idx]+=punt
