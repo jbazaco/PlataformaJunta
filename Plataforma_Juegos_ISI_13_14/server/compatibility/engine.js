@@ -39,16 +39,15 @@ var FichaPropiedades = {
 
 var ArFi = _.toArray(FichaPropiedades); //Convertimos lo que tenemos en un Array para poder tratarlo internamente
 
-//Creo el array y luego hago el random del número que le pasamos al array
+var Contador = [5,3,3,4,2,1,9,8,4,1,3,1,2,5,3,3,3,1,3,2,2,2,1,2];
+ //Creo el array y luego hago el random del número que le pasamos al array
 var Aleatorio = function(){
-	var conjunto = _.toArray(FichaPropiedades);
 	var a = Math.floor(Math.random()*24);
-	while (conjunto[a].cont == 0){
-		a = Math.floor(Math.random()*24);
+	while (Contador[a] == 0){ 
+		a = Math.floor(Math.random()*24);  
 	}
-	// Les restamos uno de la que usamos
-	conjunto[a].cont = conjunto[a].cont -1;	
-	return conjunto[a];
+	Contador[a] = Contador[a] - 1;
+	return ArFi[a];
 };
 
 var Prueba = function(A){
