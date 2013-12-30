@@ -65,7 +65,8 @@ sprites = {
 	s4: { sx: 613, sy: 245, w: 23, h: 23},			//seguidor verde
 	s5: { sx: 639, sy: 245, w: 23, h: 23},		//seguidor naranja
 	terminar: {sx: 727, sy: 44,w: 58,h: 20},		//Boton de temirnar
-	reset: {sx: 727, sy: 70, w:58, h:20}		//Boton de reset
+	reset: {sx: 727, sy: 70, w:58, h:20},		//Boton de reset
+	flecha: {sx: 756, sy: 242, w:44, h:40}		//flecha azul ->
 };
 
 var ficha_inicial;
@@ -104,11 +105,15 @@ playGame = function(){
 	Game.setBoard(Game.boards.length,FichaActual);
 	FichaActual.nextBoard = Game.boards.length;
 
+	Game.setBoard(Game.boards.length, BotonReset);
 	Game.setBoard(Game.boards.length,BotonFinTurno);
+	Game.setBoard(Game.boards.length, new BotonMoverTablero(1000, 570, 0));
+	Game.setBoard(Game.boards.length, new BotonMoverTablero(950, 600, 90));
+	Game.setBoard(Game.boards.length, new BotonMoverTablero(900, 570, 180));
+	Game.setBoard(Game.boards.length, new BotonMoverTablero(950, 540, 270));
 	
 	ficha_inicial = new Ficha(394, 263,"cmur");
 	Game.setBoard(Game.boards.length, ficha_inicial);
-	Game.setBoard(Game.boards.length, BotonReset);
 	Game.setBoard(Game.boards.length,Fondo);
 	ficha_inicial.buscar_huecos();
 	nfich = 1;
@@ -125,6 +130,36 @@ gestionarMov = function(m) {
 		debajo.establecer(m.sprite, m.rotacion, seg, m.scuadrado, m.szona);
 	}
 };
+
+BotonMoverTablero = function(x, y, rotacion) {
+	this.x = x;
+	this.y = y;
+	this.w = 44;
+	this.h = 40;
+	this.rotacion = rotacion;
+	this.sprite = "flecha";
+	this.mover = function(x,y) {	}
+	this.soltar = function(x,y) {	}
+	this.pulsado = function() {
+		switch(this.rotacion) {
+		case 0:
+			desplazarTablero(FICHA_H, 0);
+			break;
+		case 90:
+			desplazarTablero(0, FICHA_W);
+			break;
+		case 180:
+			desplazarTablero(-FICHA_H, 0);
+			break;
+		case 270:
+			desplazarTablero(0, -FICHA_W);
+			break;
+		}
+	}
+	this.draw = function(ctx) {
+		SpriteSheet.draw(ctx,this.sprite,this.x, this.y, 0, 0, rotacion);
+	}    
+}
 
 BotonAyuda = new function() {
 	this.x = 1000;
@@ -832,7 +867,6 @@ Seguidor = function(sprite, numjugador, contador, nick) {
 elemInPos = function(x, y, n) {
 	if (!n || n < 0) n = 0;
 
-	//len-1 para ignorar el fondo
 	for(var i=n,len = Game.boards.length;i<len;i++) {
 		if (Game.boards[i]){
 			if (y >= Game.boards[i].y && y <= Game.boards[i].y+Game.boards[i].h 
@@ -938,6 +972,7 @@ Deps.autorun(function(){
 		if (idcanvas !== canv) {
 			//Carga el tablero de la partida seleccionada
 			nfich = 0;
+			FichaActual.resetear();
 			idcanvas = canv;
 			Game.initialize(canv,sprites,startGame);//NO DIFERENCIA SI OBSERVA PARTIDA O LA JUEGA POR AHORA/TODO/
 		} else if (nfich > 0) {

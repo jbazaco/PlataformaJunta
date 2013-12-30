@@ -7,6 +7,7 @@ Game = new function() {
 		this.canvas = document.getElementById(canvasElementId);
 		this.width = this.canvas.width;
 		this.height= this.canvas.height;
+		this.boards = [];
 
 		this.ctx = this.canvas.getContext && this.canvas.getContext('2d');
 		if(!this.ctx) { return alert("Please upgrade your browser to play"); }
