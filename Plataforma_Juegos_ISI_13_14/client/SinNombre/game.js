@@ -64,7 +64,8 @@ sprites = {
 	s3: { sx: 586, sy: 245, w: 23, h: 23},			//seguidor azul
 	s4: { sx: 613, sy: 245, w: 23, h: 23},			//seguidor verde
 	s5: { sx: 639, sy: 245, w: 23, h: 23},		//seguidor naranja
-	terminar: {sx: 727, sy: 44,w: 58,h: 20}		//Boton de temirnar
+	terminar: {sx: 727, sy: 44,w: 58,h: 20},		//Boton de temirnar
+	reset: {sx: 727, sy: 70, w:58, h:20}		//Boton de reset
 };
 
 var ficha_inicial;
@@ -84,8 +85,7 @@ startGame = function() {
 
 
 playGame = function(){
-	Game.boards.length=0;
-	Game.setBoard(Game.boards.length, BotonAyuda);
+	Game.setBoard(0, BotonAyuda);
 	var jugadores = Partidas.findOne(Session.get("Current_Game")).jugadores;
 	var numjugadores = jugadores.length <= MAX_JUGADORES ? jugadores.length:MAX_JUGADORES;
 	var numseg;
@@ -108,6 +108,7 @@ playGame = function(){
 	
 	ficha_inicial = new Ficha(394, 263,"cmur");
 	Game.setBoard(Game.boards.length, ficha_inicial);
+	Game.setBoard(Game.boards.length, BotonReset);
 	Game.setBoard(Game.boards.length,Fondo);
 	ficha_inicial.buscar_huecos();
 	nfich = 1;
@@ -220,6 +221,27 @@ TitleScreen = function TitleScreen(title,subtitle,callback) {
 	}
 }
 
+BotonReset = new function() {
+	this.x = 940;
+	this.y = 120;
+	this.w = 58;
+	this.h = 20;
+	this.sprite = "reset";
+
+	this.mover = function(x,y) {	}
+	
+	this.soltar = function(x,y) {	}
+
+	this.pulsado = function() {
+		var sprite = FichaActual.sprite;
+		FichaActual.resetear();
+		FichaActual.sprite = sprite;
+	}
+
+	this.draw = function(ctx) {
+		SpriteSheet.draw(ctx,this.sprite,this.x, this.y);
+	}	
+}
 
 BotonFinTurno = new function() {
 	this.x = 940;
@@ -413,10 +435,10 @@ FichaActual = new function() {
 			this.sprite = 'ccmur2e'; //PEDIR A LA IA!!!, de momento ponemos una ficha cualquiera
 			return true;
 		}
-		if (this.x == this.inicialx && this.y == this.inicialy){
+		if (!this.seHaMovido()){
 			if (this.rotacion === 270)
 				this.rotacion = 0;
-			else	
+			else
 				this.rotacion+=90;
 		}
 		return false;
