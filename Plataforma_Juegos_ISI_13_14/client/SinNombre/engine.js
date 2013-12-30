@@ -55,7 +55,7 @@ Game = new function() {
 				var x = getClickX(event);
 				var y = getClickY(event);
 				
-				this.selec_elem.pulsado();
+				this.selec_elem.pulsado(x,y);
 				
 				this.selec_elem = null;
 			}

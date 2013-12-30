@@ -1,4 +1,4 @@
-var nfich = 0;
+var nfich = 0; //numero de fichas en el tablero
 
 Meteor.startup(function(){
 });
@@ -95,10 +95,10 @@ playGame = function(){
 		Game.setBoard(Game.boards.length, numseg);
 		nick = jugadores[i-1]||"Maquina"+i;
 		Game.setBoard(Game.boards.length, new GamePoints(i, nick));
-		seguidores["s"+i] = [];
+		seguidores[nick] = [];
 		for (k=1;k<=7;k++){
-			seguidores["s"+i][k-1] = new Seguidor("s"+i, i, numseg);
-			Game.setBoard(Game.boards.length, seguidores["s"+i][k-1]);
+			seguidores[nick][k-1] = new Seguidor("s"+i, i, numseg, nick);
+			Game.setBoard(Game.boards.length, seguidores[nick][k-1]);
 		}
 	}
 	Game.setBoard(Game.boards.length,FichaActual);
@@ -121,7 +121,7 @@ gestionarMov = function(m) {
 						FichaActual.nextBoard);
 	if (debajo instanceof Ficha && debajo.sprite === "interrogante"){
 		var seg = null;
-		if (m.ssprite) seg = seguidores.buscarLibre(m.ssprite);
+		if (m.scuadrado && m.szona) seg = seguidores.buscarLibre(m.user);
 		debajo.establecer(m.sprite, m.rotacion, seg, m.scuadrado, m.szona);
 	}
 };
@@ -259,20 +259,18 @@ BotonFinTurno = new function() {
 			var debajo = elemInPos(FichaActual.x+FichaActual.w/2, 
 						FichaActual.y+FichaActual.h/2, FichaActual.nextBoard);
 			if (debajo instanceof Ficha && debajo.sprite === "interrogante"){
-				var ssprite = null;/*Cuando lleve el nick del jugador no hay que poner el
-									nombre del ssprite sino que con el nick se sabe de quien es*/
 				var scuadrado = null;
 				var szona = null;
 
 				if (FichaActual.seguidor) {
-					ssprite = FichaActual.seguidor.sprite;
 					scuadrado = FichaActual.seguidor.cuadrado;
-					sszona = FichaActual.seguidor.zona;
+					szona = FichaActual.seguidor.zona;
 				}
 				Meteor.call('RegistrarMovimiento', Session.get("Current_Game"),
-									'minick',{nmove: nfich-1, sprite: FichaActual.sprite, 
+									Meteor.user().username, {user: Meteor.user().username,
+									nmove: nfich-1, sprite: FichaActual.sprite, 
 									rotacion: FichaActual.rotacion, x: debajo.coordenadas.x , 
-									y: debajo.coordenadas.y, ssprite: ssprite, scuadrado: scuadrado,
+									y: debajo.coordenadas.y, scuadrado: scuadrado,
 									szona: szona});
 				FichaActual.resetear();
 			}
@@ -429,10 +427,10 @@ FichaActual = new function() {
 	this.cuadrado = 0;
 	
 	//Devuelve true si se gira la ficha
-	this.pulsado = function() {
+	this.pulsado = function(x,y) {
 	
 		if (this.sprite === 'interrogante') {
-			this.sprite = 'ccmur2e'; //PEDIR A LA IA!!!, de momento ponemos una ficha cualquiera
+			this.sprite = 'ccmur2e'; //PEDIR A LA IA!!!, de momento ponemos una ficha cualquiera/TODO/
 			return true;
 		}
 		if (!this.seHaMovido()){
@@ -440,6 +438,10 @@ FichaActual = new function() {
 				this.rotacion = 0;
 			else
 				this.rotacion+=90;
+		} else {
+			//Si se pulsa sobre la ficha actual colocada se coloca un seguidor
+			var seg = this.seguidor || seguidores.buscarLibre(Meteor.user().username);
+			if (seg) seg.soltar(x,y);
 		}
 		return false;
 	}
@@ -545,7 +547,7 @@ FichaActual = new function() {
 };
 
 
-Seguidor = function(sprite, numjugador, contador) {
+Seguidor = function(sprite, numjugador, contador, nick) {
 	
 	this.inicialx=900;
 	this.inicialy=200;
@@ -561,6 +563,7 @@ Seguidor = function(sprite, numjugador, contador) {
 	this.restado = false;
 	this.fijado = false;
 	this.contador = contador;
+	this.nick = nick;
 	
 	this.pulsado = function() {}
 	//tiene que comprobar que el que hace click es el jugador al que le toca jugar, si no no puede mover
@@ -726,6 +729,8 @@ Seguidor = function(sprite, numjugador, contador) {
 			this.moviendo = true;
 			miJugador=1;
 			turno=1;//Falta funcion para saber de quien es el turno
+					//Hacerlo con el nick === Meteor.user().username
+					//TODO cuando podamos jugar varios y se pueda probar
 			if(turno==miJugador && this.sprite=="s"+miJugador && FichaActual.seHaMovido() 
 								&& (!FichaActual.seguidor || FichaActual.seguidor==this)){
 					this.x = x - this.w/2;
@@ -743,6 +748,8 @@ Seguidor = function(sprite, numjugador, contador) {
 			}else{
 				miJugador=1;
 				turno=1;//Falta funcion para saber de quien es el turno
+						//Hacerlo con el nick === Meteor.user().username
+						//TODO cuando podamos jugar varios y se pueda probar
 				if(turno==miJugador && this.sprite=="s"+miJugador && FichaActual.seHaMovido() && !FichaActual.seguidor){
 					this.cuadrado = this.getCuadrado(x, y, FichaActual);
 					this.recalcular(FichaActual);
