@@ -909,6 +909,7 @@ Deps.autorun(function(){
 		if (idcanvas !== canv) {
 			//Carga el tablero de la partida seleccionada
 			nfich = 0;
+			FichaActual.resetear();
 			idcanvas = canv;
 			Game.initialize(canv,sprites,startGame);//NO DIFERENCIA SI OBSERVA PARTIDA O LA JUEGA POR AHORA/TODO/
 		} else if (nfich > 0) {
