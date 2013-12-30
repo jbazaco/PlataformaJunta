@@ -37,15 +37,7 @@ var FichaPropiedades = {
   	ciucam2e:{nombre:"ciucam2e", u:CASTILLO, r:CAMPO,    d:CASTILLO, l:CAMPO,    cont:2 }        		//ciudad con 2 lados opuestos de campo con escudo
 }; 
 
-//Defino los campos de las fichas. tengo que comprobar con el dibujo de las fichas ahora mismo no lo tengo.
-//       1
-//    -------
-//  4 |1 2 3| 2
-//    |4 5 6|
-//    |7 8 9|
-//    -------
-//       3
-// no necesito un array porque el nombre lo consigo de la estructura de arriba.
+var ArFi = _.toArray(FichaPropiedades); //Convertimos lo que tenemos en un Array para poder tratarlo internamente
 
 //Creo el array y luego hago el random del número que le pasamos al array
 var Aleatorio = function(){
