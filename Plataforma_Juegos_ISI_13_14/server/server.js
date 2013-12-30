@@ -160,7 +160,7 @@ Meteor.methods({
 	// máximo de invitados.  
 	IncluirInvitado: function(id, invitado){
 		Partidas.update(id,{$addToSet:{invitados:invitado}})
-		return ("__Partida"+id+"__");
+		return ("_"+id);
 	},
 	
 	// Cambia el estado de una partida a "Empezada" dado su identificador.

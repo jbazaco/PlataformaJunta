@@ -7,6 +7,7 @@ Meteor.startup(function(){
 //Altura y anchura de una ficha
 const FICHA_H = 62;
 const FICHA_W = 62;
+const MAX_JUGADORES = 5;
 
 sprites = {
 	m: { sx: 253, sy: 44, w: FICHA_W, h: FICHA_H, si:"campo", sc:"campo", sd:"campo",
@@ -76,7 +77,8 @@ var seguidores = {
 };
 
 startGame = function() {
-	Game.setBoard(0,new TitleScreen("Carcassone.", "Haga click para empezar.",playGame));
+	Game.setBoard(0,new TitleScreen("Carcassonline.",
+				"Haga click para empezar sin esperar a más jugadores.",playGame));
 }
 
 
@@ -84,12 +86,15 @@ startGame = function() {
 playGame = function(){
 	Game.boards.length=0;
 	Game.setBoard(Game.boards.length, BotonAyuda);
-	var numjugadores=5; //nos lo tiene que dar la plataforma de momento es un ejemplo
+	var jugadores = Partidas.findOne(Session.get("Current_Game")).jugadores;
+	var numjugadores = jugadores.length <= MAX_JUGADORES ? jugadores.length:MAX_JUGADORES;
 	var numseg;
+	var nick;
 	for (i=1;i<=numjugadores;i++){
 		numseg = new NumSeguidores(i);
 		Game.setBoard(Game.boards.length, numseg);
-		Game.setBoard(Game.boards.length, new GamePoints(i));
+		nick = jugadores[i-1]||"Maquina"+i;
+		Game.setBoard(Game.boards.length, new GamePoints(i, nick));
 		seguidores["s"+i] = [];
 		for (k=1;k<=7;k++){
 			seguidores["s"+i][k-1] = new Seguidor("s"+i, i, numseg);
@@ -105,20 +110,9 @@ playGame = function(){
 	Game.setBoard(Game.boards.length, ficha_inicial);
 	Game.setBoard(Game.boards.length,Fondo);
 	ficha_inicial.buscar_huecos();
-	nfich++;
-
-	/*Deps.autorun(function(){
-		var idpartida = Session.get("Current_Game");
-		var movs = Partidas.findOne(idpartida).jugadas;
-		console.log(movs);
- /*Movimientos.find({nmove: {$gte: nfich-1}}, {sort: {nmove:1}});
-        movs.forEach(function(m) {
-			nfich++;
-			gestionarMov(m);
-		});
-	});*/
-
+	nfich = 1;
 }
+
 
 gestionarMov = function(m) {
 	var debajo = elemInPos(ficha_inicial.x+m.x*ficha_inicial.w+ficha_inicial.w/2,
@@ -176,6 +170,7 @@ MenuAyuda = new function(){
         }
 
 }
+
 TitleScreen = function TitleScreen(title,subtitle,callback) {
     
 	this.x = 0;
@@ -183,32 +178,49 @@ TitleScreen = function TitleScreen(title,subtitle,callback) {
 	this.w = 1070;
 	this.h = 650;
 	this.sprite = "";
+	this.jugadores = Partidas.findOne(Session.get("Current_Game")).jugadores;
 
 	this.mover = function(x,y) {	}
 	
 	this.soltar = function(x,y) {	}
 
 	this.pulsado = function() {
+		Meteor.call("EmpezarPartida", Session.get("Current_Game"));
 		callback();
-		//Informar a Plataforma que se ha metido un jugador a la partida y espera rivales si no estan todos.
 	}
-
-
-        this.draw = function(ctx) {
-	    ctx.fillStyle = "#FFFFFF";
-	    ctx.textAlign = "center";
 	
-	    Game.ctx.fillStyle = "#000000";
-	    Game.ctx.fillRect(0,0,1070,650);
+	//Si estan todos los jugadores se empieza (para el caso de todos jugadores maquina)
+	if(this.jugadores.length >= MAX_JUGADORES) {
+		this.pulsado();
+	} 
 
-	    ctx.fillStyle= "#c9c9c9";
-	    ctx.font = "bold 100px arial";
-	    ctx.fillText(title,Game.width/2,Game.height/2);
+	this.draw = function(ctx) {
+		ctx.fillStyle = "#FFFFFF";
+		ctx.textAlign = "center";
 
-	    ctx.font = "bold 75px arial";
-	    ctx.fillText(subtitle,Game.width/2+5,Game.height/2 + 100);
-        }
+		Game.ctx.fillStyle = "#000000";
+		Game.ctx.fillRect(0,0,Game.width,Game.height);
+		ctx.fillStyle= "#c9c9c9";
+		ctx.font = "bold 100px arial";
+		ctx.fillText(title,Game.width/2, 150);
+		ctx.font = "bold 40px arial";
+
+		ctx.textAlign = "left";
+		ctx.fillText(subtitle,20, 230);
+		ctx.font = "bold 40px arial";
+		
+		ctx.fillText("Jugadores actuales:", 20, 300);
+		
+		ctx.font = "bold 30px arial";
+		var nick;
+		for (i = 0; i<this.jugadores.length; i++) {
+			nick = this.jugadores[i]||"Maquina"+i;
+			ctx.fillText(nick,30,360 + 50*i);
+		}
+	}
 }
+
+
 BotonFinTurno = new function() {
 	this.x = 940;
 	this.y = 200;
@@ -235,7 +247,8 @@ BotonFinTurno = new function() {
 					scuadrado = FichaActual.seguidor.cuadrado;
 					sszona = FichaActual.seguidor.zona;
 				}
-				Movimientos.insert({nmove: nfich-1, sprite: FichaActual.sprite, 
+				Meteor.call('RegistrarMovimiento', Session.get("Current_Game"),
+									'minick',{nmove: nfich-1, sprite: FichaActual.sprite, 
 									rotacion: FichaActual.rotacion, x: debajo.coordenadas.x , 
 									y: debajo.coordenadas.y, ssprite: ssprite, scuadrado: scuadrado,
 									szona: szona});
@@ -479,7 +492,7 @@ FichaActual = new function() {
 		this.sprite = "interrogante";
 		this.x = this.inicialx;
 		this.y = this.inicialy;
-		this.seguidor.resetear();
+		if(this.seguidor) this.seguidor.resetear();
 		this.seguidor=null;
 		this.rotacion=0;	
 	}
@@ -788,7 +801,7 @@ Seguidor = function(sprite, numjugador, contador) {
 //Devuelve el elemento dibujado en (x,y) a partir del board n
 //El elemento debe tener una funcion pulsado, mover y soltar
 elemInPos = function(x, y, n) {
-	if (!n || n < 0) n = 0; //n<1 para ignorar GamePoints
+	if (!n || n < 0) n = 0;
 
 	//len-1 para ignorar el fondo
 	for(var i=n,len = Game.boards.length;i<len;i++) {
@@ -856,13 +869,14 @@ NumSeguidores = function(numjugador) {
 	};
 };
 
-GamePoints = function(numjugador) {
+GamePoints = function(numjugador, nick) {
 	this.points = 0;
-	this.x = 960;
+	this.x = 940;
 	this.y = 220 +numjugador*60;
 	this.w = 0;
 	this.h = 0;
 	this.sprite = "";
+	this.nick = nick;
 
 	this.mover = function(x,y) {	}
 	
@@ -880,29 +894,52 @@ GamePoints = function(numjugador) {
 	 	var txt = "" + this.points;
 	  	var i = pointsLength - txt.length, zeros = "";
 	  	while(i-- > 0) { zeros += "0"; }
-
+			ctx.fillText(this.nick, this.x, this.y-20);
 	    	ctx.fillText(zeros + txt,this.x,this.y);
 	    	ctx.restore();
 	};
 };
 
-var idcanvas;
-	Deps.autorun(function(){
-		console.log("01");
-		var idpartida = Session.get("Current_Game");
-		if (idpartida){
-			var partida = Partidas.findOne(idpartida);
-			console.log(partida);
-			var canv = partida.canvas;
-			console.log(canv);
-			if (idcanvas !== canv) {
-				idcanvas = canv;
-				Game.initialize(canv,sprites,startGame);
-				console.log("04");
+var idcanvas = null;
+Deps.autorun(function(){
+	var idpartida = Session.get("Current_Game");
+	if (idpartida){
+		var partida = Partidas.findOne(idpartida);
+		var canv = partida.canvas;
+		if (idcanvas !== canv) {
+			//Carga el tablero de la partida seleccionada
+			nfich = 0;
+			idcanvas = canv;
+			Game.initialize(canv,sprites,startGame);//NO DIFERENCIA SI OBSERVA PARTIDA O LA JUEGA POR AHORA/TODO/
+		} else if (nfich > 0) {
+			//Actualiza las fichas segun los movimientos registrados
+			var movs = partida.jugadas;
+			for (i = nfich-1; i < movs.length; i++) { 
+				nfich++;
+				gestionarMov(movs[i]);
 			}
 		}
-		console.log("02");
-	});
+	}
+});
 
+//Si esta en la pantalla de inicio se encarga de añadir jugadores nuevos
+//o ejecuta playGame si la partida ya está empezada o ha acabado
+Deps.autorun(function(){
+	var idpartida = Session.get("Current_Game");
+	if (idpartida){
+		var partida = Partidas.findOne(idpartida);
+		var board1 = Game.boards[0];
+		if (board1 instanceof TitleScreen) {
+			if (partida.estado === "Lobby") {
+				board1.jugadores = partida.jugadores;
+				if(partida.jugadores.length >= MAX_JUGADORES) {
+					board1.pulsado();
+				}
+			} else {
+				playGame();
+			}
+		}
+	}
+});
 
 
