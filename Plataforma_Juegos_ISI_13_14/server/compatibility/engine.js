@@ -49,11 +49,24 @@ var Aleatorio = function(){
 	Contador[a] = Contador[a] - 1;
 	return ArFi[a];
 };
-
+ //Funcion de prueba para comprobar fichas
 var Prueba = function(A){
-	var conjunto = _.toArray(FichaPropiedades);
-	return conjunto[A];
+	return ArFi[A];
 }
+
+ //Girar Ficha
+GirarFicha = function(Ficha){
+	var aux = 0;
+	while (Ficha.gir != 0){
+		aux = Ficha.l;
+		Ficha.l = Ficha.d;
+		Ficha.d = Ficha.r;
+		Ficha.r = Ficha.u;
+		Ficha.u = aux;
+		Ficha.gir = Ficha.gir - 1;
+	}
+	return Ficha;
+};
 	
 //Creamos tablero
 CrearTablero = function(){
