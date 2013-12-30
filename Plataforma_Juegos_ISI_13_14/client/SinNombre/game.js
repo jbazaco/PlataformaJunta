@@ -86,7 +86,8 @@ startGame = function() {
 
 
 playGame = function(){
-	Game.setBoard(0, BotonAyuda);
+	Game.boards.length = 0;
+	Game.setBoard(Game.boards.length, BotonAyuda);
 	var jugadores = Partidas.findOne(Session.get("Current_Game")).jugadores;
 	var numjugadores = jugadores.length <= MAX_JUGADORES ? jugadores.length:MAX_JUGADORES;
 	var numseg;
@@ -1001,6 +1002,7 @@ Deps.autorun(function(){
 				}
 			} else {
 				playGame();
+				console.log("AAAA");
 			}
 		}
 	}
