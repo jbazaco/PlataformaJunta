@@ -21,7 +21,14 @@ Meteor.methods({
 	//  Cada vez que un usuario se registre y en sus datos no se encuentre
 	// el campo puntuacion, se inicializa la puntuacion a cero.
 	InicializaCliente: function(id){
-		Meteor.users.update({_id:id},{$set:{puntuacion:0,equipos:[],torneos:[],penalizacion:0,estado:"Conectado"}});
+		var puntuacion = []
+		var objetoAlien = {"juego":"AlienInvasion","total":0,"record":0}
+		var objetoFruits = {"juego":"AngryFruits","total":0,"record":0}
+		var objetoCarca = {"juego":"Carcassonne","total":0,"record":0}
+		puntuacion.push(objetoAlien)
+		puntuacion.push(objetoFruits)
+		puntuacion.push(objetoCarca)
+		Meteor.users.update({_id:id},{$set:{puntuacion:puntuacion,equipos:[],torneos:[],penalizacion:0,estado:"Conectado"}});
 	},
 	
 	// Actualiza el estado de todos los usuarios registrados cada vez que hay
@@ -106,7 +113,7 @@ Meteor.methods({
 
 	//Este metodo se llama después de crearse la partida (una vez se sabe el numero de jugadores que van
 	//a participar en ella. Se inicializan las puntuaciones de todos los jugadores a cero en la colección
-	//partidas.
+	//partidas. Se le pasa el id de la partida.
 	InicializarPuntuacionesEnPartida: function(id){
 		var numeroJugadores = Partidas.findOne(id).jugadores.length
 		console.log(numeroJugadores)
@@ -114,9 +121,8 @@ Meteor.methods({
 		for(i=0;i<numeroJugadores;i++){
 			puntuacion.push(0);
 		}
-		return puntuacion
 	},
-
+	
 	// Mete una nueva partida en el servidor. Devuelve un identificador
 	// de partida UNICO no coincidente con la clave primaria al que 
 	// el cliente debe suscribirse en su Deps.autorun().
@@ -150,7 +156,8 @@ Meteor.methods({
 		return sid;
 	},
 
-
+	//Se llama a este metodo para actualizar la puntuacion de cada jugada (punt) de cada 
+	//jugador (jugador) en la partida (id)
 	PuntuacionJugadorPartida: function(id,jugador,punt){
 		var p = Partidas.findOne(id).puntuacion
 		var idx = Partidas.findOne(id).jugadores.indexOf(jugador)
