@@ -11,15 +11,15 @@ Meteor.publish('partidas',function(){
 
 // Publicacion del campo puntuacion para que puedan acceder los clientes.
 Meteor.publish("DatosUsuarios", function () {
-	return Meteor.users.find({},{fields: {username:1,puntuacion: 1,services: 1,estado:1}});
+	return Meteor.users.find({},{fields: {username:1,puntuacion: 1,registrado: 1,services: 1,estado:1}});
 });
 
 
 
 Meteor.methods({
 	
-	//  Cada vez que un usuario se registre y en sus datos no se encuentre
-	// el campo puntuacion, se inicializa la puntuacion a cero.
+	// Cada vez que un usuario se logee y en sus datos no se encuentre
+	// el campo registrado, se inicializa y se pone a uno.
 	InicializaCliente: function(id){
 		var puntuacion = []
 		var objetoAlien = {"juego":"AlienInvasion","total":0,"record":0}
@@ -28,7 +28,7 @@ Meteor.methods({
 		puntuacion.push(objetoAlien)
 		puntuacion.push(objetoFruits)
 		puntuacion.push(objetoCarca)
-		Meteor.users.update({_id:id},{$set:{puntuacion:puntuacion,equipos:[],torneos:[],penalizacion:0,estado:"Conectado"}});
+		Meteor.users.update(id,{$set:{puntuacion:puntuacion,equipos:[],torneos:[],penalizacion:0,estado:"Conectado",registrado:1}});
 	},
 	
 	// Actualiza el estado de todos los usuarios registrados cada vez que hay

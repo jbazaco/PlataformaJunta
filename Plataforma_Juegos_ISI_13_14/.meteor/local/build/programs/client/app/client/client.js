@@ -315,7 +315,7 @@ Deps.autorun(function(){
 Deps.autorun(function(){
 	if (Meteor.user()){
 		var user = Meteor.user();
-		if(!user.puntuacion && user.puntuacion!=0){
+		if(user.registrado != 1){
 			Meteor.call('InicializaCliente',user._id);
 		}
 	}

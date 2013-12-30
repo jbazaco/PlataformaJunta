@@ -576,9 +576,9 @@
       "where": "client",
       "type": "js",
       "cacheable": true,
-      "url": "/client/client.js?731f910443526ca140aa85fcf03ffc5d8ceefb43",
-      "size": 8341,
-      "hash": "731f910443526ca140aa85fcf03ffc5d8ceefb43"
+      "url": "/client/client.js?dfbf8df36e544599b9c1d1f44bf73bd9e1b1847e",
+      "size": 8323,
+      "hash": "dfbf8df36e544599b9c1d1f44bf73bd9e1b1847e"
     },
     {
       "path": "app/client/jquery-1.9.1.js",
@@ -1222,7 +1222,7 @@
     {
       "path": "app.html",
       "where": "internal",
-      "hash": "3574eddcc4baba3187718cd4d30d2d684bd80acc"
+      "hash": "ac2dc192b40f3c06956f9e8febe41fbad6a30550"
     }
   ]
 }
