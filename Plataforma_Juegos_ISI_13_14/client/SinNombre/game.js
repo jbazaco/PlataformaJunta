@@ -1,4 +1,4 @@
-var nfich = 0;
+var nfich = 0; //numero de fichas en el tablero
 
 Meteor.startup(function(){
 });
@@ -64,7 +64,9 @@ sprites = {
 	s3: { sx: 586, sy: 245, w: 23, h: 23},			//seguidor azul
 	s4: { sx: 613, sy: 245, w: 23, h: 23},			//seguidor verde
 	s5: { sx: 639, sy: 245, w: 23, h: 23},		//seguidor naranja
-	terminar: {sx: 727, sy: 44,w: 58,h: 20}		//Boton de temirnar
+	terminar: {sx: 727, sy: 44,w: 58,h: 20},		//Boton de temirnar
+	reset: {sx: 727, sy: 70, w:58, h:20},		//Boton de reset
+	flecha: {sx: 756, sy: 242, w:44, h:40}		//flecha azul ->
 };
 
 var ficha_inicial;
@@ -84,7 +86,7 @@ startGame = function() {
 
 
 playGame = function(){
-	Game.boards.length=0;
+	Game.boards.length = 0;
 	Game.setBoard(Game.boards.length, BotonAyuda);
 	var jugadores = Partidas.findOne(Session.get("Current_Game")).jugadores;
 	var numjugadores = jugadores.length <= MAX_JUGADORES ? jugadores.length:MAX_JUGADORES;
@@ -95,16 +97,21 @@ playGame = function(){
 		Game.setBoard(Game.boards.length, numseg);
 		nick = jugadores[i-1]||"Maquina"+i;
 		Game.setBoard(Game.boards.length, new GamePoints(i, nick));
-		seguidores["s"+i] = [];
+		seguidores[nick] = [];
 		for (k=1;k<=7;k++){
-			seguidores["s"+i][k-1] = new Seguidor("s"+i, i, numseg);
-			Game.setBoard(Game.boards.length, seguidores["s"+i][k-1]);
+			seguidores[nick][k-1] = new Seguidor("s"+i, i, numseg, nick);
+			Game.setBoard(Game.boards.length, seguidores[nick][k-1]);
 		}
 	}
 	Game.setBoard(Game.boards.length,FichaActual);
 	FichaActual.nextBoard = Game.boards.length;
 
+	Game.setBoard(Game.boards.length, BotonReset);
 	Game.setBoard(Game.boards.length,BotonFinTurno);
+	Game.setBoard(Game.boards.length, new BotonMoverTablero(1000, 570, 0));
+	Game.setBoard(Game.boards.length, new BotonMoverTablero(950, 600, 90));
+	Game.setBoard(Game.boards.length, new BotonMoverTablero(900, 570, 180));
+	Game.setBoard(Game.boards.length, new BotonMoverTablero(950, 540, 270));
 	
 	ficha_inicial = new Ficha(394, 263,"cmur");
 	Game.setBoard(Game.boards.length, ficha_inicial);
@@ -120,10 +127,40 @@ gestionarMov = function(m) {
 						FichaActual.nextBoard);
 	if (debajo instanceof Ficha && debajo.sprite === "interrogante"){
 		var seg = null;
-		if (m.ssprite) seg = seguidores.buscarLibre(m.ssprite);
+		if (m.scuadrado && m.szona) seg = seguidores.buscarLibre(m.user);
 		debajo.establecer(m.sprite, m.rotacion, seg, m.scuadrado, m.szona);
 	}
 };
+
+BotonMoverTablero = function(x, y, rotacion) {
+	this.x = x;
+	this.y = y;
+	this.w = 44;
+	this.h = 40;
+	this.rotacion = rotacion;
+	this.sprite = "flecha";
+	this.mover = function(x,y) {	}
+	this.soltar = function(x,y) {	}
+	this.pulsado = function() {
+		switch(this.rotacion) {
+		case 0:
+			desplazarTablero(FICHA_H, 0);
+			break;
+		case 90:
+			desplazarTablero(0, FICHA_W);
+			break;
+		case 180:
+			desplazarTablero(-FICHA_H, 0);
+			break;
+		case 270:
+			desplazarTablero(0, -FICHA_W);
+			break;
+		}
+	}
+	this.draw = function(ctx) {
+		SpriteSheet.draw(ctx,this.sprite,this.x, this.y, 0, 0, rotacion);
+	}    
+}
 
 BotonAyuda = new function() {
 	this.x = 1000;
@@ -220,6 +257,27 @@ TitleScreen = function TitleScreen(title,subtitle,callback) {
 	}
 }
 
+BotonReset = new function() {
+	this.x = 940;
+	this.y = 120;
+	this.w = 58;
+	this.h = 20;
+	this.sprite = "reset";
+
+	this.mover = function(x,y) {	}
+	
+	this.soltar = function(x,y) {	}
+
+	this.pulsado = function() {
+		var sprite = FichaActual.sprite;
+		FichaActual.resetear();
+		FichaActual.sprite = sprite;
+	}
+
+	this.draw = function(ctx) {
+		SpriteSheet.draw(ctx,this.sprite,this.x, this.y);
+	}	
+}
 
 BotonFinTurno = new function() {
 	this.x = 940;
@@ -237,20 +295,18 @@ BotonFinTurno = new function() {
 			var debajo = elemInPos(FichaActual.x+FichaActual.w/2, 
 						FichaActual.y+FichaActual.h/2, FichaActual.nextBoard);
 			if (debajo instanceof Ficha && debajo.sprite === "interrogante"){
-				var ssprite = null;/*Cuando lleve el nick del jugador no hay que poner el
-									nombre del ssprite sino que con el nick se sabe de quien es*/
 				var scuadrado = null;
 				var szona = null;
 
 				if (FichaActual.seguidor) {
-					ssprite = FichaActual.seguidor.sprite;
 					scuadrado = FichaActual.seguidor.cuadrado;
-					sszona = FichaActual.seguidor.zona;
+					szona = FichaActual.seguidor.zona;
 				}
 				Meteor.call('RegistrarMovimiento', Session.get("Current_Game"),
-									'minick',{nmove: nfich-1, sprite: FichaActual.sprite, 
+									Meteor.user().username, {user: Meteor.user().username,
+									nmove: nfich-1, sprite: FichaActual.sprite, 
 									rotacion: FichaActual.rotacion, x: debajo.coordenadas.x , 
-									y: debajo.coordenadas.y, ssprite: ssprite, scuadrado: scuadrado,
+									y: debajo.coordenadas.y, scuadrado: scuadrado,
 									szona: szona});
 				FichaActual.resetear();
 			}
@@ -407,17 +463,21 @@ FichaActual = new function() {
 	this.cuadrado = 0;
 	
 	//Devuelve true si se gira la ficha
-	this.pulsado = function() {
+	this.pulsado = function(x,y) {
 	
 		if (this.sprite === 'interrogante') {
-			this.sprite = 'ccmur2e'; //PEDIR A LA IA!!!, de momento ponemos una ficha cualquiera
+			this.sprite = 'ccmur2e'; //PEDIR A LA IA!!!, de momento ponemos una ficha cualquiera/TODO/
 			return true;
 		}
-		if (this.x == this.inicialx && this.y == this.inicialy){
+		if (!this.seHaMovido()){
 			if (this.rotacion === 270)
 				this.rotacion = 0;
-			else	
+			else
 				this.rotacion+=90;
+		} else {
+			//Si se pulsa sobre la ficha actual colocada se coloca un seguidor
+			var seg = this.seguidor || seguidores.buscarLibre(Meteor.user().username);
+			if (seg) seg.soltar(x,y);
 		}
 		return false;
 	}
@@ -523,7 +583,7 @@ FichaActual = new function() {
 };
 
 
-Seguidor = function(sprite, numjugador, contador) {
+Seguidor = function(sprite, numjugador, contador, nick) {
 	
 	this.inicialx=900;
 	this.inicialy=200;
@@ -539,6 +599,7 @@ Seguidor = function(sprite, numjugador, contador) {
 	this.restado = false;
 	this.fijado = false;
 	this.contador = contador;
+	this.nick = nick;
 	
 	this.pulsado = function() {}
 	//tiene que comprobar que el que hace click es el jugador al que le toca jugar, si no no puede mover
@@ -704,6 +765,8 @@ Seguidor = function(sprite, numjugador, contador) {
 			this.moviendo = true;
 			miJugador=1;
 			turno=1;//Falta funcion para saber de quien es el turno
+					//Hacerlo con el nick === Meteor.user().username
+					//TODO cuando podamos jugar varios y se pueda probar
 			if(turno==miJugador && this.sprite=="s"+miJugador && FichaActual.seHaMovido() 
 								&& (!FichaActual.seguidor || FichaActual.seguidor==this)){
 					this.x = x - this.w/2;
@@ -721,6 +784,8 @@ Seguidor = function(sprite, numjugador, contador) {
 			}else{
 				miJugador=1;
 				turno=1;//Falta funcion para saber de quien es el turno
+						//Hacerlo con el nick === Meteor.user().username
+						//TODO cuando podamos jugar varios y se pueda probar
 				if(turno==miJugador && this.sprite=="s"+miJugador && FichaActual.seHaMovido() && !FichaActual.seguidor){
 					this.cuadrado = this.getCuadrado(x, y, FichaActual);
 					this.recalcular(FichaActual);
@@ -803,7 +868,6 @@ Seguidor = function(sprite, numjugador, contador) {
 elemInPos = function(x, y, n) {
 	if (!n || n < 0) n = 0;
 
-	//len-1 para ignorar el fondo
 	for(var i=n,len = Game.boards.length;i<len;i++) {
 		if (Game.boards[i]){
 			if (y >= Game.boards[i].y && y <= Game.boards[i].y+Game.boards[i].h 
@@ -938,6 +1002,7 @@ Deps.autorun(function(){
 				}
 			} else {
 				playGame();
+				console.log("AAAA");
 			}
 		}
 	}
