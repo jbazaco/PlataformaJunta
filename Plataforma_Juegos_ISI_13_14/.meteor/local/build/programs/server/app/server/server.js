@@ -94,7 +94,6 @@ Meteor.methods({
 		return jugadas[jugadas.length-1];
 	},
 
-
 	// Devuelve el jugador AL QUE LE TOCA dando un identificador de partida
 	// Si es el primer turno devuelve un jugador aleatorio de la lista de jugadores.
 	// El jugador al que le toca es EL SIGUIENTE al que ha jugado la ultima jugada,
@@ -165,6 +164,28 @@ Meteor.methods({
 		Partidas.update(id,{$set:{puntuacion:p}});
 	},
 
+	// Se necesita un nuevo campo en la colección Partidas (juego?)
+	// PuntuacionRecord: function(juego,jugador,punt)
+	// Al terminar una partida se debe llamar a este método para todos y cada uno de los jugadores de esa
+	// partida y comprobar si han conseguido un nuevo record.
+	PuntuacionRecord: function(jugador,punt){
+		var user = Meteor.users.findOne({username:jugador})
+		for(var i in user.puntuacion){
+			//if(user.puntuacion[i].juego === juego){
+			if(user.puntuacion[i].juego === "Carcassonne"){
+				var p = user.puntuacion[i].record
+				if(p>=punt){
+					mayor = p;
+				}
+				else{
+					mayor = punt;
+				}
+				Meteor.users.update({username:jugador},{$set:{"puntuacion.2.record":mayor}})
+			}		
+		}
+	},
+
+		
 	// Incluye jugadores en el array de jugadores dado el identificador primario de
 	// la partida. Solo los incluye si no están ya incluidos. Aun no tiene un
 	// máximo de jugadores.
