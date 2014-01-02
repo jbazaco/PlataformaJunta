@@ -184,8 +184,23 @@ Meteor.methods({
 			}		
 		}
 	},
-
 		
+	// Se necesita un nuevo campo en la colección Partidas (juego?)
+	// PuntuacionTotal: function(juego,jugador,punt)
+	// Al terminar una partida se debe llamar a este método para todos y cada uno de los jugadores de esa
+	// partida y sumar la puntuación obtenida a la puntuación que tenía anteriormente.
+	PuntuacionTotal: function(jugador,punt){
+		var user = Meteor.users.findOne({username:jugador})
+		for(var i in user.puntuacion){
+			//if(user.puntuacion[i].juego === juego){
+			if(user.puntuacion[i].juego === "Carcassonne"){
+				var p = user.puntuacion[i].total
+				p+=punt
+				Meteor.users.update({username:jugador},{$set:{"puntuacion.2.total":p}})
+			}		
+		}
+	},
+
 	// Incluye jugadores en el array de jugadores dado el identificador primario de
 	// la partida. Solo los incluye si no están ya incluidos. Aun no tiene un
 	// máximo de jugadores.
