@@ -450,6 +450,7 @@ Ficha = function(x, y, sprite) {
 
 //Es un singleton
 FichaActual = new function() {
+	this.p="";
 	this.h = FICHA_H;
 	this.w = FICHA_W;
 	this.inicialx = 940;
@@ -466,7 +467,12 @@ FichaActual = new function() {
 	this.pulsado = function(x,y) {
 	
 		if (this.sprite === 'interrogante') {
-			this.sprite = 'ccmur2e'; //PEDIR A LA IA!!!, de momento ponemos una ficha cualquiera/TODO/
+			Meteor.call('DevuelveFicha', function(err, results){
+				if(err){
+      					console.log(err.reason);
+   				}else{
+					FichaActual.sprite=results.nombre;
+    				}});		
 			return true;
 		}
 		if (!this.seHaMovido()){
@@ -516,7 +522,7 @@ FichaActual = new function() {
 		if (this.sprite !== "interrogante") {
 			//CAMBIAR cuando se coloquen las fichas
 			var debajo = elemInPos(x,y, this.nextBoard);
-
+			
 			if (debajo instanceof Ficha && debajo.sprite === "interrogante"){
 				this.x = debajo.x;
 				this.y = debajo.y;

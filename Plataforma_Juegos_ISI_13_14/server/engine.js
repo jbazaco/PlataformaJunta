@@ -48,14 +48,14 @@ var FichaPropiedades = {
 // no necesito un array porque el nombre lo consigo de la estructura de arriba.
 
 //Creo el array y luego hago el random del número que le pasamos al array
-var Aleatorio = function(){
+Aleatorio = function(){
 	var conjunto = _.toArray(FichaPropiedades);
 	var a = Math.floor(Math.random()*24);
 	while (conjunto[a].cont == 0){
 		a = Math.floor(Math.random()*24);
 	}
 	// Les restamos uno de la que usamos
-	conjunto[a].cont = conjunto[a].cont -1;	
+	conjunto[a].cont = conjunto[a].cont -1;
 	return conjunto[a];
 };
 
