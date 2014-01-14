@@ -164,15 +164,13 @@ Meteor.methods({
 		Partidas.update(id,{$set:{puntuacion:p}});
 	},
 
-	// Se necesita un nuevo campo en la colección Partidas (juego?)
-	// PuntuacionRecord: function(juego,jugador,punt)
 	// Al terminar una partida se debe llamar a este método para todos y cada uno de los jugadores de esa
 	// partida y comprobar si han conseguido un nuevo record.
-	PuntuacionRecord: function(jugador,punt){
+	PuntuacionRecord: function(jugador,punt,juego){
 		var user = Meteor.users.findOne({username:jugador})
 		for(var i in user.puntuacion){
 			//if(user.puntuacion[i].juego === juego){
-			if(user.puntuacion[i].juego === "Carcassonne"){
+			if(user.puntuacion[i].juego === juego){
 				var p = user.puntuacion[i].record
 				if(p>=punt){
 					mayor = p;
@@ -185,15 +183,13 @@ Meteor.methods({
 		}
 	},
 		
-	// Se necesita un nuevo campo en la colección Partidas (juego?)
-	// PuntuacionTotal: function(juego,jugador,punt)
 	// Al terminar una partida se debe llamar a este método para todos y cada uno de los jugadores de esa
 	// partida y sumar la puntuación obtenida a la puntuación que tenía anteriormente.
-	PuntuacionTotal: function(jugador,punt){
+	PuntuacionTotal: function(jugador,punt,juego){
 		var user = Meteor.users.findOne({username:jugador})
 		for(var i in user.puntuacion){
 			//if(user.puntuacion[i].juego === juego){
-			if(user.puntuacion[i].juego === "Carcassonne"){
+			if(user.puntuacion[i].juego === juego){
 				var p = user.puntuacion[i].total
 				p+=punt
 				Meteor.users.update({username:jugador},{$set:{"puntuacion.2.total":p}})
