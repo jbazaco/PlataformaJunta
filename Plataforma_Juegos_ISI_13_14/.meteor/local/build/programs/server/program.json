@@ -1,6 +1,6 @@
 {
   "format": "javascript-image-pre1",
-  "arch": "os.linux.x86_64",
+  "arch": "os.linux.x86_32",
   "load": [
     {
       "path": "packages/underscore.js",
@@ -13,28 +13,8 @@
       "sourceMapRoot": "packages"
     },
     {
-      "path": "packages/standard-app-packages.js",
-      "sourceMap": "packages/standard-app-packages.js.map",
-      "sourceMapRoot": "packages"
-    },
-    {
-      "path": "packages/insecure.js",
-      "sourceMap": "packages/insecure.js.map",
-      "sourceMapRoot": "packages"
-    },
-    {
-      "path": "packages/spark.js",
-      "sourceMap": "packages/spark.js.map",
-      "sourceMapRoot": "packages"
-    },
-    {
-      "path": "packages/preserve-inputs.js",
-      "sourceMap": "packages/preserve-inputs.js.map",
-      "sourceMapRoot": "packages"
-    },
-    {
-      "path": "packages/accounts-ui.js",
-      "sourceMap": "packages/accounts-ui.js.map",
+      "path": "packages/reload.js",
+      "sourceMap": "packages/reload.js.map",
       "sourceMapRoot": "packages"
     },
     {
@@ -45,36 +25,6 @@
     {
       "path": "packages/ejson.js",
       "sourceMap": "packages/ejson.js.map",
-      "sourceMapRoot": "packages"
-    },
-    {
-      "path": "packages/check.js",
-      "sourceMap": "packages/check.js.map",
-      "sourceMapRoot": "packages"
-    },
-    {
-      "path": "packages/random.js",
-      "sourceMap": "packages/random.js.map",
-      "sourceMapRoot": "packages"
-    },
-    {
-      "path": "packages/ordered-dict.js",
-      "sourceMap": "packages/ordered-dict.js.map",
-      "sourceMapRoot": "packages"
-    },
-    {
-      "path": "packages/deps.js",
-      "sourceMap": "packages/deps.js.map",
-      "sourceMapRoot": "packages"
-    },
-    {
-      "path": "packages/geojson-utils.js",
-      "sourceMap": "packages/geojson-utils.js.map",
-      "sourceMapRoot": "packages"
-    },
-    {
-      "path": "packages/minimongo.js",
-      "sourceMap": "packages/minimongo.js.map",
       "sourceMapRoot": "packages"
     },
     {
@@ -95,9 +45,44 @@
       "sourceMapRoot": "packages"
     },
     {
+      "path": "packages/check.js",
+      "sourceMap": "packages/check.js.map",
+      "sourceMapRoot": "packages"
+    },
+    {
+      "path": "packages/random.js",
+      "sourceMap": "packages/random.js.map",
+      "sourceMapRoot": "packages"
+    },
+    {
+      "path": "packages/deps.js",
+      "sourceMap": "packages/deps.js.map",
+      "sourceMapRoot": "packages"
+    },
+    {
+      "path": "packages/ordered-dict.js",
+      "sourceMap": "packages/ordered-dict.js.map",
+      "sourceMapRoot": "packages"
+    },
+    {
+      "path": "packages/geojson-utils.js",
+      "sourceMap": "packages/geojson-utils.js.map",
+      "sourceMapRoot": "packages"
+    },
+    {
+      "path": "packages/minimongo.js",
+      "sourceMap": "packages/minimongo.js.map",
+      "sourceMapRoot": "packages"
+    },
+    {
       "path": "packages/livedata.js",
       "node_modules": "npm/livedata/main/node_modules",
       "sourceMap": "packages/livedata.js.map",
+      "sourceMapRoot": "packages"
+    },
+    {
+      "path": "packages/follower-livedata.js",
+      "sourceMap": "packages/follower-livedata.js.map",
       "sourceMapRoot": "packages"
     },
     {
@@ -106,9 +91,39 @@
       "sourceMapRoot": "packages"
     },
     {
+      "path": "packages/insecure.js",
+      "sourceMap": "packages/insecure.js.map",
+      "sourceMapRoot": "packages"
+    },
+    {
       "path": "packages/mongo-livedata.js",
       "node_modules": "npm/mongo-livedata/main/node_modules",
       "sourceMap": "packages/mongo-livedata.js.map",
+      "sourceMapRoot": "packages"
+    },
+    {
+      "path": "packages/autoupdate.js",
+      "sourceMap": "packages/autoupdate.js.map",
+      "sourceMapRoot": "packages"
+    },
+    {
+      "path": "packages/standard-app-packages.js",
+      "sourceMap": "packages/standard-app-packages.js.map",
+      "sourceMapRoot": "packages"
+    },
+    {
+      "path": "packages/spark.js",
+      "sourceMap": "packages/spark.js.map",
+      "sourceMapRoot": "packages"
+    },
+    {
+      "path": "packages/preserve-inputs.js",
+      "sourceMap": "packages/preserve-inputs.js.map",
+      "sourceMapRoot": "packages"
+    },
+    {
+      "path": "packages/accounts-ui.js",
+      "sourceMap": "packages/accounts-ui.js.map",
       "sourceMapRoot": "packages"
     },
     {

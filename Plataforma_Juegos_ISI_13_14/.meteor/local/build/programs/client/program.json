@@ -18,22 +18,154 @@
       "where": "client",
       "type": "js",
       "cacheable": true,
-      "url": "/packages/meteor.js?643bfdbf5382aa1986ff0dd3e6474d4a7e247bab",
+      "url": "/packages/meteor.js?0ee0f69c02b4a9ccb6b7476bddadf436d7592260",
       "sourceMap": "packages/meteor.js.map",
-      "sourceMapUrl": "/packages/643bfdbf5382aa1986ff0dd3e6474d4a7e247bab.map",
-      "size": 80726,
-      "hash": "75cbc36796e1376b1d2a90b4f9cff07e5ad18c55"
+      "sourceMapUrl": "/packages/0ee0f69c02b4a9ccb6b7476bddadf436d7592260.map",
+      "size": 82210,
+      "hash": "ffef59f06b9f06f1662c4d5640419969b460ee49"
     },
     {
-      "path": "packages/standard-app-packages.js",
+      "path": "packages/json.js",
       "where": "client",
       "type": "js",
       "cacheable": true,
-      "url": "/packages/standard-app-packages.js?be7072e6abfda638502b63fa0f809c85c8c2b8ed",
-      "sourceMap": "packages/standard-app-packages.js.map",
-      "sourceMapUrl": "/packages/be7072e6abfda638502b63fa0f809c85c8c2b8ed.map",
-      "size": 1373,
-      "hash": "66555f2cf23f1bc12e8c16a401ec5532f66ae0c1"
+      "url": "/packages/json.js?e22856eae714c681199eabc5c0710b904b125554",
+      "sourceMap": "packages/json.js.map",
+      "sourceMapUrl": "/packages/e22856eae714c681199eabc5c0710b904b125554.map",
+      "size": 58410,
+      "hash": "22336e2adfc7bd2e7de733d5779ed503dddcb1f9"
+    },
+    {
+      "path": "packages/ejson.js",
+      "where": "client",
+      "type": "js",
+      "cacheable": true,
+      "url": "/packages/ejson.js?6b96257c000bbb949b0e65eaacceeecba5bf84c6",
+      "sourceMap": "packages/ejson.js.map",
+      "sourceMapUrl": "/packages/6b96257c000bbb949b0e65eaacceeecba5bf84c6.map",
+      "size": 67567,
+      "hash": "581fa4d0a652a43424504e5969147bd0d0af0001"
+    },
+    {
+      "path": "packages/logging.js",
+      "where": "client",
+      "type": "js",
+      "cacheable": true,
+      "url": "/packages/logging.js?0b5bf4a50ca23ebf02c29f1243437e173a6b6c1a",
+      "sourceMap": "packages/logging.js.map",
+      "sourceMapUrl": "/packages/0b5bf4a50ca23ebf02c29f1243437e173a6b6c1a.map",
+      "size": 27875,
+      "hash": "8c2685fd8be284536a04ac3333b5637feffe27bc"
+    },
+    {
+      "path": "packages/reload.js",
+      "where": "client",
+      "type": "js",
+      "cacheable": true,
+      "url": "/packages/reload.js?8495281f1e90298939d33611f64cb97609664269",
+      "sourceMap": "packages/reload.js.map",
+      "sourceMapUrl": "/packages/8495281f1e90298939d33611f64cb97609664269.map",
+      "size": 19595,
+      "hash": "24d4ea0180923084b3f4a2296726f53cc5a4a28f"
+    },
+    {
+      "path": "packages/deps.js",
+      "where": "client",
+      "type": "js",
+      "cacheable": true,
+      "url": "/packages/deps.js?eba25ec453bb70e5ae5c2c54192d21e0e4d82780",
+      "sourceMap": "packages/deps.js.map",
+      "sourceMapUrl": "/packages/eba25ec453bb70e5ae5c2c54192d21e0e4d82780.map",
+      "size": 34115,
+      "hash": "25873e20dc3a502750ebf11e87871d1c0ee92f00"
+    },
+    {
+      "path": "packages/check.js",
+      "where": "client",
+      "type": "js",
+      "cacheable": true,
+      "url": "/packages/check.js?a54cf3c7b3abe9208d064621eb80a3ecaf2f4add",
+      "sourceMap": "packages/check.js.map",
+      "sourceMapUrl": "/packages/a54cf3c7b3abe9208d064621eb80a3ecaf2f4add.map",
+      "size": 30962,
+      "hash": "74f3303415eeaa63fed122e5d8fb4fddde5e018a"
+    },
+    {
+      "path": "packages/random.js",
+      "where": "client",
+      "type": "js",
+      "cacheable": true,
+      "url": "/packages/random.js?66f32d9674bbf319a47b2638439a6bf41565ebb9",
+      "sourceMap": "packages/random.js.map",
+      "sourceMapUrl": "/packages/66f32d9674bbf319a47b2638439a6bf41565ebb9.map",
+      "size": 21800,
+      "hash": "47dce7a8d0c3d331c281f9b3e2402cc841bc2b71"
+    },
+    {
+      "path": "packages/ordered-dict.js",
+      "where": "client",
+      "type": "js",
+      "cacheable": true,
+      "url": "/packages/ordered-dict.js?bf8af2f26c8d96bf8b2e6b407d3ed69f23c2cd37",
+      "sourceMap": "packages/ordered-dict.js.map",
+      "sourceMapUrl": "/packages/bf8af2f26c8d96bf8b2e6b407d3ed69f23c2cd37.map",
+      "size": 20462,
+      "hash": "04293cc374826c63c8f2eb11c7ac8134f661cf0b"
+    },
+    {
+      "path": "packages/geojson-utils.js",
+      "where": "client",
+      "type": "js",
+      "cacheable": true,
+      "url": "/packages/geojson-utils.js?81b79d5cf96d00b4b7a28987debcffb665c17526",
+      "sourceMap": "packages/geojson-utils.js.map",
+      "sourceMapUrl": "/packages/81b79d5cf96d00b4b7a28987debcffb665c17526.map",
+      "size": 48406,
+      "hash": "732d630d298f84b0b725df217a34d9b87fc984eb"
+    },
+    {
+      "path": "packages/minimongo.js",
+      "where": "client",
+      "type": "js",
+      "cacheable": true,
+      "url": "/packages/minimongo.js?90e2dbb4e5aa8fe163e25bb45c3b7edd5ea1b8cc",
+      "sourceMap": "packages/minimongo.js.map",
+      "sourceMapUrl": "/packages/90e2dbb4e5aa8fe163e25bb45c3b7edd5ea1b8cc.map",
+      "size": 323368,
+      "hash": "28dfd7f138fcc0d02c639c3c11d87e13afef07e6"
+    },
+    {
+      "path": "packages/livedata.js",
+      "where": "client",
+      "type": "js",
+      "cacheable": true,
+      "url": "/packages/livedata.js?a631e1fda09ec6a55504ac1389ba74e18ceb2b4d",
+      "sourceMap": "packages/livedata.js.map",
+      "sourceMapUrl": "/packages/a631e1fda09ec6a55504ac1389ba74e18ceb2b4d.map",
+      "size": 560614,
+      "hash": "bead8d25584911e5832988e3a9ca29e36795bf1d"
+    },
+    {
+      "path": "packages/follower-livedata.js",
+      "where": "client",
+      "type": "js",
+      "cacheable": true,
+      "url": "/packages/follower-livedata.js?39b05f02878030ae806a16a173661b7df1e92eb6",
+      "sourceMap": "packages/follower-livedata.js.map",
+      "sourceMapUrl": "/packages/39b05f02878030ae806a16a173661b7df1e92eb6.map",
+      "size": 1562,
+      "hash": "86f15f1dfb79baeec5c8f16c55275b050a489ad1"
+    },
+    {
+      "path": "packages/application-configuration.js",
+      "where": "client",
+      "type": "js",
+      "cacheable": true,
+      "url": "/packages/application-configuration.js?fa92020e10c808f1287070d009f69a4054676e5a",
+      "sourceMap": "packages/application-configuration.js.map",
+      "sourceMapUrl": "/packages/fa92020e10c808f1287070d009f69a4054676e5a.map",
+      "size": 1557,
+      "hash": "f07593c89c711c06846048b168f5f96b86438f6d"
     },
     {
       "path": "packages/insecure.js",
@@ -47,15 +179,37 @@
       "hash": "b08ff2a4cb09a65ed72e539c331f1fedf34ba24d"
     },
     {
-      "path": "packages/random.js",
+      "path": "packages/mongo-livedata.js",
       "where": "client",
       "type": "js",
       "cacheable": true,
-      "url": "/packages/random.js?b763d607358d5f39ec7165df804da4c9509ba4e5",
-      "sourceMap": "packages/random.js.map",
-      "sourceMapUrl": "/packages/b763d607358d5f39ec7165df804da4c9509ba4e5.map",
-      "size": 21982,
-      "hash": "aa2efe8ccc3bf9cf8d02cf2ec93fc2bb4aa92be0"
+      "url": "/packages/mongo-livedata.js?32cb8e7b8b1a4ecda94a731b3a18e434e3067a5f",
+      "sourceMap": "packages/mongo-livedata.js.map",
+      "sourceMapUrl": "/packages/32cb8e7b8b1a4ecda94a731b3a18e434e3067a5f.map",
+      "size": 102219,
+      "hash": "79fd9955ad832ce4b95ff44cb5b2ee673968dca3"
+    },
+    {
+      "path": "packages/autoupdate.js",
+      "where": "client",
+      "type": "js",
+      "cacheable": true,
+      "url": "/packages/autoupdate.js?c76cb651a032d3fdb795608d8dc51e7e07e1ee97",
+      "sourceMap": "packages/autoupdate.js.map",
+      "sourceMapUrl": "/packages/c76cb651a032d3fdb795608d8dc51e7e07e1ee97.map",
+      "size": 10296,
+      "hash": "901b39713e4342241ebefae749675234892d67ba"
+    },
+    {
+      "path": "packages/standard-app-packages.js",
+      "where": "client",
+      "type": "js",
+      "cacheable": true,
+      "url": "/packages/standard-app-packages.js?601dc02c741b437bbe8be03773a37f7d896a88e7",
+      "sourceMap": "packages/standard-app-packages.js.map",
+      "sourceMapUrl": "/packages/601dc02c741b437bbe8be03773a37f7d896a88e7.map",
+      "size": 1457,
+      "hash": "d1212ff69eb4558f928ef3dcd90c81ffd3fdfc78"
     },
     {
       "path": "packages/jquery.js",
@@ -102,72 +256,6 @@
       "hash": "a9a7185077235ab7c6e101b4d776a60eb984135a"
     },
     {
-      "path": "packages/ordered-dict.js",
-      "where": "client",
-      "type": "js",
-      "cacheable": true,
-      "url": "/packages/ordered-dict.js?bf8af2f26c8d96bf8b2e6b407d3ed69f23c2cd37",
-      "sourceMap": "packages/ordered-dict.js.map",
-      "sourceMapUrl": "/packages/bf8af2f26c8d96bf8b2e6b407d3ed69f23c2cd37.map",
-      "size": 20462,
-      "hash": "04293cc374826c63c8f2eb11c7ac8134f661cf0b"
-    },
-    {
-      "path": "packages/deps.js",
-      "where": "client",
-      "type": "js",
-      "cacheable": true,
-      "url": "/packages/deps.js?5ac28feec1f3e0539889ecde598dd9d01e408b41",
-      "sourceMap": "packages/deps.js.map",
-      "sourceMapUrl": "/packages/5ac28feec1f3e0539889ecde598dd9d01e408b41.map",
-      "size": 30983,
-      "hash": "8456fc3e3d68ad78ca96e527fd2e896d91168ba0"
-    },
-    {
-      "path": "packages/json.js",
-      "where": "client",
-      "type": "js",
-      "cacheable": true,
-      "url": "/packages/json.js?e22856eae714c681199eabc5c0710b904b125554",
-      "sourceMap": "packages/json.js.map",
-      "sourceMapUrl": "/packages/e22856eae714c681199eabc5c0710b904b125554.map",
-      "size": 58410,
-      "hash": "22336e2adfc7bd2e7de733d5779ed503dddcb1f9"
-    },
-    {
-      "path": "packages/ejson.js",
-      "where": "client",
-      "type": "js",
-      "cacheable": true,
-      "url": "/packages/ejson.js?6b96257c000bbb949b0e65eaacceeecba5bf84c6",
-      "sourceMap": "packages/ejson.js.map",
-      "sourceMapUrl": "/packages/6b96257c000bbb949b0e65eaacceeecba5bf84c6.map",
-      "size": 67567,
-      "hash": "581fa4d0a652a43424504e5969147bd0d0af0001"
-    },
-    {
-      "path": "packages/geojson-utils.js",
-      "where": "client",
-      "type": "js",
-      "cacheable": true,
-      "url": "/packages/geojson-utils.js?81b79d5cf96d00b4b7a28987debcffb665c17526",
-      "sourceMap": "packages/geojson-utils.js.map",
-      "sourceMapUrl": "/packages/81b79d5cf96d00b4b7a28987debcffb665c17526.map",
-      "size": 48406,
-      "hash": "732d630d298f84b0b725df217a34d9b87fc984eb"
-    },
-    {
-      "path": "packages/minimongo.js",
-      "where": "client",
-      "type": "js",
-      "cacheable": true,
-      "url": "/packages/minimongo.js?65b4ee0e4ba2a5ca4254709cb52b6f667a848d7b",
-      "sourceMap": "packages/minimongo.js.map",
-      "sourceMapUrl": "/packages/65b4ee0e4ba2a5ca4254709cb52b6f667a848d7b.map",
-      "size": 292665,
-      "hash": "ecaabfb4eb4612cb644c75a68f33f7546ab0499c"
-    },
-    {
       "path": "packages/spark.js",
       "where": "client",
       "type": "js",
@@ -188,72 +276,6 @@
       "sourceMapUrl": "/packages/7b3b8bf0669f1f110126607ecd8488f719344f09.map",
       "size": 2558,
       "hash": "c65d2467072820bb4ab163ea1a263a5921f773d2"
-    },
-    {
-      "path": "packages/logging.js",
-      "where": "client",
-      "type": "js",
-      "cacheable": true,
-      "url": "/packages/logging.js?e3df5be1604658260b4000a031f1a7b969cb6133",
-      "sourceMap": "packages/logging.js.map",
-      "sourceMapUrl": "/packages/e3df5be1604658260b4000a031f1a7b969cb6133.map",
-      "size": 27499,
-      "hash": "13545dd0ce2e0b589250338e912f5d8347194be9"
-    },
-    {
-      "path": "packages/check.js",
-      "where": "client",
-      "type": "js",
-      "cacheable": true,
-      "url": "/packages/check.js?a54cf3c7b3abe9208d064621eb80a3ecaf2f4add",
-      "sourceMap": "packages/check.js.map",
-      "sourceMapUrl": "/packages/a54cf3c7b3abe9208d064621eb80a3ecaf2f4add.map",
-      "size": 30962,
-      "hash": "74f3303415eeaa63fed122e5d8fb4fddde5e018a"
-    },
-    {
-      "path": "packages/reload.js",
-      "where": "client",
-      "type": "js",
-      "cacheable": true,
-      "url": "/packages/reload.js?8495281f1e90298939d33611f64cb97609664269",
-      "sourceMap": "packages/reload.js.map",
-      "sourceMapUrl": "/packages/8495281f1e90298939d33611f64cb97609664269.map",
-      "size": 19595,
-      "hash": "24d4ea0180923084b3f4a2296726f53cc5a4a28f"
-    },
-    {
-      "path": "packages/livedata.js",
-      "where": "client",
-      "type": "js",
-      "cacheable": true,
-      "url": "/packages/livedata.js?dab0057c9e7c90bcd874be39d89b9cd54637979b",
-      "sourceMap": "packages/livedata.js.map",
-      "sourceMapUrl": "/packages/dab0057c9e7c90bcd874be39d89b9cd54637979b.map",
-      "size": 557948,
-      "hash": "ea494abce6c92aaf48c44456ec3b29ffb80c34a6"
-    },
-    {
-      "path": "packages/application-configuration.js",
-      "where": "client",
-      "type": "js",
-      "cacheable": true,
-      "url": "/packages/application-configuration.js?d035285fe78d9556cb9a784c73aa129d88bc386b",
-      "sourceMap": "packages/application-configuration.js.map",
-      "sourceMapUrl": "/packages/d035285fe78d9556cb9a784c73aa129d88bc386b.map",
-      "size": 1472,
-      "hash": "83a8aaee070fc3cd979282685a7ec7381c759615"
-    },
-    {
-      "path": "packages/mongo-livedata.js",
-      "where": "client",
-      "type": "js",
-      "cacheable": true,
-      "url": "/packages/mongo-livedata.js?2f66d8591aa3225badaf5a98bfba28287bff3a3d",
-      "sourceMap": "packages/mongo-livedata.js.map",
-      "sourceMapUrl": "/packages/2f66d8591aa3225badaf5a98bfba28287bff3a3d.map",
-      "size": 101559,
-      "hash": "2318f65c30ed9d7613dc2d038bf44f7049e2ce41"
     },
     {
       "path": "packages/service-configuration.js",
@@ -293,11 +315,11 @@
       "where": "client",
       "type": "js",
       "cacheable": true,
-      "url": "/packages/accounts-base.js?9b3a1d13cc49c66883244e6606e87287d370918f",
+      "url": "/packages/accounts-base.js?1cf30596384b9e9f1f48d1f357b9e640c4065e01",
       "sourceMap": "packages/accounts-base.js.map",
-      "sourceMapUrl": "/packages/9b3a1d13cc49c66883244e6606e87287d370918f.map",
-      "size": 55280,
-      "hash": "b46755e707d46a996ed78d22dd6f5d3f8c006c49"
+      "sourceMapUrl": "/packages/1cf30596384b9e9f1f48d1f357b9e640c4065e01.map",
+      "size": 55565,
+      "hash": "22995efcc9e340c638c3e7514a53ba0ba74c9e8a"
     },
     {
       "path": "packages/templating.js",
@@ -370,11 +392,11 @@
       "where": "client",
       "type": "js",
       "cacheable": true,
-      "url": "/packages/accounts-ui-unstyled.js?7ca43f42462f1bda8a5c7991bfc1e9e842828ca0",
+      "url": "/packages/accounts-ui-unstyled.js?5475a4b12f2a1c7122160a8aab3b2ec6f2850da9",
       "sourceMap": "packages/accounts-ui-unstyled.js.map",
-      "sourceMapUrl": "/packages/7ca43f42462f1bda8a5c7991bfc1e9e842828ca0.map",
+      "sourceMapUrl": "/packages/5475a4b12f2a1c7122160a8aab3b2ec6f2850da9.map",
       "size": 164144,
-      "hash": "9967312b60193c9c8a8b401943abfdd89701bed8"
+      "hash": "42a9d0505110fb5941d90097b577631ed1ddd487"
     },
     {
       "path": "packages/less.js",
@@ -522,9 +544,9 @@
       "where": "client",
       "type": "js",
       "cacheable": true,
-      "url": "/client/template.client.js?a91f41bef42f93b34ded551075d3d6bd95d0c37b",
-      "size": 8500,
-      "hash": "a91f41bef42f93b34ded551075d3d6bd95d0c37b"
+      "url": "/client/template.client.js?d75b4c2a77ea961816f888c6aa45e7f0822793c2",
+      "size": 8503,
+      "hash": "d75b4c2a77ea961816f888c6aa45e7f0822793c2"
     },
     {
       "path": "app/lib/models.js",
@@ -549,9 +571,9 @@
       "where": "client",
       "type": "js",
       "cacheable": true,
-      "url": "/client/compatibility/froot-wars/game.js?a3313ce301593663a02677500a270918f6f8fa46",
-      "size": 25213,
-      "hash": "a3313ce301593663a02677500a270918f6f8fa46"
+      "url": "/client/compatibility/froot-wars/game.js?3008aba9547bec922743c66ada8a14914f50e94d",
+      "size": 25806,
+      "hash": "3008aba9547bec922743c66ada8a14914f50e94d"
     },
     {
       "path": "app/client/SinNombre/engine.js",
@@ -567,18 +589,36 @@
       "where": "client",
       "type": "js",
       "cacheable": true,
-      "url": "/client/SinNombre/game.js?097e9ae2a1e0776f83a33e11a74beb22020e81bb",
-      "size": 30689,
-      "hash": "097e9ae2a1e0776f83a33e11a74beb22020e81bb"
+      "url": "/client/SinNombre/game.js?d85ceb41a4b7a9317bed28eb4fddb138ee01a1d4",
+      "size": 30784,
+      "hash": "d85ceb41a4b7a9317bed28eb4fddb138ee01a1d4"
     },
     {
       "path": "app/client/client.js",
       "where": "client",
       "type": "js",
       "cacheable": true,
-      "url": "/client/client.js?dfbf8df36e544599b9c1d1f44bf73bd9e1b1847e",
-      "size": 8323,
-      "hash": "dfbf8df36e544599b9c1d1f44bf73bd9e1b1847e"
+      "url": "/client/client.js?0ae9114ab4a771a55afa4a3bbacce9ded75aedcd",
+      "size": 8377,
+      "hash": "0ae9114ab4a771a55afa4a3bbacce9ded75aedcd"
+    },
+    {
+      "path": "app/client/engine.js",
+      "where": "client",
+      "type": "js",
+      "cacheable": true,
+      "url": "/client/engine.js?e028ba7e41d941e15ba6ace3849b9b72f5063918",
+      "size": 22873,
+      "hash": "e028ba7e41d941e15ba6ace3849b9b72f5063918"
+    },
+    {
+      "path": "app/client/game.js",
+      "where": "client",
+      "type": "js",
+      "cacheable": true,
+      "url": "/client/game.js?cf3d26bf813df270032dd6bc9c46b865b0a35a0d",
+      "size": 17334,
+      "hash": "cf3d26bf813df270032dd6bc9c46b865b0a35a0d"
     },
     {
       "path": "app/client/jquery-1.9.1.js",
@@ -666,9 +706,9 @@
       "where": "client",
       "type": "css",
       "cacheable": true,
-      "url": "/froot-wars.css?a067d7c7c5354be5a017ede58471251b70599fed",
-      "size": 1811,
-      "hash": "a067d7c7c5354be5a017ede58471251b70599fed"
+      "url": "/froot-wars.css?a2b81971916af0da99cb0c88f2092c2ae7489cfc",
+      "size": 2008,
+      "hash": "a2b81971916af0da99cb0c88f2092c2ae7489cfc"
     },
     {
       "path": "app/agryfruits.png",
@@ -1222,7 +1262,7 @@
     {
       "path": "app.html",
       "where": "internal",
-      "hash": "7702850c7d92c42890557a1e540f58a17eee176a"
+      "hash": "5922fbfd46a812ac6d0b35a157b2dd1458aa6981"
     }
   ]
 }

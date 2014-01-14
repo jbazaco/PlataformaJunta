@@ -86,7 +86,7 @@ var META_COLOR = 'blue';                                                        
                                                                                        // 51
 // XXX package                                                                         // 52
 var RESTRICTED_KEYS = ['time', 'timeInexact', 'level', 'file', 'line',                 // 53
-                        'program', 'originApp', 'stderr'];                             // 54
+                        'program', 'originApp', 'satellite', 'stderr'];                // 54
                                                                                        // 55
 var FORMATTED_KEYS = RESTRICTED_KEYS.concat(['app', 'message']);                       // 56
                                                                                        // 57
@@ -237,73 +237,77 @@ Log.format = function (obj, options) {                                          
   var originApp = obj.originApp;                                                       // 202
   var message = obj.message || '';                                                     // 203
   var program = obj.program || '';                                                     // 204
-  var stderr = obj.stderr || '';                                                       // 205
-                                                                                       // 206
-  _.each(FORMATTED_KEYS, function(key) {                                               // 207
-    delete obj[key];                                                                   // 208
-  });                                                                                  // 209
-                                                                                       // 210
-  if (!_.isEmpty(obj)) {                                                               // 211
-    if (message) message += " ";                                                       // 212
-    message += EJSON.stringify(obj);                                                   // 213
-  }                                                                                    // 214
-                                                                                       // 215
-  var pad2 = function(n) { return n < 10 ? '0' + n : n; };                             // 216
-  var pad3 = function(n) { return n < 100 ? '0' + pad2(n) : n; };                      // 217
-                                                                                       // 218
-  var dateStamp = time.getFullYear() +                                                 // 219
-    pad2(time.getMonth() + 1 /*0-based*/) +                                            // 220
-    pad2(time.getDate());                                                              // 221
-  var timeStamp = pad2(time.getHours()) +                                              // 222
-        ':' +                                                                          // 223
-        pad2(time.getMinutes()) +                                                      // 224
-        ':' +                                                                          // 225
-        pad2(time.getSeconds()) +                                                      // 226
-        '.' +                                                                          // 227
-        pad3(time.getMilliseconds());                                                  // 228
-                                                                                       // 229
-  // eg in San Francisco in June this will be '(-7)'                                   // 230
-  var utcOffsetStr = '(' + (-(new Date().getTimezoneOffset() / 60)) + ')';             // 231
-                                                                                       // 232
-  var appInfo = '';                                                                    // 233
-  if (appName) appInfo += appName;                                                     // 234
-  if (originApp && originApp !== appName) appInfo += ' via ' + originApp;              // 235
-  if (appInfo) appInfo = '[' + appInfo + '] ';                                         // 236
-                                                                                       // 237
-  var sourceInfo = (file && lineNumber) ?                                              // 238
-      ['(', (program ? program + ':' : ''), file, ':', lineNumber, ') '].join('')      // 239
-      : '';                                                                            // 240
-                                                                                       // 241
-  var stderrIndicator = stderr ? '(STDERR) ' : '';                                     // 242
-                                                                                       // 243
-  var metaPrefix = [                                                                   // 244
-    level.charAt(0).toUpperCase(),                                                     // 245
-    dateStamp,                                                                         // 246
-    '-',                                                                               // 247
-    timeStamp,                                                                         // 248
-    utcOffsetStr,                                                                      // 249
-    timeInexact ? '? ' : ' ',                                                          // 250
-    appInfo,                                                                           // 251
-    sourceInfo,                                                                        // 252
-    stderrIndicator].join('');                                                         // 253
-                                                                                       // 254
-  var prettify = function (line, color) {                                              // 255
-    return (options.color && Meteor.isServer && color) ?                               // 256
-      Npm.require('cli-color')[color](line) : line;                                    // 257
-  };                                                                                   // 258
-                                                                                       // 259
-  return prettify(metaPrefix, META_COLOR)                                              // 260
-    + prettify(message, LEVEL_COLORS[level]);                                          // 261
-};                                                                                     // 262
+  var satellite = obj.satellite;                                                       // 205
+  var stderr = obj.stderr || '';                                                       // 206
+                                                                                       // 207
+  _.each(FORMATTED_KEYS, function(key) {                                               // 208
+    delete obj[key];                                                                   // 209
+  });                                                                                  // 210
+                                                                                       // 211
+  if (!_.isEmpty(obj)) {                                                               // 212
+    if (message) message += " ";                                                       // 213
+    message += EJSON.stringify(obj);                                                   // 214
+  }                                                                                    // 215
+                                                                                       // 216
+  var pad2 = function(n) { return n < 10 ? '0' + n : n.toString(); };                  // 217
+  var pad3 = function(n) { return n < 100 ? '0' + pad2(n) : n.toString(); };           // 218
+                                                                                       // 219
+  var dateStamp = time.getFullYear().toString() +                                      // 220
+    pad2(time.getMonth() + 1 /*0-based*/) +                                            // 221
+    pad2(time.getDate());                                                              // 222
+  var timeStamp = pad2(time.getHours()) +                                              // 223
+        ':' +                                                                          // 224
+        pad2(time.getMinutes()) +                                                      // 225
+        ':' +                                                                          // 226
+        pad2(time.getSeconds()) +                                                      // 227
+        '.' +                                                                          // 228
+        pad3(time.getMilliseconds());                                                  // 229
+                                                                                       // 230
+  // eg in San Francisco in June this will be '(-7)'                                   // 231
+  var utcOffsetStr = '(' + (-(new Date().getTimezoneOffset() / 60)) + ')';             // 232
+                                                                                       // 233
+  var appInfo = '';                                                                    // 234
+  if (appName) appInfo += appName;                                                     // 235
+  if (originApp && originApp !== appName) appInfo += ' via ' + originApp;              // 236
+  if (appInfo) appInfo = '[' + appInfo + '] ';                                         // 237
+                                                                                       // 238
+  var sourceInfo = (file && lineNumber) ?                                              // 239
+      ['(', (program ? program + ':' : ''), file, ':', lineNumber, ') '].join('')      // 240
+      : '';                                                                            // 241
+                                                                                       // 242
+  if (satellite)                                                                       // 243
+    sourceInfo += ['[', satellite, ']'].join('');                                      // 244
+                                                                                       // 245
+  var stderrIndicator = stderr ? '(STDERR) ' : '';                                     // 246
+                                                                                       // 247
+  var metaPrefix = [                                                                   // 248
+    level.charAt(0).toUpperCase(),                                                     // 249
+    dateStamp,                                                                         // 250
+    '-',                                                                               // 251
+    timeStamp,                                                                         // 252
+    utcOffsetStr,                                                                      // 253
+    timeInexact ? '? ' : ' ',                                                          // 254
+    appInfo,                                                                           // 255
+    sourceInfo,                                                                        // 256
+    stderrIndicator].join('');                                                         // 257
+                                                                                       // 258
+  var prettify = function (line, color) {                                              // 259
+    return (options.color && Meteor.isServer && color) ?                               // 260
+      Npm.require('cli-color')[color](line) : line;                                    // 261
+  };                                                                                   // 262
                                                                                        // 263
-// Turn a line of text into a loggable object.                                         // 264
-// @param line {String}                                                                // 265
-// @param override {Object}                                                            // 266
-Log.objFromText = function (line, override) {                                          // 267
-  var obj = {message: line, level: "info", time: new Date(), timeInexact: true};       // 268
-  return _.extend(obj, override);                                                      // 269
-};                                                                                     // 270
-                                                                                       // 271
+  return prettify(metaPrefix, META_COLOR)                                              // 264
+    + prettify(message, LEVEL_COLORS[level]);                                          // 265
+};                                                                                     // 266
+                                                                                       // 267
+// Turn a line of text into a loggable object.                                         // 268
+// @param line {String}                                                                // 269
+// @param override {Object}                                                            // 270
+Log.objFromText = function (line, override) {                                          // 271
+  var obj = {message: line, level: "info", time: new Date(), timeInexact: true};       // 272
+  return _.extend(obj, override);                                                      // 273
+};                                                                                     // 274
+                                                                                       // 275
 /////////////////////////////////////////////////////////////////////////////////////////
 
 }).call(this);
@@ -317,4 +321,4 @@ Package.logging = {
 
 })();
 
-//# sourceMappingURL=e3df5be1604658260b4000a031f1a7b969cb6133.map
+//# sourceMappingURL=0b5bf4a50ca23ebf02c29f1243437e173a6b6c1a.map

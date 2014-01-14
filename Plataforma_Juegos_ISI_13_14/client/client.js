@@ -15,6 +15,7 @@ Meteor.startup(function(){
 	$( "#container2" ).tabs({ hide: { effect: "slide",direction:'up', duration: 100 }, show:{ effect: "slide",direction:'up', duration: 100 }  });
 	$(".subtab").hide();	//Esconde los subtans que se encuentran en la segunda pestaña del acordeon
 	$(".canvas").hide();	//Esconde todos los canvas
+  $(".gamelayer").hide();
 	$('.escenario').attr("disabled",true);
 // 	Meteor.setTimeout(function(){$(".user").click(ShowUserInfo)},500);		//Hacer click muestra estadisticas de usuario, otro click lo cierra.
 	$( ".startgame" ).click(function() {
@@ -190,7 +191,7 @@ Template.games.events={
 	'click a#game_2':function(){
 		Session.set('Current_Game_id',2)
 		$(".canvas").hide();
-		$('#gamecanvas').show(500);
+    game.showLevelScreen();
 		
 		$("#selectedgame").html("Angry Fruits");
 		$("#container2").tabs( "option", "active", 1 );
@@ -199,6 +200,7 @@ Template.games.events={
 	'click a#game_3':function(){
 		Session.set('Current_Game_id',3)
 		$(".canvas").hide();
+    $(".gamelayer").hide();
 		$('#tablero').show(500);
 
 		$("#selectedgame").html("Carcassonne");	

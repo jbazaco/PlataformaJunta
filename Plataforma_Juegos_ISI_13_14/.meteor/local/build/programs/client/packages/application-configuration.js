@@ -19,9 +19,11 @@
 
 /* Imports */
 var Meteor = Package.meteor.Meteor;
+var Log = Package.logging.Log;
 var _ = Package.underscore._;
 var DDP = Package.livedata.DDP;
 var EJSON = Package.ejson.EJSON;
+var Follower = Package['follower-livedata'].Follower;
 
 
 
@@ -31,4 +33,4 @@ Package['application-configuration'] = {};
 
 })();
 
-//# sourceMappingURL=d035285fe78d9556cb9a784c73aa129d88bc386b.map
+//# sourceMappingURL=fa92020e10c808f1287070d009f69a4054676e5a.map

@@ -360,127 +360,130 @@ Accounts.callLoginMethod = function (options) {                                 
               if (error) {                                                              // 118
                 makeClientLoggedOut();                                                  // 119
               }                                                                         // 120
-              onceUserCallback(error);                                                  // 121
-            }});                                                                        // 122
-        }                                                                               // 123
-      };                                                                                // 124
-    }                                                                                   // 125
-  };                                                                                    // 126
-                                                                                        // 127
-  // This callback is called once the local cache of the current-user                   // 128
-  // subscription (and all subscriptions, in fact) are guaranteed to be up to           // 129
-  // date.                                                                              // 130
-  var loggedInAndDataReadyCallback = function (error, result) {                         // 131
-    // If the login method returns its result but the connection is lost                // 132
-    // before the data is in the local cache, it'll set an onReconnect (see             // 133
-    // above). The onReconnect will try to log in using the token, and *it*             // 134
-    // will call userCallback via its own version of this                               // 135
-    // loggedInAndDataReadyCallback. So we don't have to do anything here.              // 136
-    if (reconnected)                                                                    // 137
-      return;                                                                           // 138
-                                                                                        // 139
-    // Note that we need to call this even if _suppressLoggingIn is true,               // 140
-    // because it could be matching a _setLoggingIn(true) from a                        // 141
-    // half-completed pre-reconnect login method.                                       // 142
-    Accounts._setLoggingIn(false);                                                      // 143
-    if (error || !result) {                                                             // 144
-      error = error || new Error(                                                       // 145
-        "No result from call to " + options.methodName);                                // 146
-      onceUserCallback(error);                                                          // 147
-      return;                                                                           // 148
-    }                                                                                   // 149
-    try {                                                                               // 150
-      options.validateResult(result);                                                   // 151
-    } catch (e) {                                                                       // 152
-      onceUserCallback(e);                                                              // 153
-      return;                                                                           // 154
-    }                                                                                   // 155
-                                                                                        // 156
-    // Make the client logged in. (The user data should already be loaded!)             // 157
-    makeClientLoggedIn(result.id, result.token, result.tokenExpires);                   // 158
-    onceUserCallback();                                                                 // 159
-  };                                                                                    // 160
-                                                                                        // 161
-  if (!options._suppressLoggingIn)                                                      // 162
-    Accounts._setLoggingIn(true);                                                       // 163
-  Meteor.apply(                                                                         // 164
-    options.methodName,                                                                 // 165
-    options.methodArguments,                                                            // 166
-    {wait: true, onResultReceived: onResultReceived},                                   // 167
-    loggedInAndDataReadyCallback);                                                      // 168
-};                                                                                      // 169
-                                                                                        // 170
-makeClientLoggedOut = function() {                                                      // 171
-  unstoreLoginToken();                                                                  // 172
-  Meteor.connection.setUserId(null);                                                    // 173
-  Meteor.connection.onReconnect = null;                                                 // 174
-};                                                                                      // 175
-                                                                                        // 176
-makeClientLoggedIn = function(userId, token, tokenExpires) {                            // 177
-  storeLoginToken(userId, token, tokenExpires);                                         // 178
-  Meteor.connection.setUserId(userId);                                                  // 179
-};                                                                                      // 180
-                                                                                        // 181
-Meteor.logout = function (callback) {                                                   // 182
-  Meteor.apply('logout', [], {wait: true}, function(error, result) {                    // 183
-    if (error) {                                                                        // 184
-      callback && callback(error);                                                      // 185
-    } else {                                                                            // 186
-      makeClientLoggedOut();                                                            // 187
-      callback && callback();                                                           // 188
-    }                                                                                   // 189
-  });                                                                                   // 190
-};                                                                                      // 191
-                                                                                        // 192
-Meteor.logoutOtherClients = function (callback) {                                       // 193
-  // Our connection is going to be closed, but we don't want to call the                // 194
-  // onReconnect handler until the result comes back for this method, because           // 195
-  // the token will have been deleted on the server. Instead, wait until we get         // 196
-  // a new token and call the reconnect handler with that.                              // 197
-  // XXX this is messy.                                                                 // 198
-  // XXX what if login gets called before the callback runs?                            // 199
-  var origOnReconnect = Meteor.connection.onReconnect;                                  // 200
-  var userId = Meteor.userId();                                                         // 201
-  Meteor.connection.onReconnect = null;                                                 // 202
-  Meteor.apply('logoutOtherClients', [], { wait: true },                                // 203
-               function (error, result) {                                               // 204
-                 Meteor.connection.onReconnect = origOnReconnect;                       // 205
-                 if (! error)                                                           // 206
-                   storeLoginToken(userId, result.token, result.tokenExpires);          // 207
-                 Meteor.connection.onReconnect();                                       // 208
-                 callback && callback(error);                                           // 209
-               });                                                                      // 210
-};                                                                                      // 211
-                                                                                        // 212
-///                                                                                     // 213
-/// LOGIN SERVICES                                                                      // 214
-///                                                                                     // 215
-                                                                                        // 216
-var loginServicesHandle = Meteor.subscribe("meteor.loginServiceConfiguration");         // 217
-                                                                                        // 218
-// A reactive function returning whether the loginServiceConfiguration                  // 219
-// subscription is ready. Used by accounts-ui to hide the login button                  // 220
-// until we have all the configuration loaded                                           // 221
-//                                                                                      // 222
-Accounts.loginServicesConfigured = function () {                                        // 223
-  return loginServicesHandle.ready();                                                   // 224
-};                                                                                      // 225
-                                                                                        // 226
-///                                                                                     // 227
-/// HANDLEBARS HELPERS                                                                  // 228
-///                                                                                     // 229
-                                                                                        // 230
-// If we're using Handlebars, register the {{currentUser}} and                          // 231
-// {{loggingIn}} global helpers.                                                        // 232
-if (Package.handlebars) {                                                               // 233
-  Package.handlebars.Handlebars.registerHelper('currentUser', function () {             // 234
-    return Meteor.user();                                                               // 235
-  });                                                                                   // 236
-  Package.handlebars.Handlebars.registerHelper('loggingIn', function () {               // 237
-    return Meteor.loggingIn();                                                          // 238
+              // Possibly a weird callback to call, but better than nothing if          // 121
+              // there is a reconnect between "login result received" and "data         // 122
+              // ready".                                                                // 123
+              onceUserCallback(error);                                                  // 124
+            }});                                                                        // 125
+        }                                                                               // 126
+      };                                                                                // 127
+    }                                                                                   // 128
+  };                                                                                    // 129
+                                                                                        // 130
+  // This callback is called once the local cache of the current-user                   // 131
+  // subscription (and all subscriptions, in fact) are guaranteed to be up to           // 132
+  // date.                                                                              // 133
+  var loggedInAndDataReadyCallback = function (error, result) {                         // 134
+    // If the login method returns its result but the connection is lost                // 135
+    // before the data is in the local cache, it'll set an onReconnect (see             // 136
+    // above). The onReconnect will try to log in using the token, and *it*             // 137
+    // will call userCallback via its own version of this                               // 138
+    // loggedInAndDataReadyCallback. So we don't have to do anything here.              // 139
+    if (reconnected)                                                                    // 140
+      return;                                                                           // 141
+                                                                                        // 142
+    // Note that we need to call this even if _suppressLoggingIn is true,               // 143
+    // because it could be matching a _setLoggingIn(true) from a                        // 144
+    // half-completed pre-reconnect login method.                                       // 145
+    Accounts._setLoggingIn(false);                                                      // 146
+    if (error || !result) {                                                             // 147
+      error = error || new Error(                                                       // 148
+        "No result from call to " + options.methodName);                                // 149
+      onceUserCallback(error);                                                          // 150
+      return;                                                                           // 151
+    }                                                                                   // 152
+    try {                                                                               // 153
+      options.validateResult(result);                                                   // 154
+    } catch (e) {                                                                       // 155
+      onceUserCallback(e);                                                              // 156
+      return;                                                                           // 157
+    }                                                                                   // 158
+                                                                                        // 159
+    // Make the client logged in. (The user data should already be loaded!)             // 160
+    makeClientLoggedIn(result.id, result.token, result.tokenExpires);                   // 161
+    onceUserCallback();                                                                 // 162
+  };                                                                                    // 163
+                                                                                        // 164
+  if (!options._suppressLoggingIn)                                                      // 165
+    Accounts._setLoggingIn(true);                                                       // 166
+  Meteor.apply(                                                                         // 167
+    options.methodName,                                                                 // 168
+    options.methodArguments,                                                            // 169
+    {wait: true, onResultReceived: onResultReceived},                                   // 170
+    loggedInAndDataReadyCallback);                                                      // 171
+};                                                                                      // 172
+                                                                                        // 173
+makeClientLoggedOut = function() {                                                      // 174
+  unstoreLoginToken();                                                                  // 175
+  Meteor.connection.setUserId(null);                                                    // 176
+  Meteor.connection.onReconnect = null;                                                 // 177
+};                                                                                      // 178
+                                                                                        // 179
+makeClientLoggedIn = function(userId, token, tokenExpires) {                            // 180
+  storeLoginToken(userId, token, tokenExpires);                                         // 181
+  Meteor.connection.setUserId(userId);                                                  // 182
+};                                                                                      // 183
+                                                                                        // 184
+Meteor.logout = function (callback) {                                                   // 185
+  Meteor.apply('logout', [], {wait: true}, function(error, result) {                    // 186
+    if (error) {                                                                        // 187
+      callback && callback(error);                                                      // 188
+    } else {                                                                            // 189
+      makeClientLoggedOut();                                                            // 190
+      callback && callback();                                                           // 191
+    }                                                                                   // 192
+  });                                                                                   // 193
+};                                                                                      // 194
+                                                                                        // 195
+Meteor.logoutOtherClients = function (callback) {                                       // 196
+  // Our connection is going to be closed, but we don't want to call the                // 197
+  // onReconnect handler until the result comes back for this method, because           // 198
+  // the token will have been deleted on the server. Instead, wait until we get         // 199
+  // a new token and call the reconnect handler with that.                              // 200
+  // XXX this is messy.                                                                 // 201
+  // XXX what if login gets called before the callback runs?                            // 202
+  var origOnReconnect = Meteor.connection.onReconnect;                                  // 203
+  var userId = Meteor.userId();                                                         // 204
+  Meteor.connection.onReconnect = null;                                                 // 205
+  Meteor.apply('logoutOtherClients', [], { wait: true },                                // 206
+               function (error, result) {                                               // 207
+                 Meteor.connection.onReconnect = origOnReconnect;                       // 208
+                 if (! error)                                                           // 209
+                   storeLoginToken(userId, result.token, result.tokenExpires);          // 210
+                 Meteor.connection.onReconnect();                                       // 211
+                 callback && callback(error);                                           // 212
+               });                                                                      // 213
+};                                                                                      // 214
+                                                                                        // 215
+///                                                                                     // 216
+/// LOGIN SERVICES                                                                      // 217
+///                                                                                     // 218
+                                                                                        // 219
+var loginServicesHandle = Meteor.subscribe("meteor.loginServiceConfiguration");         // 220
+                                                                                        // 221
+// A reactive function returning whether the loginServiceConfiguration                  // 222
+// subscription is ready. Used by accounts-ui to hide the login button                  // 223
+// until we have all the configuration loaded                                           // 224
+//                                                                                      // 225
+Accounts.loginServicesConfigured = function () {                                        // 226
+  return loginServicesHandle.ready();                                                   // 227
+};                                                                                      // 228
+                                                                                        // 229
+///                                                                                     // 230
+/// HANDLEBARS HELPERS                                                                  // 231
+///                                                                                     // 232
+                                                                                        // 233
+// If we're using Handlebars, register the {{currentUser}} and                          // 234
+// {{loggingIn}} global helpers.                                                        // 235
+if (Package.handlebars) {                                                               // 236
+  Package.handlebars.Handlebars.registerHelper('currentUser', function () {             // 237
+    return Meteor.user();                                                               // 238
   });                                                                                   // 239
-}                                                                                       // 240
-                                                                                        // 241
+  Package.handlebars.Handlebars.registerHelper('loggingIn', function () {               // 240
+    return Meteor.loggingIn();                                                          // 241
+  });                                                                                   // 242
+}                                                                                       // 243
+                                                                                        // 244
 //////////////////////////////////////////////////////////////////////////////////////////
 
 }).call(this);
@@ -638,4 +641,4 @@ Package['accounts-base'] = {
 
 })();
 
-//# sourceMappingURL=9b3a1d13cc49c66883244e6606e87287d370918f.map
+//# sourceMappingURL=1cf30596384b9e9f1f48d1f357b9e640c4065e01.map

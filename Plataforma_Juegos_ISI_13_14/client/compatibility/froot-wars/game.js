@@ -91,18 +91,22 @@ var game = {
 		}
 	},
 	showLevelScreen:function(){
-		$('.canvas').hide();
+		$('.gamelayer').hide();
+    $("#container5").css("visibility","visible");
 		$('#levelselectscreen').show('slow');
+    $('#levelselectscreen').css("visibility","visible");
 	},
 	restartLevel:function(){
 		window.cancelAnimationFrame(game.animationFrame);		
 		game.lastUpdateTime = undefined;
 		levels.load(game.currentLevel.number);
+    $("#container5").css("visibility","visible");
 	},
 	startNextLevel:function(){
 		window.cancelAnimationFrame(game.animationFrame);		
 		game.lastUpdateTime = undefined;
 		levels.load(game.currentLevel.number+1);
+    $("#container5").css("visibility","visible");
 	},
 	// Game Mode
 	mode:"intro", 
@@ -110,7 +114,6 @@ var game = {
 	slingshotX:140,
 	slingshotY:280,
 	start:function(){
-		$('.canvas').hide();
 		// Display the game canvas and score 
 		$('#gamecanvas').show();
 		$('#scorescreen').show();
@@ -293,7 +296,13 @@ var game = {
 			    $('#endingmessage').html('Failed. Play Again?');
 			    $("#playnextlevel").hide();
 			}		
-	
+	    $("#loadingscreen").css("visibility","visible");
+      $("#container5").css("visibility","hidden");
+      $("#endingscreen div").css("visibility","visible");		
+	    $("#endingscreen p").css("visibility","visible");
+      $("#endingscreen p img").css("visibility","visible");
+      $("#endingscreen #endingmessage").css("visibility","visible");
+      $("#loadingscreen div").css("visibility","visible");
 			$('#endingscreen').show();
 		},
 	

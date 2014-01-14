@@ -165,7 +165,7 @@ _.extend(Meteor, {                                                              
           callback = fut.resolver();                                                                // 105
         }                                                                                           // 106
       }                                                                                             // 107
-      newArgs.push(Meteor.bindEnvironment(callback, logErr));                                       // 108
+      newArgs.push(Meteor.bindEnvironment(callback));                                               // 108
       var result = fn.apply(self, newArgs);                                                         // 109
       if (fut)                                                                                      // 110
         return fut.wait();                                                                          // 111
@@ -362,42 +362,39 @@ var withoutInvocation = function (f) {                                          
 };                                                                                                  // 10
                                                                                                     // 11
 var bindAndCatch = function (context, f) {                                                          // 12
-  return Meteor.bindEnvironment(withoutInvocation(f), function (e) {                                // 13
-    // XXX report nicely (or, should we catch it at all?)                                           // 14
-    Meteor._debug("Exception from " + context + ":", e, e.stack);                                   // 15
-  });                                                                                               // 16
-};                                                                                                  // 17
-                                                                                                    // 18
-_.extend(Meteor, {                                                                                  // 19
-  // Meteor.setTimeout and Meteor.setInterval callbacks scheduled                                   // 20
-  // inside a server method are not part of the method invocation and                               // 21
-  // should clear out the CurrentInvocation environment variable.                                   // 22
-                                                                                                    // 23
-  setTimeout: function (f, duration) {                                                              // 24
-    return setTimeout(bindAndCatch("setTimeout callback", f), duration);                            // 25
-  },                                                                                                // 26
-                                                                                                    // 27
-  setInterval: function (f, duration) {                                                             // 28
-    return setInterval(bindAndCatch("setInterval callback", f), duration);                          // 29
-  },                                                                                                // 30
-                                                                                                    // 31
-  clearInterval: function(x) {                                                                      // 32
-    return clearInterval(x);                                                                        // 33
-  },                                                                                                // 34
-                                                                                                    // 35
-  clearTimeout: function(x) {                                                                       // 36
-    return clearTimeout(x);                                                                         // 37
-  },                                                                                                // 38
-                                                                                                    // 39
-  // XXX consider making this guarantee ordering of defer'd callbacks, like                         // 40
-  // Deps.afterFlush or Node's nextTick (in practice). Then tests can do:                           // 41
-  //    callSomethingThatDefersSomeWork();                                                          // 42
-  //    Meteor.defer(expect(somethingThatValidatesThatTheWorkHappened));                            // 43
-  defer: function (f) {                                                                             // 44
-    Meteor._setImmediate(bindAndCatch("defer callback", f));                                        // 45
-  }                                                                                                 // 46
-});                                                                                                 // 47
-                                                                                                    // 48
+  return Meteor.bindEnvironment(withoutInvocation(f), context);                                     // 13
+};                                                                                                  // 14
+                                                                                                    // 15
+_.extend(Meteor, {                                                                                  // 16
+  // Meteor.setTimeout and Meteor.setInterval callbacks scheduled                                   // 17
+  // inside a server method are not part of the method invocation and                               // 18
+  // should clear out the CurrentInvocation environment variable.                                   // 19
+                                                                                                    // 20
+  setTimeout: function (f, duration) {                                                              // 21
+    return setTimeout(bindAndCatch("setTimeout callback", f), duration);                            // 22
+  },                                                                                                // 23
+                                                                                                    // 24
+  setInterval: function (f, duration) {                                                             // 25
+    return setInterval(bindAndCatch("setInterval callback", f), duration);                          // 26
+  },                                                                                                // 27
+                                                                                                    // 28
+  clearInterval: function(x) {                                                                      // 29
+    return clearInterval(x);                                                                        // 30
+  },                                                                                                // 31
+                                                                                                    // 32
+  clearTimeout: function(x) {                                                                       // 33
+    return clearTimeout(x);                                                                         // 34
+  },                                                                                                // 35
+                                                                                                    // 36
+  // XXX consider making this guarantee ordering of defer'd callbacks, like                         // 37
+  // Deps.afterFlush or Node's nextTick (in practice). Then tests can do:                           // 38
+  //    callSomethingThatDefersSomeWork();                                                          // 39
+  //    Meteor.defer(expect(somethingThatValidatesThatTheWorkHappened));                            // 40
+  defer: function (f) {                                                                             // 41
+    Meteor._setImmediate(bindAndCatch("defer callback", f));                                        // 42
+  }                                                                                                 // 43
+});                                                                                                 // 44
+                                                                                                    // 45
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
 }).call(this);
@@ -497,6 +494,16 @@ Meteor.Error = Meteor.makeErrorType(                                            
       self.message = '[' + self.error + ']';                                                        // 80
   });                                                                                               // 81
                                                                                                     // 82
+// Meteor.Error is basically data and is sent over DDP, so you should be able to                    // 83
+// properly EJSON-clone it. This is especially important because if a                               // 84
+// Meteor.Error is thrown through a Future, the error, reason, and details                          // 85
+// properties become non-enumerable so a standard Object clone won't preserve                       // 86
+// them and they will be lost from DDP.                                                             // 87
+Meteor.Error.prototype.clone = function () {                                                        // 88
+  var self = this;                                                                                  // 89
+  return new Meteor.Error(self.error, self.reason, self.details);                                   // 90
+};                                                                                                  // 91
+                                                                                                    // 92
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
 }).call(this);
@@ -777,23 +784,30 @@ Meteor.bindEnvironment = function (func, onException, _this) {                  
   // values                                                                                         // 30
   var boundValues = _.clone(currentValues);                                                         // 31
                                                                                                     // 32
-  if (!onException)                                                                                 // 33
-    throw new Error("onException must be supplied");                                                // 34
-                                                                                                    // 35
-  return function (/* arguments */) {                                                               // 36
-    var savedValues = currentValues;                                                                // 37
-    try {                                                                                           // 38
-      currentValues = boundValues;                                                                  // 39
-      var ret = func.apply(_this, _.toArray(arguments));                                            // 40
-    } catch (e) {                                                                                   // 41
-      onException(e);                                                                               // 42
-    } finally {                                                                                     // 43
-      currentValues = savedValues;                                                                  // 44
-    }                                                                                               // 45
-    return ret;                                                                                     // 46
-  };                                                                                                // 47
-};                                                                                                  // 48
-                                                                                                    // 49
+  if (!onException || typeof(onException) === 'string') {                                           // 33
+    var description = onException || "callback of async function";                                  // 34
+    onException = function (error) {                                                                // 35
+      Meteor._debug(                                                                                // 36
+        "Exception in " + description + ":",                                                        // 37
+        error && error.stack || error                                                               // 38
+      );                                                                                            // 39
+    };                                                                                              // 40
+  }                                                                                                 // 41
+                                                                                                    // 42
+  return function (/* arguments */) {                                                               // 43
+    var savedValues = currentValues;                                                                // 44
+    try {                                                                                           // 45
+      currentValues = boundValues;                                                                  // 46
+      var ret = func.apply(_this, _.toArray(arguments));                                            // 47
+    } catch (e) {                                                                                   // 48
+      onException(e);                                                                               // 49
+    } finally {                                                                                     // 50
+      currentValues = savedValues;                                                                  // 51
+    }                                                                                               // 52
+    return ret;                                                                                     // 53
+  };                                                                                                // 54
+};                                                                                                  // 55
+                                                                                                    // 56
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
 }).call(this);
@@ -874,4 +888,4 @@ Package.meteor = {
 
 })();
 
-//# sourceMappingURL=643bfdbf5382aa1986ff0dd3e6474d4a7e247bab.map
+//# sourceMappingURL=0ee0f69c02b4a9ccb6b7476bddadf436d7592260.map

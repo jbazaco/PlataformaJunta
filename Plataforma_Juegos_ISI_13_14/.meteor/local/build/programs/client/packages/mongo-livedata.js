@@ -579,379 +579,385 @@ Meteor.Collection.prototype._dropIndex = function (index) {                     
     throw new Error("Can only call _dropIndex on server collections");                                 // 489
   self._collection._dropIndex(index);                                                                  // 490
 };                                                                                                     // 491
-Meteor.Collection.prototype._createCappedCollection = function (byteSize) {                            // 492
+Meteor.Collection.prototype._dropCollection = function () {                                            // 492
   var self = this;                                                                                     // 493
-  if (!self._collection._createCappedCollection)                                                       // 494
-    throw new Error("Can only call _createCappedCollection on server collections");                    // 495
-  self._collection._createCappedCollection(byteSize);                                                  // 496
+  if (!self._collection.dropCollection)                                                                // 494
+    throw new Error("Can only call _dropCollection on server collections");                            // 495
+  self._collection.dropCollection();                                                                   // 496
 };                                                                                                     // 497
-                                                                                                       // 498
-Meteor.Collection.ObjectID = LocalCollection._ObjectID;                                                // 499
-                                                                                                       // 500
-///                                                                                                    // 501
-/// Remote methods and access control.                                                                 // 502
-///                                                                                                    // 503
+Meteor.Collection.prototype._createCappedCollection = function (byteSize) {                            // 498
+  var self = this;                                                                                     // 499
+  if (!self._collection._createCappedCollection)                                                       // 500
+    throw new Error("Can only call _createCappedCollection on server collections");                    // 501
+  self._collection._createCappedCollection(byteSize);                                                  // 502
+};                                                                                                     // 503
                                                                                                        // 504
-// Restrict default mutators on collection. allow() and deny() take the                                // 505
-// same options:                                                                                       // 506
-//                                                                                                     // 507
-// options.insert {Function(userId, doc)}                                                              // 508
-//   return true to allow/deny adding this document                                                    // 509
-//                                                                                                     // 510
-// options.update {Function(userId, docs, fields, modifier)}                                           // 511
-//   return true to allow/deny updating these documents.                                               // 512
-//   `fields` is passed as an array of fields that are to be modified                                  // 513
-//                                                                                                     // 514
-// options.remove {Function(userId, docs)}                                                             // 515
-//   return true to allow/deny removing these documents                                                // 516
-//                                                                                                     // 517
-// options.fetch {Array}                                                                               // 518
-//   Fields to fetch for these validators. If any call to allow or deny                                // 519
-//   does not have this option then all fields are loaded.                                             // 520
-//                                                                                                     // 521
-// allow and deny can be called multiple times. The validators are                                     // 522
-// evaluated as follows:                                                                               // 523
-// - If neither deny() nor allow() has been called on the collection,                                  // 524
-//   then the request is allowed if and only if the "insecure" smart                                   // 525
-//   package is in use.                                                                                // 526
-// - Otherwise, if any deny() function returns true, the request is denied.                            // 527
-// - Otherwise, if any allow() function returns true, the request is allowed.                          // 528
-// - Otherwise, the request is denied.                                                                 // 529
-//                                                                                                     // 530
-// Meteor may call your deny() and allow() functions in any order, and may not                         // 531
-// call all of them if it is able to make a decision without calling them all                          // 532
-// (so don't include side effects).                                                                    // 533
-                                                                                                       // 534
-(function () {                                                                                         // 535
-  var addValidator = function(allowOrDeny, options) {                                                  // 536
-    // validate keys                                                                                   // 537
-    var VALID_KEYS = ['insert', 'update', 'remove', 'fetch', 'transform'];                             // 538
-    _.each(_.keys(options), function (key) {                                                           // 539
-      if (!_.contains(VALID_KEYS, key))                                                                // 540
-        throw new Error(allowOrDeny + ": Invalid key: " + key);                                        // 541
-    });                                                                                                // 542
-                                                                                                       // 543
-    var self = this;                                                                                   // 544
-    self._restricted = true;                                                                           // 545
-                                                                                                       // 546
-    _.each(['insert', 'update', 'remove'], function (name) {                                           // 547
-      if (options[name]) {                                                                             // 548
-        if (!(options[name] instanceof Function)) {                                                    // 549
-          throw new Error(allowOrDeny + ": Value for `" + name + "` must be a function");              // 550
-        }                                                                                              // 551
-        if (self._transform)                                                                           // 552
-          options[name].transform = self._transform;                                                   // 553
-        if (options.transform)                                                                         // 554
-          options[name].transform = Deps._makeNonreactive(options.transform);                          // 555
-        self._validators[name][allowOrDeny].push(options[name]);                                       // 556
-      }                                                                                                // 557
-    });                                                                                                // 558
-                                                                                                       // 559
-    // Only update the fetch fields if we're passed things that affect                                 // 560
-    // fetching. This way allow({}) and allow({insert: f}) don't result in                             // 561
-    // setting fetchAllFields                                                                          // 562
-    if (options.update || options.remove || options.fetch) {                                           // 563
-      if (options.fetch && !(options.fetch instanceof Array)) {                                        // 564
-        throw new Error(allowOrDeny + ": Value for `fetch` must be an array");                         // 565
-      }                                                                                                // 566
-      self._updateFetch(options.fetch);                                                                // 567
-    }                                                                                                  // 568
-  };                                                                                                   // 569
-                                                                                                       // 570
-  Meteor.Collection.prototype.allow = function(options) {                                              // 571
-    addValidator.call(this, 'allow', options);                                                         // 572
-  };                                                                                                   // 573
-  Meteor.Collection.prototype.deny = function(options) {                                               // 574
-    addValidator.call(this, 'deny', options);                                                          // 575
-  };                                                                                                   // 576
-})();                                                                                                  // 577
-                                                                                                       // 578
-                                                                                                       // 579
-Meteor.Collection.prototype._defineMutationMethods = function() {                                      // 580
-  var self = this;                                                                                     // 581
-                                                                                                       // 582
-  // set to true once we call any allow or deny methods. If true, use                                  // 583
-  // allow/deny semantics. If false, use insecure mode semantics.                                      // 584
-  self._restricted = false;                                                                            // 585
-                                                                                                       // 586
-  // Insecure mode (default to allowing writes). Defaults to 'undefined' which                         // 587
-  // means insecure iff the insecure package is loaded. This property can be                           // 588
-  // overriden by tests or packages wishing to change insecure mode behavior of                        // 589
-  // their collections.                                                                                // 590
-  self._insecure = undefined;                                                                          // 591
+Meteor.Collection.ObjectID = LocalCollection._ObjectID;                                                // 505
+                                                                                                       // 506
+///                                                                                                    // 507
+/// Remote methods and access control.                                                                 // 508
+///                                                                                                    // 509
+                                                                                                       // 510
+// Restrict default mutators on collection. allow() and deny() take the                                // 511
+// same options:                                                                                       // 512
+//                                                                                                     // 513
+// options.insert {Function(userId, doc)}                                                              // 514
+//   return true to allow/deny adding this document                                                    // 515
+//                                                                                                     // 516
+// options.update {Function(userId, docs, fields, modifier)}                                           // 517
+//   return true to allow/deny updating these documents.                                               // 518
+//   `fields` is passed as an array of fields that are to be modified                                  // 519
+//                                                                                                     // 520
+// options.remove {Function(userId, docs)}                                                             // 521
+//   return true to allow/deny removing these documents                                                // 522
+//                                                                                                     // 523
+// options.fetch {Array}                                                                               // 524
+//   Fields to fetch for these validators. If any call to allow or deny                                // 525
+//   does not have this option then all fields are loaded.                                             // 526
+//                                                                                                     // 527
+// allow and deny can be called multiple times. The validators are                                     // 528
+// evaluated as follows:                                                                               // 529
+// - If neither deny() nor allow() has been called on the collection,                                  // 530
+//   then the request is allowed if and only if the "insecure" smart                                   // 531
+//   package is in use.                                                                                // 532
+// - Otherwise, if any deny() function returns true, the request is denied.                            // 533
+// - Otherwise, if any allow() function returns true, the request is allowed.                          // 534
+// - Otherwise, the request is denied.                                                                 // 535
+//                                                                                                     // 536
+// Meteor may call your deny() and allow() functions in any order, and may not                         // 537
+// call all of them if it is able to make a decision without calling them all                          // 538
+// (so don't include side effects).                                                                    // 539
+                                                                                                       // 540
+(function () {                                                                                         // 541
+  var addValidator = function(allowOrDeny, options) {                                                  // 542
+    // validate keys                                                                                   // 543
+    var VALID_KEYS = ['insert', 'update', 'remove', 'fetch', 'transform'];                             // 544
+    _.each(_.keys(options), function (key) {                                                           // 545
+      if (!_.contains(VALID_KEYS, key))                                                                // 546
+        throw new Error(allowOrDeny + ": Invalid key: " + key);                                        // 547
+    });                                                                                                // 548
+                                                                                                       // 549
+    var self = this;                                                                                   // 550
+    self._restricted = true;                                                                           // 551
+                                                                                                       // 552
+    _.each(['insert', 'update', 'remove'], function (name) {                                           // 553
+      if (options[name]) {                                                                             // 554
+        if (!(options[name] instanceof Function)) {                                                    // 555
+          throw new Error(allowOrDeny + ": Value for `" + name + "` must be a function");              // 556
+        }                                                                                              // 557
+        if (self._transform && options.transform !== null)                                             // 558
+          options[name].transform = self._transform;                                                   // 559
+        if (options.transform)                                                                         // 560
+          options[name].transform = Deps._makeNonreactive(options.transform);                          // 561
+        self._validators[name][allowOrDeny].push(options[name]);                                       // 562
+      }                                                                                                // 563
+    });                                                                                                // 564
+                                                                                                       // 565
+    // Only update the fetch fields if we're passed things that affect                                 // 566
+    // fetching. This way allow({}) and allow({insert: f}) don't result in                             // 567
+    // setting fetchAllFields                                                                          // 568
+    if (options.update || options.remove || options.fetch) {                                           // 569
+      if (options.fetch && !(options.fetch instanceof Array)) {                                        // 570
+        throw new Error(allowOrDeny + ": Value for `fetch` must be an array");                         // 571
+      }                                                                                                // 572
+      self._updateFetch(options.fetch);                                                                // 573
+    }                                                                                                  // 574
+  };                                                                                                   // 575
+                                                                                                       // 576
+  Meteor.Collection.prototype.allow = function(options) {                                              // 577
+    addValidator.call(this, 'allow', options);                                                         // 578
+  };                                                                                                   // 579
+  Meteor.Collection.prototype.deny = function(options) {                                               // 580
+    addValidator.call(this, 'deny', options);                                                          // 581
+  };                                                                                                   // 582
+})();                                                                                                  // 583
+                                                                                                       // 584
+                                                                                                       // 585
+Meteor.Collection.prototype._defineMutationMethods = function() {                                      // 586
+  var self = this;                                                                                     // 587
+                                                                                                       // 588
+  // set to true once we call any allow or deny methods. If true, use                                  // 589
+  // allow/deny semantics. If false, use insecure mode semantics.                                      // 590
+  self._restricted = false;                                                                            // 591
                                                                                                        // 592
-  self._validators = {                                                                                 // 593
-    insert: {allow: [], deny: []},                                                                     // 594
-    update: {allow: [], deny: []},                                                                     // 595
-    remove: {allow: [], deny: []},                                                                     // 596
-    upsert: {allow: [], deny: []}, // dummy arrays; can't set these!                                   // 597
-    fetch: [],                                                                                         // 598
-    fetchAllFields: false                                                                              // 599
-  };                                                                                                   // 600
-                                                                                                       // 601
-  if (!self._name)                                                                                     // 602
-    return; // anonymous collection                                                                    // 603
-                                                                                                       // 604
-  // XXX Think about method namespacing. Maybe methods should be                                       // 605
-  // "Meteor:Mongo:insert/NAME"?                                                                       // 606
-  self._prefix = '/' + self._name + '/';                                                               // 607
-                                                                                                       // 608
-  // mutation methods                                                                                  // 609
-  if (self._connection) {                                                                              // 610
-    var m = {};                                                                                        // 611
-                                                                                                       // 612
-    _.each(['insert', 'update', 'remove'], function (method) {                                         // 613
-      m[self._prefix + method] = function (/* ... */) {                                                // 614
-        // All the methods do their own validation, instead of using check().                          // 615
-        check(arguments, [Match.Any]);                                                                 // 616
-        try {                                                                                          // 617
-          if (this.isSimulation) {                                                                     // 618
-                                                                                                       // 619
-            // In a client simulation, you can do any mutation (even with a                            // 620
-            // complex selector).                                                                      // 621
-            return self._collection[method].apply(                                                     // 622
-              self._collection, _.toArray(arguments));                                                 // 623
-          }                                                                                            // 624
+  // Insecure mode (default to allowing writes). Defaults to 'undefined' which                         // 593
+  // means insecure iff the insecure package is loaded. This property can be                           // 594
+  // overriden by tests or packages wishing to change insecure mode behavior of                        // 595
+  // their collections.                                                                                // 596
+  self._insecure = undefined;                                                                          // 597
+                                                                                                       // 598
+  self._validators = {                                                                                 // 599
+    insert: {allow: [], deny: []},                                                                     // 600
+    update: {allow: [], deny: []},                                                                     // 601
+    remove: {allow: [], deny: []},                                                                     // 602
+    upsert: {allow: [], deny: []}, // dummy arrays; can't set these!                                   // 603
+    fetch: [],                                                                                         // 604
+    fetchAllFields: false                                                                              // 605
+  };                                                                                                   // 606
+                                                                                                       // 607
+  if (!self._name)                                                                                     // 608
+    return; // anonymous collection                                                                    // 609
+                                                                                                       // 610
+  // XXX Think about method namespacing. Maybe methods should be                                       // 611
+  // "Meteor:Mongo:insert/NAME"?                                                                       // 612
+  self._prefix = '/' + self._name + '/';                                                               // 613
+                                                                                                       // 614
+  // mutation methods                                                                                  // 615
+  if (self._connection) {                                                                              // 616
+    var m = {};                                                                                        // 617
+                                                                                                       // 618
+    _.each(['insert', 'update', 'remove'], function (method) {                                         // 619
+      m[self._prefix + method] = function (/* ... */) {                                                // 620
+        // All the methods do their own validation, instead of using check().                          // 621
+        check(arguments, [Match.Any]);                                                                 // 622
+        try {                                                                                          // 623
+          if (this.isSimulation) {                                                                     // 624
                                                                                                        // 625
-          // This is the server receiving a method call from the client.                               // 626
-                                                                                                       // 627
-          // We don't allow arbitrary selectors in mutations from the client: only                     // 628
-          // single-ID selectors.                                                                      // 629
-          if (method !== 'insert')                                                                     // 630
-            throwIfSelectorIsNotId(arguments[0], method);                                              // 631
-                                                                                                       // 632
-          if (self._restricted) {                                                                      // 633
-            // short circuit if there is no way it will pass.                                          // 634
-            if (self._validators[method].allow.length === 0) {                                         // 635
-              throw new Meteor.Error(                                                                  // 636
-                403, "Access denied. No allow validators set on restricted " +                         // 637
-                  "collection for method '" + method + "'.");                                          // 638
-            }                                                                                          // 639
-                                                                                                       // 640
-            var validatedMethodName =                                                                  // 641
-                  '_validated' + method.charAt(0).toUpperCase() + method.slice(1);                     // 642
-            var argsWithUserId = [this.userId].concat(_.toArray(arguments));                           // 643
-            return self[validatedMethodName].apply(self, argsWithUserId);                              // 644
-          } else if (self._isInsecure()) {                                                             // 645
-            // In insecure mode, allow any mutation (with a simple selector).                          // 646
-            return self._collection[method].apply(self._collection,                                    // 647
-                                                  _.toArray(arguments));                               // 648
-          } else {                                                                                     // 649
-            // In secure mode, if we haven't called allow or deny, then nothing                        // 650
-            // is permitted.                                                                           // 651
-            throw new Meteor.Error(403, "Access denied");                                              // 652
-          }                                                                                            // 653
-        } catch (e) {                                                                                  // 654
-          if (e.name === 'MongoError' || e.name === 'MinimongoError') {                                // 655
-            throw new Meteor.Error(409, e.toString());                                                 // 656
-          } else {                                                                                     // 657
-            throw e;                                                                                   // 658
+            // In a client simulation, you can do any mutation (even with a                            // 626
+            // complex selector).                                                                      // 627
+            return self._collection[method].apply(                                                     // 628
+              self._collection, _.toArray(arguments));                                                 // 629
+          }                                                                                            // 630
+                                                                                                       // 631
+          // This is the server receiving a method call from the client.                               // 632
+                                                                                                       // 633
+          // We don't allow arbitrary selectors in mutations from the client: only                     // 634
+          // single-ID selectors.                                                                      // 635
+          if (method !== 'insert')                                                                     // 636
+            throwIfSelectorIsNotId(arguments[0], method);                                              // 637
+                                                                                                       // 638
+          if (self._restricted) {                                                                      // 639
+            // short circuit if there is no way it will pass.                                          // 640
+            if (self._validators[method].allow.length === 0) {                                         // 641
+              throw new Meteor.Error(                                                                  // 642
+                403, "Access denied. No allow validators set on restricted " +                         // 643
+                  "collection for method '" + method + "'.");                                          // 644
+            }                                                                                          // 645
+                                                                                                       // 646
+            var validatedMethodName =                                                                  // 647
+                  '_validated' + method.charAt(0).toUpperCase() + method.slice(1);                     // 648
+            var argsWithUserId = [this.userId].concat(_.toArray(arguments));                           // 649
+            return self[validatedMethodName].apply(self, argsWithUserId);                              // 650
+          } else if (self._isInsecure()) {                                                             // 651
+            // In insecure mode, allow any mutation (with a simple selector).                          // 652
+            return self._collection[method].apply(self._collection,                                    // 653
+                                                  _.toArray(arguments));                               // 654
+          } else {                                                                                     // 655
+            // In secure mode, if we haven't called allow or deny, then nothing                        // 656
+            // is permitted.                                                                           // 657
+            throw new Meteor.Error(403, "Access denied");                                              // 658
           }                                                                                            // 659
-        }                                                                                              // 660
-      };                                                                                               // 661
-    });                                                                                                // 662
-    // Minimongo on the server gets no stubs; instead, by default                                      // 663
-    // it wait()s until its result is ready, yielding.                                                 // 664
-    // This matches the behavior of macromongo on the server better.                                   // 665
-    if (Meteor.isClient || self._connection === Meteor.server)                                         // 666
-      self._connection.methods(m);                                                                     // 667
-  }                                                                                                    // 668
-};                                                                                                     // 669
-                                                                                                       // 670
-                                                                                                       // 671
-Meteor.Collection.prototype._updateFetch = function (fields) {                                         // 672
-  var self = this;                                                                                     // 673
-                                                                                                       // 674
-  if (!self._validators.fetchAllFields) {                                                              // 675
-    if (fields) {                                                                                      // 676
-      self._validators.fetch = _.union(self._validators.fetch, fields);                                // 677
-    } else {                                                                                           // 678
-      self._validators.fetchAllFields = true;                                                          // 679
-      // clear fetch just to make sure we don't accidentally read it                                   // 680
-      self._validators.fetch = null;                                                                   // 681
-    }                                                                                                  // 682
-  }                                                                                                    // 683
-};                                                                                                     // 684
-                                                                                                       // 685
-Meteor.Collection.prototype._isInsecure = function () {                                                // 686
-  var self = this;                                                                                     // 687
-  if (self._insecure === undefined)                                                                    // 688
-    return !!Package.insecure;                                                                         // 689
-  return self._insecure;                                                                               // 690
-};                                                                                                     // 691
-                                                                                                       // 692
-var docToValidate = function (validator, doc) {                                                        // 693
-  var ret = doc;                                                                                       // 694
-  if (validator.transform)                                                                             // 695
-    ret = validator.transform(EJSON.clone(doc));                                                       // 696
-  return ret;                                                                                          // 697
-};                                                                                                     // 698
-                                                                                                       // 699
-Meteor.Collection.prototype._validatedInsert = function(userId, doc) {                                 // 700
-  var self = this;                                                                                     // 701
-                                                                                                       // 702
-  // call user validators.                                                                             // 703
-  // Any deny returns true means denied.                                                               // 704
-  if (_.any(self._validators.insert.deny, function(validator) {                                        // 705
-    return validator(userId, docToValidate(validator, doc));                                           // 706
-  })) {                                                                                                // 707
-    throw new Meteor.Error(403, "Access denied");                                                      // 708
-  }                                                                                                    // 709
-  // Any allow returns true means proceed. Throw error if they all fail.                               // 710
-  if (_.all(self._validators.insert.allow, function(validator) {                                       // 711
-    return !validator(userId, docToValidate(validator, doc));                                          // 712
+        } catch (e) {                                                                                  // 660
+          if (e.name === 'MongoError' || e.name === 'MinimongoError') {                                // 661
+            throw new Meteor.Error(409, e.toString());                                                 // 662
+          } else {                                                                                     // 663
+            throw e;                                                                                   // 664
+          }                                                                                            // 665
+        }                                                                                              // 666
+      };                                                                                               // 667
+    });                                                                                                // 668
+    // Minimongo on the server gets no stubs; instead, by default                                      // 669
+    // it wait()s until its result is ready, yielding.                                                 // 670
+    // This matches the behavior of macromongo on the server better.                                   // 671
+    if (Meteor.isClient || self._connection === Meteor.server)                                         // 672
+      self._connection.methods(m);                                                                     // 673
+  }                                                                                                    // 674
+};                                                                                                     // 675
+                                                                                                       // 676
+                                                                                                       // 677
+Meteor.Collection.prototype._updateFetch = function (fields) {                                         // 678
+  var self = this;                                                                                     // 679
+                                                                                                       // 680
+  if (!self._validators.fetchAllFields) {                                                              // 681
+    if (fields) {                                                                                      // 682
+      self._validators.fetch = _.union(self._validators.fetch, fields);                                // 683
+    } else {                                                                                           // 684
+      self._validators.fetchAllFields = true;                                                          // 685
+      // clear fetch just to make sure we don't accidentally read it                                   // 686
+      self._validators.fetch = null;                                                                   // 687
+    }                                                                                                  // 688
+  }                                                                                                    // 689
+};                                                                                                     // 690
+                                                                                                       // 691
+Meteor.Collection.prototype._isInsecure = function () {                                                // 692
+  var self = this;                                                                                     // 693
+  if (self._insecure === undefined)                                                                    // 694
+    return !!Package.insecure;                                                                         // 695
+  return self._insecure;                                                                               // 696
+};                                                                                                     // 697
+                                                                                                       // 698
+var docToValidate = function (validator, doc) {                                                        // 699
+  var ret = doc;                                                                                       // 700
+  if (validator.transform)                                                                             // 701
+    ret = validator.transform(EJSON.clone(doc));                                                       // 702
+  return ret;                                                                                          // 703
+};                                                                                                     // 704
+                                                                                                       // 705
+Meteor.Collection.prototype._validatedInsert = function(userId, doc) {                                 // 706
+  var self = this;                                                                                     // 707
+                                                                                                       // 708
+  // call user validators.                                                                             // 709
+  // Any deny returns true means denied.                                                               // 710
+  if (_.any(self._validators.insert.deny, function(validator) {                                        // 711
+    return validator(userId, docToValidate(validator, doc));                                           // 712
   })) {                                                                                                // 713
     throw new Meteor.Error(403, "Access denied");                                                      // 714
   }                                                                                                    // 715
-                                                                                                       // 716
-  self._collection.insert.call(self._collection, doc);                                                 // 717
-};                                                                                                     // 718
-                                                                                                       // 719
-var transformDoc = function (validator, doc) {                                                         // 720
-  if (validator.transform)                                                                             // 721
-    return validator.transform(doc);                                                                   // 722
-  return doc;                                                                                          // 723
+  // Any allow returns true means proceed. Throw error if they all fail.                               // 716
+  if (_.all(self._validators.insert.allow, function(validator) {                                       // 717
+    return !validator(userId, docToValidate(validator, doc));                                          // 718
+  })) {                                                                                                // 719
+    throw new Meteor.Error(403, "Access denied");                                                      // 720
+  }                                                                                                    // 721
+                                                                                                       // 722
+  self._collection.insert.call(self._collection, doc);                                                 // 723
 };                                                                                                     // 724
                                                                                                        // 725
-// Simulate a mongo `update` operation while validating that the access                                // 726
-// control rules set by calls to `allow/deny` are satisfied. If all                                    // 727
-// pass, rewrite the mongo operation to use $in to set the list of                                     // 728
-// document ids to change ##ValidatedChange                                                            // 729
-Meteor.Collection.prototype._validatedUpdate = function(                                               // 730
-    userId, selector, mutator, options) {                                                              // 731
-  var self = this;                                                                                     // 732
-                                                                                                       // 733
-  options = options || {};                                                                             // 734
-                                                                                                       // 735
-  if (!LocalCollection._selectorIsIdPerhapsAsObject(selector))                                         // 736
-    throw new Error("validated update should be of a single ID");                                      // 737
-                                                                                                       // 738
-  // We don't support upserts because they don't fit nicely into allow/deny                            // 739
-  // rules.                                                                                            // 740
-  if (options.upsert)                                                                                  // 741
-    throw new Meteor.Error(403, "Access denied. Upserts not " +                                        // 742
-                           "allowed in a restricted collection.");                                     // 743
+var transformDoc = function (validator, doc) {                                                         // 726
+  if (validator.transform)                                                                             // 727
+    return validator.transform(doc);                                                                   // 728
+  return doc;                                                                                          // 729
+};                                                                                                     // 730
+                                                                                                       // 731
+// Simulate a mongo `update` operation while validating that the access                                // 732
+// control rules set by calls to `allow/deny` are satisfied. If all                                    // 733
+// pass, rewrite the mongo operation to use $in to set the list of                                     // 734
+// document ids to change ##ValidatedChange                                                            // 735
+Meteor.Collection.prototype._validatedUpdate = function(                                               // 736
+    userId, selector, mutator, options) {                                                              // 737
+  var self = this;                                                                                     // 738
+                                                                                                       // 739
+  options = options || {};                                                                             // 740
+                                                                                                       // 741
+  if (!LocalCollection._selectorIsIdPerhapsAsObject(selector))                                         // 742
+    throw new Error("validated update should be of a single ID");                                      // 743
                                                                                                        // 744
-  // compute modified fields                                                                           // 745
-  var fields = [];                                                                                     // 746
-  _.each(mutator, function (params, op) {                                                              // 747
-    if (op.charAt(0) !== '$') {                                                                        // 748
-      throw new Meteor.Error(                                                                          // 749
+  // We don't support upserts because they don't fit nicely into allow/deny                            // 745
+  // rules.                                                                                            // 746
+  if (options.upsert)                                                                                  // 747
+    throw new Meteor.Error(403, "Access denied. Upserts not " +                                        // 748
+                           "allowed in a restricted collection.");                                     // 749
+                                                                                                       // 750
+  // compute modified fields                                                                           // 751
+  var fields = [];                                                                                     // 752
+  _.each(mutator, function (params, op) {                                                              // 753
+    if (op.charAt(0) !== '$') {                                                                        // 754
+      throw new Meteor.Error(                                                                          // 755
         403, "Access denied. In a restricted collection you can only update documents, not replace them. Use a Mongo update operator, such as '$set'.");
-    } else if (!_.has(ALLOWED_UPDATE_OPERATIONS, op)) {                                                // 751
-      throw new Meteor.Error(                                                                          // 752
-        403, "Access denied. Operator " + op + " not allowed in a restricted collection.");            // 753
-    } else {                                                                                           // 754
-      _.each(_.keys(params), function (field) {                                                        // 755
-        // treat dotted fields as if they are replacing their                                          // 756
-        // top-level part                                                                              // 757
-        if (field.indexOf('.') !== -1)                                                                 // 758
-          field = field.substring(0, field.indexOf('.'));                                              // 759
-                                                                                                       // 760
-        // record the field we are trying to change                                                    // 761
-        if (!_.contains(fields, field))                                                                // 762
-          fields.push(field);                                                                          // 763
-      });                                                                                              // 764
-    }                                                                                                  // 765
-  });                                                                                                  // 766
-                                                                                                       // 767
-  var findOptions = {transform: null};                                                                 // 768
-  if (!self._validators.fetchAllFields) {                                                              // 769
-    findOptions.fields = {};                                                                           // 770
-    _.each(self._validators.fetch, function(fieldName) {                                               // 771
-      findOptions.fields[fieldName] = 1;                                                               // 772
-    });                                                                                                // 773
-  }                                                                                                    // 774
-                                                                                                       // 775
-  var doc = self._collection.findOne(selector, findOptions);                                           // 776
-  if (!doc)  // none satisfied!                                                                        // 777
-    return;                                                                                            // 778
-                                                                                                       // 779
-  var factoriedDoc;                                                                                    // 780
+    } else if (!_.has(ALLOWED_UPDATE_OPERATIONS, op)) {                                                // 757
+      throw new Meteor.Error(                                                                          // 758
+        403, "Access denied. Operator " + op + " not allowed in a restricted collection.");            // 759
+    } else {                                                                                           // 760
+      _.each(_.keys(params), function (field) {                                                        // 761
+        // treat dotted fields as if they are replacing their                                          // 762
+        // top-level part                                                                              // 763
+        if (field.indexOf('.') !== -1)                                                                 // 764
+          field = field.substring(0, field.indexOf('.'));                                              // 765
+                                                                                                       // 766
+        // record the field we are trying to change                                                    // 767
+        if (!_.contains(fields, field))                                                                // 768
+          fields.push(field);                                                                          // 769
+      });                                                                                              // 770
+    }                                                                                                  // 771
+  });                                                                                                  // 772
+                                                                                                       // 773
+  var findOptions = {transform: null};                                                                 // 774
+  if (!self._validators.fetchAllFields) {                                                              // 775
+    findOptions.fields = {};                                                                           // 776
+    _.each(self._validators.fetch, function(fieldName) {                                               // 777
+      findOptions.fields[fieldName] = 1;                                                               // 778
+    });                                                                                                // 779
+  }                                                                                                    // 780
                                                                                                        // 781
-  // call user validators.                                                                             // 782
-  // Any deny returns true means denied.                                                               // 783
-  if (_.any(self._validators.update.deny, function(validator) {                                        // 784
-    if (!factoriedDoc)                                                                                 // 785
-      factoriedDoc = transformDoc(validator, doc);                                                     // 786
-    return validator(userId,                                                                           // 787
-                     factoriedDoc,                                                                     // 788
-                     fields,                                                                           // 789
-                     mutator);                                                                         // 790
-  })) {                                                                                                // 791
-    throw new Meteor.Error(403, "Access denied");                                                      // 792
-  }                                                                                                    // 793
-  // Any allow returns true means proceed. Throw error if they all fail.                               // 794
-  if (_.all(self._validators.update.allow, function(validator) {                                       // 795
-    if (!factoriedDoc)                                                                                 // 796
-      factoriedDoc = transformDoc(validator, doc);                                                     // 797
-    return !validator(userId,                                                                          // 798
-                      factoriedDoc,                                                                    // 799
-                      fields,                                                                          // 800
-                      mutator);                                                                        // 801
-  })) {                                                                                                // 802
-    throw new Meteor.Error(403, "Access denied");                                                      // 803
-  }                                                                                                    // 804
-                                                                                                       // 805
-  // Back when we supported arbitrary client-provided selectors, we actually                           // 806
-  // rewrote the selector to include an _id clause before passing to Mongo to                          // 807
-  // avoid races, but since selector is guaranteed to already just be an ID, we                        // 808
-  // don't have to any more.                                                                           // 809
-                                                                                                       // 810
-  self._collection.update.call(                                                                        // 811
-    self._collection, selector, mutator, options);                                                     // 812
-};                                                                                                     // 813
-                                                                                                       // 814
-// Only allow these operations in validated updates. Specifically                                      // 815
-// whitelist operations, rather than blacklist, so new complex                                         // 816
-// operations that are added aren't automatically allowed. A complex                                   // 817
-// operation is one that does more than just modify its target                                         // 818
-// field. For now this contains all update operations except '$rename'.                                // 819
-// http://docs.mongodb.org/manual/reference/operators/#update                                          // 820
-var ALLOWED_UPDATE_OPERATIONS = {                                                                      // 821
-  $inc:1, $set:1, $unset:1, $addToSet:1, $pop:1, $pullAll:1, $pull:1,                                  // 822
-  $pushAll:1, $push:1, $bit:1                                                                          // 823
-};                                                                                                     // 824
-                                                                                                       // 825
-// Simulate a mongo `remove` operation while validating access control                                 // 826
-// rules. See #ValidatedChange                                                                         // 827
-Meteor.Collection.prototype._validatedRemove = function(userId, selector) {                            // 828
-  var self = this;                                                                                     // 829
-                                                                                                       // 830
-  var findOptions = {transform: null};                                                                 // 831
-  if (!self._validators.fetchAllFields) {                                                              // 832
-    findOptions.fields = {};                                                                           // 833
-    _.each(self._validators.fetch, function(fieldName) {                                               // 834
-      findOptions.fields[fieldName] = 1;                                                               // 835
-    });                                                                                                // 836
-  }                                                                                                    // 837
-                                                                                                       // 838
-  var doc = self._collection.findOne(selector, findOptions);                                           // 839
-  if (!doc)                                                                                            // 840
-    return;                                                                                            // 841
-                                                                                                       // 842
-  // call user validators.                                                                             // 843
-  // Any deny returns true means denied.                                                               // 844
-  if (_.any(self._validators.remove.deny, function(validator) {                                        // 845
-    return validator(userId, transformDoc(validator, doc));                                            // 846
-  })) {                                                                                                // 847
-    throw new Meteor.Error(403, "Access denied");                                                      // 848
-  }                                                                                                    // 849
-  // Any allow returns true means proceed. Throw error if they all fail.                               // 850
-  if (_.all(self._validators.remove.allow, function(validator) {                                       // 851
-    return !validator(userId, transformDoc(validator, doc));                                           // 852
+  var doc = self._collection.findOne(selector, findOptions);                                           // 782
+  if (!doc)  // none satisfied!                                                                        // 783
+    return;                                                                                            // 784
+                                                                                                       // 785
+  var factoriedDoc;                                                                                    // 786
+                                                                                                       // 787
+  // call user validators.                                                                             // 788
+  // Any deny returns true means denied.                                                               // 789
+  if (_.any(self._validators.update.deny, function(validator) {                                        // 790
+    if (!factoriedDoc)                                                                                 // 791
+      factoriedDoc = transformDoc(validator, doc);                                                     // 792
+    return validator(userId,                                                                           // 793
+                     factoriedDoc,                                                                     // 794
+                     fields,                                                                           // 795
+                     mutator);                                                                         // 796
+  })) {                                                                                                // 797
+    throw new Meteor.Error(403, "Access denied");                                                      // 798
+  }                                                                                                    // 799
+  // Any allow returns true means proceed. Throw error if they all fail.                               // 800
+  if (_.all(self._validators.update.allow, function(validator) {                                       // 801
+    if (!factoriedDoc)                                                                                 // 802
+      factoriedDoc = transformDoc(validator, doc);                                                     // 803
+    return !validator(userId,                                                                          // 804
+                      factoriedDoc,                                                                    // 805
+                      fields,                                                                          // 806
+                      mutator);                                                                        // 807
+  })) {                                                                                                // 808
+    throw new Meteor.Error(403, "Access denied");                                                      // 809
+  }                                                                                                    // 810
+                                                                                                       // 811
+  // Back when we supported arbitrary client-provided selectors, we actually                           // 812
+  // rewrote the selector to include an _id clause before passing to Mongo to                          // 813
+  // avoid races, but since selector is guaranteed to already just be an ID, we                        // 814
+  // don't have to any more.                                                                           // 815
+                                                                                                       // 816
+  self._collection.update.call(                                                                        // 817
+    self._collection, selector, mutator, options);                                                     // 818
+};                                                                                                     // 819
+                                                                                                       // 820
+// Only allow these operations in validated updates. Specifically                                      // 821
+// whitelist operations, rather than blacklist, so new complex                                         // 822
+// operations that are added aren't automatically allowed. A complex                                   // 823
+// operation is one that does more than just modify its target                                         // 824
+// field. For now this contains all update operations except '$rename'.                                // 825
+// http://docs.mongodb.org/manual/reference/operators/#update                                          // 826
+var ALLOWED_UPDATE_OPERATIONS = {                                                                      // 827
+  $inc:1, $set:1, $unset:1, $addToSet:1, $pop:1, $pullAll:1, $pull:1,                                  // 828
+  $pushAll:1, $push:1, $bit:1                                                                          // 829
+};                                                                                                     // 830
+                                                                                                       // 831
+// Simulate a mongo `remove` operation while validating access control                                 // 832
+// rules. See #ValidatedChange                                                                         // 833
+Meteor.Collection.prototype._validatedRemove = function(userId, selector) {                            // 834
+  var self = this;                                                                                     // 835
+                                                                                                       // 836
+  var findOptions = {transform: null};                                                                 // 837
+  if (!self._validators.fetchAllFields) {                                                              // 838
+    findOptions.fields = {};                                                                           // 839
+    _.each(self._validators.fetch, function(fieldName) {                                               // 840
+      findOptions.fields[fieldName] = 1;                                                               // 841
+    });                                                                                                // 842
+  }                                                                                                    // 843
+                                                                                                       // 844
+  var doc = self._collection.findOne(selector, findOptions);                                           // 845
+  if (!doc)                                                                                            // 846
+    return;                                                                                            // 847
+                                                                                                       // 848
+  // call user validators.                                                                             // 849
+  // Any deny returns true means denied.                                                               // 850
+  if (_.any(self._validators.remove.deny, function(validator) {                                        // 851
+    return validator(userId, transformDoc(validator, doc));                                            // 852
   })) {                                                                                                // 853
     throw new Meteor.Error(403, "Access denied");                                                      // 854
   }                                                                                                    // 855
-                                                                                                       // 856
-  // Back when we supported arbitrary client-provided selectors, we actually                           // 857
-  // rewrote the selector to {_id: {$in: [ids that we found]}} before passing to                       // 858
-  // Mongo to avoid races, but since selector is guaranteed to already just be                         // 859
-  // an ID, we don't have to any more.                                                                 // 860
-                                                                                                       // 861
-  self._collection.remove.call(self._collection, selector);                                            // 862
-};                                                                                                     // 863
-                                                                                                       // 864
+  // Any allow returns true means proceed. Throw error if they all fail.                               // 856
+  if (_.all(self._validators.remove.allow, function(validator) {                                       // 857
+    return !validator(userId, transformDoc(validator, doc));                                           // 858
+  })) {                                                                                                // 859
+    throw new Meteor.Error(403, "Access denied");                                                      // 860
+  }                                                                                                    // 861
+                                                                                                       // 862
+  // Back when we supported arbitrary client-provided selectors, we actually                           // 863
+  // rewrote the selector to {_id: {$in: [ids that we found]}} before passing to                       // 864
+  // Mongo to avoid races, but since selector is guaranteed to already just be                         // 865
+  // an ID, we don't have to any more.                                                                 // 866
+                                                                                                       // 867
+  self._collection.remove.call(self._collection, selector);                                            // 868
+};                                                                                                     // 869
+                                                                                                       // 870
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 }).call(this);
@@ -963,4 +969,4 @@ Package['mongo-livedata'] = {};
 
 })();
 
-//# sourceMappingURL=2f66d8591aa3225badaf5a98bfba28287bff3a3d.map
+//# sourceMappingURL=32cb8e7b8b1a4ecda94a731b3a18e434e3067a5f.map

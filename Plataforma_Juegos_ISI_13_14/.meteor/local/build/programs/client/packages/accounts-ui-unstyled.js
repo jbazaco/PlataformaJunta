@@ -752,7 +752,7 @@ Template._loginButtonsLoggedOutDropdown.events({                                
                                                                                                                      // 156
 // additional classes that can be helpful in styling the dropdown                                                    // 157
 Template._loginButtonsLoggedOutDropdown.additionalClasses = function () {                                            // 158
-  if (!Accounts.password) {                                                                                          // 159
+  if (!hasPasswordService()) {                                                                                       // 159
     return false;                                                                                                    // 160
   } else {                                                                                                           // 161
     if (loginButtonsSession.get('inSignupFlow')) {                                                                   // 162
@@ -1353,4 +1353,4 @@ Package['accounts-ui-unstyled'] = {};
 
 })();
 
-//# sourceMappingURL=7ca43f42462f1bda8a5c7991bfc1e9e842828ca0.map
+//# sourceMappingURL=5475a4b12f2a1c7122160a8aab3b2ec6f2850da9.map

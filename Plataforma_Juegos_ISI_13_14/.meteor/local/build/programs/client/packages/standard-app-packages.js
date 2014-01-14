@@ -19,6 +19,8 @@
 
 /* Imports */
 var Meteor = Package.meteor.Meteor;
+var Reload = Package.reload.Reload;
+var Autoupdate = Package.autoupdate.Autoupdate;
 
 
 
@@ -28,4 +30,4 @@ Package['standard-app-packages'] = {};
 
 })();
 
-//# sourceMappingURL=be7072e6abfda638502b63fa0f809c85c8c2b8ed.map
+//# sourceMappingURL=601dc02c741b437bbe8be03773a37f7d896a88e7.map

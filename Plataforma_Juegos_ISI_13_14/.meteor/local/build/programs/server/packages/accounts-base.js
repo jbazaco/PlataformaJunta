@@ -7,6 +7,7 @@ var check = Package.check.check;
 var Match = Package.check.Match;
 var Random = Package.random.Random;
 var ServiceConfiguration = Package['service-configuration'].ServiceConfiguration;
+var EJSON = Package.ejson.EJSON;
 var DDP = Package.livedata.DDP;
 var DDPServer = Package.livedata.DDPServer;
 var MongoInternals = Package['mongo-livedata'].MongoInternals;
@@ -244,14 +245,14 @@ Meteor.methods({                                                                
     var result = tryAllLoginHandlers(options);                                                                   // 78
     if (result !== null) {                                                                                       // 79
       this.setUserId(result.id);                                                                                 // 80
-      this._setLoginToken(result.token);                                                                         // 81
+      Accounts._setLoginToken(this.connection.id, result.token);                                                 // 81
     }                                                                                                            // 82
     return result;                                                                                               // 83
   },                                                                                                             // 84
                                                                                                                  // 85
   logout: function() {                                                                                           // 86
-    var token = this._getLoginToken();                                                                           // 87
-    this._setLoginToken(null);                                                                                   // 88
+    var token = Accounts._getLoginToken(this.connection.id);                                                     // 87
+    Accounts._setLoginToken(this.connection.id, null);                                                           // 88
     if (token && this.userId)                                                                                    // 89
       removeLoginToken(this.userId, token);                                                                      // 90
     this.setUserId(null);                                                                                        // 91
@@ -306,535 +307,632 @@ Meteor.methods({                                                                
 });                                                                                                              // 140
                                                                                                                  // 141
 ///                                                                                                              // 142
-/// RECONNECT TOKENS                                                                                             // 143
+/// ACCOUNT DATA                                                                                                 // 143
 ///                                                                                                              // 144
-/// support reconnecting using a meteor login token                                                              // 145
-                                                                                                                 // 146
-// Login handler for resume tokens.                                                                              // 147
-Accounts.registerLoginHandler(function(options) {                                                                // 148
-  if (!options.resume)                                                                                           // 149
-    return undefined;                                                                                            // 150
-                                                                                                                 // 151
-  check(options.resume, String);                                                                                 // 152
-  var user = Meteor.users.findOne({                                                                              // 153
-    "services.resume.loginTokens.token": ""+options.resume                                                       // 154
-  });                                                                                                            // 155
+                                                                                                                 // 145
+// connectionId -> {connection, loginToken, srpChallenge}                                                        // 146
+var accountData = {};                                                                                            // 147
+                                                                                                                 // 148
+Accounts._getAccountData = function (connectionId, field) {                                                      // 149
+  var data = accountData[connectionId];                                                                          // 150
+  return data && data[field];                                                                                    // 151
+};                                                                                                               // 152
+                                                                                                                 // 153
+Accounts._setAccountData = function (connectionId, field, value) {                                               // 154
+  var data = accountData[connectionId];                                                                          // 155
                                                                                                                  // 156
-  if (!user) {                                                                                                   // 157
-    throw new Meteor.Error(403, "You've been logged out by the server. " +                                       // 158
-    "Please login again.");                                                                                      // 159
-  }                                                                                                              // 160
+  // safety belt. shouldn't happen. accountData is set in onConnection,                                          // 157
+  // we don't have a connectionId until it is set.                                                               // 158
+  if (!data)                                                                                                     // 159
+    return;                                                                                                      // 160
                                                                                                                  // 161
-  var token = _.find(user.services.resume.loginTokens, function (token) {                                        // 162
-    return token.token === options.resume;                                                                       // 163
-  });                                                                                                            // 164
-                                                                                                                 // 165
-  var tokenExpires = Accounts._tokenExpiration(token.when);                                                      // 166
-  if (new Date() >= tokenExpires)                                                                                // 167
-    throw new Meteor.Error(403, "Your session has expired. Please login again.");                                // 168
-                                                                                                                 // 169
-  return {                                                                                                       // 170
-    token: options.resume,                                                                                       // 171
-    tokenExpires: tokenExpires,                                                                                  // 172
-    id: user._id                                                                                                 // 173
-  };                                                                                                             // 174
-});                                                                                                              // 175
+  if (value === undefined)                                                                                       // 162
+    delete data[field];                                                                                          // 163
+  else                                                                                                           // 164
+    data[field] = value;                                                                                         // 165
+};                                                                                                               // 166
+                                                                                                                 // 167
+Meteor.server.onConnection(function (connection) {                                                               // 168
+  accountData[connection.id] = {connection: connection};                                                         // 169
+  connection.onClose(function () {                                                                               // 170
+    removeConnectionFromToken(connection.id);                                                                    // 171
+    delete accountData[connection.id];                                                                           // 172
+  });                                                                                                            // 173
+});                                                                                                              // 174
+                                                                                                                 // 175
                                                                                                                  // 176
-// Semi-public. Used by other login methods to generate tokens.                                                  // 177
-//                                                                                                               // 178
-Accounts._generateStampedLoginToken = function () {                                                              // 179
-  return {token: Random.id(), when: (new Date)};                                                                 // 180
-};                                                                                                               // 181
-                                                                                                                 // 182
-// Deletes the given loginToken from the database. This will cause all                                           // 183
-// connections associated with the token to be closed.                                                           // 184
-var removeLoginToken = function (userId, loginToken) {                                                           // 185
-  Meteor.users.update(userId, {                                                                                  // 186
-    $pull: {                                                                                                     // 187
-      "services.resume.loginTokens": { "token": loginToken }                                                     // 188
-    }                                                                                                            // 189
-  });                                                                                                            // 190
-};                                                                                                               // 191
-                                                                                                                 // 192
-///                                                                                                              // 193
-/// TOKEN EXPIRATION                                                                                             // 194
-///                                                                                                              // 195
-                                                                                                                 // 196
-var expireTokenInterval;                                                                                         // 197
-                                                                                                                 // 198
-// Deletes expired tokens from the database and closes all open connections                                      // 199
-// associated with these tokens.                                                                                 // 200
-//                                                                                                               // 201
-// Exported for tests. Also, the arguments are only used by                                                      // 202
-// tests. oldestValidDate is simulate expiring tokens without waiting                                            // 203
-// for them to actually expire. userId is used by tests to only expire                                           // 204
-// tokens for the test user.                                                                                     // 205
-var expireTokens = Accounts._expireTokens = function (oldestValidDate, userId) {                                 // 206
-  var tokenLifetimeMs = getTokenLifetimeMs();                                                                    // 207
-                                                                                                                 // 208
-  // when calling from a test with extra arguments, you must specify both!                                       // 209
-  if ((oldestValidDate && !userId) || (!oldestValidDate && userId)) {                                            // 210
-    throw new Error("Bad test. Must specify both oldestValidDate and userId.");                                  // 211
-  }                                                                                                              // 212
-                                                                                                                 // 213
-  oldestValidDate = oldestValidDate ||                                                                           // 214
-    (new Date(new Date() - tokenLifetimeMs));                                                                    // 215
-  var userFilter = userId ? {_id: userId} : {};                                                                  // 216
-                                                                                                                 // 217
+///                                                                                                              // 177
+/// RECONNECT TOKENS                                                                                             // 178
+///                                                                                                              // 179
+/// support reconnecting using a meteor login token                                                              // 180
+                                                                                                                 // 181
+// token -> list of connection ids                                                                               // 182
+var connectionsByLoginToken = {};                                                                                // 183
+                                                                                                                 // 184
+// test hook                                                                                                     // 185
+Accounts._getTokenConnections = function (token) {                                                               // 186
+  return connectionsByLoginToken[token];                                                                         // 187
+};                                                                                                               // 188
+                                                                                                                 // 189
+// Remove the connection from the list of open connections for the token.                                        // 190
+var removeConnectionFromToken = function (connectionId) {                                                        // 191
+  var token = Accounts._getLoginToken(connectionId);                                                             // 192
+  if (token) {                                                                                                   // 193
+    connectionsByLoginToken[token] = _.without(                                                                  // 194
+      connectionsByLoginToken[token],                                                                            // 195
+      connectionId                                                                                               // 196
+    );                                                                                                           // 197
+    if (_.isEmpty(connectionsByLoginToken[token]))                                                               // 198
+      delete connectionsByLoginToken[token];                                                                     // 199
+  }                                                                                                              // 200
+};                                                                                                               // 201
+                                                                                                                 // 202
+Accounts._getLoginToken = function (connectionId) {                                                              // 203
+  return Accounts._getAccountData(connectionId, 'loginToken');                                                   // 204
+};                                                                                                               // 205
+                                                                                                                 // 206
+Accounts._setLoginToken = function (connectionId, newToken) {                                                    // 207
+  removeConnectionFromToken(connectionId);                                                                       // 208
+                                                                                                                 // 209
+  Accounts._setAccountData(connectionId, 'loginToken', newToken);                                                // 210
+                                                                                                                 // 211
+  if (newToken) {                                                                                                // 212
+    if (! _.has(connectionsByLoginToken, newToken))                                                              // 213
+      connectionsByLoginToken[newToken] = [];                                                                    // 214
+    connectionsByLoginToken[newToken].push(connectionId);                                                        // 215
+  }                                                                                                              // 216
+};                                                                                                               // 217
                                                                                                                  // 218
-  // Backwards compatible with older versions of meteor that stored login token                                  // 219
-  // timestamps as numbers.                                                                                      // 220
-  Meteor.users.update(_.extend(userFilter, {                                                                     // 221
-    $or: [                                                                                                       // 222
-      { "services.resume.loginTokens.when": { $lt: oldestValidDate } },                                          // 223
-      { "services.resume.loginTokens.when": { $lt: +oldestValidDate } }                                          // 224
-    ]                                                                                                            // 225
-  }), {                                                                                                          // 226
-    $pull: {                                                                                                     // 227
-      "services.resume.loginTokens": {                                                                           // 228
-        $or: [                                                                                                   // 229
-          { when: { $lt: oldestValidDate } },                                                                    // 230
-          { when: { $lt: +oldestValidDate } }                                                                    // 231
-        ]                                                                                                        // 232
-      }                                                                                                          // 233
-    }                                                                                                            // 234
-  }, { multi: true });                                                                                           // 235
-  // The observe on Meteor.users will take care of closing connections for                                       // 236
-  // expired tokens.                                                                                             // 237
-};                                                                                                               // 238
-                                                                                                                 // 239
-maybeStopExpireTokensInterval = function () {                                                                    // 240
-  if (_.has(Accounts._options, "loginExpirationInDays") &&                                                       // 241
-      Accounts._options.loginExpirationInDays === null &&                                                        // 242
-      expireTokenInterval) {                                                                                     // 243
-    Meteor.clearInterval(expireTokenInterval);                                                                   // 244
-    expireTokenInterval = null;                                                                                  // 245
-  }                                                                                                              // 246
-};                                                                                                               // 247
-                                                                                                                 // 248
-expireTokenInterval = Meteor.setInterval(expireTokens,                                                           // 249
-                                         EXPIRE_TOKENS_INTERVAL_MS);                                             // 250
+// Close all open connections associated with any of the tokens in                                               // 219
+// `tokens`.                                                                                                     // 220
+var closeConnectionsForTokens = function (tokens) {                                                              // 221
+  _.each(tokens, function (token) {                                                                              // 222
+    if (_.has(connectionsByLoginToken, token)) {                                                                 // 223
+      // safety belt. close should defer potentially yielding callbacks.                                         // 224
+      Meteor._noYieldsAllowed(function () {                                                                      // 225
+        _.each(connectionsByLoginToken[token], function (connectionId) {                                         // 226
+          var connection = Accounts._getAccountData(connectionId, 'connection');                                 // 227
+          if (connection)                                                                                        // 228
+            connection.close();                                                                                  // 229
+        });                                                                                                      // 230
+      });                                                                                                        // 231
+    }                                                                                                            // 232
+  });                                                                                                            // 233
+};                                                                                                               // 234
+                                                                                                                 // 235
+                                                                                                                 // 236
+// Login handler for resume tokens.                                                                              // 237
+Accounts.registerLoginHandler(function(options) {                                                                // 238
+  if (!options.resume)                                                                                           // 239
+    return undefined;                                                                                            // 240
+                                                                                                                 // 241
+  check(options.resume, String);                                                                                 // 242
+  var user = Meteor.users.findOne({                                                                              // 243
+    "services.resume.loginTokens.token": ""+options.resume                                                       // 244
+  });                                                                                                            // 245
+                                                                                                                 // 246
+  if (!user) {                                                                                                   // 247
+    throw new Meteor.Error(403, "You've been logged out by the server. " +                                       // 248
+    "Please login again.");                                                                                      // 249
+  }                                                                                                              // 250
                                                                                                                  // 251
-///                                                                                                              // 252
-/// CREATE USER HOOKS                                                                                            // 253
-///                                                                                                              // 254
+  var token = _.find(user.services.resume.loginTokens, function (token) {                                        // 252
+    return token.token === options.resume;                                                                       // 253
+  });                                                                                                            // 254
                                                                                                                  // 255
-var onCreateUserHook = null;                                                                                     // 256
-Accounts.onCreateUser = function (func) {                                                                        // 257
-  if (onCreateUserHook)                                                                                          // 258
-    throw new Error("Can only call onCreateUser once");                                                          // 259
-  else                                                                                                           // 260
-    onCreateUserHook = func;                                                                                     // 261
-};                                                                                                               // 262
-                                                                                                                 // 263
-// XXX see comment on Accounts.createUser in passwords_server about adding a                                     // 264
-// second "server options" argument.                                                                             // 265
-var defaultCreateUserHook = function (options, user) {                                                           // 266
-  if (options.profile)                                                                                           // 267
-    user.profile = options.profile;                                                                              // 268
-  return user;                                                                                                   // 269
-};                                                                                                               // 270
-                                                                                                                 // 271
-// Called by accounts-password                                                                                   // 272
-Accounts.insertUserDoc = function (options, user) {                                                              // 273
-  // - clone user document, to protect from modification                                                         // 274
-  // - add createdAt timestamp                                                                                   // 275
-  // - prepare an _id, so that you can modify other collections (eg                                              // 276
-  // create a first task for every new user)                                                                     // 277
-  //                                                                                                             // 278
-  // XXX If the onCreateUser or validateNewUser hooks fail, we might                                             // 279
-  // end up having modified some other collection                                                                // 280
-  // inappropriately. The solution is probably to have onCreateUser                                              // 281
-  // accept two callbacks - one that gets called before inserting                                                // 282
-  // the user document (in which you can modify its contents), and                                               // 283
-  // one that gets called after (in which you should change other                                                // 284
-  // collections)                                                                                                // 285
-  user = _.extend({createdAt: new Date(), _id: Random.id()}, user);                                              // 286
-                                                                                                                 // 287
-  var result = {};                                                                                               // 288
-  if (options.generateLoginToken) {                                                                              // 289
-    var stampedToken = Accounts._generateStampedLoginToken();                                                    // 290
-    result.token = stampedToken.token;                                                                           // 291
-    result.tokenExpires = Accounts._tokenExpiration(stampedToken.when);                                          // 292
-    Meteor._ensure(user, 'services', 'resume');                                                                  // 293
-    if (_.has(user.services.resume, 'loginTokens'))                                                              // 294
-      user.services.resume.loginTokens.push(stampedToken);                                                       // 295
-    else                                                                                                         // 296
-      user.services.resume.loginTokens = [stampedToken];                                                         // 297
-  }                                                                                                              // 298
-                                                                                                                 // 299
-  var fullUser;                                                                                                  // 300
-  if (onCreateUserHook) {                                                                                        // 301
-    fullUser = onCreateUserHook(options, user);                                                                  // 302
+  var tokenExpires = Accounts._tokenExpiration(token.when);                                                      // 256
+  if (new Date() >= tokenExpires)                                                                                // 257
+    throw new Meteor.Error(403, "Your session has expired. Please login again.");                                // 258
+                                                                                                                 // 259
+  return {                                                                                                       // 260
+    token: options.resume,                                                                                       // 261
+    tokenExpires: tokenExpires,                                                                                  // 262
+    id: user._id                                                                                                 // 263
+  };                                                                                                             // 264
+});                                                                                                              // 265
+                                                                                                                 // 266
+// Semi-public. Used by other login methods to generate tokens.                                                  // 267
+//                                                                                                               // 268
+Accounts._generateStampedLoginToken = function () {                                                              // 269
+  return {token: Random.id(), when: (new Date)};                                                                 // 270
+};                                                                                                               // 271
+                                                                                                                 // 272
+// Deletes the given loginToken from the database. This will cause all                                           // 273
+// connections associated with the token to be closed.                                                           // 274
+var removeLoginToken = function (userId, loginToken) {                                                           // 275
+  Meteor.users.update(userId, {                                                                                  // 276
+    $pull: {                                                                                                     // 277
+      "services.resume.loginTokens": { "token": loginToken }                                                     // 278
+    }                                                                                                            // 279
+  });                                                                                                            // 280
+};                                                                                                               // 281
+                                                                                                                 // 282
+///                                                                                                              // 283
+/// TOKEN EXPIRATION                                                                                             // 284
+///                                                                                                              // 285
+                                                                                                                 // 286
+var expireTokenInterval;                                                                                         // 287
+                                                                                                                 // 288
+// Deletes expired tokens from the database and closes all open connections                                      // 289
+// associated with these tokens.                                                                                 // 290
+//                                                                                                               // 291
+// Exported for tests. Also, the arguments are only used by                                                      // 292
+// tests. oldestValidDate is simulate expiring tokens without waiting                                            // 293
+// for them to actually expire. userId is used by tests to only expire                                           // 294
+// tokens for the test user.                                                                                     // 295
+var expireTokens = Accounts._expireTokens = function (oldestValidDate, userId) {                                 // 296
+  var tokenLifetimeMs = getTokenLifetimeMs();                                                                    // 297
+                                                                                                                 // 298
+  // when calling from a test with extra arguments, you must specify both!                                       // 299
+  if ((oldestValidDate && !userId) || (!oldestValidDate && userId)) {                                            // 300
+    throw new Error("Bad test. Must specify both oldestValidDate and userId.");                                  // 301
+  }                                                                                                              // 302
                                                                                                                  // 303
-    // This is *not* part of the API. We need this because we can't isolate                                      // 304
-    // the global server environment between tests, meaning we can't test                                        // 305
-    // both having a create user hook set and not having one set.                                                // 306
-    if (fullUser === 'TEST DEFAULT HOOK')                                                                        // 307
-      fullUser = defaultCreateUserHook(options, user);                                                           // 308
-  } else {                                                                                                       // 309
-    fullUser = defaultCreateUserHook(options, user);                                                             // 310
-  }                                                                                                              // 311
-                                                                                                                 // 312
-  _.each(validateNewUserHooks, function (hook) {                                                                 // 313
-    if (!hook(fullUser))                                                                                         // 314
-      throw new Meteor.Error(403, "User validation failed");                                                     // 315
-  });                                                                                                            // 316
-                                                                                                                 // 317
-  try {                                                                                                          // 318
-    result.id = Meteor.users.insert(fullUser);                                                                   // 319
-  } catch (e) {                                                                                                  // 320
-    // XXX string parsing sucks, maybe                                                                           // 321
-    // https://jira.mongodb.org/browse/SERVER-3069 will get fixed one day                                        // 322
-    if (e.name !== 'MongoError') throw e;                                                                        // 323
-    var match = e.err.match(/^E11000 duplicate key error index: ([^ ]+)/);                                       // 324
-    if (!match) throw e;                                                                                         // 325
-    if (match[1].indexOf('$emails.address') !== -1)                                                              // 326
-      throw new Meteor.Error(403, "Email already exists.");                                                      // 327
-    if (match[1].indexOf('username') !== -1)                                                                     // 328
-      throw new Meteor.Error(403, "Username already exists.");                                                   // 329
-    // XXX better error reporting for services.facebook.id duplicate, etc                                        // 330
-    throw e;                                                                                                     // 331
-  }                                                                                                              // 332
-                                                                                                                 // 333
-  return result;                                                                                                 // 334
-};                                                                                                               // 335
-                                                                                                                 // 336
-var validateNewUserHooks = [];                                                                                   // 337
-Accounts.validateNewUser = function (func) {                                                                     // 338
-  validateNewUserHooks.push(func);                                                                               // 339
-};                                                                                                               // 340
+  oldestValidDate = oldestValidDate ||                                                                           // 304
+    (new Date(new Date() - tokenLifetimeMs));                                                                    // 305
+  var userFilter = userId ? {_id: userId} : {};                                                                  // 306
+                                                                                                                 // 307
+                                                                                                                 // 308
+  // Backwards compatible with older versions of meteor that stored login token                                  // 309
+  // timestamps as numbers.                                                                                      // 310
+  Meteor.users.update(_.extend(userFilter, {                                                                     // 311
+    $or: [                                                                                                       // 312
+      { "services.resume.loginTokens.when": { $lt: oldestValidDate } },                                          // 313
+      { "services.resume.loginTokens.when": { $lt: +oldestValidDate } }                                          // 314
+    ]                                                                                                            // 315
+  }), {                                                                                                          // 316
+    $pull: {                                                                                                     // 317
+      "services.resume.loginTokens": {                                                                           // 318
+        $or: [                                                                                                   // 319
+          { when: { $lt: oldestValidDate } },                                                                    // 320
+          { when: { $lt: +oldestValidDate } }                                                                    // 321
+        ]                                                                                                        // 322
+      }                                                                                                          // 323
+    }                                                                                                            // 324
+  }, { multi: true });                                                                                           // 325
+  // The observe on Meteor.users will take care of closing connections for                                       // 326
+  // expired tokens.                                                                                             // 327
+};                                                                                                               // 328
+                                                                                                                 // 329
+maybeStopExpireTokensInterval = function () {                                                                    // 330
+  if (_.has(Accounts._options, "loginExpirationInDays") &&                                                       // 331
+      Accounts._options.loginExpirationInDays === null &&                                                        // 332
+      expireTokenInterval) {                                                                                     // 333
+    Meteor.clearInterval(expireTokenInterval);                                                                   // 334
+    expireTokenInterval = null;                                                                                  // 335
+  }                                                                                                              // 336
+};                                                                                                               // 337
+                                                                                                                 // 338
+expireTokenInterval = Meteor.setInterval(expireTokens,                                                           // 339
+                                         EXPIRE_TOKENS_INTERVAL_MS);                                             // 340
                                                                                                                  // 341
-// XXX Find a better place for this utility function                                                             // 342
-// Like Perl's quotemeta: quotes all regexp metacharacters. See                                                  // 343
-//   https://github.com/substack/quotemeta/blob/master/index.js                                                  // 344
-var quotemeta = function (str) {                                                                                 // 345
-    return String(str).replace(/(\W)/g, '\\$1');                                                                 // 346
-};                                                                                                               // 347
-                                                                                                                 // 348
-// Helper function: returns false if email does not match company domain from                                    // 349
-// the configuration.                                                                                            // 350
-var testEmailDomain = function (email) {                                                                         // 351
-  var domain = Accounts._options.restrictCreationByEmailDomain;                                                  // 352
-  return !domain ||                                                                                              // 353
-    (_.isFunction(domain) && domain(email)) ||                                                                   // 354
-    (_.isString(domain) &&                                                                                       // 355
-      (new RegExp('@' + quotemeta(domain) + '$', 'i')).test(email));                                             // 356
-};                                                                                                               // 357
-                                                                                                                 // 358
-// Validate new user's email or Google/Facebook/GitHub account's email                                           // 359
-Accounts.validateNewUser(function (user) {                                                                       // 360
-  var domain = Accounts._options.restrictCreationByEmailDomain;                                                  // 361
-  if (!domain)                                                                                                   // 362
-    return true;                                                                                                 // 363
-                                                                                                                 // 364
-  var emailIsGood = false;                                                                                       // 365
-  if (!_.isEmpty(user.emails)) {                                                                                 // 366
-    emailIsGood = _.any(user.emails, function (email) {                                                          // 367
-      return testEmailDomain(email.address);                                                                     // 368
-    });                                                                                                          // 369
-  } else if (!_.isEmpty(user.services)) {                                                                        // 370
-    // Find any email of any service and check it                                                                // 371
-    emailIsGood = _.any(user.services, function (service) {                                                      // 372
-      return service.email && testEmailDomain(service.email);                                                    // 373
-    });                                                                                                          // 374
-  }                                                                                                              // 375
-                                                                                                                 // 376
-  if (emailIsGood)                                                                                               // 377
-    return true;                                                                                                 // 378
-                                                                                                                 // 379
-  if (_.isString(domain))                                                                                        // 380
-    throw new Meteor.Error(403, "@" + domain + " email required");                                               // 381
-  else                                                                                                           // 382
-    throw new Meteor.Error(403, "Email doesn't match the criteria.");                                            // 383
-});                                                                                                              // 384
-                                                                                                                 // 385
-///                                                                                                              // 386
-/// MANAGING USER OBJECTS                                                                                        // 387
-///                                                                                                              // 388
+///                                                                                                              // 342
+/// CREATE USER HOOKS                                                                                            // 343
+///                                                                                                              // 344
+                                                                                                                 // 345
+var onCreateUserHook = null;                                                                                     // 346
+Accounts.onCreateUser = function (func) {                                                                        // 347
+  if (onCreateUserHook)                                                                                          // 348
+    throw new Error("Can only call onCreateUser once");                                                          // 349
+  else                                                                                                           // 350
+    onCreateUserHook = func;                                                                                     // 351
+};                                                                                                               // 352
+                                                                                                                 // 353
+// XXX see comment on Accounts.createUser in passwords_server about adding a                                     // 354
+// second "server options" argument.                                                                             // 355
+var defaultCreateUserHook = function (options, user) {                                                           // 356
+  if (options.profile)                                                                                           // 357
+    user.profile = options.profile;                                                                              // 358
+  return user;                                                                                                   // 359
+};                                                                                                               // 360
+                                                                                                                 // 361
+// Called by accounts-password                                                                                   // 362
+Accounts.insertUserDoc = function (options, user) {                                                              // 363
+  // - clone user document, to protect from modification                                                         // 364
+  // - add createdAt timestamp                                                                                   // 365
+  // - prepare an _id, so that you can modify other collections (eg                                              // 366
+  // create a first task for every new user)                                                                     // 367
+  //                                                                                                             // 368
+  // XXX If the onCreateUser or validateNewUser hooks fail, we might                                             // 369
+  // end up having modified some other collection                                                                // 370
+  // inappropriately. The solution is probably to have onCreateUser                                              // 371
+  // accept two callbacks - one that gets called before inserting                                                // 372
+  // the user document (in which you can modify its contents), and                                               // 373
+  // one that gets called after (in which you should change other                                                // 374
+  // collections)                                                                                                // 375
+  user = _.extend({createdAt: new Date(), _id: Random.id()}, user);                                              // 376
+                                                                                                                 // 377
+  var result = {};                                                                                               // 378
+  if (options.generateLoginToken) {                                                                              // 379
+    var stampedToken = Accounts._generateStampedLoginToken();                                                    // 380
+    result.token = stampedToken.token;                                                                           // 381
+    result.tokenExpires = Accounts._tokenExpiration(stampedToken.when);                                          // 382
+    Meteor._ensure(user, 'services', 'resume');                                                                  // 383
+    if (_.has(user.services.resume, 'loginTokens'))                                                              // 384
+      user.services.resume.loginTokens.push(stampedToken);                                                       // 385
+    else                                                                                                         // 386
+      user.services.resume.loginTokens = [stampedToken];                                                         // 387
+  }                                                                                                              // 388
                                                                                                                  // 389
-// Updates or creates a user after we authenticate with a 3rd party.                                             // 390
-//                                                                                                               // 391
-// @param serviceName {String} Service name (eg, twitter).                                                       // 392
-// @param serviceData {Object} Data to store in the user's record                                                // 393
-//        under services[serviceName]. Must include an "id" field                                                // 394
-//        which is a unique identifier for the user in the service.                                              // 395
-// @param options {Object, optional} Other options to pass to insertUserDoc                                      // 396
-//        (eg, profile)                                                                                          // 397
-// @returns {Object} Object with token and id keys, like the result                                              // 398
-//        of the "login" method.                                                                                 // 399
-//                                                                                                               // 400
-Accounts.updateOrCreateUserFromExternalService = function(                                                       // 401
-  serviceName, serviceData, options) {                                                                           // 402
-  options = _.clone(options || {});                                                                              // 403
-                                                                                                                 // 404
-  if (serviceName === "password" || serviceName === "resume")                                                    // 405
-    throw new Error(                                                                                             // 406
-      "Can't use updateOrCreateUserFromExternalService with internal service "                                   // 407
-        + serviceName);                                                                                          // 408
-  if (!_.has(serviceData, 'id'))                                                                                 // 409
-    throw new Error(                                                                                             // 410
-      "Service data for service " + serviceName + " must include id");                                           // 411
-                                                                                                                 // 412
-  // Look for a user with the appropriate service user id.                                                       // 413
-  var selector = {};                                                                                             // 414
-  var serviceIdKey = "services." + serviceName + ".id";                                                          // 415
-                                                                                                                 // 416
-  // XXX Temporary special case for Twitter. (Issue #629)                                                        // 417
-  //   The serviceData.id will be a string representation of an integer.                                         // 418
-  //   We want it to match either a stored string or int representation.                                         // 419
-  //   This is to cater to earlier versions of Meteor storing twitter                                            // 420
-  //   user IDs in number form, and recent versions storing them as strings.                                     // 421
-  //   This can be removed once migration technology is in place, and twitter                                    // 422
-  //   users stored with integer IDs have been migrated to string IDs.                                           // 423
-  if (serviceName === "twitter" && !isNaN(serviceData.id)) {                                                     // 424
-    selector["$or"] = [{},{}];                                                                                   // 425
-    selector["$or"][0][serviceIdKey] = serviceData.id;                                                           // 426
-    selector["$or"][1][serviceIdKey] = parseInt(serviceData.id, 10);                                             // 427
-  } else {                                                                                                       // 428
-    selector[serviceIdKey] = serviceData.id;                                                                     // 429
-  }                                                                                                              // 430
+  var fullUser;                                                                                                  // 390
+  if (onCreateUserHook) {                                                                                        // 391
+    fullUser = onCreateUserHook(options, user);                                                                  // 392
+                                                                                                                 // 393
+    // This is *not* part of the API. We need this because we can't isolate                                      // 394
+    // the global server environment between tests, meaning we can't test                                        // 395
+    // both having a create user hook set and not having one set.                                                // 396
+    if (fullUser === 'TEST DEFAULT HOOK')                                                                        // 397
+      fullUser = defaultCreateUserHook(options, user);                                                           // 398
+  } else {                                                                                                       // 399
+    fullUser = defaultCreateUserHook(options, user);                                                             // 400
+  }                                                                                                              // 401
+                                                                                                                 // 402
+  _.each(validateNewUserHooks, function (hook) {                                                                 // 403
+    if (!hook(fullUser))                                                                                         // 404
+      throw new Meteor.Error(403, "User validation failed");                                                     // 405
+  });                                                                                                            // 406
+                                                                                                                 // 407
+  try {                                                                                                          // 408
+    result.id = Meteor.users.insert(fullUser);                                                                   // 409
+  } catch (e) {                                                                                                  // 410
+    // XXX string parsing sucks, maybe                                                                           // 411
+    // https://jira.mongodb.org/browse/SERVER-3069 will get fixed one day                                        // 412
+    if (e.name !== 'MongoError') throw e;                                                                        // 413
+    var match = e.err.match(/^E11000 duplicate key error index: ([^ ]+)/);                                       // 414
+    if (!match) throw e;                                                                                         // 415
+    if (match[1].indexOf('$emails.address') !== -1)                                                              // 416
+      throw new Meteor.Error(403, "Email already exists.");                                                      // 417
+    if (match[1].indexOf('username') !== -1)                                                                     // 418
+      throw new Meteor.Error(403, "Username already exists.");                                                   // 419
+    // XXX better error reporting for services.facebook.id duplicate, etc                                        // 420
+    throw e;                                                                                                     // 421
+  }                                                                                                              // 422
+                                                                                                                 // 423
+  return result;                                                                                                 // 424
+};                                                                                                               // 425
+                                                                                                                 // 426
+var validateNewUserHooks = [];                                                                                   // 427
+Accounts.validateNewUser = function (func) {                                                                     // 428
+  validateNewUserHooks.push(func);                                                                               // 429
+};                                                                                                               // 430
                                                                                                                  // 431
-  var user = Meteor.users.findOne(selector);                                                                     // 432
-                                                                                                                 // 433
-  if (user) {                                                                                                    // 434
-    // We *don't* process options (eg, profile) for update, but we do replace                                    // 435
-    // the serviceData (eg, so that we keep an unexpired access token and                                        // 436
-    // don't cache old email addresses in serviceData.email).                                                    // 437
-    // XXX provide an onUpdateUser hook which would let apps update                                              // 438
-    //     the profile too                                                                                       // 439
-    var stampedToken = Accounts._generateStampedLoginToken();                                                    // 440
-    var setAttrs = {};                                                                                           // 441
-    _.each(serviceData, function(value, key) {                                                                   // 442
-      setAttrs["services." + serviceName + "." + key] = value;                                                   // 443
-    });                                                                                                          // 444
-                                                                                                                 // 445
-    // XXX Maybe we should re-use the selector above and notice if the update                                    // 446
-    //     touches nothing?                                                                                      // 447
-    Meteor.users.update(                                                                                         // 448
-      user._id,                                                                                                  // 449
-      {$set: setAttrs,                                                                                           // 450
-       $push: {'services.resume.loginTokens': stampedToken}});                                                   // 451
-    return {                                                                                                     // 452
-      token: stampedToken.token,                                                                                 // 453
-      id: user._id,                                                                                              // 454
-      tokenExpires: Accounts._tokenExpiration(stampedToken.when)                                                 // 455
-    };                                                                                                           // 456
-  } else {                                                                                                       // 457
-    // Create a new user with the service data. Pass other options through to                                    // 458
-    // insertUserDoc.                                                                                            // 459
-    user = {services: {}};                                                                                       // 460
-    user.services[serviceName] = serviceData;                                                                    // 461
-    options.generateLoginToken = true;                                                                           // 462
-    return Accounts.insertUserDoc(options, user);                                                                // 463
-  }                                                                                                              // 464
-};                                                                                                               // 465
+// XXX Find a better place for this utility function                                                             // 432
+// Like Perl's quotemeta: quotes all regexp metacharacters. See                                                  // 433
+//   https://github.com/substack/quotemeta/blob/master/index.js                                                  // 434
+var quotemeta = function (str) {                                                                                 // 435
+    return String(str).replace(/(\W)/g, '\\$1');                                                                 // 436
+};                                                                                                               // 437
+                                                                                                                 // 438
+// Helper function: returns false if email does not match company domain from                                    // 439
+// the configuration.                                                                                            // 440
+var testEmailDomain = function (email) {                                                                         // 441
+  var domain = Accounts._options.restrictCreationByEmailDomain;                                                  // 442
+  return !domain ||                                                                                              // 443
+    (_.isFunction(domain) && domain(email)) ||                                                                   // 444
+    (_.isString(domain) &&                                                                                       // 445
+      (new RegExp('@' + quotemeta(domain) + '$', 'i')).test(email));                                             // 446
+};                                                                                                               // 447
+                                                                                                                 // 448
+// Validate new user's email or Google/Facebook/GitHub account's email                                           // 449
+Accounts.validateNewUser(function (user) {                                                                       // 450
+  var domain = Accounts._options.restrictCreationByEmailDomain;                                                  // 451
+  if (!domain)                                                                                                   // 452
+    return true;                                                                                                 // 453
+                                                                                                                 // 454
+  var emailIsGood = false;                                                                                       // 455
+  if (!_.isEmpty(user.emails)) {                                                                                 // 456
+    emailIsGood = _.any(user.emails, function (email) {                                                          // 457
+      return testEmailDomain(email.address);                                                                     // 458
+    });                                                                                                          // 459
+  } else if (!_.isEmpty(user.services)) {                                                                        // 460
+    // Find any email of any service and check it                                                                // 461
+    emailIsGood = _.any(user.services, function (service) {                                                      // 462
+      return service.email && testEmailDomain(service.email);                                                    // 463
+    });                                                                                                          // 464
+  }                                                                                                              // 465
                                                                                                                  // 466
-                                                                                                                 // 467
-///                                                                                                              // 468
-/// PUBLISHING DATA                                                                                              // 469
-///                                                                                                              // 470
-                                                                                                                 // 471
-// Publish the current user's record to the client.                                                              // 472
-Meteor.publish(null, function() {                                                                                // 473
-  if (this.userId) {                                                                                             // 474
-    return Meteor.users.find(                                                                                    // 475
-      {_id: this.userId},                                                                                        // 476
-      {fields: {profile: 1, username: 1, emails: 1}});                                                           // 477
-  } else {                                                                                                       // 478
-    return null;                                                                                                 // 479
-  }                                                                                                              // 480
-}, /*suppress autopublish warning*/{is_auto: true});                                                             // 481
-                                                                                                                 // 482
-// If autopublish is on, publish these user fields. Login service                                                // 483
-// packages (eg accounts-google) add to these by calling                                                         // 484
-// Accounts.addAutopublishFields Notably, this isn't implemented with                                            // 485
-// multiple publishes since DDP only merges only across top-level                                                // 486
-// fields, not subfields (such as 'services.facebook.accessToken')                                               // 487
-var autopublishFields = {                                                                                        // 488
-  loggedInUser: ['profile', 'username', 'emails'],                                                               // 489
-  otherUsers: ['profile', 'username']                                                                            // 490
-};                                                                                                               // 491
-                                                                                                                 // 492
-// Add to the list of fields or subfields to be automatically                                                    // 493
-// published if autopublish is on. Must be called from top-level                                                 // 494
-// code (ie, before Meteor.startup hooks run).                                                                   // 495
-//                                                                                                               // 496
-// @param opts {Object} with:                                                                                    // 497
-//   - forLoggedInUser {Array} Array of fields published to the logged-in user                                   // 498
-//   - forOtherUsers {Array} Array of fields published to users that aren't logged in                            // 499
-Accounts.addAutopublishFields = function(opts) {                                                                 // 500
-  autopublishFields.loggedInUser.push.apply(                                                                     // 501
-    autopublishFields.loggedInUser, opts.forLoggedInUser);                                                       // 502
-  autopublishFields.otherUsers.push.apply(                                                                       // 503
-    autopublishFields.otherUsers, opts.forOtherUsers);                                                           // 504
-};                                                                                                               // 505
+  if (emailIsGood)                                                                                               // 467
+    return true;                                                                                                 // 468
+                                                                                                                 // 469
+  if (_.isString(domain))                                                                                        // 470
+    throw new Meteor.Error(403, "@" + domain + " email required");                                               // 471
+  else                                                                                                           // 472
+    throw new Meteor.Error(403, "Email doesn't match the criteria.");                                            // 473
+});                                                                                                              // 474
+                                                                                                                 // 475
+///                                                                                                              // 476
+/// MANAGING USER OBJECTS                                                                                        // 477
+///                                                                                                              // 478
+                                                                                                                 // 479
+// Updates or creates a user after we authenticate with a 3rd party.                                             // 480
+//                                                                                                               // 481
+// @param serviceName {String} Service name (eg, twitter).                                                       // 482
+// @param serviceData {Object} Data to store in the user's record                                                // 483
+//        under services[serviceName]. Must include an "id" field                                                // 484
+//        which is a unique identifier for the user in the service.                                              // 485
+// @param options {Object, optional} Other options to pass to insertUserDoc                                      // 486
+//        (eg, profile)                                                                                          // 487
+// @returns {Object} Object with token and id keys, like the result                                              // 488
+//        of the "login" method.                                                                                 // 489
+//                                                                                                               // 490
+Accounts.updateOrCreateUserFromExternalService = function(                                                       // 491
+  serviceName, serviceData, options) {                                                                           // 492
+  options = _.clone(options || {});                                                                              // 493
+                                                                                                                 // 494
+  if (serviceName === "password" || serviceName === "resume")                                                    // 495
+    throw new Error(                                                                                             // 496
+      "Can't use updateOrCreateUserFromExternalService with internal service "                                   // 497
+        + serviceName);                                                                                          // 498
+  if (!_.has(serviceData, 'id'))                                                                                 // 499
+    throw new Error(                                                                                             // 500
+      "Service data for service " + serviceName + " must include id");                                           // 501
+                                                                                                                 // 502
+  // Look for a user with the appropriate service user id.                                                       // 503
+  var selector = {};                                                                                             // 504
+  var serviceIdKey = "services." + serviceName + ".id";                                                          // 505
                                                                                                                  // 506
-if (Package.autopublish) {                                                                                       // 507
-  // Use Meteor.startup to give other packages a chance to call                                                  // 508
-  // addAutopublishFields.                                                                                       // 509
-  Meteor.startup(function () {                                                                                   // 510
-    // ['profile', 'username'] -> {profile: 1, username: 1}                                                      // 511
-    var toFieldSelector = function(fields) {                                                                     // 512
-      return _.object(_.map(fields, function(field) {                                                            // 513
-        return [field, 1];                                                                                       // 514
-      }));                                                                                                       // 515
-    };                                                                                                           // 516
-                                                                                                                 // 517
-    Meteor.server.publish(null, function () {                                                                    // 518
-      if (this.userId) {                                                                                         // 519
-        return Meteor.users.find(                                                                                // 520
-          {_id: this.userId},                                                                                    // 521
-          {fields: toFieldSelector(autopublishFields.loggedInUser)});                                            // 522
-      } else {                                                                                                   // 523
-        return null;                                                                                             // 524
-      }                                                                                                          // 525
-    }, /*suppress autopublish warning*/{is_auto: true});                                                         // 526
-                                                                                                                 // 527
-    // XXX this publish is neither dedup-able nor is it optimized by our special                                 // 528
-    // treatment of queries on a specific _id. Therefore this will have O(n^2)                                   // 529
-    // run-time performance every time a user document is changed (eg someone                                    // 530
-    // logging in). If this is a problem, we can instead write a manual publish                                  // 531
-    // function which filters out fields based on 'this.userId'.                                                 // 532
-    Meteor.server.publish(null, function () {                                                                    // 533
-      var selector;                                                                                              // 534
-      if (this.userId)                                                                                           // 535
-        selector = {_id: {$ne: this.userId}};                                                                    // 536
-      else                                                                                                       // 537
-        selector = {};                                                                                           // 538
-                                                                                                                 // 539
-      return Meteor.users.find(                                                                                  // 540
-        selector,                                                                                                // 541
-        {fields: toFieldSelector(autopublishFields.otherUsers)});                                                // 542
-    }, /*suppress autopublish warning*/{is_auto: true});                                                         // 543
-  });                                                                                                            // 544
-}                                                                                                                // 545
-                                                                                                                 // 546
-// Publish all login service configuration fields other than secret.                                             // 547
-Meteor.publish("meteor.loginServiceConfiguration", function () {                                                 // 548
-  return ServiceConfiguration.configurations.find({}, {fields: {secret: 0}});                                    // 549
-}, {is_auto: true}); // not techincally autopublish, but stops the warning.                                      // 550
-                                                                                                                 // 551
-// Allow a one-time configuration for a login service. Modifications                                             // 552
-// to this collection are also allowed in insecure mode.                                                         // 553
-Meteor.methods({                                                                                                 // 554
-  "configureLoginService": function (options) {                                                                  // 555
-    check(options, Match.ObjectIncluding({service: String}));                                                    // 556
-    // Don't let random users configure a service we haven't added yet (so                                       // 557
-    // that when we do later add it, it's set up with their configuration                                        // 558
-    // instead of ours).                                                                                         // 559
-    // XXX if service configuration is oauth-specific then this code should                                      // 560
-    //     be in accounts-oauth; if it's not then the registry should be                                         // 561
-    //     in this package                                                                                       // 562
-    if (!(Accounts.oauth                                                                                         // 563
-          && _.contains(Accounts.oauth.serviceNames(), options.service))) {                                      // 564
-      throw new Meteor.Error(403, "Service unknown");                                                            // 565
-    }                                                                                                            // 566
-    if (ServiceConfiguration.configurations.findOne({service: options.service}))                                 // 567
-      throw new Meteor.Error(403, "Service " + options.service + " already configured");                         // 568
-    ServiceConfiguration.configurations.insert(options);                                                         // 569
+  // XXX Temporary special case for Twitter. (Issue #629)                                                        // 507
+  //   The serviceData.id will be a string representation of an integer.                                         // 508
+  //   We want it to match either a stored string or int representation.                                         // 509
+  //   This is to cater to earlier versions of Meteor storing twitter                                            // 510
+  //   user IDs in number form, and recent versions storing them as strings.                                     // 511
+  //   This can be removed once migration technology is in place, and twitter                                    // 512
+  //   users stored with integer IDs have been migrated to string IDs.                                           // 513
+  if (serviceName === "twitter" && !isNaN(serviceData.id)) {                                                     // 514
+    selector["$or"] = [{},{}];                                                                                   // 515
+    selector["$or"][0][serviceIdKey] = serviceData.id;                                                           // 516
+    selector["$or"][1][serviceIdKey] = parseInt(serviceData.id, 10);                                             // 517
+  } else {                                                                                                       // 518
+    selector[serviceIdKey] = serviceData.id;                                                                     // 519
+  }                                                                                                              // 520
+                                                                                                                 // 521
+  var user = Meteor.users.findOne(selector);                                                                     // 522
+                                                                                                                 // 523
+  if (user) {                                                                                                    // 524
+    // We *don't* process options (eg, profile) for update, but we do replace                                    // 525
+    // the serviceData (eg, so that we keep an unexpired access token and                                        // 526
+    // don't cache old email addresses in serviceData.email).                                                    // 527
+    // XXX provide an onUpdateUser hook which would let apps update                                              // 528
+    //     the profile too                                                                                       // 529
+    var stampedToken = Accounts._generateStampedLoginToken();                                                    // 530
+    var setAttrs = {};                                                                                           // 531
+    _.each(serviceData, function(value, key) {                                                                   // 532
+      setAttrs["services." + serviceName + "." + key] = value;                                                   // 533
+    });                                                                                                          // 534
+                                                                                                                 // 535
+    // XXX Maybe we should re-use the selector above and notice if the update                                    // 536
+    //     touches nothing?                                                                                      // 537
+    Meteor.users.update(                                                                                         // 538
+      user._id,                                                                                                  // 539
+      {$set: setAttrs,                                                                                           // 540
+       $push: {'services.resume.loginTokens': stampedToken}});                                                   // 541
+    return {                                                                                                     // 542
+      token: stampedToken.token,                                                                                 // 543
+      id: user._id,                                                                                              // 544
+      tokenExpires: Accounts._tokenExpiration(stampedToken.when)                                                 // 545
+    };                                                                                                           // 546
+  } else {                                                                                                       // 547
+    // Create a new user with the service data. Pass other options through to                                    // 548
+    // insertUserDoc.                                                                                            // 549
+    user = {services: {}};                                                                                       // 550
+    user.services[serviceName] = serviceData;                                                                    // 551
+    options.generateLoginToken = true;                                                                           // 552
+    return Accounts.insertUserDoc(options, user);                                                                // 553
+  }                                                                                                              // 554
+};                                                                                                               // 555
+                                                                                                                 // 556
+                                                                                                                 // 557
+///                                                                                                              // 558
+/// PUBLISHING DATA                                                                                              // 559
+///                                                                                                              // 560
+                                                                                                                 // 561
+// Publish the current user's record to the client.                                                              // 562
+Meteor.publish(null, function() {                                                                                // 563
+  if (this.userId) {                                                                                             // 564
+    return Meteor.users.find(                                                                                    // 565
+      {_id: this.userId},                                                                                        // 566
+      {fields: {profile: 1, username: 1, emails: 1}});                                                           // 567
+  } else {                                                                                                       // 568
+    return null;                                                                                                 // 569
   }                                                                                                              // 570
-});                                                                                                              // 571
+}, /*suppress autopublish warning*/{is_auto: true});                                                             // 571
                                                                                                                  // 572
-                                                                                                                 // 573
-///                                                                                                              // 574
-/// RESTRICTING WRITES TO USER OBJECTS                                                                           // 575
-///                                                                                                              // 576
-                                                                                                                 // 577
-Meteor.users.allow({                                                                                             // 578
-  // clients can modify the profile field of their own document, and                                             // 579
-  // nothing else.                                                                                               // 580
-  update: function (userId, user, fields, modifier) {                                                            // 581
-    // make sure it is our record                                                                                // 582
-    if (user._id !== userId)                                                                                     // 583
-      return false;                                                                                              // 584
-                                                                                                                 // 585
-    // user can only modify the 'profile' field. sets to multiple                                                // 586
-    // sub-keys (eg profile.foo and profile.bar) are merged into entry                                           // 587
-    // in the fields list.                                                                                       // 588
-    if (fields.length !== 1 || fields[0] !== 'profile')                                                          // 589
-      return false;                                                                                              // 590
-                                                                                                                 // 591
-    return true;                                                                                                 // 592
-  },                                                                                                             // 593
-  fetch: ['_id'] // we only look at _id.                                                                         // 594
-});                                                                                                              // 595
+// If autopublish is on, publish these user fields. Login service                                                // 573
+// packages (eg accounts-google) add to these by calling                                                         // 574
+// Accounts.addAutopublishFields Notably, this isn't implemented with                                            // 575
+// multiple publishes since DDP only merges only across top-level                                                // 576
+// fields, not subfields (such as 'services.facebook.accessToken')                                               // 577
+var autopublishFields = {                                                                                        // 578
+  loggedInUser: ['profile', 'username', 'emails'],                                                               // 579
+  otherUsers: ['profile', 'username']                                                                            // 580
+};                                                                                                               // 581
+                                                                                                                 // 582
+// Add to the list of fields or subfields to be automatically                                                    // 583
+// published if autopublish is on. Must be called from top-level                                                 // 584
+// code (ie, before Meteor.startup hooks run).                                                                   // 585
+//                                                                                                               // 586
+// @param opts {Object} with:                                                                                    // 587
+//   - forLoggedInUser {Array} Array of fields published to the logged-in user                                   // 588
+//   - forOtherUsers {Array} Array of fields published to users that aren't logged in                            // 589
+Accounts.addAutopublishFields = function(opts) {                                                                 // 590
+  autopublishFields.loggedInUser.push.apply(                                                                     // 591
+    autopublishFields.loggedInUser, opts.forLoggedInUser);                                                       // 592
+  autopublishFields.otherUsers.push.apply(                                                                       // 593
+    autopublishFields.otherUsers, opts.forOtherUsers);                                                           // 594
+};                                                                                                               // 595
                                                                                                                  // 596
-/// DEFAULT INDEXES ON USERS                                                                                     // 597
-Meteor.users._ensureIndex('username', {unique: 1, sparse: 1});                                                   // 598
-Meteor.users._ensureIndex('emails.address', {unique: 1, sparse: 1});                                             // 599
-Meteor.users._ensureIndex('services.resume.loginTokens.token',                                                   // 600
-                          {unique: 1, sparse: 1});                                                               // 601
-// For taking care of logoutOtherClients calls that crashed before the tokens                                    // 602
-// were deleted.                                                                                                 // 603
-Meteor.users._ensureIndex('services.resume.haveLoginTokensToDelete',                                             // 604
-                          { sparse: 1 });                                                                        // 605
-// For expiring login tokens                                                                                     // 606
-Meteor.users._ensureIndex("services.resume.loginTokens.when", { sparse: 1 });                                    // 607
-                                                                                                                 // 608
-///                                                                                                              // 609
-/// CLEAN UP FOR `logoutOtherClients`                                                                            // 610
-///                                                                                                              // 611
-                                                                                                                 // 612
-var deleteSavedTokens = function (userId, tokensToDelete) {                                                      // 613
-  if (tokensToDelete) {                                                                                          // 614
-    Meteor.users.update(userId, {                                                                                // 615
-      $unset: {                                                                                                  // 616
-        "services.resume.haveLoginTokensToDelete": 1,                                                            // 617
-        "services.resume.loginTokensToDelete": 1                                                                 // 618
-      },                                                                                                         // 619
-      $pullAll: {                                                                                                // 620
-        "services.resume.loginTokens": tokensToDelete                                                            // 621
-      }                                                                                                          // 622
-    });                                                                                                          // 623
-  }                                                                                                              // 624
-};                                                                                                               // 625
-                                                                                                                 // 626
-Meteor.startup(function () {                                                                                     // 627
-  // If we find users who have saved tokens to delete on startup, delete them                                    // 628
-  // now. It's possible that the server could have crashed and come back up                                      // 629
-  // before new tokens are found in localStorage, but this shouldn't happen very                                 // 630
-  // often. We shouldn't put a delay here because that would give a lot of power                                 // 631
-  // to an attacker with a stolen login token and the ability to crash the                                       // 632
-  // server.                                                                                                     // 633
-  var users = Meteor.users.find({                                                                                // 634
-    "services.resume.haveLoginTokensToDelete": true                                                              // 635
-  }, {                                                                                                           // 636
-    "services.resume.loginTokensToDelete": 1                                                                     // 637
-  });                                                                                                            // 638
-  users.forEach(function (user) {                                                                                // 639
-    deleteSavedTokens(user._id, user.services.resume.loginTokensToDelete);                                       // 640
-  });                                                                                                            // 641
-});                                                                                                              // 642
-                                                                                                                 // 643
-///                                                                                                              // 644
-/// LOGGING OUT DELETED USERS                                                                                    // 645
-///                                                                                                              // 646
-                                                                                                                 // 647
-var closeTokensForUser = function (userTokens) {                                                                 // 648
-  Meteor.server._closeAllForTokens(_.map(userTokens, function (token) {                                          // 649
-    return token.token;                                                                                          // 650
-  }));                                                                                                           // 651
-};                                                                                                               // 652
-                                                                                                                 // 653
-Meteor.users.find({}, { fields: { "services.resume": 1 }}).observe({                                             // 654
-  changed: function (newUser, oldUser) {                                                                         // 655
-    var removedTokens = [];                                                                                      // 656
-    if (newUser.services && newUser.services.resume &&                                                           // 657
-        oldUser.services && oldUser.services.resume) {                                                           // 658
-      removedTokens = _.difference(oldUser.services.resume.loginTokens || [],                                    // 659
-                                   newUser.services.resume.loginTokens || []);                                   // 660
-    } else if (oldUser.services && oldUser.services.resume) {                                                    // 661
-      removedTokens = oldUser.services.resume.loginTokens || [];                                                 // 662
-    }                                                                                                            // 663
-    closeTokensForUser(removedTokens);                                                                           // 664
-  },                                                                                                             // 665
-  removed: function (oldUser) {                                                                                  // 666
-    if (oldUser.services && oldUser.services.resume)                                                             // 667
-      closeTokensForUser(oldUser.services.resume.loginTokens || []);                                             // 668
-  }                                                                                                              // 669
-});                                                                                                              // 670
-                                                                                                                 // 671
+if (Package.autopublish) {                                                                                       // 597
+  // Use Meteor.startup to give other packages a chance to call                                                  // 598
+  // addAutopublishFields.                                                                                       // 599
+  Meteor.startup(function () {                                                                                   // 600
+    // ['profile', 'username'] -> {profile: 1, username: 1}                                                      // 601
+    var toFieldSelector = function(fields) {                                                                     // 602
+      return _.object(_.map(fields, function(field) {                                                            // 603
+        return [field, 1];                                                                                       // 604
+      }));                                                                                                       // 605
+    };                                                                                                           // 606
+                                                                                                                 // 607
+    Meteor.server.publish(null, function () {                                                                    // 608
+      if (this.userId) {                                                                                         // 609
+        return Meteor.users.find(                                                                                // 610
+          {_id: this.userId},                                                                                    // 611
+          {fields: toFieldSelector(autopublishFields.loggedInUser)});                                            // 612
+      } else {                                                                                                   // 613
+        return null;                                                                                             // 614
+      }                                                                                                          // 615
+    }, /*suppress autopublish warning*/{is_auto: true});                                                         // 616
+                                                                                                                 // 617
+    // XXX this publish is neither dedup-able nor is it optimized by our special                                 // 618
+    // treatment of queries on a specific _id. Therefore this will have O(n^2)                                   // 619
+    // run-time performance every time a user document is changed (eg someone                                    // 620
+    // logging in). If this is a problem, we can instead write a manual publish                                  // 621
+    // function which filters out fields based on 'this.userId'.                                                 // 622
+    Meteor.server.publish(null, function () {                                                                    // 623
+      var selector;                                                                                              // 624
+      if (this.userId)                                                                                           // 625
+        selector = {_id: {$ne: this.userId}};                                                                    // 626
+      else                                                                                                       // 627
+        selector = {};                                                                                           // 628
+                                                                                                                 // 629
+      return Meteor.users.find(                                                                                  // 630
+        selector,                                                                                                // 631
+        {fields: toFieldSelector(autopublishFields.otherUsers)});                                                // 632
+    }, /*suppress autopublish warning*/{is_auto: true});                                                         // 633
+  });                                                                                                            // 634
+}                                                                                                                // 635
+                                                                                                                 // 636
+// Publish all login service configuration fields other than secret.                                             // 637
+Meteor.publish("meteor.loginServiceConfiguration", function () {                                                 // 638
+  return ServiceConfiguration.configurations.find({}, {fields: {secret: 0}});                                    // 639
+}, {is_auto: true}); // not techincally autopublish, but stops the warning.                                      // 640
+                                                                                                                 // 641
+// Allow a one-time configuration for a login service. Modifications                                             // 642
+// to this collection are also allowed in insecure mode.                                                         // 643
+Meteor.methods({                                                                                                 // 644
+  "configureLoginService": function (options) {                                                                  // 645
+    check(options, Match.ObjectIncluding({service: String}));                                                    // 646
+    // Don't let random users configure a service we haven't added yet (so                                       // 647
+    // that when we do later add it, it's set up with their configuration                                        // 648
+    // instead of ours).                                                                                         // 649
+    // XXX if service configuration is oauth-specific then this code should                                      // 650
+    //     be in accounts-oauth; if it's not then the registry should be                                         // 651
+    //     in this package                                                                                       // 652
+    if (!(Accounts.oauth                                                                                         // 653
+          && _.contains(Accounts.oauth.serviceNames(), options.service))) {                                      // 654
+      throw new Meteor.Error(403, "Service unknown");                                                            // 655
+    }                                                                                                            // 656
+    if (ServiceConfiguration.configurations.findOne({service: options.service}))                                 // 657
+      throw new Meteor.Error(403, "Service " + options.service + " already configured");                         // 658
+    ServiceConfiguration.configurations.insert(options);                                                         // 659
+  }                                                                                                              // 660
+});                                                                                                              // 661
+                                                                                                                 // 662
+                                                                                                                 // 663
+///                                                                                                              // 664
+/// RESTRICTING WRITES TO USER OBJECTS                                                                           // 665
+///                                                                                                              // 666
+                                                                                                                 // 667
+Meteor.users.allow({                                                                                             // 668
+  // clients can modify the profile field of their own document, and                                             // 669
+  // nothing else.                                                                                               // 670
+  update: function (userId, user, fields, modifier) {                                                            // 671
+    // make sure it is our record                                                                                // 672
+    if (user._id !== userId)                                                                                     // 673
+      return false;                                                                                              // 674
+                                                                                                                 // 675
+    // user can only modify the 'profile' field. sets to multiple                                                // 676
+    // sub-keys (eg profile.foo and profile.bar) are merged into entry                                           // 677
+    // in the fields list.                                                                                       // 678
+    if (fields.length !== 1 || fields[0] !== 'profile')                                                          // 679
+      return false;                                                                                              // 680
+                                                                                                                 // 681
+    return true;                                                                                                 // 682
+  },                                                                                                             // 683
+  fetch: ['_id'] // we only look at _id.                                                                         // 684
+});                                                                                                              // 685
+                                                                                                                 // 686
+/// DEFAULT INDEXES ON USERS                                                                                     // 687
+Meteor.users._ensureIndex('username', {unique: 1, sparse: 1});                                                   // 688
+Meteor.users._ensureIndex('emails.address', {unique: 1, sparse: 1});                                             // 689
+Meteor.users._ensureIndex('services.resume.loginTokens.token',                                                   // 690
+                          {unique: 1, sparse: 1});                                                               // 691
+// For taking care of logoutOtherClients calls that crashed before the tokens                                    // 692
+// were deleted.                                                                                                 // 693
+Meteor.users._ensureIndex('services.resume.haveLoginTokensToDelete',                                             // 694
+                          { sparse: 1 });                                                                        // 695
+// For expiring login tokens                                                                                     // 696
+Meteor.users._ensureIndex("services.resume.loginTokens.when", { sparse: 1 });                                    // 697
+                                                                                                                 // 698
+///                                                                                                              // 699
+/// CLEAN UP FOR `logoutOtherClients`                                                                            // 700
+///                                                                                                              // 701
+                                                                                                                 // 702
+var deleteSavedTokens = function (userId, tokensToDelete) {                                                      // 703
+  if (tokensToDelete) {                                                                                          // 704
+    Meteor.users.update(userId, {                                                                                // 705
+      $unset: {                                                                                                  // 706
+        "services.resume.haveLoginTokensToDelete": 1,                                                            // 707
+        "services.resume.loginTokensToDelete": 1                                                                 // 708
+      },                                                                                                         // 709
+      $pullAll: {                                                                                                // 710
+        "services.resume.loginTokens": tokensToDelete                                                            // 711
+      }                                                                                                          // 712
+    });                                                                                                          // 713
+  }                                                                                                              // 714
+};                                                                                                               // 715
+                                                                                                                 // 716
+Meteor.startup(function () {                                                                                     // 717
+  // If we find users who have saved tokens to delete on startup, delete them                                    // 718
+  // now. It's possible that the server could have crashed and come back up                                      // 719
+  // before new tokens are found in localStorage, but this shouldn't happen very                                 // 720
+  // often. We shouldn't put a delay here because that would give a lot of power                                 // 721
+  // to an attacker with a stolen login token and the ability to crash the                                       // 722
+  // server.                                                                                                     // 723
+  var users = Meteor.users.find({                                                                                // 724
+    "services.resume.haveLoginTokensToDelete": true                                                              // 725
+  }, {                                                                                                           // 726
+    "services.resume.loginTokensToDelete": 1                                                                     // 727
+  });                                                                                                            // 728
+  users.forEach(function (user) {                                                                                // 729
+    deleteSavedTokens(user._id, user.services.resume.loginTokensToDelete);                                       // 730
+  });                                                                                                            // 731
+});                                                                                                              // 732
+                                                                                                                 // 733
+///                                                                                                              // 734
+/// LOGGING OUT DELETED USERS                                                                                    // 735
+///                                                                                                              // 736
+                                                                                                                 // 737
+var closeTokensForUser = function (userTokens) {                                                                 // 738
+  closeConnectionsForTokens(_.pluck(userTokens, "token"));                                                       // 739
+};                                                                                                               // 740
+                                                                                                                 // 741
+// Like _.difference, but uses EJSON.equals to compute which values to return.                                   // 742
+var differenceObj = function (array1, array2) {                                                                  // 743
+  return _.filter(array1, function (array1Value) {                                                               // 744
+    return ! _.some(array2, function (array2Value) {                                                             // 745
+      return EJSON.equals(array1Value, array2Value);                                                             // 746
+    });                                                                                                          // 747
+  });                                                                                                            // 748
+};                                                                                                               // 749
+                                                                                                                 // 750
+Meteor.users.find({}, { fields: { "services.resume": 1 }}).observe({                                             // 751
+  changed: function (newUser, oldUser) {                                                                         // 752
+    var removedTokens = [];                                                                                      // 753
+    if (newUser.services && newUser.services.resume &&                                                           // 754
+        oldUser.services && oldUser.services.resume) {                                                           // 755
+      removedTokens = differenceObj(oldUser.services.resume.loginTokens || [],                                   // 756
+                                    newUser.services.resume.loginTokens || []);                                  // 757
+    } else if (oldUser.services && oldUser.services.resume) {                                                    // 758
+      removedTokens = oldUser.services.resume.loginTokens || [];                                                 // 759
+    }                                                                                                            // 760
+    closeTokensForUser(removedTokens);                                                                           // 761
+  },                                                                                                             // 762
+  removed: function (oldUser) {                                                                                  // 763
+    if (oldUser.services && oldUser.services.resume)                                                             // 764
+      closeTokensForUser(oldUser.services.resume.loginTokens || []);                                             // 765
+  }                                                                                                              // 766
+});                                                                                                              // 767
+                                                                                                                 // 768
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 }).call(this);
