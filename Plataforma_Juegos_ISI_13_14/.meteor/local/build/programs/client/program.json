@@ -558,18 +558,18 @@
       "where": "client",
       "type": "js",
       "cacheable": true,
-      "url": "/client/SinNombre/engine.js?11e04a351080fb9a81107482e01256c55ac32608",
-      "size": 4313,
-      "hash": "11e04a351080fb9a81107482e01256c55ac32608"
+      "url": "/client/SinNombre/engine.js?33d4868bf80c9ec1d8ebb26f7b0192e605634145",
+      "size": 4316,
+      "hash": "33d4868bf80c9ec1d8ebb26f7b0192e605634145"
     },
     {
       "path": "app/client/SinNombre/game.js",
       "where": "client",
       "type": "js",
       "cacheable": true,
-      "url": "/client/SinNombre/game.js?cd8fb8c8ffa6be79ca5730801d4cb675b2d638f8",
-      "size": 28933,
-      "hash": "cd8fb8c8ffa6be79ca5730801d4cb675b2d638f8"
+      "url": "/client/SinNombre/game.js?097e9ae2a1e0776f83a33e11a74beb22020e81bb",
+      "size": 30689,
+      "hash": "097e9ae2a1e0776f83a33e11a74beb22020e81bb"
     },
     {
       "path": "app/client/client.js",
@@ -703,8 +703,8 @@
       "type": "asset",
       "cacheable": false,
       "url": "/fichas_carssonline.png",
-      "size": 131856,
-      "hash": "24d2438a90b52b383481500a13ae967b7283092f"
+      "size": 133266,
+      "hash": "4fefb33025a8b414f7acb4e72b96399bdcfc1367"
     },
     {
       "path": "app/sprites.png",
@@ -1222,7 +1222,7 @@
     {
       "path": "app.html",
       "where": "internal",
-      "hash": "ac2dc192b40f3c06956f9e8febe41fbad6a30550"
+      "hash": "7702850c7d92c42890557a1e540f58a17eee176a"
     }
   ]
 }
