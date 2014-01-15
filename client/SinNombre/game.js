@@ -182,6 +182,7 @@ BotonAyuda = new function() {
 	    	ctx.fillText("Ayuda", this.x+22, this.y+15);	
 	}    
 }
+
 MenuAyuda = new function(){
 	this.x = 0;
 	this.y = 0;
@@ -192,18 +193,26 @@ MenuAyuda = new function(){
 	this.soltar = function(x,y) {	}
 	this.pulsado = function() {Game.setBoard(0, BotonAyuda);}
         this.draw = function(ctx) {
-	    ctx.fillStyle = "#FFFFFF";
-	    ctx.textAlign = "center";
+			ctx.fillStyle = "#FFFFFF";
+			ctx.textAlign = "center";
 	
-	    Game.ctx.fillStyle = "#000000";
-	    Game.ctx.fillRect(0,0,1070,650);
+			Game.ctx.fillStyle = "#000000";
+			Game.ctx.fillRect(0,0,1070,650);
 
-	    ctx.fillStyle= "#c9c9c9";
-	    ctx.font = "bold 10px arial";
-	    ctx.fillText("AYUDA.",Game.width/2,Game.height/2);
+			ctx.fillStyle= "#c9c9c9";
+			ctx.font = "bold 40px arial";
+			ctx.fillText("Menú de ayuda", Game.width/2, 50);
 
-	    ctx.font = "bold 7px arial";
-	    ctx.fillText("Aqui cuento la ayuda...",Game.width/2+5,Game.height/2 + 100);
+			ctx.textAlign = "left";
+			ctx.font = "bold 22px arial";
+			ctx.fillText("1 Pulsa sobre la ficha '?' en el menú de la derecha en tu turno", 30, 100);
+			ctx.fillText("2 Para rotar la ficha pincha sobre ella mientras esté en la barra", 30, 130);
+			ctx.fillText("3 Para colocar la ficha girada muévela hasta una casilla '?' o pincha sobre dicha casilla*", 30,160);
+			ctx.fillText("4 Para colocar un seguidor muévelo hasta la ficha que acabas de poner o pincha sobre ella en",30, 190);
+			ctx.fillText("   la posición deseada*", 30, 220);
+			ctx.fillText("5 Para terminar el turno pulsar sobre el botón de Terminar", 30,250);
+			ctx.fillText("Para mover el tablero pincha sobre él y desplázalo o utiliza las flechas del menú*", 30,300);
+			ctx.fillText("*En pantallas táctiles no se puede arrastrar, se debe jugar pulsando", 30,350);
         }
 
 }
