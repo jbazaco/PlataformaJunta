@@ -91,7 +91,6 @@ var game = {
 		}
 	},
 	showLevelScreen:function(){
-    alert("elige nivel");
 		$('.gamelayer').hide();
     $("#container5").css("visibility","visible");
 		$('#levelselectscreen').show('slow');
