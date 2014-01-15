@@ -222,6 +222,15 @@ Meteor.methods({
 
 		return ("__Partida"+id+"__");
 	},
+	
+	//Metodo temporal para añadir puntuacion a jugadores de partidas en curso
+	AñadirPuntuacionTemporal: function(id,jugador,punt){
+		var p = Partidas.findOne(id).puntuacion
+		var idx = Partidas.findOne(id).jugadores.indexOf(jugador)
+		p[idx]+=punt
+		Partidas.update(id,{$set:{puntuacion:p}});		
+	},
+	
 	//Disponible
 	DevuelveFicha:function(){
 		return Aleatorio();
