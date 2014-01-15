@@ -1,6 +1,5 @@
 
 #Evita los archivos temporales ~, la carpeta meteor y la packages.
-*/*~
 *~
 .meteor/
 packages/
