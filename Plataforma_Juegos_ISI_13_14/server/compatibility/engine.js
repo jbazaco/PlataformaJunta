@@ -11,30 +11,30 @@ var CAMINO = 'camino';
 var CAMPO = 'campo'
 
 var FichaPropiedades = {
-	murcam:  {nombre:"murcam", u:CAMPO,    r:CAMPO,    d:CASTILLO, l:CASTILLO, gir: 0},        //media ficha muralla media ficha campo
-	c3mur: 	 {nombre:"c3mur", u:CAMINO,   r:CAMINO,   d:CAMINO,   l:CASTILLO, gir: 0},         //cruce de 3 caminos con muralla al lado
-	mur2: 	 {nombre:"mur2", u:CAMPO,    r:CASTILLO, d:CAMPO,    l:CASTILLO, gir: 0},          //una muralla a cada lado de la ficha
-	m: 		 {nombre:"m", u: CAMPO,   r:CAMPO,    d:CAMPO,    l:CAMPO , gir: 0},               //monasterio
-  	mc: 	 {nombre:"mc", u:CAMPO,    r:CAMINO,   d:CAMPO,    l:CAMPO, gir: 0},               //monasterio con camino
-	c4: 	 {nombre:"c4", u:CAMINO,   r:CAMINO,   d:CAMINO,   l:CAMINO, gir: 0},              //cruce de 4 caminos
-	cc: 	 {nombre:"cc", u:CAMINO,   r:CAMINO,   d:CAMPO,    l:CAMPO, gir: 0},               //camino curva
- 	cr: 	 {nombre:"cr", u:CAMPO,    r:CAMINO,   d:CAMPO,    l:CAMINO, gir: 0},              //camino recto
- 	c3: 	 {nombre:"c3", u:CAMINO,   r:CAMINO,   d:CAMINO,   l:CAMPO, gir: 0},               //cruce de 3 caminos
-	ciudad:  {nombre:"ciudad", u:CASTILLO, r:CASTILLO, d:CASTILLO, l:CASTILLO, gir: 0},        //todo ciudad con escudo
-	ciucam:  {nombre:"ciucam", u:CASTILLO, r:CAMPO,    d:CASTILLO, l:CASTILLO, gir: 0},        //ciudad con un lado de campo
-	chmur: 	 {nombre:"chmur", u:CASTILLO, r:CAMINO,   d:CASTILLO, l:CASTILLO, gir: 0},   	   //camino hacia muralla
-	mur2c: 	 {nombre:"mur2c", u:CASTILLO, r:CAMPO,    d:CAMPO,    l:CASTILLO, gir: 0},         //2 murallas en lados contiguos
-	mur1: 	 {nombre:"mur1", u:CAMPO,    r:CAMPO,    d:CAMPO,    l:CASTILLO, gir: 0},          //1 muralla en un lado y el resto campo
- 	cmur: 	 {nombre:"cmur", u:CAMINO,   r:CAMPO,    d:CAMINO,   l:CASTILLO, gir: 0},          //camino recto con muralla al lado(ini)
- 	ccmur: 	 {nombre:"ccmur", u:CAMINO,   r:CAMINO,   d:CAMPO,    l:CASTILLO, gir: 0},         //camino con curva y con muralla al lado
-	ccmur3:  {nombre:"ccmur3", u:CAMPO,    r:CAMINO,   d:CAMINO,   l:CASTILLO, gir: 0},        //camino con curva y muralla al lado(otro)
-	ciucam2: {nombre:"ciucam2", u:CASTILLO, r:CAMPO,    d:CASTILLO, l:CAMPO, gir: 0},          //ciudad con 2 lados opuestos de campo
-	ccmur2:  {nombre:"ccmur2", u:CAMINO,   r:CAMINO,   d:CASTILLO, l:CASTILLO, gir: 0},	 	   //camino con curva con 2 lados de ciudad contiguos
- 	chmure:  {nombre:"chmure", u:CASTILLO, r:CAMINO,   d:CASTILLO, l:CASTILLO, gir: 0}, 	   //camino hacia muralla con escudo
-  	ccmur2e: {nombre:"ccmur2e", u:CAMINO,   r:CAMINO,   d:CASTILLO, l:CASTILLO, gir: 0},       //camino con curva con 2 lados de ciudad,escudo
-  	murcame: {nombre:"murcame", u:CAMPO,    r:CAMPO,    d:CASTILLO, l:CASTILLO, gir: 0},       //media ficha muralla media ficha campo con escudo
-  	ciucame: {nombre:"ciucame", u:CASTILLO, r:CAMPO,    d:CASTILLO, l:CASTILLO, gir: 0},       //ciudad con un lado de campo con escudo
-  	ciucam2e:{nombre:"ciucam2e", u:CASTILLO, r:CAMPO,    d:CASTILLO, l:CAMPO, gir: 0}          //ciudad 2 lados opuestos campo con escudo
+/*0*/		murcam:  {nombre:"murcam", u:CAMPO,    r:CAMPO,    d:CASTILLO, l:CASTILLO, gir: 0},        //media ficha muralla media ficha campo
+/*1*/		c3mur: 	 {nombre:"c3mur", u:CAMINO,   r:CAMINO,   d:CAMINO,   l:CASTILLO, gir: 0},         //cruce de 3 caminos con muralla al lado
+/*2*/		mur2: 	 {nombre:"mur2", u:CAMPO,    r:CASTILLO, d:CAMPO,    l:CASTILLO, gir: 0},          //una muralla a cada lado de la ficha
+/*3*/		m: 		 {nombre:"m", u: CAMPO,   r:CAMPO,    d:CAMPO,    l:CAMPO , gir: 0},               //monasterio
+/*4*/  		mc: 	 {nombre:"mc", u:CAMPO,    r:CAMINO,   d:CAMPO,    l:CAMPO, gir: 0},               //monasterio con camino
+/*5*/		c4: 	 {nombre:"c4", u:CAMINO,   r:CAMINO,   d:CAMINO,   l:CAMINO, gir: 0},              //cruce de 4 caminos
+/*6*/		cc: 	 {nombre:"cc", u:CAMINO,   r:CAMINO,   d:CAMPO,    l:CAMPO, gir: 0},               //camino curva
+/*7*/ 		cr: 	 {nombre:"cr", u:CAMPO,    r:CAMINO,   d:CAMPO,    l:CAMINO, gir: 0},              //camino recto
+/*8*/ 		c3: 	 {nombre:"c3", u:CAMINO,   r:CAMINO,   d:CAMINO,   l:CAMPO, gir: 0},               //cruce de 3 caminos
+/*9*/		ciudad:  {nombre:"ciudad", u:CASTILLO, r:CASTILLO, d:CASTILLO, l:CASTILLO, gir: 0},        //todo ciudad con escudo
+/*10*/		ciucam:  {nombre:"ciucam", u:CASTILLO, r:CAMPO,    d:CASTILLO, l:CASTILLO, gir: 0},        //ciudad con un lado de campo
+/*11*/		chmur: 	 {nombre:"chmur", u:CASTILLO, r:CAMINO,   d:CASTILLO, l:CASTILLO, gir: 0},   	   //camino hacia muralla
+/*12*/		mur2c: 	 {nombre:"mur2c", u:CASTILLO, r:CAMPO,    d:CAMPO,    l:CASTILLO, gir: 0},         //2 murallas en lados contiguos
+/*13*/		mur1: 	 {nombre:"mur1", u:CAMPO,    r:CAMPO,    d:CAMPO,    l:CASTILLO, gir: 0},          //1 muralla en un lado y el resto campo
+/*14*/		cmur: 	 {nombre:"cmur", u:CAMINO,   r:CAMPO,    d:CAMINO,   l:CASTILLO, gir: 0},          //camino recto con muralla al lado(ini)
+/*15*/ 		ccmur: 	 {nombre:"ccmur", u:CAMINO,   r:CAMINO,   d:CAMPO,    l:CASTILLO, gir: 0},         //camino con curva y con muralla al lado
+/*16*/		ccmur3:  {nombre:"ccmur3", u:CAMPO,    r:CAMINO,   d:CAMINO,   l:CASTILLO, gir: 0},        //camino con curva y muralla al lado(otro)
+/*17*/		ciucam2: {nombre:"ciucam2", u:CASTILLO, r:CAMPO,    d:CASTILLO, l:CAMPO, gir: 0},          //ciudad con 2 lados opuestos de campo
+/*18*/		ccmur2:  {nombre:"ccmur2", u:CAMINO,   r:CAMINO,   d:CASTILLO, l:CASTILLO, gir: 0},	 	   //camino con curva con 2 lados de ciudad contiguos
+/*19*/ 		chmure:  {nombre:"chmure", u:CASTILLO, r:CAMINO,   d:CASTILLO, l:CASTILLO, gir: 0}, 	   //camino hacia muralla con escudo
+/*20*/  	ccmur2e: {nombre:"ccmur2e", u:CAMINO,   r:CAMINO,   d:CASTILLO, l:CASTILLO, gir: 0},       //camino con curva con 2 lados de ciudad,escudo
+/*21*/  	murcame: {nombre:"murcame", u:CAMPO,    r:CAMPO,    d:CASTILLO, l:CASTILLO, gir: 0},       //media ficha muralla media ficha campo con escudo
+/*22*/  	ciucame: {nombre:"ciucame", u:CASTILLO, r:CAMPO,    d:CASTILLO, l:CASTILLO, gir: 0},       //ciudad con un lado de campo con escudo
+/*23*/  	ciucam2e:{nombre:"ciucam2e", u:CASTILLO, r:CAMPO,    d:CASTILLO, l:CAMPO, gir: 0}          //ciudad 2 lados opuestos campo con escudo
 }; 
 
 var ArFi = _.toArray(FichaPropiedades); //Convertimos lo que tenemos en un Array para poder tratarlo
@@ -83,9 +83,27 @@ CrearTablero = function(){
 	}
 	return x;
 };
+//Meteor.call("DevuelveFicha", function(error,resultado){
+//	console.log(error)
+//	console.lo(resultado)	
+//})
+// Para acceder a la base de datos meteor mongo
+/*
+Deps.autorun(function(){
+	p = Partidas.find({estado: "Esperando"});
+	p.forEach(function(){
+		j = this.jugadas[this.jugadas.length - 1];
+		Parsear(this.id, j);
+	});
+});
+*/
+
 //Procedimiento que mira las posiciones del tablero para ver si se puede colocar la ficha
 //Terminología: U: Up, R:Right, D: Down, L:Left. 
-colocarficha = function(Tablero, Ficha, X, Y){
+colocarficha = function(Id, Ficha, X, Y){
+		//Primero extremos el tablero mediante el Id
+		Tablero = ListaTableros[Id];
+
 		var colocado = true;
 		if (Tablero[X][Y] == 0){
 			if ((X != 0 && Y != 0) || (X != 72 && Y != 0) || (Y != 0)){ //En cada una comprobamos las esquinas y los bordes(L-U,U,R-A)
@@ -146,6 +164,7 @@ CuentaPCamino = function(Tablero, Ficha, Num, X, Y){
 	puntos = 0;
 	flag = 0;			 			// 2 fincamino. 
 	var arr = [];					//Array con todas las direcciones por las que ya hemos pasado
+
 	MeteDirec = function(X, Y){ 	// Diccionario de las posiciones que ha tenido ese camino, para comprobar si hemos retornado al inicio.
 		var obj = {
 			x: X,
@@ -153,67 +172,79 @@ CuentaPCamino = function(Tablero, Ficha, Num, X, Y){
 		}
 		arr.push(obj);
 	};
+
+	//Funcion que nos devuelve si en esa posicion ya hemos estado
+	DarDirec = function(X, Y){
+		for (i = 0; i <= puntos; i++){
+			if (arr[i].x == X && arr[i].y == Y)
+				return false;
+			else
+				return true;
+		}
+	};
+
 	//Funcion recursiva a la que le voy pasando la ficha siguiente (a partir de la ficha inicial)
 	Recursiva = function(Tablero, prohibido, flag, X, Y){
 		if ((Tablero[X][Y] != 0) && (flag != 2)){ 		// Caso en el que tenemos ficha en esa dirección y todavía no hemos finalizado camino
 			puntos = puntos + 1; 						// Si hay ficha, tiene que ser camino y por tanto sumamos puntos
+			//alert("Puntos que tengo: " + puntos);
+			alert("X: " + X + "Y: " + Y);
 			if (fincamino.indexOf(Tablero[X][Y].nombre) != -1){ 		// Si la ficha está en fincamino ya hemos finalizado el camino
-				alert("Recursiva Fincamino, Ficha: " + Tablero[X][Y].nombre);
+				//alert("Recursiva Fincamino, Ficha: " + Tablero[X][Y].nombre);
 				flag = flag + 1;
 			}
 			else if(contcamino.indexOf(Tablero[X][Y].nombre) != -1){ // Si la ficha está en contcamino seguimos haciendo recursiva
-				alert("Recursiva Contcamino");
-				if ((Tablero[X][Y].u == 'camino') && (prohibido != 'arriba')){
+				alert("Recursiva Contcamino, Ficha: " + Tablero[X][Y].nombre);
+				if ((Tablero[X][Y].u == 'camino') && (prohibido != 'arriba') && DarDirec(X,Y)){
 					Y1 = Y - 1;					
 					Recursiva(Tablero, 'abajo', flag, X, Y1);
-					MeteDirec(X,Y);
+					MeteDirec(X,Y1);
 				}
-				if ((Tablero[X][Y].r == 'camino') && (prohibido != 'derecha')){
+				if ((Tablero[X][Y].r == 'camino') && (prohibido != 'derecha') && DarDirec(X,Y)){
 					X1 = X + 1;
 					Recursiva(Tablero, 'izquierda', flag, X1, Y);
-					MeteDirec(X,Y);
+					MeteDirec(X1,Y);
 				}
-				if ((Tablero[X][Y].d == 'camino') && (prohibido != 'abajo')){
+				if ((Tablero[X][Y].d == 'camino') && (prohibido != 'abajo') && DarDirec(X,Y)){
 					Y2 = Y + 1;
 					Recursiva(Tablero, 'arriba', flag, X, Y2);
-					MeteDirec(X,Y);
+					MeteDirec(X,Y2);
 				}
-				if ((Tablero[X][Y].l == 'camino') && (prohibido != 'izquierda')){
+				if ((Tablero[X][Y].l == 'camino') && (prohibido != 'izquierda') && DarDirec(X,Y)){
 					X2 = X - 1;
 					Recursiva(Tablero, 'derecha', flag, X2, Y);
-					MeteDirec(X,Y);
+					MeteDirec(X2,Y);
 				}
 			}
 		}	
 	};
 
 	//Funcion para las fichas iniciales continuas(Con dos posibles direcciones).
-	Continua = function(Tablero, Ficha, X, Y){ 		
+	Continua = function(Tablero, Ficha, X, Y){ 
+		alert("Entra en Continua");		
 		if (Ficha.u == 'camino'){
-			alert("arriba");
 			Y1 = Y - 1;
-			alert("Ficha arriba: " + Tablero[X][Y1].nombre);
-			Recursiva(Tablero, "abajo", flag, X, Y1);
-			MeteDirec(X,Y);	
+			//alert("Cont Ficha arriba: " + Tablero[X][Y1].nombre);
+			MeteDirec(X,Y1);
+			Recursiva(Tablero, "abajo", flag, X, Y1);	
 		}
-		if (Ficha.r == 'camino') {
-			alert("derecha");			
+		if (Ficha.r == 'camino') {			
 			X1 = X + 1;
-			alert("Ficha derecha: " + Tablero[X1][Y].nombre);
+			//alert("Cont Ficha derecha: " + Tablero[X1][Y].nombre);
+			MeteDirec(X1,Y);
 			Recursiva(Tablero, "izquierda", flag, X1, Y);
-			MeteDirec(X,Y);
 		}
-		if (Ficha.d == 'camino') {	
-			alert("abajo");			
+		if (Ficha.d == 'camino') {			
 			Y2 = Y + 1;
+			//alert("Cont Ficha abajo: " + Tablero[X][Y2].nombre);
+			MeteDirec(X,Y2);
 			Recursiva(Tablero, "arriba", flag, X, Y2);
-			MeteDirec(X,Y);
 		}
-		if (Ficha.l == 'camino'){
-			alert("izquierda");			
+		if (Ficha.l == 'camino'){			
 			X2 = X - 1;
+			//alert("Cont Ficha izquierda: " + Tablero[X2][Y].nombre);
+			MeteDirec(X2,Y);
 			Recursiva(Tablero, "derecha", flag, X2, Y);
-			MeteDirec(X,Y);
 		}
 	};
 
@@ -227,7 +258,7 @@ CuentaPCamino = function(Tablero, Ficha, Num, X, Y){
 			MeteDirec(X,Y);
 		}
 		else if (contcamino.indexOf(Ficha.nombre) != -1){ 	//Aquí le diremos para donde tiene que tirar cada camino
-			alert("Num = 1 contcamino Ficha: " + Ficha.nombre);						
+			//alert("Num = 1 contcamino Ficha: " + Ficha.nombre);						
 			Continua(Tablero, Ficha, X, Y);
 		}		
 	}	
