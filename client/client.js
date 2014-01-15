@@ -212,6 +212,13 @@ Template.games.events={
 	} 
 }
 
+
+
+/**
+Template.RankingJuego.ranking = function(){
+	return Meteor.users.find({},{sort:{estado:1,username:1}})
+}
+
 Template.ranking.ranking = function (){
     var users_data = [];
 	
@@ -221,7 +228,7 @@ Template.ranking.ranking = function (){
   	}
 	return users_data;
 }
-
+**/
 
 Template.gamesList.gamesListIn = function(){
 	var usuid = Meteor.userId();
@@ -232,6 +239,8 @@ Template.gamesList.gamesListIn = function(){
 		}
 	}
 };
+
+
 Template.gamesList.gamesListOut = function(){
 	var usuid = Meteor.userId();
 	if (usuid){
