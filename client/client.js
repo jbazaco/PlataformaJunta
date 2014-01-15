@@ -58,13 +58,18 @@ Template.input.events={
 				}else{
 					var name="Anon";
 				}
-				Messages.insert({
-					name:name,
-					message:message.val(),
-					time:Date.now()
-				});
+				if(Meteor.users.findOne(Meteor.userId) != undefined){
+					Messages.insert({
+						name:name,
+						message:message.val(),
+						time:Date.now()
+					});
+				}
+				else{
+					alert('Debes estar registrado para poder mandar mensages')
+				}
 			}
-			message.val("");	
+			message.val("");        
 		}
 	}
 }
@@ -260,7 +265,7 @@ Template.gamesList.events={
 						$(".canvas").hide();
 						if(!$("#"+canvas).length){
 							$("#container").append("<canvas id='"+canvas+"' class='canvas' width='1150' height='1150'></canvas>");
-							console.log(canvas);
+							console.log(canvas+'                        1');
 						}
 						$("#"+canvas).show();
 					}
@@ -275,7 +280,7 @@ Template.gamesList.events={
 						var canvas = "Canvas"+res;
 						$(".canvas").hide();
 						$("#container").append("<canvas id='"+canvas+"' class='canvas' width='1150' height='1150'></canvas>");
-						console.log(canvas);
+						console.log(canvas+'                            2');
 						$("#"+canvas).show();
 				}
 			})
@@ -290,18 +295,13 @@ Template.gamesList.events={
 				Meteor.call('IncluirJugador',this._id,usu.username,function(err,res){
 					console.log(res)
 					if(! err){
-						console.log('2')
 						Meteor.subscribe(res)
-						console.log('2.1')
 						$('.canvas').hide()
 						$("#container").append("<canvas id='Canvas_"+res+"' class='canvas' width='1150' height='1150'></canvas>");
-						console.log('2.2')
 						Session.set("Current_Game",res)
 					}else{
-						console.log('3')
 						console.log(err)
 					}
-					console.log('4')
 				})
 			}
 		return false;
