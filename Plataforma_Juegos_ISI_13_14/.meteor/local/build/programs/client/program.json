@@ -571,9 +571,9 @@
       "where": "client",
       "type": "js",
       "cacheable": true,
-      "url": "/client/compatibility/froot-wars/game.js?3008aba9547bec922743c66ada8a14914f50e94d",
-      "size": 25806,
-      "hash": "3008aba9547bec922743c66ada8a14914f50e94d"
+      "url": "/client/compatibility/froot-wars/game.js?286f3dd192532487f8ae6eff4322edbccd8af541",
+      "size": 26239,
+      "hash": "286f3dd192532487f8ae6eff4322edbccd8af541"
     },
     {
       "path": "app/client/SinNombre/engine.js",
@@ -706,9 +706,9 @@
       "where": "client",
       "type": "css",
       "cacheable": true,
-      "url": "/froot-wars.css?a2b81971916af0da99cb0c88f2092c2ae7489cfc",
-      "size": 2008,
-      "hash": "a2b81971916af0da99cb0c88f2092c2ae7489cfc"
+      "url": "/froot-wars.css?526e824556119209ba1e03a932e73254a5228152",
+      "size": 2235,
+      "hash": "526e824556119209ba1e03a932e73254a5228152"
     },
     {
       "path": "app/agryfruits.png",
@@ -1262,7 +1262,7 @@
     {
       "path": "app.html",
       "where": "internal",
-      "hash": "5922fbfd46a812ac6d0b35a157b2dd1458aa6981"
+      "hash": "f53be43162180878ef54e84f4f7823646cb6576d"
     }
   ]
 }

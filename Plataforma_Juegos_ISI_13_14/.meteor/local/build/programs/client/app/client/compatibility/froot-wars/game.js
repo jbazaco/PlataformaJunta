@@ -91,6 +91,7 @@ var game = {
 		}
 	},
 	showLevelScreen:function(){
+    alert("elige nivel");
 		$('.gamelayer').hide();
     $("#container5").css("visibility","visible");
 		$('#levelselectscreen').show('slow');
@@ -100,13 +101,21 @@ var game = {
 		window.cancelAnimationFrame(game.animationFrame);		
 		game.lastUpdateTime = undefined;
 		levels.load(game.currentLevel.number);
-    $("#container5").css("visibility","visible");
+    $("#container5").hide();
+    $("#endingmessage").hide();
+    $("#playcurrentlevel").hide();
+    $("#playnextlevel").hide();
+    $("#returntolevelscreen").hide();
 	},
 	startNextLevel:function(){
 		window.cancelAnimationFrame(game.animationFrame);		
 		game.lastUpdateTime = undefined;
 		levels.load(game.currentLevel.number+1);
-    $("#container5").css("visibility","visible");
+    $("#container5").css("visibility","hidden");
+    $("#endingmessage").hide();
+    $("#playcurrentlevel").hide();
+    $("#playnextlevel").hide();
+    $("#returntolevelscreen").hide();
 	},
 	// Game Mode
 	mode:"intro", 
@@ -282,11 +291,20 @@ var game = {
 			if (game.mode=="level-success"){			
 				if(game.currentLevel.number<levels.data.length-1){
 					$('#endingmessage').html('Level Complete. Well Done!!!');
+          $("#endingmessage").show();
+          $("#endingscreen").show();
 					$("#playnextlevel").show();
+          $("#endingmessage").show();
+          $("#playcurrentlevel").show();
+          $("#playnextlevel").show();
+          $("#returntolevelscreen").show();
 				} else {
 					$('#endingmessage').html('All Levels Complete. Well Done!!!');
+          $("#endingmessage").show();
+          $("#endingscreen").show()
 					$("#playnextlevel").hide();
-
+          $("#playcurrentlevel").show();
+          $("#returntolevelscreen").show();
    				        Meteor.call("matchFinish", Session.get("current_game"), game.score);				        
 
 				}
@@ -294,16 +312,14 @@ var game = {
    			    Meteor.call("matchFinish", Session.get("current_game"), game.score);				        
 			    
 			    $('#endingmessage').html('Failed. Play Again?');
+          $("#endingmessage").show();
+          $("#endingscreen").show();
 			    $("#playnextlevel").hide();
+          $("#endingmessage").show();
+          $("#playcurrentlevel").show();
+          $("#returntolevelscreen").show();
 			}		
-	    $("#loadingscreen").css("visibility","visible");
-      $("#container5").css("visibility","hidden");
-      $("#endingscreen div").css("visibility","visible");		
-	    $("#endingscreen p").css("visibility","visible");
-      $("#endingscreen p img").css("visibility","visible");
-      $("#endingscreen #endingmessage").css("visibility","visible");
-      $("#loadingscreen div").css("visibility","visible");
-			$('#endingscreen').show();
+
 		},
 	
 	animate:function(){
