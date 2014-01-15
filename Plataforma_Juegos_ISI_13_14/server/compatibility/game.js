@@ -71,15 +71,10 @@
 		var Ficha3 = Prueba(6); //cc [girar1]
 		Ficha3.gir = 3;	
 		Ficha3 = GirarFicha(Ficha3);
-		//alert("Ficha3 Arriba: " + Ficha3.u + "Ficha3 Izquierda: " + Ficha3.l);
 		Tablero[1][1] = Ficha3;
 	
 		var Ficha4 = Prueba(18); //ccmur2 [girar3]
-		//alert("Ficha4SG: " + Ficha4.u + Ficha4.r + Ficha4.d + Ficha4.l + Ficha4.gir);
 		Ficha4 = GirarFicha(Ficha4);
-		//alert("Ficha4 Derecha: " + Ficha4.r + "Ficha Arriba: " + Ficha4.u);
-		//alert("Ficha4G: " + Ficha4.u + Ficha4.r + Ficha4.d + Ficha4.l + Ficha4.gir);
-			
 		
 			//Le pasamos a la funcion la ficha donde este el seguidor y en que posición determinada está. 
 		var Num = 1;
