@@ -522,9 +522,9 @@
       "where": "client",
       "type": "js",
       "cacheable": true,
-      "url": "/client/template.client.js?a91f41bef42f93b34ded551075d3d6bd95d0c37b",
+      "url": "/client/template.client.js?40489d6d6332e70684c2ee5190dc09aaee952483",
       "size": 8500,
-      "hash": "a91f41bef42f93b34ded551075d3d6bd95d0c37b"
+      "hash": "40489d6d6332e70684c2ee5190dc09aaee952483"
     },
     {
       "path": "app/lib/models.js",
@@ -567,9 +567,9 @@
       "where": "client",
       "type": "js",
       "cacheable": true,
-      "url": "/client/SinNombre/game.js?097e9ae2a1e0776f83a33e11a74beb22020e81bb",
-      "size": 30689,
-      "hash": "097e9ae2a1e0776f83a33e11a74beb22020e81bb"
+      "url": "/client/SinNombre/game.js?d85ceb41a4b7a9317bed28eb4fddb138ee01a1d4",
+      "size": 30784,
+      "hash": "d85ceb41a4b7a9317bed28eb4fddb138ee01a1d4"
     },
     {
       "path": "app/client/client.js",
@@ -1222,7 +1222,7 @@
     {
       "path": "app.html",
       "where": "internal",
-      "hash": "7702850c7d92c42890557a1e540f58a17eee176a"
+      "hash": "f99fb0072c89597d4b1fc6756a9b4f3197076bf4"
     }
   ]
 }
