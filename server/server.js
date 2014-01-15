@@ -14,7 +14,36 @@ Meteor.publish("DatosUsuarios", function () {
 	return Meteor.users.find({},{fields: {username:1,puntuacion: 1,registrado: 1,services: 1,estado:1}});
 });
 
-
+// Al terminar una partida se debe llamar a este método para todos y cada uno de los jugadores de esa
+// partida y comprobar si han conseguido un nuevo record.
+PuntuacionRecord = function(jugador,punt,juego){
+	var user = Meteor.users.findOne({username:jugador})
+	for(var i in user.puntuacion){
+		if(user.puntuacion[i].juego === juego){
+			var p = user.puntuacion[i].record
+			if(p>=punt){
+				mayor = p;
+			}
+			else{
+				mayor = punt;
+			}
+			Meteor.users.update({username:jugador},{$set:{"puntuacion.2.record":mayor}})
+		}		
+	}
+},
+	
+// Al terminar una partida se debe llamar a este método para todos y cada uno de los jugadores de esa
+// partida y sumar la puntuación obtenida a la puntuación que tenía anteriormente.
+PuntuacionTotal = function(jugador,punt,juego){
+	var user = Meteor.users.findOne({username:jugador})
+	for(var i in user.puntuacion){
+		if(user.puntuacion[i].juego === juego){
+			var p = user.puntuacion[i].total
+			p+=punt
+			Meteor.users.update({username:jugador},{$set:{"puntuacion.2.total":p}})
+		}		
+	}
+},
 
 Meteor.methods({
 	
@@ -141,7 +170,7 @@ Meteor.methods({
 			jugadas:[],
 			canvas: mycanvas,
 			estado: "Lobby",
-			puntuacion:[]
+			puntuacion:[0]
 		})
 
 		var sid = id.toString();
@@ -164,42 +193,11 @@ Meteor.methods({
 		Partidas.update(id,{$set:{puntuacion:p}});
 	},
 
-	// Al terminar una partida se debe llamar a este método para todos y cada uno de los jugadores de esa
-	// partida y comprobar si han conseguido un nuevo record.
-	PuntuacionRecord: function(jugador,punt,juego){
-		var user = Meteor.users.findOne({username:jugador})
-		for(var i in user.puntuacion){
-			if(user.puntuacion[i].juego === juego){
-				var p = user.puntuacion[i].record
-				if(p>=punt){
-					mayor = p;
-				}
-				else{
-					mayor = punt;
-				}
-				Meteor.users.update({username:jugador},{$set:{"puntuacion.2.record":mayor}})
-			}		
-		}
-	},
-		
-	// Al terminar una partida se debe llamar a este método para todos y cada uno de los jugadores de esa
-	// partida y sumar la puntuación obtenida a la puntuación que tenía anteriormente.
-	PuntuacionTotal: function(jugador,punt,juego){
-		var user = Meteor.users.findOne({username:jugador})
-		for(var i in user.puntuacion){
-			if(user.puntuacion[i].juego === juego){
-				var p = user.puntuacion[i].total
-				p+=punt
-				Meteor.users.update({username:jugador},{$set:{"puntuacion.2.total":p}})
-			}		
-		}
-	},
-
 	// Incluye jugadores en el array de jugadores dado el identificador primario de
 	// la partida. Solo los incluye si no están ya incluidos. Aun no tiene un
 	// máximo de jugadores.
 	IncluirJugador: function(id, jugador){
-		Partidas.update(id,{$addToSet:{jugadores:jugador}})
+		Partidas.update(id,{$addToSet:{jugadores:jugador},$push:{puntuacion:0}})
 		return id
 	},
 	
@@ -217,11 +215,17 @@ Meteor.methods({
 	},
 	
 	// Cambia el estado de una partida a "Terminada" dado su identificador.
+	// Añade las puntuaciones de los jugadores a la bd.Users
 	TerminarPartida:function(id){
 		Partidas.update(id,{$set:{estado:"Terminada"}});
-
-		return ("__Partida"+id+"__");
+		var p = Partidas.findOne(id)
+		for(var i=0;i<p.jugadores.length;i++){
+			PuntuacionTotal(id,p.puntuacion[i],p.jugadores[i]);
+			PuntuacionRecord(p.jugadores[i],p.puntuacion[i],"Carcassonne");
+		}
+		return (id);
 	},
+	
 	//Disponible
 	DevuelveFicha:function(){
 		return Aleatorio();

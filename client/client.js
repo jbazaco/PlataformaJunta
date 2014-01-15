@@ -288,18 +288,11 @@ Template.gamesList.events={
 			var usu = Meteor.users.findOne(usuid);
 			if (usu){
 				Meteor.call('IncluirJugador',this._id,usu.username,function(err,res){
-					console.log(res)
 					if(! err){
-						console.log('2')
 						Meteor.subscribe(res)
-						console.log('2.1')
 						$('.canvas').hide()
 						$("#container").append("<canvas id='Canvas_"+res+"' class='canvas' width='1150' height='1150'></canvas>");
-						console.log('2.2')
 						Session.set("Current_Game",res)
-					}else{
-						console.log('3')
-						console.log(err)
 					}
 					console.log('4')
 				})
@@ -343,5 +336,7 @@ Deps.autorun(function(){
 	}
 })
 
-
+Deps.autorun(function(){
+	alert(Partidas.findOne(Session.get("Current_Game")).estado)
+})
 
