@@ -165,7 +165,7 @@ BotonMoverTablero = function(x, y, rotacion) {
 BotonAyuda = new function() {
 	this.x = 1000;
 	this.y = 40;
-	this.w = 50;
+	this.w = 60;
 	this.h = 20;
 	this.sprite = "";
 	this.mover = function(x,y) {	}
@@ -179,7 +179,7 @@ BotonAyuda = new function() {
 
 		ctx.fillStyle= "#000000";
 	    	ctx.font = "bold 13px arial";
-	    	ctx.fillText("Ayuda", this.x+22, this.y+15);	
+	    	ctx.fillText("Ayuda", this.x+18, this.y+15);	
 	}    
 }
 
@@ -471,7 +471,7 @@ FichaActual = new function() {
 	this.seguidor=null;
 	this.rotacion = 0;
 	this.cuadrado = 0;
-	
+	var colocada=false;
 	//Devuelve true si se gira la ficha
 	this.pulsado = function(x,y) {
 	
@@ -532,9 +532,23 @@ FichaActual = new function() {
 			//CAMBIAR cuando se coloquen las fichas
 			var debajo = elemInPos(x,y, this.nextBoard);
 			
+		//aqui seria para ver si se puede o no colocar la ficha?	
 			if (debajo instanceof Ficha && debajo.sprite === "interrogante"){
-				this.x = debajo.x;
-				this.y = debajo.y;
+				var id = Session.get("Current_Game");
+				Meteor.call('ColocaFicha',id,this.sprite,debajo.coordenadas.x, 
+				debajo.coordenadas.y,function(err, result){
+					if(err){
+      						console.log(err.reason);
+   					}else{
+						FichaActual.colocada=result;
+    					}});		
+				if (FichaActual.colocada===true){
+					this.x=debajo.x;
+					this.y=debajo.y;
+				}else {
+					this.x=this.inicialx;
+					this.y=this.inicialy;
+				}
 			} else {	
 				this.x = this.inicialx;
 				this.y = this.inicialy;	
