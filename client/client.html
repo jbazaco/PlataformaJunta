@@ -49,8 +49,7 @@
 				<p>Duis cursus. Maecenas ligula eros.</p>
 			</div>
 			<div id="tabs-4" class="tabs">
-				<h3>ranking</h3>
-				
+				{{>RankingJuego}}
 			</div>
 		</div>
 		<div id='container3'>
@@ -212,5 +211,13 @@
 	{{/each}}
 </template>
 
+<template name="RankingJuego">
+  <h3 id="selectedgame" style="color:red"></h3>
+    {{#each ranking}}
+		{{#if Puntu}}
+     		<span class="NombreUsuario">{{username}} : {{Puntu}} </span><br />
+		{{/if}}
+    {{/each}}
+</template>
 
 

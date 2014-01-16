@@ -171,13 +171,12 @@ Meteor.methods({
 		for(var i in user.puntuacion){
 			if(user.puntuacion[i].juego === juego){
 				var p = user.puntuacion[i].record
-				if(p>=punt){
-					mayor = p;
-				}
-				else{
-					mayor = punt;
-				}
-				Meteor.users.update({username:jugador},{$set:{"puntuacion.2.record":mayor}})
+				p>=punt? mayor=p : mayor=punt;
+                switch(i){
+                    case "0": Meteor.users.update({username:jugador},{$set:{"puntuacion.0.record":mayor}}); break;
+                    case "1": Meteor.users.update({username:jugador},{$set:{"puntuacion.1.record":mayor}}); break;
+                    case "2": Meteor.users.update({username:jugador},{$set:{"puntuacion.2.record":mayor}}); break;
+                }
 			}		
 		}
 	},
@@ -190,7 +189,11 @@ Meteor.methods({
 			if(user.puntuacion[i].juego === juego){
 				var p = user.puntuacion[i].total
 				p+=punt
-				Meteor.users.update({username:jugador},{$set:{"puntuacion.2.total":p}})
+				switch(i){
+                        case "0": Meteor.users.update({username:jugador},{$set:{"puntuacion.0.total":p}}); break;
+                        case "1": Meteor.users.update({username:jugador},{$set:{"puntuacion.1.total":p}}); break;
+                        case "2": Meteor.users.update({username:jugador},{$set:{"puntuacion.2.total":p}}); break;
+                }
 			}		
 		}
 	},

@@ -213,22 +213,30 @@ Template.games.events={
 }
 
 
-
-/**
 Template.RankingJuego.ranking = function(){
-	return Meteor.users.find({},{sort:{estado:1,username:1}})
+	return Meteor.users.find({},{sort:{'puntuacion.0.total':-1,'puntuacion.1.total':-1,'puntuacion.2.total':-1}})
 }
 
-Template.ranking.ranking = function (){
-    var users_data = [];
-	
-	var usu = Meteor.user();
-  	if (usu){
-   	    users_data.push({name:usu.username, points:usu.puntuacion});
-  	}
-	return users_data;
+
+Template.RankingJuego.Puntu = function(){
+	//alert(Session.get('Current_Game_id'))
+	if(!Session.get('Current_Game_id')){
+		return false
+	}
+	else{
+		if(Session.get('Current_Game_id')===1){
+			p = this.puntuacion[0].total
+		}
+		if(Session.get('Current_Game_id')===2){
+			p = this.puntuacion[1].total
+		}
+		if(Session.get('Current_Game_id')===3){
+			p = this.puntuacion[2].total
+		}
+	return p
+	}
 }
-**/
+
 
 Template.gamesList.gamesListIn = function(){
 	var usuid = Meteor.userId();
