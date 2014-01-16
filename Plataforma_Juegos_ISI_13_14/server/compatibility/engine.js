@@ -363,5 +363,62 @@ CuentaPCamino = function(Tablero, Ficha, Num, X, Y){
 };
 
 
+//funcion cierra Campo
+CierraCampo = function(ficha,X,Y){
+	var fichas1campo = [
+		'mur2',
+		'm',
+		'mc',
+		'ciucam',
+		'mur2c',
+		'mur1',
+		'murcam',
+		'ciucame',
+		'murcame'
+	];
+
+	var fichas2campo = [
+		'cc',
+		'cr',
+		'chmur',
+		'cmur',
+		'ccmur',
+		'ccmur3',
+		'ciucam2',
+		'ccmur2',
+		'chmure',
+		'ccmur2e',
+		'ciucam2e'
+	];
+		
+	var fichas3campo = [
+		'c3',
+		'c3mur
+	];
+
+	var ficha4campo = 'c4';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+};
+
+
 
 
