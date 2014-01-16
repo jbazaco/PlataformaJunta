@@ -29,7 +29,7 @@ PuntuacionRecord = function(jugador,punt,juego){
 			}
 		}		
 	}
-},
+};
 	
 // Al terminar una partida se debe llamar a este método para todos y cada uno de los jugadores de esa
 // partida y sumar la puntuación obtenida a la puntuación que tenía anteriormente.
@@ -46,7 +46,18 @@ PuntuacionTotal = function(jugador,punt,juego){
 			}
 		}		
 	}
-},
+};
+
+EliminarJugador = function(jugador){
+	console.log('1')
+	Partidas.find({jugadores:{$in:[jugador]}}).forEach(function(partida){
+		console.log('2')
+		partida.jugadores[partida.jugadores.indexOf(jugador)]="";
+		console.log('3')
+		Partidas.update(partida._id,{$set:{jugadores:partida.jugadores}})
+		console.log('4')
+	});
+}
 
 Meteor.methods({
 	
@@ -63,6 +74,10 @@ Meteor.methods({
 		Meteor.users.update(id,{$set:{puntuacion:puntuacion,equipos:[],torneos:[],penalizacion:0,estado:"Conectado",registrado:1}});
 	},
 	
+	EliminarJugador : function(jugador){
+		return EliminarJugador(jugador);
+	},
+	
 	// Actualiza el estado de todos los usuarios registrados cada vez que hay
 	// un cambio en la colección users.
 	ActualizarEstado: function(){
@@ -75,6 +90,7 @@ Meteor.methods({
 			else{
 				//Usuario: Conectado
 				Meteor.users.update(user,{$set:{estado:"Conectado"}});
+				EliminarJugador(user);
 			}
 		});
 	},
