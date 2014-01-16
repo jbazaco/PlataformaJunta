@@ -233,40 +233,30 @@ CuentaPCamino = function(Tablero, Ficha, Num, X, Y){
 //Para ello dos pasos:
 	//ver si se ha cerrado el castillo.
 	//ver si hay un caballero en el castillo cerrado.
-CierraCastillo = function(Tablero, Ficha, Num, X, Y){
-	
+CierraCastillo = function(Tablero, Ficha, PosSeguidor, X, Y){
+
 	//POSIBLES ESTRUCTURAS DE DATOS A USAR.
-	var fichas1LadoCastillo =[
+	var fichasLadoCastilloConexos =[
 		'c3mur',
 		'mur1',
 		'cmur',
 		'ccmur',
-		'ccmur3'
-	];
-	
-	var fichas2LadosCastillo = [
-		'mur2',
-		'ciucam2',
-		'ciucam2e'
-	];
-	
-	var fichas2LadosCastilloConsecutivo = [
+		'ccmur3',
 		'murcam',
-		'mur2c',
 		'ccmur2',
 		'ccmur2e',
-		'murcame'
-	];
-	
-	var fichas3Lados = [
+		'murcame',
+		'ciucam2e',
 		'ciucam',
 		'chmur',
 		'chmure',
-		'ciucame'
+		'ciucame',
+		'ciudad
 	];
 	
-	var ficha4Lados = [
-		'ciudad'
+	var fichas2LadosCierranCastillo =[
+		'mur2',
+		'mur2c'
 	];
 	
 	var fichasConEscudo = [
@@ -277,20 +267,37 @@ CierraCastillo = function(Tablero, Ficha, Num, X, Y){
 		'ciucame',
 		'ciucam2e'
 	];
-	
-	var fichasSinEscudo = [
-		'murcam',
-		'c3mur',
-		'mur2',
-		'ciucam',
-		'chmur',
-		'mur2c',
-		'mur1',
-		'cmur',
-		'ccmur',
-		'ccmur3',
-		'ciucam2',
-		'ccmur2'
-	];
-	
+		
+	resultado = TipoCastillo(Ficha.nombre);
+	alert("el resultado del tipo de castillo es: " + resultado);
+	//return resultado;
+	var Puntos=0;
+	RecursivaCastillo= function(Ficha, Prohibido,X,Y){
+		var A=0;
+		if (fichas2LadosCastilloConsecutivo.indexOf(Ficha.nombre)!=-1){	//si la ficha esta en este array
+			if (Ficha.u=="castillo"){
+				A=Y-1;
+				Puntos=Puntos+1;
+				RecursivaCastillo(Tablero[X][A],"abajo",X,A);
+			}	
+			if (Ficha.r=="castillo"){
+				A=X-1;
+				Puntos=Puntos+1;
+				RecursivaCastillo(Tablero[A][Y],"izquierda",A,Y);
+			}
+			if (Ficha.d=="castillo"){
+				A=Y+1;
+				Puntos=Puntos+1;
+				RecursivaCastillo(Tablero[X][A],"arriba",X,A);
+			}
+			if (Ficha.l=="castillo"){
+				A=X+1;
+				Puntos=Puntos+1;
+				RecursivaCastillo(Tablero[A][y],"derecha",A,Y);
+			}
+		}
+		else{
+			Puntos=Puntos+1;
+		}
+	};
 };

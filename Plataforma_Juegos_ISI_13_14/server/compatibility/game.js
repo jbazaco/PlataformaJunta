@@ -1,6 +1,6 @@
 //Desde aquí ejecutamos todo el código.
 	EjecutaTotal = function(){
-		var Ficha1 = Aleatorio();
+		/*var Ficha1 = Aleatorio();
 		var Ficha2 = Aleatorio();
 		var FichaPrueba = Aleatorio();
 			////////////////////////////// COMPROBAMOS TABLERO ///////////
@@ -40,7 +40,17 @@
 		*/
 
 		///////////PROBAMOS CIERRACAMINO //////////
-		
+		/*
 		var PuntosCam = CuentaPCamino(Tablero, FichaPrueba, 1);
 		alert(PuntosCam);
+		*/
+		//////////PROBAMOS TIPOCASTILLO////////////////
+		var FichaP1 = Prueba(0);
+		Tablero=1;
+		X= 1;
+		Y=1;
+		PosSeguidor=3;
+		var prueba= CierraCastillo(Tablero, FichaP1, PosSeguidor, X, Y);
+		
 	};
+$(EjecutaTotal);
