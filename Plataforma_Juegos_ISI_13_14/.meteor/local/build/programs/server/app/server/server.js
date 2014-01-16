@@ -11,17 +11,24 @@ Meteor.publish('partidas',function(){
 
 // Publicacion del campo puntuacion para que puedan acceder los clientes.
 Meteor.publish("DatosUsuarios", function () {
-	return Meteor.users.find({},{fields: {username:1,puntuacion: 1,services: 1,estado:1}});
+	return Meteor.users.find({},{fields: {username:1,puntuacion: 1,registrado: 1,services: 1,estado:1}});
 });
 
 
 
 Meteor.methods({
 	
-	//  Cada vez que un usuario se registre y en sus datos no se encuentre
-	// el campo puntuacion, se inicializa la puntuacion a cero.
+	// Cada vez que un usuario se logee y en sus datos no se encuentre
+	// el campo registrado, se inicializa y se pone a uno.
 	InicializaCliente: function(id){
-		Meteor.users.update({_id:id},{$set:{puntuacion:0,equipos:[],torneos:[],penalizacion:0,estado:"Conectado"}});
+		var puntuacion = []
+		var objetoAlien = {"juego":"AlienInvasion","total":0,"record":0}
+		var objetoFruits = {"juego":"AngryFruits","total":0,"record":0}
+		var objetoCarca = {"juego":"Carcassonne","total":0,"record":0}
+		puntuacion.push(objetoAlien)
+		puntuacion.push(objetoFruits)
+		puntuacion.push(objetoCarca)
+		Meteor.users.update(id,{$set:{puntuacion:puntuacion,equipos:[],torneos:[],penalizacion:0,estado:"Conectado",registrado:1}});
 	},
 	
 	// Actualiza el estado de todos los usuarios registrados cada vez que hay
@@ -104,6 +111,18 @@ Meteor.methods({
 		}
 	},
 
+	//Este metodo se llama después de crearse la partida (una vez se sabe el numero de jugadores que van
+	//a participar en ella. Se inicializan las puntuaciones de todos los jugadores a cero en la colección
+	//partidas. Se le pasa el id de la partida.
+	InicializarPuntuacionesEnPartida: function(id){
+		var numeroJugadores = Partidas.findOne(id).jugadores.length
+		console.log(numeroJugadores)
+		var puntuacion = Partidas.findOne(id).puntuacion
+		for(i=0;i<numeroJugadores;i++){
+			puntuacion.push(0);
+		}
+	},
+	
 	// Mete una nueva partida en el servidor. Devuelve un identificador
 	// de partida UNICO no coincidente con la clave primaria al que 
 	// el cliente debe suscribirse en su Deps.autorun().
@@ -123,10 +142,10 @@ Meteor.methods({
 			jugadas:[],
 			canvas: mycanvas,
 			estado: "Lobby",
-			puntuacion:[0]
+			puntuacion:[]
 		})
 
-		var sid = "__Partida"+id+"__";
+		var sid = id.toString();
 		var mycanvas= "Canvas_"+sid;
 		console.log(mycanvas)
 		Partidas.update(id,{$set:{canvas:mycanvas}})
@@ -134,12 +153,12 @@ Meteor.methods({
 		Meteor.publish(sid,function(){
 			return Partidas.find(id,{nombre:1, jugadores:1,invitados:1,opciones:1,jugadas:1,canvas:1});
 		})
-		
 		return sid;
 	},
 
+	//Se llama a este metodo para actualizar la puntuacion de cada jugada (punt) de cada 
+	//jugador (jugador) en la partida (id)
 	PuntuacionJugadorPartida: function(id,jugador,punt){
-	
 		var p = Partidas.findOne(id).puntuacion
 		var idx = Partidas.findOne(id).jugadores.indexOf(jugador)
 		p[idx]+=punt
@@ -160,7 +179,7 @@ Meteor.methods({
 	// máximo de invitados.  
 	IncluirInvitado: function(id, invitado){
 		Partidas.update(id,{$addToSet:{invitados:invitado}})
-		return ("__Partida"+id+"__");
+		return ("_"+id);
 	},
 	
 	// Cambia el estado de una partida a "Empezada" dado su identificador.
@@ -173,6 +192,19 @@ Meteor.methods({
 		Partidas.update(id,{$set:{estado:"Terminada"}});
 
 		return ("__Partida"+id+"__");
+	},
+	//Disponible
+	DevuelveFicha:function(){
+		return Aleatorio();
+	},
+	//Hay que pasar una Tablero dado de momento, hare que nosotros cojamos el tablero de plataforma
+	ColocaFicha:function(Tablero, Ficha, x, y){  // Dado una ficha y dos posiciones, se devuelve un booleano para si se puede o no colocar esa ficha
+										 
+		return colocarficha();
+	},
+	
+	ColocarSeguidor:function(ficha, campoficha, rotacion, x, y){
+		return 1;	//funcion que devuelve si se puede poner un seguidor en la posicion de la ficha correspondiente.
 	}
 })
 

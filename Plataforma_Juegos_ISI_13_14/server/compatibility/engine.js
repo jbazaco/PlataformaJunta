@@ -142,6 +142,64 @@ colocarficha = function(Id, Ficha, X, Y){
 };
 
 
+
+//funcion cierra claustro
+
+alert("antes del cierra claustro");
+CierraClaustro = function(Tablero,X,Y){
+	var cerrado = false;
+	var contador = 0;
+	var puntos = 1;
+
+	alert("-----");
+	alert("el valor de x es: " + X); 
+	alert("el valor de y es: " + Y);
+
+	if(Tablero[X-1][(Y-1)] != 0){
+		contador++;
+		puntos++;
+	}
+	if(Tablero[(X)][(Y-1)] != 0){
+		contador++;
+		puntos++;
+	}
+	if(Tablero[(X+1)][Y-1] != 0){
+		contador++;
+		puntos++;
+	}
+	if(Tablero[(X+1)][(Y)] != 0){
+		contador++;
+		puntos++;
+	}
+	if(Tablero[X+1][(Y+1)] != 0){
+		contador++;
+		puntos++;
+	}
+	if(Tablero[(X)][(Y+1)] != 0){
+		contador++;
+		puntos++;
+	}
+	if(Tablero[(X-1)][Y+1] != 0){
+		contador++;
+		puntos++;
+	}
+	if(Tablero[(X-1)][(Y)] != 0){
+		contador++;
+		puntos++;
+	}
+	
+	//alert("el valor del contador es: " + contador);
+	if (contador == 8){
+		return [true,puntos]
+	}else{
+		return [false,puntos]
+	}
+
+};
+
+
+
+
 //Funcion a la que se llamara a la hora de poner una ficha y comprobar si se pueden
 //atribuir puntos a ese jugador o todavía no para ello tendremos dos objetivos a cumplir:
 //			- Se cierra el castillo
@@ -309,6 +367,63 @@ CuentaPCamino = function(Tablero, Ficha, Num, X, Y){
 		alert("ArrayPosY: " + arr[i].y);
 	}*/
 	return puntos;
+};
+
+
+//funcion cierra Campo
+CierraCampo = function(ficha,X,Y){
+	var fichas1campo = [
+		'mur2',
+		'm',
+		'mc',
+		'ciucam',
+		'mur2c',
+		'mur1',
+		'murcam',
+		'ciucame',
+		'murcame'
+	];
+
+	var fichas2campo = [
+		'cc',
+		'cr',
+		'chmur',
+		'cmur',
+		'ccmur',
+		'ccmur3',
+		'ciucam2',
+		'ccmur2',
+		'chmure',
+		'ccmur2e',
+		'ciucam2e'
+	];
+		
+	var fichas3campo = [
+		'c3',
+		'c3mur
+	];
+
+	var ficha4campo = 'c4';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 };
 
 

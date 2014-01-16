@@ -55,7 +55,7 @@
 		///////////PROBAMOS CIERRACAMINO //////////
 		
 			//Creamos Tablero
-		Tablero = CrearTablero();
+		/*Tablero = CrearTablero();
 			//Asignamos unas determinadas fichas para ver si funciona la función y cuenta los puntos correctamente.
 			//Preguntar porqué aquí si igualo diferentes fichas
 		var Ficha1 = Prueba(15); //ccmur
@@ -63,8 +63,13 @@
 		Ficha1 = GirarFicha(Ficha1);
 		Tablero[0][0] = Ficha1;
 
+<<<<<<< HEAD
+		var Ficha2 = Prueba(15); //ccmur3
+		Ficha2.gir = 2;
+=======
 		var Ficha2 = Prueba(16); //ccmur3
 		Ficha2.gir = 1;
+>>>>>>> 37950f43ffee206cf1d6f6f8cf6d6bf6d86a22dc
 		Ficha2 = GirarFicha(Ficha2);
 		Tablero[1][0] = Ficha2;
 		
@@ -81,8 +86,35 @@
 		var X = 0;
 		var Y = 1; 		
 		var PuntosCamino = CuentaPCamino(Tablero, Ficha4, Num, X, Y);
-		alert("Puntos que tengo: " + PuntosCamino);
+		alert("Puntos que tengo: " + PuntosCamino);*/
+
+		////////////////////////////////////////////
+		////////////////////////////////////////////
 		////////////////////////////////////////////	
+
+		///////Compruebo el CierraClaustro//////////
+
+		Tablero = CrearTablero();
+
+		//asigno posicion a varias fichas
+		var Ficha1 = Prueba(10);    //ciucam
+		Tablero[1][2] = Ficha1;
+
+		var Ficha2 = Prueba(12);	//mur2c
+		Tablero[2][2] = Ficha1;
+
+		var Ficha3 = Prueba(14);	//cmur
+		Tablero[2][4] = Ficha1;
+
+
+		var X = 2;
+		var Y = 3;
+		var puntosclaustro = CierraClaustro(Tablero,X,Y);
+		alert("los puntos del claustro son: " + puntosclaustro);
+
+		////////////////////////////////////////////
+		////////////////////////////////////////////
+		////////////////////////////////////////////
 		
 	};
 

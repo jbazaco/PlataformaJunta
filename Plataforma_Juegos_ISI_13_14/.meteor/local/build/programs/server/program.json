@@ -215,6 +215,12 @@
       "path": "app/lib/models.js"
     },
     {
+      "path": "app/server/engine.js"
+    },
+    {
+      "path": "app/server/game.js"
+    },
+    {
       "path": "app/server/server.js"
     }
   ]

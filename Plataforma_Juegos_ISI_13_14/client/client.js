@@ -115,7 +115,7 @@ Template.options.events={
 			jugadores.push(user);
 			if(n_players>0){
 				for(var i=0; i<n_players; i++){
-					jugadores.push('" "');				
+					jugadores.push('');				
 				}
 			}
 			Meteor.call("SuscribirPartida",jugadores,opciones,[],name,function(error,result){
@@ -315,7 +315,7 @@ Deps.autorun(function(){
 Deps.autorun(function(){
 	if (Meteor.user()){
 		var user = Meteor.user();
-		if(!user.puntuacion && user.puntuacion!=0){
+		if(user.registrado != 1){
 			Meteor.call('InicializaCliente',user._id);
 		}
 	}

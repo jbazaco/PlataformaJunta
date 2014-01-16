@@ -7,6 +7,7 @@ Game = new function() {
 		this.canvas = document.getElementById(canvasElementId);
 		this.width = this.canvas.width;
 		this.height= this.canvas.height;
+		this.boards = [];
 
 		this.ctx = this.canvas.getContext && this.canvas.getContext('2d');
 		if(!this.ctx) { return alert("Please upgrade your browser to play"); }
@@ -26,6 +27,7 @@ Game = new function() {
 			
 			this.selec_elem = elemInPos(x,y);
 			this.anularClick=false;
+			this.moviendoRaton=false;
 		}, false);
 
 		this.canvas.addEventListener('mouseup', function(event) {
@@ -54,10 +56,9 @@ Game = new function() {
 				var x = getClickX(event);
 				var y = getClickY(event);
 				
-				this.selec_elem.pulsado();
+				this.selec_elem.pulsado(x,y);
 				
 				this.selec_elem = null;
-				this.anularClick=false;
 			}
 		}, false);
 		SpriteSheet.load (sprite_data,callback);
