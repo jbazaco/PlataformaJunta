@@ -58,11 +58,18 @@
 		/*Tablero = CrearTablero();
 			//Asignamos unas determinadas fichas para ver si funciona la función y cuenta los puntos correctamente.
 			//Preguntar porqué aquí si igualo diferentes fichas
-		var Ficha1 = Prueba(16); //ccmur
+		var Ficha1 = Prueba(15); //ccmur
+		Ficha1.gir = 1;
+		Ficha1 = GirarFicha(Ficha1);
 		Tablero[0][0] = Ficha1;
 
+<<<<<<< HEAD
 		var Ficha2 = Prueba(15); //ccmur3
 		Ficha2.gir = 2;
+=======
+		var Ficha2 = Prueba(16); //ccmur3
+		Ficha2.gir = 1;
+>>>>>>> 37950f43ffee206cf1d6f6f8cf6d6bf6d86a22dc
 		Ficha2 = GirarFicha(Ficha2);
 		Tablero[1][0] = Ficha2;
 		
@@ -71,12 +78,8 @@
 		Ficha3 = GirarFicha(Ficha3);
 		Tablero[1][1] = Ficha3;
 	
-		var Ficha4 = Prueba(18); //ccmur2e [girar3]
-		//alert("Ficha4SG: " + Ficha4.u + Ficha4.r + Ficha4.d + Ficha4.l + Ficha4.gir);
-		//Ficha4.gir = 3;
-		//Ficha4 = GirarFicha(Ficha4);
-		//alert("Ficha4G: " + Ficha4.u + Ficha4.r + Ficha4.d + Ficha4.l + Ficha4.gir);
-			
+		var Ficha4 = Prueba(18); //ccmur2 [girar3]
+		Ficha4 = GirarFicha(Ficha4);
 		
 			//Le pasamos a la funcion la ficha donde este el seguidor y en que posición determinada está. 
 		var Num = 1;
