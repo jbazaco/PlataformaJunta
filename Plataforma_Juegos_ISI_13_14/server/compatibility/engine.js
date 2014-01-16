@@ -254,24 +254,24 @@ CuentaPCamino = function(Tablero, Ficha, Num, X, Y){
 			else if(contcamino.indexOf(Tablero[X][Y].nombre) != -1){ // Si la ficha está en contcamino seguimos haciendo recursiva
 				alert("Recursiva Contcamino, Ficha: " + Tablero[X][Y].nombre);
 				if ((Tablero[X][Y].u == 'camino') && (prohibido != 'arriba') && DarDirec(X,Y)){
-					Y1 = Y - 1;					
+					Y1 = Y - 1;	
+					MeteDirec(X,Y1);				
 					Recursiva(Tablero, 'abajo', flag, X, Y1);
-					MeteDirec(X,Y1);
 				}
 				if ((Tablero[X][Y].r == 'camino') && (prohibido != 'derecha') && DarDirec(X,Y)){
 					X1 = X + 1;
-					Recursiva(Tablero, 'izquierda', flag, X1, Y);
 					MeteDirec(X1,Y);
+					Recursiva(Tablero, 'izquierda', flag, X1, Y);
 				}
 				if ((Tablero[X][Y].d == 'camino') && (prohibido != 'abajo') && DarDirec(X,Y)){
 					Y2 = Y + 1;
-					Recursiva(Tablero, 'arriba', flag, X, Y2);
 					MeteDirec(X,Y2);
+					Recursiva(Tablero, 'arriba', flag, X, Y2);
 				}
 				if ((Tablero[X][Y].l == 'camino') && (prohibido != 'izquierda') && DarDirec(X,Y)){
 					X2 = X - 1;
-					Recursiva(Tablero, 'derecha', flag, X2, Y);
 					MeteDirec(X2,Y);
+					Recursiva(Tablero, 'derecha', flag, X2, Y);
 				}
 			}
 		}	
