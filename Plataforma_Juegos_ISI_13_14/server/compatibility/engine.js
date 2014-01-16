@@ -88,15 +88,22 @@ CrearTablero = function(){
 //	console.lo(resultado)	
 //})
 // Para acceder a la base de datos meteor mongo
-/*
+//Funcion Parsear
+ParserTab = function(Id, Info){
+
+
+};
+
+//Este Deps lo usaremos para extraer la informacion de la base de datos de como esta actualmente
+//el tablero correspondiente a cada identificador
 Deps.autorun(function(){
 	p = Partidas.find({estado: "Esperando"});
 	p.forEach(function(){
 		j = this.jugadas[this.jugadas.length - 1];
-		Parsear(this.id, j);
+		ParserTab(this.id, j);
 	});
 });
-*/
+
 
 //Procedimiento que mira las posiciones del tablero para ver si se puede colocar la ficha
 //Terminología: U: Up, R:Right, D: Down, L:Left. 
@@ -139,7 +146,7 @@ colocarficha = function(Id, Ficha, X, Y){
 //atribuir puntos a ese jugador o todavía no para ello tendremos dos objetivos a cumplir:
 //			- Se cierra el castillo
 //			- Hay algun seguidor en ese castillo
-//Num = Posicion del seguidor dentro de la ficha(1..4)
+//Num = Posicion del seguidor dentro de la ficha(1..4) Se puede cambiar a como nos lo quieran pasar
 //X = Posicion inicial de la ficha eje X.   Y = Posicion inicial de la ficha eje Y. 
 
 CuentaPCamino = function(Tablero, Ficha, Num, X, Y){

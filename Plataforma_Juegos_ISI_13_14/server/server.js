@@ -176,6 +176,7 @@ Meteor.methods({
 	},
 	//Disponible
 	DevuelveFicha:function(){
+		console.log("1");
 		return Aleatorio();
 	},
 	//Hay que pasar una Tablero dado de momento, hare que nosotros cojamos el tablero de plataforma
