@@ -254,6 +254,10 @@ Meteor.methods({
 	
 	ColocarSeguidor:function(ficha, campoficha, rotacion, x, y){
 		return 1;	//funcion que devuelve si se puede poner un seguidor en la posicion de la ficha correspondiente.
+	},
+	
+	EjecutaTotal: function(){
+		EjecutaTotal();
 	}
 })
 
