@@ -295,32 +295,59 @@ CierraCastillo = function(Tablero, Ficha, PosSeguidor, X, Y){
 			if (fichas2LadosCastilloConsecutivo.indexOf(Ficha.nombre)!=-1){	//si la ficha esta en este array
 				if (Ficha.u=="castillo")&& (Prohibido!= "arriba") && DarDirec(X,Y){
 					A=Y-1;
-					Puntos=Puntos+1;
+					//si la ficha tiene escudo
+					if (fichasConEscudo.indexOf(Ficha.nombre)!=-1){
+						Puntos= Puntos + 4;
+					}
+					else{
+						Puntos=Puntos+2;
+					}
 					MeteDirec(X,A);
 					RecursivaCastillo(Tablero[X][A],"abajo",X,A);
 				}	
 				if (Ficha.r=="castillo") && (Prohibido!= "derecha") && DarDirec(X,Y){
 					A=X+1;
-					Puntos=Puntos+1;
+					//si la ficha tiene escudo
+					if (fichasConEscudo.indexOf(Ficha.nombre)!=-1){
+						Puntos= Puntos + 4;
+					}
+					else{
+						Puntos=Puntos+2;
+					}
 					MeteDirec(A,Y);
 					RecursivaCastillo(Tablero[A][Y],"izquierda",A,Y);
 				}
 				if (Ficha.d=="castillo") && (Prohibido!= "abajo") && DarDirec(X,Y){
 					A=Y+1;
-					Puntos=Puntos+1;
+					//si la ficha tiene escudo
+					if (fichasConEscudo.indexOf(Ficha.nombre)!=-1){
+						Puntos= Puntos + 4;
+					}
+					else{
+						Puntos=Puntos+2;
+					}
 					MeteDirec(X,A);
 					RecursivaCastillo(Tablero[X][A],"arriba",X,A);
 				}
 				if (Ficha.l=="castillo") && (Prohibido!= "izquierda") && DarDirec(X,Y){
 					A=X-1;
-					Puntos=Puntos+1;
+					//si la ficha tiene escudo
+					if (fichasConEscudo.indexOf(Ficha.nombre)!=-1){
+						Puntos= Puntos + 4;
+					}
+					else{
+						Puntos=Puntos+2;
+					}
 					MeteDirec(A,Y);
 					RecursivaCastillo(Tablero[A][Y],"derecha",A,Y);
 				}
 			}
 			else{
-				Puntos=Puntos+1;
+				Puntos=Puntos+2;
 			}
+		}
+		else{
+			Puntos=0;
 		}
 	};
 	
