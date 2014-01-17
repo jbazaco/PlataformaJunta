@@ -14,6 +14,25 @@ Meteor.publish("DatosUsuarios", function () {
 	return Meteor.users.find({},{fields: {username:1,puntuacion: 1,registrado: 1,services: 1,estado:1}});
 });
 
+
+// Actualiza el estado de todos los usuarios registrados cada vez que hay
+// un cambio en la colección users.
+ActualizarEstado = function(){
+	var usuarios = Meteor.users.find({});	
+	usuarios.forEach(function(user){
+		if(user.services.resume.loginTokens[0] === undefined){
+			//Usuario: No conectado
+			Meteor.users.update(user,{$set:{estado:"No conectado"}});
+			EliminarJugador(user.username);
+		}else{
+			//Usuario: Conectado
+			Meteor.users.update(user,{$set:{estado:"Conectado"}});
+		}
+	});
+	Meteor.setTimeout(ActualizarEstado,1000);
+};
+Meteor.setTimeout(ActualizarEstado,5000);
+
 // Al terminar una partida se debe llamar a este método para todos y cada uno de los jugadores de esa
 // partida y comprobar si han conseguido un nuevo record.
 PuntuacionRecord = function(jugador,punt,juego){
@@ -29,7 +48,7 @@ PuntuacionRecord = function(jugador,punt,juego){
 			}
 		}		
 	}
-},
+};
 	
 // Al terminar una partida se debe llamar a este método para todos y cada uno de los jugadores de esa
 // partida y sumar la puntuación obtenida a la puntuación que tenía anteriormente.
@@ -46,7 +65,22 @@ PuntuacionTotal = function(jugador,punt,juego){
 			}
 		}		
 	}
-},
+};
+
+
+EliminarJugador = function(jugador){
+	Partidas.find({jugadores:{$in:[jugador]}}).forEach(function(partida){
+		partida.jugadores[partida.jugadores.indexOf(jugador)]="";
+		Partidas.update(partida._id,{$set:{jugadores:partida.jugadores}})
+		AgregarPenalizacion(jugador,1);
+	});
+}
+
+// Cada vez que un jugador pierde "x" tiempo en su turno se le penaliza. Igualmente
+// si el jugador abandona el juego antes de que acabe la partida.
+AgregarPenalizacion = function(nombre,penal){
+	Meteor.users.update({username:nombre},{$inc:{penalizacion:penal}});
+};
 
 Meteor.methods({
 	
@@ -63,20 +97,14 @@ Meteor.methods({
 		Meteor.users.update(id,{$set:{puntuacion:puntuacion,equipos:[],torneos:[],penalizacion:0,estado:"Conectado",registrado:1}});
 	},
 	
+	EliminarJugador : function(jugador){
+		return EliminarJugador(jugador);
+	},
+	
 	// Actualiza el estado de todos los usuarios registrados cada vez que hay
 	// un cambio en la colección users.
 	ActualizarEstado: function(){
-		var usuarios = Meteor.users.find({});	
-		usuarios.forEach(function(user){
-			if(user.services.resume.loginTokens[0] === undefined){
-				//Usuario: No conectado
-				Meteor.users.update(user,{$set:{estado:"No conectado"}});
-			}
-			else{
-				//Usuario: Conectado
-				Meteor.users.update(user,{$set:{estado:"Conectado"}});
-			}
-		});
+		ActualizarEstado();
 	},
 
 	//  Cada vez que un jugador sume una puntuación se deberá llamar a 
@@ -102,7 +130,7 @@ Meteor.methods({
 	// Cada vez que un jugador pierde "x" tiempo en su turno se le penaliza. Igualmente
 	// si el jugador abandona el juego antes de que acabe la partida.
 	AgregarPenalizacion: function(id,penal){
-		Meteor.users.update(id,{$inc:{penalizacion:penal}});
+		AgregarPenalizacion(id,penal)		
 	},
 
 	//  Cada vez que se quiera almacenar un movimiento de una partida se llamará 
@@ -283,4 +311,3 @@ var GetSeq = function(){
 	var val= lst.length==0 ? 0 : lst[lst.length-1].id+1;
 	return val;				//Not Gap. Return the last+1 or 0 if no Games.
 };
-
