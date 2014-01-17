@@ -63,13 +63,9 @@
 		Ficha1 = GirarFicha(Ficha1);
 		Tablero[0][0] = Ficha1;
 
-<<<<<<< HEAD
-		var Ficha2 = Prueba(15); //ccmur3
-		Ficha2.gir = 2;
-=======
+
 		var Ficha2 = Prueba(16); //ccmur3
 		Ficha2.gir = 1;
->>>>>>> 37950f43ffee206cf1d6f6f8cf6d6bf6d86a22dc
 		Ficha2 = GirarFicha(Ficha2);
 		Tablero[1][0] = Ficha2;
 		

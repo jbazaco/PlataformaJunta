@@ -370,60 +370,159 @@ CuentaPCamino = function(Tablero, Ficha, Num, X, Y){
 };
 
 
-//funcion cierra Campo
-CierraCampo = function(ficha,X,Y){
-	var fichas1campo = [
-		'mur2',
-		'm',
-		'mc',
-		'ciucam',
-		'mur2c',
-		'mur1',
-		'murcam',
-		'ciucame',
-		'murcame'
-	];
+//función que comprueba si se ha cerrado el castillo y devuelve la puntuación.
+//Para ello dos pasos:
+	//ver si se ha cerrado el castillo.
+	//ver si hay un caballero en el castillo cerrado.
+CierraCastillo = function(Tablero, Ficha, PosSeguidor, X, Y){
 
-	var fichas2campo = [
-		'cc',
-		'cr',
-		'chmur',
+	//POSIBLES ESTRUCTURAS DE DATOS A USAR.
+	var fichasLadoCastilloConexos =[
+		'c3mur',
+		'mur1',
 		'cmur',
 		'ccmur',
 		'ccmur3',
-		'ciucam2',
+		'murcam',
 		'ccmur2',
+		'ccmur2e',
+		'murcame',
+		'ciucam2e',
+		'ciucam',
+		'chmur',
+		'chmure',
+		'ciucame',
+		'ciudad
+	];
+	
+	var fichas2LadosCierranCastillo =[
+		'mur2',
+		'mur2c'
+	];
+	
+	var fichasConEscudo = [
+		'ciudad',
 		'chmure',
 		'ccmur2e',
+		'murcame',
+		'ciucame',
 		'ciucam2e'
 	];
 		
-	var fichas3campo = [
-		'c3',
-		'c3mur
-	];
+	resultado = TipoCastillo(Ficha.nombre);
+	alert("el resultado del tipo de castillo es: " + resultado);
+	//return resultado;
+	MeteDirec = function(X, Y){         // Diccionario de las posiciones que ha tenido ese camino, para comprobar si hemos retornado al inicio.
+    	var obj = {
+			x: X,
+			y: Y
+		}
+		arr.push(obj);
+	};
 
-	var ficha4campo = 'c4';
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	//Funcion que nos devuelve si en esa posicion ya hemos estado
+	DarDirec = function(X, Y){
+		for (i = 0; i <= puntos; i++){
+			if (arr[i].x == X && arr[i].y == Y)
+				return false;
+			else
+				return true;
+		}
+	};
+	var Puntos=0;
+	RecursivaCastillo= function(Ficha, Prohibido,X,Y){
+		if (Tablero[X][Y]!=0){
+			var A=0;
+			if (fichas2LadosCastilloConsecutivo.indexOf(Ficha.nombre)!=-1){	//si la ficha esta en este array
+				if (Ficha.u=="castillo")&& (Prohibido!= "arriba") && DarDirec(X,Y){
+					A=Y-1;
+					//si la ficha tiene escudo
+					if (fichasConEscudo.indexOf(Ficha.nombre)!=-1){
+						Puntos= Puntos + 4;
+					}
+					else{
+						Puntos=Puntos+2;
+					}
+					MeteDirec(X,A);
+					RecursivaCastillo(Tablero[X][A],"abajo",X,A);
+				}	
+				if (Ficha.r=="castillo") && (Prohibido!= "derecha") && DarDirec(X,Y){
+					A=X+1;
+					//si la ficha tiene escudo
+					if (fichasConEscudo.indexOf(Ficha.nombre)!=-1){
+						Puntos= Puntos + 4;
+					}
+					else{
+						Puntos=Puntos+2;
+					}
+					MeteDirec(A,Y);
+					RecursivaCastillo(Tablero[A][Y],"izquierda",A,Y);
+				}
+				if (Ficha.d=="castillo") && (Prohibido!= "abajo") && DarDirec(X,Y){
+					A=Y+1;
+					//si la ficha tiene escudo
+					if (fichasConEscudo.indexOf(Ficha.nombre)!=-1){
+						Puntos= Puntos + 4;
+					}
+					else{
+						Puntos=Puntos+2;
+					}
+					MeteDirec(X,A);
+					RecursivaCastillo(Tablero[X][A],"arriba",X,A);
+				}
+				if (Ficha.l=="castillo") && (Prohibido!= "izquierda") && DarDirec(X,Y){
+					A=X-1;
+					//si la ficha tiene escudo
+					if (fichasConEscudo.indexOf(Ficha.nombre)!=-1){
+						Puntos= Puntos + 4;
+					}
+					else{
+						Puntos=Puntos+2;
+					}
+					MeteDirec(A,Y);
+					RecursivaCastillo(Tablero[A][Y],"derecha",A,Y);
+				}
+			}
+			else{
+				Puntos=Puntos+2;
+			}
+		}
+		else{
+			Puntos=0;
+		}
+	};
+	
+	//tratamos el caso de que llega una ficha con seguidor
+	//entramos en el caso de las fichas inconexas
+	if (fichas2LadosCierranCastillo.indexOf(Ficha.nombre)!=-1){
+		var A=0;
+		//tengo que ver las 4 posiciones del seguidor
+		if (PosSeguidor==1){
+			A=Y-1;
+			MeteDirec(X,A);
+			RecursivaCastillo(Tablero[X][A], "abajo", X, Y);
+			
+		}
+		if (PosSeguidor==2){
+			A=X-1;
+			MeteDirec(A,Y);
+			RecursivaCastillo(Tablero[A][Y], "izquierda", X, Y);
+		}
+		if (PosSeguidor==3){
+			A=Y+1;
+			MeteDirec(X,A);
+			RecursivaCastillo(Tablero[X][A], "arriba", X, Y);
+		}
+		if (PosSeguidor==4){
+			A=X+1;
+			MeteDirec(A,Y);
+			RecursivaCastillo(Tablero[A][Y], "derecha", X, Y);
+		}
+	}
+	else{
+		MeteDirec(X,Y);
+		RecursivaCastillo(Ficha,"nada", X, Y);
+	}
 };
 
 
