@@ -1,4 +1,7 @@
-
+//var prueba = function(){console.log('carga')}
+//prueba()
+//prueba2 = function(){console.log('carga2')}
+//prueba()
 //       1
 //    -------
 //  4 |     | 2
@@ -8,7 +11,7 @@
 
 var CASTILLO = 'castillo';
 var CAMINO = 'camino';
-var CAMPO = 'campo'
+var CAMPO = 'campo';
 
 var FichaPropiedades = {
 /*0*/		murcam:  {nombre:"murcam", u:CAMPO,    r:CAMPO,    d:CASTILLO, l:CASTILLO, gir: 0},        //media ficha muralla media ficha campo
@@ -43,18 +46,15 @@ var Contador = [5,3,3,4,2,1,9,8,4,1,3,1,2,5,3,3,3,1,3,2,2,2,1,2];
 
 //Creo el array y luego hago el random del número que le pasamos al array
 var Aleatorio = function(){
+	console.log("Entra en Aleatorio");
 	var a = Math.floor(Math.random()*24);
-	while (Contador[a] == 0){ 
-		a = Math.floor(Math.random()*24);	
-	}
-	Contador[a] = Contador[a] - 1;
 	return ArFi[a];
 };
 
 //Funcion de prueba para comprobar fichas
 var Prueba = function(A){
 	return ArFi[A];
-}
+};
 
 //Girar Ficha
 GirarFicha = function(Ficha){
@@ -89,20 +89,20 @@ CrearTablero = function(){
 //})
 // Para acceder a la base de datos meteor mongo
 //Funcion Parsear
-ParserTab = function(Id, Info){
+/*ParserTab = function(Id, Info){
 
 
-};
+};*/
 
 //Este Deps lo usaremos para extraer la informacion de la base de datos de como esta actualmente
 //el tablero correspondiente a cada identificador
-Deps.autorun(function(){
-	p = Partidas.find({estado: "Esperando"});
+/*Deps.autorun(function(){
+	p = Partidas.find({estado: "Empezada"});
 	p.forEach(function(){
 		j = this.jugadas[this.jugadas.length - 1];
 		ParserTab(this.id, j);
 	});
-});
+});*/
 
 
 //Procedimiento que mira las posiciones del tablero para ver si se puede colocar la ficha
@@ -145,7 +145,6 @@ colocarficha = function(Id, Ficha, X, Y){
 
 //funcion cierra claustro
 
-alert("antes del cierra claustro");
 CierraClaustro = function(Tablero,X,Y){
 	var cerrado = false;
 	var contador = 0;
@@ -392,7 +391,7 @@ CierraCastillo = function(Tablero, Ficha, PosSeguidor, X, Y){
 		'chmur',
 		'chmure',
 		'ciucame',
-		'ciudad
+		'ciudad'
 	];
 	
 	var fichas2LadosCierranCastillo =[
@@ -434,7 +433,7 @@ CierraCastillo = function(Tablero, Ficha, PosSeguidor, X, Y){
 		if (Tablero[X][Y]!=0){
 			var A=0;
 			if (fichas2LadosCastilloConsecutivo.indexOf(Ficha.nombre)!=-1){	//si la ficha esta en este array
-				if (Ficha.u=="castillo")&& (Prohibido!= "arriba") && DarDirec(X,Y){
+				if ((Ficha.u == "castillo") && (Prohibido != "arriba") && DarDirec(X,Y)){
 					A=Y-1;
 					//si la ficha tiene escudo
 					if (fichasConEscudo.indexOf(Ficha.nombre)!=-1){
@@ -446,7 +445,7 @@ CierraCastillo = function(Tablero, Ficha, PosSeguidor, X, Y){
 					MeteDirec(X,A);
 					RecursivaCastillo(Tablero[X][A],"abajo",X,A);
 				}	
-				if (Ficha.r=="castillo") && (Prohibido!= "derecha") && DarDirec(X,Y){
+				if ((Ficha.r=="castillo") && (Prohibido!= "derecha") && DarDirec(X,Y)){
 					A=X+1;
 					//si la ficha tiene escudo
 					if (fichasConEscudo.indexOf(Ficha.nombre)!=-1){
@@ -458,7 +457,7 @@ CierraCastillo = function(Tablero, Ficha, PosSeguidor, X, Y){
 					MeteDirec(A,Y);
 					RecursivaCastillo(Tablero[A][Y],"izquierda",A,Y);
 				}
-				if (Ficha.d=="castillo") && (Prohibido!= "abajo") && DarDirec(X,Y){
+				if ((Ficha.d=="castillo") && (Prohibido!= "abajo") && DarDirec(X,Y)){
 					A=Y+1;
 					//si la ficha tiene escudo
 					if (fichasConEscudo.indexOf(Ficha.nombre)!=-1){
@@ -470,7 +469,7 @@ CierraCastillo = function(Tablero, Ficha, PosSeguidor, X, Y){
 					MeteDirec(X,A);
 					RecursivaCastillo(Tablero[X][A],"arriba",X,A);
 				}
-				if (Ficha.l=="castillo") && (Prohibido!= "izquierda") && DarDirec(X,Y){
+				if ((Ficha.l=="castillo") && (Prohibido!= "izquierda") && DarDirec(X,Y)){
 					A=X-1;
 					//si la ficha tiene escudo
 					if (fichasConEscudo.indexOf(Ficha.nombre)!=-1){
