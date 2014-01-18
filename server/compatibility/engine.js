@@ -95,12 +95,20 @@ CrearTablero = function(){
 //Este Deps lo usaremos para extraer la informacion de la base de datos de como esta actualmente
 //el tablero correspondiente a cada identificador
 Deps.autorun(function(){
+<<<<<<< HEAD
 	p = Partidas.find({nombre: "18-1"});
 	console.log(p);
 	p.forEach(function(){
 		console.log(this.jugadores);
 		if (this.jugadas != undefined){		
 			j = this.jugadas[(this.jugadas.length) - 1];
+=======
+	p = Partidas.find({estado:"Empezada"});
+	p.forEach(function(partida){
+		console.log("Identificador de partida: " + partida._id);
+		if (partida.jugadas != undefined){		
+			j = partida.jugadas[(partida.jugadas.length) - 1];
+>>>>>>> 151da2fc7fbacd4add183e7463c8f5008a5956bb
 			console.log(j);
 			//ParserTab(this.id, j);
 		}
