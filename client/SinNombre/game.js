@@ -85,18 +85,22 @@ startGame = function() {
 
 
 
+var puntuaciones;
+ 
 playGame = function(){
-	Game.boards.length = 0;
-	Game.setBoard(Game.boards.length, BotonAyuda);
-	var jugadores = Partidas.findOne(Session.get("Current_Game")).jugadores;
-	var numjugadores = jugadores.length <= MAX_JUGADORES ? jugadores.length:MAX_JUGADORES;
-	var numseg;
-	var nick;
-	for (i=1;i<=numjugadores;i++){
-		numseg = new NumSeguidores(i);
-		Game.setBoard(Game.boards.length, numseg);
-		nick = jugadores[i-1]||"Maquina"+i;
-		Game.setBoard(Game.boards.length, new GamePoints(i, nick));
+    puntuaciones = [];
+    Game.boards.length = 0;
+    Game.setBoard(Game.boards.length, BotonAyuda);
+    var jugadores = Partidas.findOne(Session.get("Current_Game")).jugadores;
+    var numjugadores = jugadores.length <= MAX_JUGADORES ? jugadores.length:MAX_JUGADORES;
+    var numseg;
+    var nick;
+    for (i=1;i<=numjugadores;i++){
+        numseg = new NumSeguidores(i);
+        Game.setBoard(Game.boards.length, numseg);
+        nick = jugadores[i-1]||"Maquina"+i;
+        puntuaciones[nick]= new GamePoints(i, nick);
+        Game.setBoard(Game.boards.length, puntuaciones[nick]);
 		seguidores[nick] = [];
 		for (k=1;k<=7;k++){
 			seguidores[nick][k-1] = new Seguidor("s"+i, i, numseg, nick);
@@ -1037,4 +1041,16 @@ Deps.autorun(function(){
 	}
 });
 
-
+//Actualiza las puntuaciones de los jugadores
+Deps.autorun(function(){
+    var idpartida = Session.get("Current_Game");
+    if (idpartida){
+        var partida = Partidas.findOne(idpartida);
+        var canv = partida.canvas;
+        if (idcanvas === canv){
+            partida.jugadores.forEach(funtion(nick){
+                puntuaciones[nick].actualizar(partidas.puntuaciones[nick]);
+            }
+        }
+    }
+});
