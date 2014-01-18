@@ -103,7 +103,6 @@ Deps.autorun(function(){
 	});
 });
 
-
 //Procedimiento que mira las posiciones del tablero para ver si se puede colocar la ficha
 //Terminología: U: Up, R:Right, D: Down, L:Left. 
 colocarficha = function(Tablero, Ficha, X, Y){
