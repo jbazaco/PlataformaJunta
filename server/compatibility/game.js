@@ -55,7 +55,7 @@
 		///////////PROBAMOS CIERRACAMINO //////////
 		
 			//Creamos Tablero
-		/*Tablero = CrearTablero();
+		Tablero = CrearTablero();
 			//Asignamos unas determinadas fichas para ver si funciona la función y cuenta los puntos correctamente.
 			//Preguntar porqué aquí si igualo diferentes fichas
 		var Ficha1 = Prueba(15); //ccmur
@@ -82,14 +82,12 @@
 		var X = 0;
 		var Y = 1; 		
 		var PuntosCamino = CuentaPCamino(Tablero, Ficha4, Num, X, Y);
-		alert("Puntos que tengo: " + PuntosCamino);*/
+		alert("Puntos que tengo: " + PuntosCamino);
 
 		////////////////////////////////////////////
-		////////////////////////////////////////////
-		////////////////////////////////////////////	
 
 		///////Compruebo el CierraClaustro//////////
-
+		/*
 		Tablero = CrearTablero();
 
 		//asigno posicion a varias fichas
@@ -106,9 +104,9 @@
 		var X = 2;
 		var Y = 3;
 		var puntosclaustro = CierraClaustro(Tablero,X,Y);
+		*/
 		////////////////////////////////////////////
-		////////////////////////////////////////////
-		////////////////////////////////////////////
+		
 		
 	};
 

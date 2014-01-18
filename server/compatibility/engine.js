@@ -81,28 +81,36 @@ CrearTablero = function(){
 	}
 	return x;
 };
+//ELIMINAR
 //Meteor.call("DevuelveFicha", function(error,resultado){
 //	console.log(error)
 //	console.lo(resultado)	
 //})
-// Para acceder a la base de datos meteor mongo
-//Funcion Parsear
-/*ParserTab = function(Id, Info){
 
+// Lista de Tableros es una funcion que recoge el identificador de una partida y un Tablero que se
+// le pase y los mete en un array.
 
-};*/
+var Tableros = new Array(50);
+
+CrearArJug = function(id){
+	Tablero = CrearTablero();
+	ListaTableros = function(id, Tablero){
+		var partida = {
+			id: id,
+			tablero: Tablero
+		}
+		Tableros.push(partida);
+	};
+};
 
 //Este Deps lo usaremos para extraer la informacion de la base de datos de como esta actualmente
 //el tablero correspondiente a cada identificador
 Deps.autorun(function(){
 	p = Partidas.find({estado:"Empezada"});
 	p.forEach(function(partida){
-		console.log("Identificador de partida: " + partida._id);
-		if (partida.jugadas != undefined){		
-			j = partida.jugadas[(partida.jugadas.length) - 1];
-			console.log(j);
-			//ParserTab(this.id, j);
-		}
+		CrearTablero(partida._id);	
+		//j = partida.jugadas[(partida.jugadas.length) - 1];
+		//ParserTab(this.id, j);
 	});
 });
 
