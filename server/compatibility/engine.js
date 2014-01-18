@@ -108,7 +108,7 @@ CrearArJug = function(id){
 Deps.autorun(function(){
 	p = Partidas.find({estado:"Empezada"});
 	p.forEach(function(partida){
-		CrearTablero(partida._id);	
+		CrearArJug(partida._id);	
 		//j = partida.jugadas[(partida.jugadas.length) - 1];
 		//ParserTab(this.id, j);
 	});
