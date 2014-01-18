@@ -40,19 +40,17 @@ var FichaPropiedades = {
 /*23*/  	ciucam2e:{nombre:"ciucam2e", u:CASTILLO, r:CAMPO,    d:CASTILLO, l:CAMPO, gir: 0}          //ciudad 2 lados opuestos campo con escudo
 }; 
 
-var ArFi = _.toArray(FichaPropiedades); //Convertimos lo que tenemos en un Array para poder tratarlo
-
-var Contador = [5,3,3,4,2,1,9,8,4,1,3,1,2,5,3,3,3,1,3,2,2,2,1,2];
+ArFi = _.toArray(FichaPropiedades); //Convertimos lo que tenemos en un Array para poder tratarlo
 
 //Creo el array y luego hago el random del número que le pasamos al array
-var Aleatorio = function(){
+Aleatorio = function(){
 	console.log("Entra en Aleatorio");
 	var a = Math.floor(Math.random()*24);
 	return ArFi[a];
 };
 
 //Funcion de prueba para comprobar fichas
-var Prueba = function(A){
+Prueba = function(A){
 	return ArFi[A];
 };
 
@@ -96,20 +94,21 @@ CrearTablero = function(){
 
 //Este Deps lo usaremos para extraer la informacion de la base de datos de como esta actualmente
 //el tablero correspondiente a cada identificador
-/*Deps.autorun(function(){
+Deps.autorun(function(){
 	p = Partidas.find({estado: "Empezada"});
 	p.forEach(function(){
-		j = this.jugadas[this.jugadas.length - 1];
-		ParserTab(this.id, j);
+		console.log(p);		
+		//j = this.jugadas[this.jugadas.length - 1];
+		//ParserTab(this.id, j);
 	});
-});*/
+});
 
 
 //Procedimiento que mira las posiciones del tablero para ver si se puede colocar la ficha
 //Terminología: U: Up, R:Right, D: Down, L:Left. 
-colocarficha = function(Id, Ficha, X, Y){
+colocarficha = function(Tablero, Ficha, X, Y){
 		//Primero extremos el tablero mediante el Id
-		Tablero = ListaTableros[Id];
+		//Tablero = ListaTableros[Id];
 
 		var colocado = true;
 		if (Tablero[X][Y] == 0){
@@ -149,10 +148,6 @@ CierraClaustro = function(Tablero,X,Y){
 	var cerrado = false;
 	var contador = 0;
 	var puntos = 1;
-
-	alert("-----");
-	alert("el valor de x es: " + X); 
-	alert("el valor de y es: " + Y);
 
 	if(Tablero[X-1][(Y-1)] != 0){
 		contador++;
@@ -499,8 +494,7 @@ CierraCastillo = function(Tablero, Ficha, PosSeguidor, X, Y){
 		if (PosSeguidor==1){
 			A=Y-1;
 			MeteDirec(X,A);
-			RecursivaCastillo(Tablero[X][A], "abajo", X, Y);
-			
+			RecursivaCastillo(Tablero[X][A], "abajo", X, Y);	
 		}
 		if (PosSeguidor==2){
 			A=X-1;
