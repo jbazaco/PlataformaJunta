@@ -97,9 +97,12 @@ CrearTablero = function(){
 Deps.autorun(function(){
 	p = Partidas.find({estado: "Empezada"});
 	p.forEach(function(){
-		console.log(p);		
-		//j = this.jugadas[this.jugadas.length - 1];
-		//ParserTab(this.id, j);
+		console.log(this.jugadas);
+		if (this.jugadas != undefined){		
+			j = this.jugadas[(this.jugadas.length) - 1];
+			console.log(j);
+			//ParserTab(this.id, j);
+		}
 	});
 });
 
