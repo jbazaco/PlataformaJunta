@@ -436,7 +436,7 @@ CierraCastillo = function(Tablero, Ficha, PosSeguidor, X, Y){
 			console.log("el tablero no está vacío.");
 			var A=0;
 			if (fichasLadoCastilloConexos.indexOf(Ficha.nombre)!=-1){	//si la ficha esta en este array
-				console.log("la ficha está en el array conexo.");
+				console.log("la ficha está siguiente en el array conexo.");
 				if ((Ficha.u == "castillo") && (Prohibido != "arriba") && DarDirec(X,Y)){
 					A=Y-1;
 					//si la ficha tiene escudo
@@ -487,7 +487,6 @@ CierraCastillo = function(Tablero, Ficha, PosSeguidor, X, Y){
 				}
 				if ((Ficha.l=="castillo") && (Prohibido!= "izquierda") && DarDirec(X,Y)){
 					A=X-1;
-					console.log("eeeeee");
 					//si la ficha tiene escudo
 					if (fichasConEscudo.indexOf(Ficha.nombre)!=-1){
 						console.log("entro en ficha con escudo");
@@ -504,7 +503,7 @@ CierraCastillo = function(Tablero, Ficha, PosSeguidor, X, Y){
 				}
 			}
 			else{
-				console.log("la ficha es inconexa.");
+				console.log("la ficha siguiente es inconexa.");
 				Puntos=Puntos+2;
 				console.log("los puntos totales son: " + Puntos);
 				//RecursivaCastillo(Tablero[X+1][Y],"derecha",X+1,Y);
