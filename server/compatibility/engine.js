@@ -497,6 +497,7 @@ CierraCastillo = function(Tablero, Ficha, PosSeguidor, X, Y){
 	if (fichas2LadosCierranCastillo.indexOf(Ficha.nombre)!=-1){
 		console.log("la ficha es inconexa, caso inicial.");
 		var A=0;
+		console.log("x e y iniciales "+X+"   "+ Y);
 		//tengo que ver las 4 posiciones del seguidor
 		if (PosSeguidor==1){
 			console.log("posicion del seguidor es: " + PosSeguidor);
@@ -525,9 +526,27 @@ CierraCastillo = function(Tablero, Ficha, PosSeguidor, X, Y){
 		}
 	}
 	else{
+		var A=0;
 		console.log("la ficha es conexa, caso inicial.");
 		MeteDirec(X,Y);
-		RecursivaCastillo(Ficha,"nada", X, Y);
+		if (Ficha.u == "castillo"){
+			A=Y-1;
+			RecursivaCastillo(Tablero[X][A],"abajo",X,A);
+		}
+		if (Ficha.r=="castillo"){
+			console.log("entra");
+			A=X+1;
+			RecursivaCastillo(Tablero[A][Y],"izquierda",A,Y);
+		}
+		if (Ficha.d=="castillo"){
+			A=Y+1;
+			RecursivaCastillo(Tablero[X][A],"arriba",X,A);
+		}
+		if (Ficha.l=="castillo"){
+			A=X-1;
+			RecursivaCastillo(Tablero[A][Y],"derecha",A,Y);
+		}
+		
 	}
 	return puntos;
 };
