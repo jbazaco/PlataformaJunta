@@ -410,7 +410,7 @@ CierraCastillo = function(Tablero, Ficha, PosSeguidor, X, Y){
 		
 	var arr = [];	//Array con todas las direcciones por las que ya hemos pasado
 	//resultado = TipoCastillo(Ficha.nombre);
-	console.log("Estoy dentro de CierraCastillo");
+	//console.log("Estoy dentro de CierraCastillo");
 	//return resultado;
 	MeteDirec = function(X, Y){         // Diccionario de las posiciones que ha tenido ese camino, para comprobar si hemos retornado al inicio.
     	var obj = {
@@ -431,9 +431,12 @@ CierraCastillo = function(Tablero, Ficha, PosSeguidor, X, Y){
 	};
 	var Puntos=0;
 	RecursivaCastillo= function(Ficha, Prohibido,X,Y){
+		console.log("entro en RecursivaCastillo");
 		if (Tablero[X][Y]!=0){
+		console.log("el tablero no está vacío.");
 			var A=0;
 			if (fichasLadoCastilloConexos.indexOf(Ficha.nombre)!=-1){	//si la ficha esta en este array
+			console.log("la ficha está en el array conexo.");
 				if ((Ficha.u == "castillo") && (Prohibido != "arriba") && DarDirec(X,Y)){
 					A=Y-1;
 					//si la ficha tiene escudo
@@ -484,6 +487,7 @@ CierraCastillo = function(Tablero, Ficha, PosSeguidor, X, Y){
 				}
 			}
 			else{
+				console.log("la ficha es inconexa.");
 				Puntos=Puntos+2;
 			}
 		}
@@ -495,31 +499,37 @@ CierraCastillo = function(Tablero, Ficha, PosSeguidor, X, Y){
 	//tratamos el caso de que llega una ficha con seguidor
 	//entramos en el caso de las fichas inconexas
 	if (fichas2LadosCierranCastillo.indexOf(Ficha.nombre)!=-1){
+		console.log("la ficha es inconexa, caso inicial.");
 		var A=0;
 		//tengo que ver las 4 posiciones del seguidor
 		if (PosSeguidor==1){
+			console.log("posicion del seguidor es: " + PosSeguidor);
 			A=Y-1;
 			MeteDirec(X,A);
 			RecursivaCastillo(Tablero[X][A], "abajo", X, Y);
 			
 		}
 		if (PosSeguidor==2){
+			console.log("posicion del seguidor es: " + PosSeguidor);
 			A=X-1;
 			MeteDirec(A,Y);
 			RecursivaCastillo(Tablero[A][Y], "izquierda", X, Y);
 		}
 		if (PosSeguidor==3){
+			console.log("posicion del seguidor es: " + PosSeguidor);
 			A=Y+1;
 			MeteDirec(X,A);
 			RecursivaCastillo(Tablero[X][A], "arriba", X, Y);
 		}
 		if (PosSeguidor==4){
+			console.log("posicion del seguidor es: " + PosSeguidor);
 			A=X+1;
 			MeteDirec(A,Y);
 			RecursivaCastillo(Tablero[A][Y], "derecha", X, Y);
 		}
 	}
 	else{
+		console.log("la ficha es conexa, caso inicial.");
 		MeteDirec(X,Y);
 		RecursivaCastillo(Ficha,"nada", X, Y);
 	}
