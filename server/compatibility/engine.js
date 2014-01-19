@@ -110,7 +110,8 @@ Deps.autorun(function(){
 	p.forEach(function(partida){
 		CrearArJug(partida._id);	
 		//j = partida.jugadas[(partida.jugadas.length) - 1];
-		//ParserTab(this.id, j);
+		//IncluirJugTAb(partida._id, j);
+		//j.x j.y j.ficha j.giro
 	});
 });
 
