@@ -435,9 +435,10 @@ CierraCastillo = function(Tablero, Ficha, PosSeguidor, X, Y){
 		if (Tablero[X][Y]!=0){
 			console.log("el tablero no está vacío.");
 			console.log(Ficha.nombre);
+			console.log("las coordenadas de la ficha son: X= " + X + "||| Y= " + Y);
 			var A=0;
 			if (fichasLadoCastilloConexos.indexOf(Ficha.nombre)!=-1){	//si la ficha esta en este array
-				console.log("la ficha siguiente está en el array conexo.");
+				console.log("la ficha "+ Ficha.nombre + " está en el array conexo.");
 				//si la ficha tiene escudo
 				if (fichasConEscudo.indexOf(Ficha.nombre)!=-1){
 					console.log("entro en ficha con escudo");
@@ -472,7 +473,7 @@ CierraCastillo = function(Tablero, Ficha, PosSeguidor, X, Y){
 				}
 			}
 			else{
-				console.log("la ficha siguiente es inconexa.");
+				console.log("la ficha "+ Ficha.nombre + " es inconexa.");
 				puntos=puntos+2;
 				console.log("los puntos totales son: " + puntos);
 				
