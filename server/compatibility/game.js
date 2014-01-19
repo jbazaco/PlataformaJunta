@@ -115,6 +115,13 @@
 		
 		/////////TESTEAR CIERRACASTILLO/////////
 		
+		Tablero= CrearTablero();
+		var Ficha1= Prueba(2);	//mur2
+		Tablero[1][2]= Ficha1;
+		
+		var Ficha2 = Prueba(13);	//mur1
+		Tablero[1][3] = Ficha2;
+		var puntoscastillo = CierraCastillo(Tablero, Ficha1, 2, 1, 2);
 	};
 
 

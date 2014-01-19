@@ -150,9 +150,9 @@ CierraClaustro = function(Tablero,X,Y){
 	var contador = 0;
 	var puntos = 1;
 
-	alert("-----");
-	alert("el valor de x es: " + X); 
-	alert("el valor de y es: " + Y);
+	//alert("-----");
+	//alert("el valor de x es: " + X); 
+	//alert("el valor de y es: " + Y);
 
 	if(Tablero[X-1][(Y-1)] != 0){
 		contador++;
@@ -252,13 +252,13 @@ CuentaPCamino = function(Tablero, Ficha, Num, X, Y){
 		if ((Tablero[X][Y] != 0) && (flag != 2)){ 		// Caso en el que tenemos ficha en esa dirección y todavía no hemos finalizado camino
 			puntos = puntos + 1; 						// Si hay ficha, tiene que ser camino y por tanto sumamos puntos
 			//alert("Puntos que tengo: " + puntos);
-			alert("X: " + X + "Y: " + Y);
+			//alert("X: " + X + "Y: " + Y);
 			if (fincamino.indexOf(Tablero[X][Y].nombre) != -1){ 		// Si la ficha está en fincamino ya hemos finalizado el camino
 				//alert("Recursiva Fincamino, Ficha: " + Tablero[X][Y].nombre);
 				flag = flag + 1;
 			}
 			else if(contcamino.indexOf(Tablero[X][Y].nombre) != -1){ // Si la ficha está en contcamino seguimos haciendo recursiva
-				alert("Recursiva Contcamino, Ficha: " + Tablero[X][Y].nombre);
+				//alert("Recursiva Contcamino, Ficha: " + Tablero[X][Y].nombre);
 				if ((Tablero[X][Y].u == 'camino') && (prohibido != 'arriba') && DarDirec(X,Y)){
 					Y1 = Y - 1;	
 					MeteDirec(X,Y1);				
@@ -285,7 +285,7 @@ CuentaPCamino = function(Tablero, Ficha, Num, X, Y){
 
 	//Funcion para las fichas iniciales continuas(Con dos posibles direcciones).
 	Continua = function(Tablero, Ficha, X, Y){ 
-		alert("Entra en Continua");		
+		//alert("Entra en Continua");		
 		if (Ficha.u == 'camino'){
 			Y1 = Y - 1;
 			//alert("Cont Ficha arriba: " + Tablero[X][Y1].nombre);
@@ -360,7 +360,7 @@ CuentaPCamino = function(Tablero, Ficha, Num, X, Y){
 		}	
 	}
 	else
-		alert("El Num es incorrecto");
+		//alert("El Num es incorrecto");
 	/*for (i = 0; i <= puntos; i++){
 		alert("ArrayPosX: " + arr[i].x);
 		alert("ArrayPosY: " + arr[i].y);
@@ -409,7 +409,7 @@ CierraCastillo = function(Tablero, Ficha, PosSeguidor, X, Y){
 	];
 		
 	resultado = TipoCastillo(Ficha.nombre);
-	alert("el resultado del tipo de castillo es: " + resultado);
+	console.log("el resultado del tipo de castillo es: " + resultado);
 	//return resultado;
 	MeteDirec = function(X, Y){         // Diccionario de las posiciones que ha tenido ese camino, para comprobar si hemos retornado al inicio.
     	var obj = {
