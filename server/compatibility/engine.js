@@ -422,7 +422,7 @@ CierraCastillo = function(Tablero, Ficha, PosSeguidor, X, Y){
 
 	//Funcion que nos devuelve si en esa posicion ya hemos estado
 	DarDirec = function(X, Y){
-		for (i = 0; i <= puntos; i++){
+		for (i = 0; i <= Puntos; i++){
 			if (arr[i].x == X && arr[i].y == Y)
 				return false;
 			else
@@ -433,10 +433,10 @@ CierraCastillo = function(Tablero, Ficha, PosSeguidor, X, Y){
 	RecursivaCastillo= function(Ficha, Prohibido,X,Y){
 		console.log("entro en RecursivaCastillo");
 		if (Tablero[X][Y]!=0){
-		console.log("el tablero no está vacío.");
+			console.log("el tablero no está vacío.");
 			var A=0;
 			if (fichasLadoCastilloConexos.indexOf(Ficha.nombre)!=-1){	//si la ficha esta en este array
-			console.log("la ficha está en el array conexo.");
+				console.log("la ficha está en el array conexo.");
 				if ((Ficha.u == "castillo") && (Prohibido != "arriba") && DarDirec(X,Y)){
 					A=Y-1;
 					//si la ficha tiene escudo
@@ -446,6 +446,7 @@ CierraCastillo = function(Tablero, Ficha, PosSeguidor, X, Y){
 						console.log("los puntos totales son: " + Puntos);
 					}
 					else{
+						console.log("entro en ficha sin escudo");
 						Puntos=Puntos+2;
 						console.log("los puntos totales son: " + Puntos);
 					}
@@ -461,6 +462,7 @@ CierraCastillo = function(Tablero, Ficha, PosSeguidor, X, Y){
 						console.log("los puntos totales son: " + Puntos);
 					}
 					else{
+						console.log("entro en ficha sin escudo");
 						Puntos=Puntos+2;
 						console.log("los puntos totales son: " + Puntos);
 					}
@@ -476,6 +478,7 @@ CierraCastillo = function(Tablero, Ficha, PosSeguidor, X, Y){
 						console.log("los puntos totales son: " + Puntos);
 					}
 					else{
+						console.log("entro en ficha sin escudo");
 						Puntos=Puntos+2;
 						console.log("los puntos totales son: " + Puntos);
 					}
@@ -484,6 +487,7 @@ CierraCastillo = function(Tablero, Ficha, PosSeguidor, X, Y){
 				}
 				if ((Ficha.l=="castillo") && (Prohibido!= "izquierda") && DarDirec(X,Y)){
 					A=X-1;
+					console.log("eeeeee");
 					//si la ficha tiene escudo
 					if (fichasConEscudo.indexOf(Ficha.nombre)!=-1){
 						console.log("entro en ficha con escudo");
@@ -491,6 +495,7 @@ CierraCastillo = function(Tablero, Ficha, PosSeguidor, X, Y){
 						console.log("los puntos totales son: " + Puntos);
 					}
 					else{
+						console.log("entro en ficha sin escudo");
 						Puntos=Puntos+2;
 						console.log("los puntos totales son: " + Puntos);
 					}
@@ -502,10 +507,77 @@ CierraCastillo = function(Tablero, Ficha, PosSeguidor, X, Y){
 				console.log("la ficha es inconexa.");
 				Puntos=Puntos+2;
 				console.log("los puntos totales son: " + Puntos);
+				//RecursivaCastillo(Tablero[X+1][Y],"derecha",X+1,Y);
+				if ((Ficha.u == "castillo") && (Prohibido != "arriba") && DarDirec(X,Y)){
+					A=Y-1;
+					//si la ficha tiene escudo
+					if (fichasConEscudo.indexOf(Ficha.nombre)!=-1){
+						console.log("entro en ficha con escudo");
+						Puntos= Puntos + 4;
+						console.log("los puntos totales son: " + Puntos);
+					}
+					else{
+						console.log("entro en ficha sin escudo");
+						Puntos=Puntos+2;
+						console.log("los puntos totales son: " + Puntos);
+					}
+					MeteDirec(X,A);
+					RecursivaCastillo(Tablero[X][A],"abajo",X,A);
+				}	
+				if ((Ficha.r=="castillo") && (Prohibido!= "derecha") && DarDirec(X,Y)){
+					A=X+1;
+					//si la ficha tiene escudo
+					if (fichasConEscudo.indexOf(Ficha.nombre)!=-1){
+						console.log("entro en ficha con escudo");
+						Puntos= Puntos + 4;
+						console.log("los puntos totales son: " + Puntos);
+					}
+					else{
+						console.log("entro en ficha sin escudo");
+						Puntos=Puntos+2;
+						console.log("los puntos totales son: " + Puntos);
+					}
+					MeteDirec(A,Y);
+					RecursivaCastillo(Tablero[A][Y],"izquierda",A,Y);
+				}
+				if ((Ficha.d=="castillo") && (Prohibido!= "abajo") && DarDirec(X,Y)){
+					A=Y+1;
+					//si la ficha tiene escudo
+					if (fichasConEscudo.indexOf(Ficha.nombre)!=-1){
+						console.log("entro en ficha con escudo");
+						Puntos= Puntos + 4;
+						console.log("los puntos totales son: " + Puntos);
+					}
+					else{
+						console.log("entro en ficha sin escudo");
+						Puntos=Puntos+2;
+						console.log("los puntos totales son: " + Puntos);
+					}
+					MeteDirec(X,A);
+					RecursivaCastillo(Tablero[X][A],"arriba",X,A);
+				}
+				if ((Ficha.l=="castillo") && (Prohibido!= "izquierda") && DarDirec(X,Y)){
+					A=X-1;
+					console.log("eeeeee");
+					//si la ficha tiene escudo
+					if (fichasConEscudo.indexOf(Ficha.nombre)!=-1){
+						console.log("entro en ficha con escudo");
+						Puntos= Puntos + 4;
+						console.log("los puntos totales son: " + Puntos);
+					}
+					else{
+						console.log("entro en ficha sin escudo");
+						Puntos=Puntos+2;
+						console.log("los puntos totales son: " + Puntos);
+					}
+					MeteDirec(A,Y);
+					RecursivaCastillo(Tablero[A][Y],"derecha",A,Y);
+				}
 			}
 		}
 		else{
-			Puntos=0;
+			console.log("El tablero está vacío.");
+			//Puntos=0;
 		}
 	};
 	
@@ -524,7 +596,7 @@ CierraCastillo = function(Tablero, Ficha, PosSeguidor, X, Y){
 		}
 		if (PosSeguidor==2){
 			console.log("posicion del seguidor es: " + PosSeguidor);
-			A=X-1;
+			A=X+1;
 			MeteDirec(A,Y);
 			RecursivaCastillo(Tablero[A][Y], "izquierda", X, Y);
 		}
@@ -536,7 +608,7 @@ CierraCastillo = function(Tablero, Ficha, PosSeguidor, X, Y){
 		}
 		if (PosSeguidor==4){
 			console.log("posicion del seguidor es: " + PosSeguidor);
-			A=X+1;
+			A=X-1;
 			MeteDirec(A,Y);
 			RecursivaCastillo(Tablero[A][Y], "derecha", X, Y);
 		}
@@ -548,7 +620,3 @@ CierraCastillo = function(Tablero, Ficha, PosSeguidor, X, Y){
 	}
 	return Puntos;
 };
-
-
-
-
