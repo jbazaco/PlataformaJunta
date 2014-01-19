@@ -124,9 +124,16 @@
 		Ficha2 = GirarFicha(Ficha2);
 		Tablero[2][1] = Ficha2;
 		
-		var Ficha3 = Prueba(13);	//mur1 
-		Tablero[3][1]= Ficha3;
+		var Ficha3 = Prueba(23);	//ciucam2
+		Ficha3.gir= 1;
+		Ficha3 = GirarFicha(Ficha3);
+		Tablero[3][1] = Ficha3;
+		
+		var Ficha4 = Prueba(13);	//mur1 
+		Tablero[4][1]= Ficha4;
+		
 		var puntoscastillo = CierraCastillo(Tablero, Ficha1, 2, 1, 1);
+		console.log("la puntuacion total es: " + puntoscastillo);
 	};
 
 
