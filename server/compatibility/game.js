@@ -90,7 +90,7 @@
 
 		///////Compruebo el CierraClaustro//////////
 
-		Tablero = CrearTablero();
+		/*Tablero = CrearTablero();
 
 		//asigno posicion a varias fichas
 		var Ficha1 = Prueba(10);    //ciucam
@@ -111,6 +111,9 @@
 		////////////////////////////////////////////
 		////////////////////////////////////////////
 		////////////////////////////////////////////
+		*/
+		
+		/////////TESTEAR CIERRACASTILLO/////////
 		
 	};
 
