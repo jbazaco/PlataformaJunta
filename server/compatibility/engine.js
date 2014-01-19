@@ -441,10 +441,13 @@ CierraCastillo = function(Tablero, Ficha, PosSeguidor, X, Y){
 					A=Y-1;
 					//si la ficha tiene escudo
 					if (fichasConEscudo.indexOf(Ficha.nombre)!=-1){
+						console.log("entro en ficha con escudo");
 						Puntos= Puntos + 4;
+						console.log("los puntos totales son: " + Puntos);
 					}
 					else{
 						Puntos=Puntos+2;
+						console.log("los puntos totales son: " + Puntos);
 					}
 					MeteDirec(X,A);
 					RecursivaCastillo(Tablero[X][A],"abajo",X,A);
@@ -453,10 +456,13 @@ CierraCastillo = function(Tablero, Ficha, PosSeguidor, X, Y){
 					A=X+1;
 					//si la ficha tiene escudo
 					if (fichasConEscudo.indexOf(Ficha.nombre)!=-1){
+						console.log("entro en ficha con escudo");
 						Puntos= Puntos + 4;
+						console.log("los puntos totales son: " + Puntos);
 					}
 					else{
 						Puntos=Puntos+2;
+						console.log("los puntos totales son: " + Puntos);
 					}
 					MeteDirec(A,Y);
 					RecursivaCastillo(Tablero[A][Y],"izquierda",A,Y);
@@ -465,10 +471,13 @@ CierraCastillo = function(Tablero, Ficha, PosSeguidor, X, Y){
 					A=Y+1;
 					//si la ficha tiene escudo
 					if (fichasConEscudo.indexOf(Ficha.nombre)!=-1){
+						console.log("entro en ficha con escudo");
 						Puntos= Puntos + 4;
+						console.log("los puntos totales son: " + Puntos);
 					}
 					else{
 						Puntos=Puntos+2;
+						console.log("los puntos totales son: " + Puntos);
 					}
 					MeteDirec(X,A);
 					RecursivaCastillo(Tablero[X][A],"arriba",X,A);
@@ -477,10 +486,13 @@ CierraCastillo = function(Tablero, Ficha, PosSeguidor, X, Y){
 					A=X-1;
 					//si la ficha tiene escudo
 					if (fichasConEscudo.indexOf(Ficha.nombre)!=-1){
+						console.log("entro en ficha con escudo");
 						Puntos= Puntos + 4;
+						console.log("los puntos totales son: " + Puntos);
 					}
 					else{
 						Puntos=Puntos+2;
+						console.log("los puntos totales son: " + Puntos);
 					}
 					MeteDirec(A,Y);
 					RecursivaCastillo(Tablero[A][Y],"derecha",A,Y);
@@ -489,6 +501,7 @@ CierraCastillo = function(Tablero, Ficha, PosSeguidor, X, Y){
 			else{
 				console.log("la ficha es inconexa.");
 				Puntos=Puntos+2;
+				console.log("los puntos totales son: " + Puntos);
 			}
 		}
 		else{
@@ -533,6 +546,7 @@ CierraCastillo = function(Tablero, Ficha, PosSeguidor, X, Y){
 		MeteDirec(X,Y);
 		RecursivaCastillo(Ficha,"nada", X, Y);
 	}
+	return Puntos;
 };
 
 
