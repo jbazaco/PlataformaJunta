@@ -109,9 +109,6 @@ Deps.autorun(function(){
 	p = Partidas.find({estado:"Empezada"});
 	p.forEach(function(partida){
 		CrearArJug(partida._id);	
-		//j = partida.jugadas[(partida.jugadas.length) - 1];
-		//IncluirJugTAb(partida._id, j);
-		//j.x j.y j.ficha j.giro
 	});
 });
 
