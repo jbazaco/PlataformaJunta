@@ -113,6 +113,47 @@ Deps.autorun(function(){
 });
 
 
+//.......................................
+//función añadir jugada nueva en tablero
+CrearTabJug = function(id,x,y,ficha,rota){
+	var encontrado = false;
+	for(i=0; i<= 50;i++){
+		if (Tableros[i].partida.id == id){
+			encontrado == true;
+			break;
+		}
+	}
+
+	if (rota == 0){
+		ficha.gir = 0;
+	}
+	if (rota == 90){
+		ficha.gir = 1;
+	}
+	if (rota == 180){
+		ficha.gir = 2;
+	}
+	if (rota == 270){
+		ficha.gir = 3;
+	}
+
+	if (encontrado){
+		Tableros[i].tablero[x][y] = ficha;
+	}
+	
+};
+
+
+//Autorun para mirar las jugadas nuevas que aparecen e incluirlas en el tablero
+Deps.autorun(function){
+	p = Partidas.find({jugadas});
+	p.forEach(function(partida){
+		j = partida.jugadas[(partida.jugadas.length) - 1];
+		CrearTabJug(partida._id, j.x, j.y, j.sprite.nombre, j.rotacion);
+
+	}
+});
+
 //Procedimiento que mira las posiciones del tablero para ver si se puede colocar la ficha
 //Terminología: U: Up, R:Right, D: Down, L:Left. 
 colocarficha = function(Tablero, Ficha, X, Y){
