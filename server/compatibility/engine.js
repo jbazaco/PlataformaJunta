@@ -388,6 +388,7 @@ CierraCastillo = function(Tablero, Ficha, PosSeguidor, X, Y){
 		'murcame',
 		'ciucam2e',
 		'ciucam',
+		'ciucam2',
 		'chmur',
 		'chmure',
 		'ciucame',
@@ -422,6 +423,7 @@ CierraCastillo = function(Tablero, Ficha, PosSeguidor, X, Y){
 
 	//Funcion que nos devuelve si en esa posicion ya hemos estado
 	DarDirec = function(X, Y){
+		console.log(X+"    "+ Y);
 		for (i = 0; i <= puntos; i++){
 			if (arr[i].x == X && arr[i].y == Y)
 				return false;
@@ -456,7 +458,11 @@ CierraCastillo = function(Tablero, Ficha, PosSeguidor, X, Y){
 					MeteDirec(X,A);
 					RecursivaCastillo(Tablero[X][A],"abajo",X,A);
 				}	
+				console.log(Ficha.r);
+				console.log(Prohibido);
+				console.log(DarDirec(X,Y));
 				if ((Ficha.r=="castillo") && (Prohibido!= "derecha") && DarDirec(X,Y)){
+					console.log("entra");
 					A=X+1;
 					MeteDirec(A,Y);
 					RecursivaCastillo(Tablero[A][Y],"izquierda",A,Y);

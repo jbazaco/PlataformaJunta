@@ -120,6 +120,8 @@
 		Tablero[1][1]= Ficha1;
 		
 		var Ficha2 = Prueba(17);	//ciucam2
+		Ficha2.gir= 1;
+		Ficha2 = GirarFicha(Ficha2);
 		Tablero[2][1] = Ficha2;
 		
 		var Ficha3 = Prueba(13);	//mur1 
