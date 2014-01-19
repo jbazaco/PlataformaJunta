@@ -436,7 +436,7 @@ CierraCastillo = function(Tablero, Ficha, PosSeguidor, X, Y){
 			console.log("el tablero no está vacío.");
 			var A=0;
 			if (fichasLadoCastilloConexos.indexOf(Ficha.nombre)!=-1){	//si la ficha esta en este array
-				console.log("la ficha está siguiente en el array conexo.");
+				console.log("la ficha siguiente está en el array conexo.");
 				if ((Ficha.u == "castillo") && (Prohibido != "arriba") && DarDirec(X,Y)){
 					A=Y-1;
 					//si la ficha tiene escudo
