@@ -52,7 +52,7 @@ var Aleatorio = function(){
 };
 
 //Funcion de prueba para comprobar fichas
-var Prueba = function(A){
+Prueba = function(A){
 	return ArFi[A];
 };
 
@@ -408,8 +408,9 @@ CierraCastillo = function(Tablero, Ficha, PosSeguidor, X, Y){
 		'ciucam2e'
 	];
 		
-	resultado = TipoCastillo(Ficha.nombre);
-	console.log("el resultado del tipo de castillo es: " + resultado);
+	var arr = [];	//Array con todas las direcciones por las que ya hemos pasado
+	//resultado = TipoCastillo(Ficha.nombre);
+	console.log("Estoy dentro de CierraCastillo");
 	//return resultado;
 	MeteDirec = function(X, Y){         // Diccionario de las posiciones que ha tenido ese camino, para comprobar si hemos retornado al inicio.
     	var obj = {
@@ -432,7 +433,7 @@ CierraCastillo = function(Tablero, Ficha, PosSeguidor, X, Y){
 	RecursivaCastillo= function(Ficha, Prohibido,X,Y){
 		if (Tablero[X][Y]!=0){
 			var A=0;
-			if (fichas2LadosCastilloConsecutivo.indexOf(Ficha.nombre)!=-1){	//si la ficha esta en este array
+			if (fichasLadoCastilloConexos.indexOf(Ficha.nombre)!=-1){	//si la ficha esta en este array
 				if ((Ficha.u == "castillo") && (Prohibido != "arriba") && DarDirec(X,Y)){
 					A=Y-1;
 					//si la ficha tiene escudo
