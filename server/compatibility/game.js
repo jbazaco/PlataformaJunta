@@ -119,11 +119,11 @@
 		var Ficha1= Prueba(2);	//mur2
 		Tablero[1][1]= Ficha1;
 		
-		var Ficha2 = Prueba(13);	//mur1
+		var Ficha2 = Prueba(17);	//mur1
 		Tablero[2][1] = Ficha2;
 		
-		//var Ficha3 = Prueba(17);	//ciucam2 
-		//Tablero[2][1]
+		var Ficha3 = Prueba(13);	//ciucam2 
+		Tablero[3][1]= Ficha3;
 		var puntoscastillo = CierraCastillo(Tablero, Ficha1, 2, 1, 1);
 	};
 

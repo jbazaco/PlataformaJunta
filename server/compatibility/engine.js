@@ -434,6 +434,7 @@ CierraCastillo = function(Tablero, Ficha, PosSeguidor, X, Y){
 		console.log("entro en RecursivaCastillo");
 		if (Tablero[X][Y]!=0){
 			console.log("el tablero no está vacío.");
+			console.log(Ficha.nombre);
 			var A=0;
 			if (fichasLadoCastilloConexos.indexOf(Ficha.nombre)!=-1){	//si la ficha esta en este array
 				console.log("la ficha siguiente está en el array conexo.");
@@ -448,6 +449,7 @@ CierraCastillo = function(Tablero, Ficha, PosSeguidor, X, Y){
 					puntos=puntos+2;
 					console.log("los puntos totales son: " + puntos);
 				}
+				
 				if ((Ficha.u == "castillo") && (Prohibido != "arriba") && DarDirec(X,Y)){
 					A=Y-1;
 					MeteDirec(X,A);
@@ -484,6 +486,7 @@ CierraCastillo = function(Tablero, Ficha, PosSeguidor, X, Y){
 	
 	//tratamos el caso de que llega una ficha con seguidor
 	//entramos en el caso de las fichas inconexas
+	console.log("la ficha de la que empezamos es: " + Ficha.nombre);
 	if (fichas2LadosCierranCastillo.indexOf(Ficha.nombre)!=-1){
 		console.log("la ficha es inconexa, caso inicial.");
 		var A=0;
@@ -492,7 +495,7 @@ CierraCastillo = function(Tablero, Ficha, PosSeguidor, X, Y){
 			console.log("posicion del seguidor es: " + PosSeguidor);
 			A=Y-1;
 			MeteDirec(X,A);
-			RecursivaCastillo(Tablero[X][A], "abajo", X, Y);
+			RecursivaCastillo(Tablero[X][A], "abajo", X, A);
 			
 		}
 		if (PosSeguidor==2){
@@ -505,13 +508,13 @@ CierraCastillo = function(Tablero, Ficha, PosSeguidor, X, Y){
 			console.log("posicion del seguidor es: " + PosSeguidor);
 			A=Y+1;
 			MeteDirec(X,A);
-			RecursivaCastillo(Tablero[X][A], "arriba", X, Y);
+			RecursivaCastillo(Tablero[X][A], "arriba", X, A);
 		}
 		if (PosSeguidor==4){
 			console.log("posicion del seguidor es: " + PosSeguidor);
 			A=X-1;
 			MeteDirec(A,Y);
-			RecursivaCastillo(Tablero[A][Y], "derecha", X, Y);
+			RecursivaCastillo(Tablero[A][Y], "derecha", A, Y);
 		}
 	}
 	else{
