@@ -64,6 +64,7 @@ GirarFicha = function(Ficha){
 		Ficha.r = Ficha.u;
 		Ficha.u = aux;
 		Ficha.gir = Ficha.gir - 1;
+		console.log("Nombre: " + Ficha.nombre + " ||Arriba: " + Ficha.u + " Derecha: " + Ficha.r + " Abajo: " + Ficha.d + " Izquierda: " + Ficha.l + "Girado: " + Ficha.gir);
 	}
 	return Ficha;
 };
@@ -148,13 +149,13 @@ CrearTabJug = function(id,x,y,ficha,rota){
 Deps.autorun(function(){
 	p = Partidas.find({});
 	p.forEach(function(partida){
-		console.log("antes de definir j");
-		console.log("la longitud de jugadas es: " + partida.jugadas.length);
+		//console.log("antes de definir j");
+		//console.log("la longitud de jugadas es: " + partida.jugadas.length);
 		var longitud = partida.jugadas.length;
 		if (longitud != 0){
-			console.log("longitud jugadas no es cero");
+			//console.log("longitud jugadas no es cero");
 			j = partida.jugadas[longitud - 1];
-			console.log(j);
+			//console.log(j);
 			CrearTabJug(partida._id, j.x, j.y, j.sprite, j.rotacion);
 		}
 	});
@@ -300,34 +301,35 @@ CuentaPCamino = function(Tablero, Ficha, Num, X, Y){
 
 	//Funcion recursiva a la que le voy pasando la ficha siguiente (a partir de la ficha inicial)
 	Recursiva = function(Tablero, prohibido, flag, X, Y){
+		console.log("Entra en Recursiva");
 		if ((Tablero[X][Y] != 0) && (flag != 2)){ 		// Caso en el que tenemos ficha en esa dirección y todavía no hemos finalizado camino
 			puntos = puntos + 1; 						// Si hay ficha, tiene que ser camino y por tanto sumamos puntos
-			//alert("Puntos que tengo: " + puntos);
-			alert("X: " + X + "Y: " + Y);
+			console.log("Puntos que tengo: " + puntos);
+			console.log("X: " + X + "Y: " + Y);
 			if (fincamino.indexOf(Tablero[X][Y].nombre) != -1){ 		// Si la ficha está en fincamino ya hemos finalizado el camino
-				//alert("Recursiva Fincamino, Ficha: " + Tablero[X][Y].nombre);
+				console.log("Recursiva Fincamino, Ficha: " + Tablero[X][Y].nombre);
 				flag = flag + 1;
 			}
 			else if(contcamino.indexOf(Tablero[X][Y].nombre) != -1){ // Si la ficha está en contcamino seguimos haciendo recursiva
-				alert("Recursiva Contcamino, Ficha: " + Tablero[X][Y].nombre);
+				console.log("Recursiva Contcamino, Ficha: " + Tablero[X][Y].nombre);
 				if ((Tablero[X][Y].u == 'camino') && (prohibido != 'arriba') && DarDirec(X,Y)){
 					Y1 = Y - 1;	
-					MeteDirec(X,Y1);				
+					MeteDirec(X,Y);				
 					Recursiva(Tablero, 'abajo', flag, X, Y1);
 				}
 				if ((Tablero[X][Y].r == 'camino') && (prohibido != 'derecha') && DarDirec(X,Y)){
 					X1 = X + 1;
-					MeteDirec(X1,Y);
+					MeteDirec(X,Y);
 					Recursiva(Tablero, 'izquierda', flag, X1, Y);
 				}
 				if ((Tablero[X][Y].d == 'camino') && (prohibido != 'abajo') && DarDirec(X,Y)){
 					Y2 = Y + 1;
-					MeteDirec(X,Y2);
+					MeteDirec(X,Y);
 					Recursiva(Tablero, 'arriba', flag, X, Y2);
 				}
 				if ((Tablero[X][Y].l == 'camino') && (prohibido != 'izquierda') && DarDirec(X,Y)){
 					X2 = X - 1;
-					MeteDirec(X2,Y);
+					MeteDirec(X,Y);
 					Recursiva(Tablero, 'derecha', flag, X2, Y);
 				}
 			}
@@ -336,29 +338,29 @@ CuentaPCamino = function(Tablero, Ficha, Num, X, Y){
 
 	//Funcion para las fichas iniciales continuas(Con dos posibles direcciones).
 	Continua = function(Tablero, Ficha, X, Y){ 
-		alert("Entra en Continua");		
+		console.log("Entra en Continua");		
 		if (Ficha.u == 'camino'){
 			Y1 = Y - 1;
 			//alert("Cont Ficha arriba: " + Tablero[X][Y1].nombre);
-			MeteDirec(X,Y1);
+			MeteDirec(X,Y);
 			Recursiva(Tablero, "abajo", flag, X, Y1);	
 		}
 		if (Ficha.r == 'camino') {			
 			X1 = X + 1;
 			//alert("Cont Ficha derecha: " + Tablero[X1][Y].nombre);
-			MeteDirec(X1,Y);
+			MeteDirec(X,Y);
 			Recursiva(Tablero, "izquierda", flag, X1, Y);
 		}
 		if (Ficha.d == 'camino') {			
 			Y2 = Y + 1;
 			//alert("Cont Ficha abajo: " + Tablero[X][Y2].nombre);
-			MeteDirec(X,Y2);
+			MeteDirec(X,Y);
 			Recursiva(Tablero, "arriba", flag, X, Y2);
 		}
 		if (Ficha.l == 'camino'){			
 			X2 = X - 1;
 			//alert("Cont Ficha izquierda: " + Tablero[X2][Y].nombre);
-			MeteDirec(X2,Y);
+			MeteDirec(X,Y);
 			Recursiva(Tablero, "derecha", flag, X2, Y);
 		}
 	};
@@ -381,7 +383,7 @@ CuentaPCamino = function(Tablero, Ficha, Num, X, Y){
 		if (fincamino.indexOf(Ficha.nombre) != -1){
 			flag = flag + 1;
 			X = X + 1; //Vamos para la derecha
-			Recursiva(Tablero, "izquerda", flag, X, Y);
+			Recursiva(Tablero, "izquierda", flag, X, Y);
 			MeteDirec(X,Y);
 		}
 		else if (contcamino.indexOf(Ficha.nombre) != -1){
@@ -411,11 +413,12 @@ CuentaPCamino = function(Tablero, Ficha, Num, X, Y){
 		}	
 	}
 	else
-		alert("El Num es incorrecto");
+		console.log("El Num es incorrecto");
 	/*for (i = 0; i <= puntos; i++){
 		alert("ArrayPosX: " + arr[i].x);
 		alert("ArrayPosY: " + arr[i].y);
 	}*/
+	arr = [];
 	return puntos;
 };
 

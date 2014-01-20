@@ -53,35 +53,44 @@
 			///////////////////////////////////////////////////
 		
 		///////////PROBAMOS CIERRACAMINO //////////
-		
 			//Creamos Tablero
 		Tablero = CrearTablero();
 			//Asignamos unas determinadas fichas para ver si funciona la función y cuenta los puntos correctamente.
 			//Preguntar porqué aquí si igualo diferentes fichas
-		var Ficha1 = Prueba(15); //ccmur
+		console.log("Ficha1");
+		var Ficha1 = Prueba(6); //cc [gira 1] 
 		Ficha1.gir = 1;
 		Ficha1 = GirarFicha(Ficha1);
-		Tablero[0][0] = Ficha1;
+		Tablero[1][1] = Ficha1;
 
+		console.log("Ficha2");
+		var Ficha2 = Prueba(7); //cr [gira 0]
+		Tablero[2][1] = Ficha2;
 
-		var Ficha2 = Prueba(16); //ccmur3
-		Ficha2.gir = 1;
-		Ficha2 = GirarFicha(Ficha2);
-		Tablero[1][0] = Ficha2;
-		
-		var Ficha3 = Prueba(6); //cc [girar1]
-		Ficha3.gir = 3;	
+		console.log("Ficha3");
+		var Ficha3 = Prueba(6); //cc [gira 2] De momento 3
+		Ficha3.gir = 3;
 		Ficha3 = GirarFicha(Ficha3);
-		Tablero[1][1] = Ficha3;
+		Tablero[3][1] = Ficha3;
+
+		console.log("Ficha4");
+		var Ficha4 = Prueba(8); //c3 [gira 0]
+		Tablero[1][2] = Ficha4;
+
+		console.log("Ficha5");
+		var Ficha5 = Prueba(7); //cr [gira 0]
+		Tablero[2][2] = Ficha5;
 	
-		var Ficha4 = Prueba(18); //ccmur2 [girar3]
-		Ficha4 = GirarFicha(Ficha4);
+		console.log("Ficha6");	
+		var Ficha6 = Prueba(5); //c4 [gira 0]
+		Tablero[3][2] = Ficha6;
 		
 			//Le pasamos a la funcion la ficha donde este el seguidor y en que posición determinada está. 
-		var Num = 1;
-		var X = 0;
+		var Num = 2;
+		var X = 1;
 		var Y = 1; 		
-		var PuntosCamino = CuentaPCamino(Tablero, Ficha4, Num, X, Y);
+		var PuntosCamino = CuentaPCamino(Tablero, Ficha1, Num, X, Y);
+		console.log(PuntosCamino);
 		//alert("Puntos que tengo: " + PuntosCamino);
 
 		////////////////////////////////////////////
