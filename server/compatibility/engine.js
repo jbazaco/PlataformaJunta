@@ -623,108 +623,146 @@ CierraCampo = function(board){
 			tmp = this._rotate(tmp);
 		};
 		return tmp;
-	}
-	
-	this.RecursiveChecker = function(){
-		
 	};
 	
 	//New field properties to the tiles.
 	FichaPropiedades["murcam"]["fieldMap"]={
-		1:{fieldOwner:[],fieldPointer:[UC,RC]}
+		1:{id:"1",fieldOwner:[],fieldPointers:[UC,RC]}
 	}
 	FichaPropiedades["c3mur"]["fieldMap"]={
-		1:{fieldOwner:[],fieldPointer:[UL,DR]},
-		2:{fieldOwner:[],fieldPointer:[UR,RL]},
-		3:{fieldOwner:[],fieldPointer:[RR,DL]}
+		1:{id:"1",fieldOwner:[],fieldPointers:[UL,DR]},
+		2:{id:"2",fieldOwner:[],fieldPointers:[UR,RL]},
+		3:{id:"3",fieldOwner:[],fieldPointers:[RR,DL]}
 	}
 	FichaPropiedades["mur2"]["fieldMap"]={
-		1:{fieldOwner:[],fieldPointer:[UC,DC]}
+		1:{id:"1",fieldOwner:[],fieldPointers:[UC,DC]}
 	}
 	FichaPropiedades["m"]["fieldMap"]={
-		1:{fieldOwner:[],fieldPointer:[UC,RC,DC,LC]}
+		1:{id:"1",fieldOwner:[],fieldPointers:[UC,RC,DC,LC]}
 	}
 	FichaPropiedades["mc"]["fieldMap"]={
-		1:{fieldOwner:[],fieldPointer:[UC,RL,RR,DC,LC]}
+		1:{id:"1",fieldOwner:[],fieldPointers:[UC,RL,RR,DC,LC]}
 	}
 	FichaPropiedades["c4"]["fieldMap"]={
-		1:{fieldOwner:[],fieldPointer:[UL,LR]},
-		2:{fieldOwner:[],fieldPointer:[UR,RL]},
-		3:{fieldOwner:[],fieldPointer:[LL,DR]},
-		4:{fieldOwner:[],fieldPointer:[RR,DL]}
+		1:{id:"1",fieldOwner:[],fieldPointers:[UL,LR]},
+		2:{id:"2",fieldOwner:[],fieldPointers:[UR,RL]},
+		3:{id:"3",fieldOwner:[],fieldPointers:[LL,DR]},
+		4:{id:"4",fieldOwner:[],fieldPointers:[RR,DL]}
 	}
 	FichaPropiedades["cc"]["fieldMap"]={
-		1:{fieldOwner:[],fieldPointer:[UL,RR,DC,LC]},
-		2:{fieldOwner:[],fieldPointer:[UR,RL]}	
+		1:{id:"1",fieldOwner:[],fieldPointers:[UL,RR,DC,LC]},
+		2:{id:"2",fieldOwner:[],fieldPointers:[UR,RL]}	
 	}
 	FichaPropiedades["cr"]["fieldMap"]={
-		1:{fieldOwner:[],fieldPointer:[UC,RL,LR]},
-		2:{fieldOwner:[],fieldPointer:[RR,DC,LL]}
+		1:{id:"1",fieldOwner:[],fieldPointers:[UC,RL,LR]},
+		2:{id:"2",fieldOwner:[],fieldPointers:[RR,DC,LL]}
 	}
 	FichaPropiedades["c3"]["fieldMap"]={
-		1:{fieldOwner:[],fieldPointer:[UL,DR,LC]},
-		2:{fieldOwner:[],fieldPointer:[UR,RL]},
-		3:{fieldOwner:[],fieldPointer:[RR,DL]}
+		1:{id:"1",fieldOwner:[],fieldPointers:[UL,DR,LC]},
+		2:{id:"2",fieldOwner:[],fieldPointers:[UR,RL]},
+		3:{id:"3",fieldOwner:[],fieldPointers:[RR,DL]}
 	}
 	FichaPropiedades["ciucam"]["fieldMap"]={
-		1:{fieldOwner:[],fieldPointer:[RC]}
+		1:{id:"1",fieldOwner:[],fieldPointers:[RC]}
 	}
 	FichaPropiedades["chmur"]["fieldMap"]={
-		1:{fieldOwner:[],fieldPointer:[RL]},
-		2:{fieldOwner:[],fieldPointer:[RR]}
+		1:{id:"1",fieldOwner:[],fieldPointers:[RL]},
+		2:{id:"2",fieldOwner:[],fieldPointers:[RR]}
 	}
 	FichaPropiedades["mur2c"]["fieldMap"]={
-		1:{fieldOwner:[],fieldPointer:[RC,DC]}
+		1:{id:"1",fieldOwner:[],fieldPointers:[RC,DC]}
 	}
 	FichaPropiedades["mur1"]["fieldMap"]={
-		1:{fieldOwner:[],fieldPointer:[UC,RC,DC]}
+		1:{id:"1",fieldOwner:[],fieldPointers:[UC,RC,DC]}
 	}
 	FichaPropiedades["cmur"]["fieldMap"]={
-		1:{fieldOwner:[],fieldPointer:[UL,DR]},
-		2:{fieldOwner:[],fieldPointer:[UR,RC,DL]}
+		1:{id:"1",fieldOwner:[],fieldPointers:[UL,DR]},
+		2:{id:"2",fieldOwner:[],fieldPointers:[UR,RC,DL]}
 	}
 	FichaPropiedades["ccmur"]["fieldMap"]={
-		1:{fieldOwner:[],fieldPointer:[UL,RR,DC]},
-		2:{fieldOwner:[],fieldPointer:[UR,RL]}
+		1:{id:"1",fieldOwner:[],fieldPointers:[UL,RR,DC]},
+		2:{id:"2",fieldOwner:[],fieldPointers:[UR,RL]}
 	}
 	FichaPropiedades["ccmur3"]["fieldMap"]={
-		1:{fieldOwner:[],fieldPointer:[UC,RL,DR]},
-		2:{fieldOwner:[],fieldPointer:[RR,DL]}
+		1:{id:"1",fieldOwner:[],fieldPointers:[UC,RL,DR]},
+		2:{id:"2",fieldOwner:[],fieldPointers:[RR,DL]}
 	}
 	FichaPropiedades["ciucam2"]["fieldMap"]={
-		1:{fieldOwner:[],fieldPointer:[LC]},
-		2:{fieldOwner:[],fieldPointer:[RC]}
+		1:{id:"1",fieldOwner:[],fieldPointers:[LC]},
+		2:{id:"2",fieldOwner:[],fieldPointers:[RC]}
 	}
 	FichaPropiedades["ccmur2"]["fieldMap"]={
-		1:{fieldOwner:[],fieldPointer:[UL,RR]},
-		2:{fieldOwner:[],fieldPointer:[UR,RL]}
+		1:{id:"1",fieldOwner:[],fieldPointers:[UL,RR]},
+		2:{id:"2",fieldOwner:[],fieldPointers:[UR,RL]}
 	}
 	FichaPropiedades["chmure"]["fieldMap"]={
-		1:{fieldOwner:[],fieldPointer:[RL]},
-		2:{fieldOwner:[],fieldPointer:[RR]}
+		1:{id:"1",fieldOwner:[],fieldPointers:[RL]},
+		2:{id:"2",fieldOwner:[],fieldPointers:[RR]}
 	}
 	FichaPropiedades["ccmur2e"]["fieldMap"]={
-		1:{fieldOwner:[],fieldPointer:[UL,RR]},
-		2:{fieldOwner:[],fieldPointer:[UR,RL]}
+		1:{id:"1",fieldOwner:[],fieldPointers:[UL,RR]},
+		2:{id:"2",fieldOwner:[],fieldPointers:[UR,RL]}
 	}
 	FichaPropiedades["murcame"]["fieldMap"]={
-		1:{fieldOwner:[],fieldPointer:[UC,RC]}
+		1:{id:"1",fieldOwner:[],fieldPointers:[UC,RC]}
 	}
 	FichaPropiedades["ciucame"]["fieldMap"]={
-		1:{fieldOwner:[],fieldPointer:[RC]}
+		1:{id:"1",fieldOwner:[],fieldPointers:[RC]}
 	}
 	FichaPropiedades["ciucam2e"]["fieldMap"]={
-		1:{fieldOwner:[],fieldPointer:[LC]},
-		2:{fieldOwner:[],fieldPointer:[RC]}
+		1:{id:"1",fieldOwner:[],fieldPointers:[LC]},
+		2:{id:"2",fieldOwner:[],fieldPointers:[RC]}
 	}
 	
+	this.RecursiveChecker = function(board,xpos,ypos,from,owner,id){
+		var tile = board[xpos][ypos];
+		if (! tile.fielded){
+			//first time to be fielded
+			tile.fielded=[];
+			board[xpos][ypos].fielded=[];
+		}
+		if (if ! id in tile.fielded){
+			//we have not fielded this tile before
+			board[xpos][ypos].fielded.push(id);	//push our id, next time we wont field it again
+			if (from == ""){
+				//initial growing point tile
+				var fieldId = //tile.seguidor.what??
+				var owner = //tile.seguidor.what??
+			}else{
+				//find the field id
+				for(field in tile.fieldMap){
+					if (from in field.fieldPointers){
+						var fieldId = field.id;
+						break;
+					}
+				}
+			}
+			board[xpos][ypos].fieldMap[fieldId].fieldOwner.push(owner)		//push the owner
+			for (pointer in tile.fieldMap[fieldId].fieldPointers){			//each new direction in the same field
+				if (pointer.id != from){
+					// except the direction from where i came
+					switch(pointer.points[SIDE]){
+						case "U": RecursiveChecker(board,xpos,ypos-1,dir.points,owner);break;
+						case "R": RecursiveChecker(board,xpos+1,ypos,dir.points,owner);break;
+						case "D": RecursiveChecker(board,xpos,ypos+1,dir.points,owner);break;
+						case "L": RecursiveChecker(board,xpos-1,ypos,dir.points,owner);break;
+					}
+				}
+			}
+		}
+	};
+	
 	//Main loop
-	for (i in board.length){
-		for (j in board[i].length){
-			var tile = board[i][j];
-			//tile.seguidor??
-			if (tile.seguidor){
-				RecursiveChecker(tile));
+	this.Run = function(){
+		var i = 0;
+		for (i in board.length){
+			for (j in board[i].length){
+				var tile = board[i][j];
+				//tile.seguidor??
+				if (tile.seguidor){
+					RecursiveChecker(board,tile,"","",i));
+					i++;
+				}
 			}
 		}
 	}
