@@ -8,6 +8,7 @@ Meteor.subscribe("messages");
 Meteor.subscribe("partidas");
 Meteor.subscribe("DatosUsuarios");
 
+
 Meteor.startup(function(){
 	screenauto();
     $("#opciones").hide();
@@ -17,17 +18,12 @@ Meteor.startup(function(){
 	$(".canvas").hide();	//Esconde todos los canvas
 	$('.escenario').attr("disabled",true);
 // 	Meteor.setTimeout(function(){$(".user").click(ShowUserInfo)},500);		//Hacer click muestra estadisticas de usuario, otro click lo cierra.
+  //Meteor.setTimeout(function(){(".match").onmouseover(ShowPartidaInfo)},500);
 	$( ".startgame" ).click(function() {
 		$( "#opciones" ).fadeToggle( "slow", "linear" );
 	});
 	Session.setDefault('Current_Game_id',0);
 });
-
-// var ShowUserInfo = function(){
-// 	console.log('Over User');
-// 	return false;
-// }
-
 
 var screenauto= function(){
 	$("#containermain").css("width",document.documentElement.clientWidth.toString()+'px');

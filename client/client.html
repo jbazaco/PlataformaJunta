@@ -1,6 +1,12 @@
 <head>
     <title> Chat Alien </title>
 	<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0" />
+  <script type="text/javascript">
+	  function hacer_hover(nombre){
+      var ID = nombre.id;
+      Meteor.call('Mostrar_Partida',ID);
+ 	    }
+  </script>
 </head>
 
 
@@ -150,7 +156,7 @@
 <template name="gamesList">
 	{{#each gamesListIn}}
 		<div class='match' style="font-weight:bold;color:green">{{nombre}}
-			<div id={{nombre}} class='match_info' style="display: none;font-weight:normal;">
+			<div id={{nombre}} class='match_info' onmouseover="hacer_hover(this)" style="display: none;font-weight:normal;">
 				{{jugadores}} </br>
 				<a class='watch_match' href="">Obervar partida<a></br>
 			</div>

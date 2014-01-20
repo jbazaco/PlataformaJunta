@@ -218,7 +218,7 @@ Meteor.methods({
   // Metodo para comprobar el estado de dicho campo ficha
   UltimaFicha : function(id){
     var UltimaFicha = Partidas.findOne(id).ultimaficha;
-    console.log(datosPartida);
+    return UltimaFicha;
   },
 
   // Metodo para actualizar la ultima ficha que se ha utilizado
@@ -265,6 +265,12 @@ Meteor.methods({
 		return ("_"+id);
 	},
 	
+  Mostrar_Partida: function(id){
+   var Partida = Partidas.findOne({nombre: id});
+    console.log(Partida.estado); 
+  },
+
+
 	// Cambia el estado de una partida a "Empezada" dado su identificador.
 	EmpezarPartida:function(id){
 		Partidas.update(id,{$set:{estado:"Empezada"}});
