@@ -49,18 +49,24 @@ PuntuacionTotal = function(jugador,punt,juego){
 },
 
 Meteor.methods({
-	
 	// Cada vez que un usuario se logee y en sus datos no se encuentre
 	// el campo registrado, se inicializa y se pone a uno.
 	InicializaCliente: function(id){
 		var puntuacion = []
+		var historial = []
 		var objetoAlien = {"juego":"AlienInvasion","total":0,"record":0}
 		var objetoFruits = {"juego":"AngryFruits","total":0,"record":0}
 		var objetoCarca = {"juego":"Carcassonne","total":0,"record":0}
+		var histAlien = {"juego":"AlienInvasion","jugadas":0,"ganadas":0,"perdidas":0,"abandonadas":0}
+		var histFruits = {"juego":"AngryFruits","jugadas":0,"ganadas":0,"perdidas":0,"abandonadas":0}
+		var histCarca = {"juego":"Carcassonne","jugadas":0,"ganadas":0,"perdidas":0,"abandonadas":0}
 		puntuacion.push(objetoAlien)
 		puntuacion.push(objetoFruits)
-		puntuacion.push(objetoCarca)
-		Meteor.users.update(id,{$set:{puntuacion:puntuacion,equipos:[],torneos:[],penalizacion:0,estado:"Conectado",registrado:1}});
+		puntuacion.push(objetoCarca)	
+		historial.push(histAlien)
+		historial.push(histFruits)
+		historial.push(histCarca)
+		Meteor.users.update(id,{$set:{puntuacion:puntuacion,historial:historial,equipos:[],torneos:[],penalizacion:0,estado:"Conectado",registrado:1}});
 	},
 	
 	// Actualiza el estado de todos los usuarios registrados cada vez que hay
