@@ -760,7 +760,7 @@ CierraCampo = function(board){
 				var tile = board[i][j];
 				//tile.seguidor??
 				if (tile.seguidor){
-					RecursiveChecker(board,tile,"","",i));
+					RecursiveChecker(board,i,j,tile,"","",i));
 					i++;
 				}
 			}
