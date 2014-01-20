@@ -58,7 +58,7 @@ Prueba = function(A){
 
 //Girar Ficha
 GirarFicha = function(Ficha){
-	var aux = 0;
+	/*var aux = 0;
 	console.log("giro inicial de: " + Ficha.gir);
 	while (Ficha.gir != 0){
 		aux = Ficha.l;
@@ -68,8 +68,45 @@ GirarFicha = function(Ficha){
 		Ficha.u = aux;
 		console.log("giro intermedio de: " + Ficha.gir + " arriba: " + Ficha.u + "|| derecha: " + Ficha.r + " ||abajo: " + Ficha.d + " ||izquierda: " + Ficha.l);
 		Ficha.gir = Ficha.gir - 1;
+	}*/
+	if (Ficha.gir==0){
+		//console.log("inicio giro 0");
+		//console.log(Ficha.gir);
+		//console.log("fin giro 0");		
+		return Ficha;
 	}
-	return Ficha;
+	if (Ficha.gir==1){
+		//console.log("inicio giro 1");
+		var aux = Ficha.l;
+		Ficha.l = Ficha.d;
+		Ficha.d = Ficha.r;
+		Ficha.r = Ficha.u;
+		Ficha.u = aux;
+		//console.log(Ficha.gir);
+		//console.log("fin giro 1");
+		return Ficha;
+	}
+	if (Ficha.gir==2){
+		//console.log("inicio giro 2");
+		var aux = Ficha.l;
+		var aux2 = Ficha.d;
+		Ficha.l = Ficha.r;
+		Ficha.d = Ficha.u;
+		Ficha.r = aux;
+		Ficha.u = aux2;
+		//console.log(Ficha.gir);
+		//console.log("fin giro 2");
+		return Ficha;
+	}
+	if (Ficha.gir==3){
+		var aux = Ficha.r;
+		Ficha.l = Ficha.u;
+		Ficha.d = Ficha.l;
+		Ficha.r = Ficha.d;
+		Ficha.u = aux;
+		return Ficha;
+	}
+	//return Ficha;
 };
 	
 //Creamos tablero
