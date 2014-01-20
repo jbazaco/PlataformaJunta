@@ -108,6 +108,7 @@ CrearArJug = function(id){
 Deps.autorun(function(){
 	p = Partidas.find({estado:"Empezada"});
 	p.forEach(function(partida){
+		//j = partida.jugadas[partida.jugadas.length - 1]
 		CrearArJug(partida._id);	
 	});
 });
@@ -145,10 +146,12 @@ CrearTabJug = function(id,x,y,ficha,rota){
 
 //Autorun para mirar las jugadas nuevas que aparecen e incluirlas en el tablero
 Deps.autorun(function(){
-	p = Partidas.findOne().jugadas;
-	p_id = Partidas.findOne()._ia
-	j = p[(p.length) - 1];
-	CrearTabJug(p._id, j.x, j.y, j.sprite.nombre, j.rotacion);
+	p = Partidas.find({});
+	p.forEach(function(partida){
+		j = p.jugadas[(p.jugadas.length) - 1];
+		console.log(j);
+		//CrearTabJug(p._id, j.x, j.y, j.sprite.nombre, j.rotacion);
+	});
 });
 
 //Procedimiento que mira las posiciones del tablero para ver si se puede colocar la ficha
