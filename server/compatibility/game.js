@@ -184,9 +184,7 @@
 		var Ficha3 = Prueba(0);	//murcam
 		Ficha3.gir= 3;
 		Ficha3 = GirarFicha(Ficha3);
-		console.log("arriba: " + Ficha3.u + "|| derecha: " + Ficha3.r + " ||abajo: " + Ficha3.d + " ||izquierda: " + Ficha3.l);
-		
-		
+		console.log("arriba: " + Ficha3.u + "|| derecha: " + Ficha3.r + " ||abajo: " + Ficha3.d + " ||izquierda: " + Ficha3.l);		
 	};
 
 
