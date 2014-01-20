@@ -116,23 +116,54 @@
 		/////////TESTEAR CIERRACASTILLO/////////
 		
 		Tablero= CrearTablero();
-		var Ficha1= Prueba(2);	//mur2
+		
+		/*var Ficha1= Prueba(2);	//mur2
 		Tablero[1][1]= Ficha1;
 		
-		var Ficha2 = Prueba(17);	//ciucam2
+		var Ficha2 = Prueba(23);	//ciucam2e
 		Ficha2.gir= 1;
 		Ficha2 = GirarFicha(Ficha2);
-		Tablero[2][1] = Ficha2;
+		Tablero[3][1] = Ficha2;
 		
-		var Ficha3 = Prueba(23);	//ciucam2
+		var Ficha3 = Prueba(17);	//ciucam2
 		Ficha3.gir= 1;
 		Ficha3 = GirarFicha(Ficha3);
-		Tablero[3][1] = Ficha3;
+		Tablero[2][1] = Ficha3;
 		
 		var Ficha4 = Prueba(13);	//mur1 
 		Tablero[4][1]= Ficha4;
+		*/
+		var Ficha11 = Prueba(0);	//murcam
+		Ficha11.gir= 3;
+		Ficha11 = GirarFicha(Ficha11);
+		Tablero[1][1]= Ficha11;
 		
-		var puntoscastillo = CierraCastillo(Tablero, Ficha1, 2, 1, 1);
+		var Ficha21 = Prueba(10);	//ciucam
+		Ficha21.gir= 3;
+		Ficha21 = GirarFicha(Ficha21);
+		Tablero[2][1]= Ficha21;
+		
+		var Ficha31 = Prueba(12); //mur2c
+		Ficha31.gir= 3;
+		Ficha31 = GirarFicha(Ficha31);
+		Tablero[3][1]= Ficha31;
+		
+		var Ficha12 = Prueba(18);	//ccmur2 
+		Ficha12.gir= 2;
+		Ficha12 = GirarFicha(Ficha12);
+		Tablero[1][2]= Ficha12;
+		
+		var Ficha22 = Prueba(10);	//ciucam 
+		Ficha22.gir= 1;
+		Ficha22 = GirarFicha(Ficha22);
+		Tablero[2][2]= Ficha22;
+		
+		var Ficha32 = Prueba(0);	//murcam 
+		Ficha32.gir= 1;
+		Ficha32 = GirarFicha(Ficha32);
+		Tablero[3][2]= Ficha32;
+		
+		var puntoscastillo = CierraCastillo(Tablero, Ficha11, 2, 1, 1);
 		console.log("la puntuacion total es: " + puntoscastillo);
 	};
 
