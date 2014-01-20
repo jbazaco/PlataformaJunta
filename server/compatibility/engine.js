@@ -148,9 +148,15 @@ CrearTabJug = function(id,x,y,ficha,rota){
 Deps.autorun(function(){
 	p = Partidas.find({});
 	p.forEach(function(partida){
-		j = p.jugadas[(p.jugadas.length) - 1];
-		console.log(j);
-		//CrearTabJug(p._id, j.x, j.y, j.sprite.nombre, j.rotacion);
+		console.log("antes de definir j");
+		console.log("la longitud de jugadas es: " + partida.jugadas.length);
+		var longitud = partida.jugadas.length;
+		if (longitud != 0){
+			console.log("longitud jugadas no es cero");
+			j = partida.jugadas[longitud - 1];
+			console.log(j);
+			CrearTabJug(partida._id, j.x, j.y, j.sprite, j.rotacion);
+		}
 	});
 });
 
