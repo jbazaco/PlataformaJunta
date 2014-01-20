@@ -528,7 +528,7 @@ CierraCastillo = function(Tablero, Ficha, PosSeguidor, X, Y){
 CierraCampo = function(board){
 	
 	this.pointers={
-//Up
+		//Up
 		UL:{
 			id:"UL",
 			points:"DR"
@@ -541,7 +541,7 @@ CierraCampo = function(board){
 			id:"UR",
 			points:"DL"
 		},
-//Rigth
+		//Rigth
 		RL:{
 			id:"RL",
 			points:"LR"
@@ -554,7 +554,7 @@ CierraCampo = function(board){
 			id:"RR",
 			points:"LL"
 		},
-//Down
+		//Down
 		DL:{
 			id:"DL",
 			points:"UR"
@@ -567,8 +567,7 @@ CierraCampo = function(board){
 			id:"DR",
 			points:"UL"
 		},
-
-//Left
+		//Left
 		LL:{
 			id:"LL",
 			points:"RR"
@@ -583,27 +582,45 @@ CierraCampo = function(board){
 		}
 	}
 	
+	//Const, touch this and i'll kill u.
+	var UL = this.pointers["UL"];
+	var UC = this.pointers["UC"];
+	var UR = this.pointers["UR"];
+	var RL = this.pointers["RL"];
+	var RC = this.pointers["RC"];
+	var RR = this.pointers["RR"];
+	var DL = this.pointers["DL"];
+	var DC = this.pointers["DC"];
+	var DR = this.pointers["DR"];
+	var LL = this.pointers["LL"];
+	var LC = this.pointers["LC"];
+	var LR = this.pointers["LR"];
+	var SIDE = 0;
+	var SUBSIDE = 1;
+	
+	//Rotate the tile, 90deg clockwise
 	this._rotate=function(t){
 		switch(tile.id){
-			case "UL": return this.Pointers["RL"]; break;
-			case "UC": return this.Pointers["RC"]; break;
-			case "UR": return this.Pointers["RR"]; break;
-			case "RL": return this.Pointers["DL"]; break;
-			case "RC": return this.Pointers["DC"]; break;
-			case "RR": return this.Pointers["DR"]; break;
-			case "DL": return this.Pointers["LL"]; break;
-			case "DC": return this.Pointers["LC"]; break;
-			case "DR": return this.Pointers["LR"]; break;
-			case "LL": return this.Pointers["UL"]; break;
-			case "LC": return this.Pointers["UC"]; break;
-			case "LR": return this.Pointers["UR"]; break;
+			case "UL": return RL; break;
+			case "UC": return RC; break;
+			case "UR": return RR; break;
+			case "RL": return DL; break;
+			case "RC": return DC; break;
+			case "RR": return DR; break;
+			case "DL": return LL; break;
+			case "DC": return LC; break;
+			case "DR": return LR; break;
+			case "LL": return UL; break;
+			case "LC": return UC; break;
+			case "LR": return UR; break;
 		};
 	};
 	
+	//Rotate the tile n times.
 	this.Rotate = function(tile,times){
 		var tmp = tile;
 		for (var i = 0; i<times, i++){
-			tmp = this._rotate(tmp)
+			tmp = this._rotate(tmp);
 		};
 		return tmp;
 	}
@@ -611,6 +628,95 @@ CierraCampo = function(board){
 	this.RecursiveChecker = function(){
 		
 	};
+	
+	//New field properties to the tiles.
+	FichaPropiedades["murcam"]["fieldMap"]={
+		1:{fieldOwner:[],fieldPointer:[UC,RC]}
+	}
+	FichaPropiedades["c3mur"]["fieldMap"]={
+		1:{fieldOwner:[],fieldPointer:[UL,DR]},
+		2:{fieldOwner:[],fieldPointer:[UR,RL]},
+		3:{fieldOwner:[],fieldPointer:[RR,DL]}
+	}
+	FichaPropiedades["mur2"]["fieldMap"]={
+		1:{fieldOwner:[],fieldPointer:[UC,DC]}
+	}
+	FichaPropiedades["m"]["fieldMap"]={
+		1:{fieldOwner:[],fieldPointer:[UC,RC,DC,LC]}
+	}
+	FichaPropiedades["mc"]["fieldMap"]={
+		1:{fieldOwner:[],fieldPointer:[UC,RL,RR,DC,LC]}
+	}
+	FichaPropiedades["c4"]["fieldMap"]={
+		1:{fieldOwner:[],fieldPointer:[UL,LR]},
+		2:{fieldOwner:[],fieldPointer:[UR,RL]},
+		3:{fieldOwner:[],fieldPointer:[LL,DR]},
+		4:{fieldOwner:[],fieldPointer:[RR,DL]}
+	}
+	FichaPropiedades["cc"]["fieldMap"]={
+		1:{fieldOwner:[],fieldPointer:[UL,RR,DC,LC]},
+		2:{fieldOwner:[],fieldPointer:[UR,RL]}	
+	}
+	FichaPropiedades["cr"]["fieldMap"]={
+		1:{fieldOwner:[],fieldPointer:[UC,RL,LR]},
+		2:{fieldOwner:[],fieldPointer:[RR,DC,LL]}
+	}
+	FichaPropiedades["c3"]["fieldMap"]={
+		1:{fieldOwner:[],fieldPointer:[UL,DR,LC]},
+		2:{fieldOwner:[],fieldPointer:[UR,RL]},
+		3:{fieldOwner:[],fieldPointer:[RR,DL]}
+	}
+	FichaPropiedades["ciucam"]["fieldMap"]={
+		1:{fieldOwner:[],fieldPointer:[RC]}
+	}
+	FichaPropiedades["chmur"]["fieldMap"]={
+		1:{fieldOwner:[],fieldPointer:[RL]},
+		2:{fieldOwner:[],fieldPointer:[RR]}
+	}
+	FichaPropiedades["mur2c"]["fieldMap"]={
+		1:{fieldOwner:[],fieldPointer:[RC,DC]}
+	}
+	FichaPropiedades["mur1"]["fieldMap"]={
+		1:{fieldOwner:[],fieldPointer:[UC,RC,DC]}
+	}
+	FichaPropiedades["cmur"]["fieldMap"]={
+		1:{fieldOwner:[],fieldPointer:[UL,DR]},
+		2:{fieldOwner:[],fieldPointer:[UR,RC,DL]}
+	}
+	FichaPropiedades["ccmur"]["fieldMap"]={
+		1:{fieldOwner:[],fieldPointer:[UL,RR,DC]},
+		2:{fieldOwner:[],fieldPointer:[UR,RL]}
+	}
+	FichaPropiedades["ccmur3"]["fieldMap"]={
+		1:{fieldOwner:[],fieldPointer:[UC,RL,DR]},
+		2:{fieldOwner:[],fieldPointer:[RR,DL]}
+	}
+	FichaPropiedades["ciucam2"]["fieldMap"]={
+		1:{fieldOwner:[],fieldPointer:[LC]},
+		2:{fieldOwner:[],fieldPointer:[RC]}
+	}
+	FichaPropiedades["ccmur2"]["fieldMap"]={
+		1:{fieldOwner:[],fieldPointer:[UL,RR]},
+		2:{fieldOwner:[],fieldPointer:[UR,RL]}
+	}
+	FichaPropiedades["chmure"]["fieldMap"]={
+		1:{fieldOwner:[],fieldPointer:[RL]},
+		2:{fieldOwner:[],fieldPointer:[RR]}
+	}
+	FichaPropiedades["ccmur2e"]["fieldMap"]={
+		1:{fieldOwner:[],fieldPointer:[UL,RR]},
+		2:{fieldOwner:[],fieldPointer:[UR,RL]}
+	}
+	FichaPropiedades["murcame"]["fieldMap"]={
+		1:{fieldOwner:[],fieldPointer:[UC,RC]}
+	}
+	FichaPropiedades["ciucame"]["fieldMap"]={
+		1:{fieldOwner:[],fieldPointer:[RC]}
+	}
+	FichaPropiedades["ciucam2e"]["fieldMap"]={
+		1:{fieldOwner:[],fieldPointer:[LC]},
+		2:{fieldOwner:[],fieldPointer:[RC]}
+	}
 	
 	//Main loop
 	for (i in board.length){
