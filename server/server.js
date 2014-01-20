@@ -83,18 +83,24 @@ AgregarPenalizacion = function(nombre,penal){
 };
 
 Meteor.methods({
-	
 	// Cada vez que un usuario se logee y en sus datos no se encuentre
 	// el campo registrado, se inicializa y se pone a uno.
 	InicializaCliente: function(id){
 		var puntuacion = []
+		var historial = []
 		var objetoAlien = {"juego":"AlienInvasion","total":0,"record":0}
 		var objetoFruits = {"juego":"AngryFruits","total":0,"record":0}
 		var objetoCarca = {"juego":"Carcassonne","total":0,"record":0}
+		var histAlien = {"juego":"AlienInvasion","jugadas":0,"ganadas":0,"perdidas":0,"abandonadas":0}
+		var histFruits = {"juego":"AngryFruits","jugadas":0,"ganadas":0,"perdidas":0,"abandonadas":0}
+		var histCarca = {"juego":"Carcassonne","jugadas":0,"ganadas":0,"perdidas":0,"abandonadas":0}
 		puntuacion.push(objetoAlien)
 		puntuacion.push(objetoFruits)
-		puntuacion.push(objetoCarca)
-		Meteor.users.update(id,{$set:{puntuacion:puntuacion,equipos:[],torneos:[],penalizacion:0,estado:"Conectado",registrado:1}});
+		puntuacion.push(objetoCarca)	
+		historial.push(histAlien)
+		historial.push(histFruits)
+		historial.push(histCarca)
+		Meteor.users.update(id,{$set:{puntuacion:puntuacion,historial:historial,equipos:[],torneos:[],penalizacion:0,estado:"Conectado",registrado:1}});
 	},
 	
 	EliminarJugador : function(jugador){
@@ -235,7 +241,31 @@ Meteor.methods({
 		Partidas.update(id,{$set:{puntuacion:p}});
 	},
 
-
+	//Se llama a este metodo al terminar la partida para actualizar el historial de cada usuario para cada juego.
+	//Los campos jugadas, ganadas, perdidas,abandonadas debe ser un entero 1 o 0.
+	ActualizarHistorial: function(jugador,juego,jugadas,ganadas,perdidas,abandonadas){
+		var user = Meteor.users.findOne({username:jugador})
+		for(var i in user.historial){
+			if(user.historial[i].juego === juego){
+				var histJugadas = user.historial[i].jugadas
+				var histGanadas = user.historial[i].ganadas
+				var histPerdidas = user.historial[i].perdidas
+				var histAbandonadas = user.historial[i].abandonadas
+				histJugadas+=jugadas; histGanadas+=ganadas; histPerdidas+=perdidas; histAbandonadas+=abandonadas;
+				switch(i){
+					case "0": Meteor.users.update({username:jugador},{$set:{"historial.0.jugadas":histJugadas,
+							"historial.0.ganadas":histGanadas,"historial.0.perdidas":histPerdidas,
+							"historial.0.abandonadas":histAbandonadas}}); break;
+					case "1": Meteor.users.update({username:jugador},{$set:{"historial.1.jugadas":histJugadas,
+							"historial.1.ganadas":histGanadas,"historial.1.perdidas":histPerdidas,
+							"historial.1.abandonadas":histAbandonadas}}); break;
+					case "2": Meteor.users.update({username:jugador},{$set:{"historial.2.jugadas":histJugadas,
+							"historial.2.ganadas":histGanadas,"historial.2.perdidas":histPerdidas,
+							"historial.2.abandonadas":histAbandonadas}}); break;
+				}
+			}
+		}
+	},
 	// Incluye jugadores en el array de jugadores dado el identificador primario de
 	// la partida. Solo los incluye si no están ya incluidos. Aun no tiene un
 	// máximo de jugadores.
