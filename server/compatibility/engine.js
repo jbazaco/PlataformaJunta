@@ -145,15 +145,15 @@ colocarficha = function(Id, Ficha, X, Y){
 
 //funcion cierra claustro
 
-alert("antes del cierra claustro");
+console.log("antes del cierra claustro");
 CierraClaustro = function(Tablero,X,Y){
 	var cerrado = false;
 	var contador = 0;
 	var puntos = 1;
 
-	alert("-----");
-	alert("el valor de x es: " + X); 
-	alert("el valor de y es: " + Y);
+	console.log("-----");
+	console.log("el valor de x es: " + X); 
+	console.log("el valor de y es: " + Y);
 
 	if(Tablero[X-1][(Y-1)] != 0){
 		contador++;
@@ -188,7 +188,7 @@ CierraClaustro = function(Tablero,X,Y){
 		puntos++;
 	}
 	
-	//alert("el valor del contador es: " + contador);
+	//console.log("el valor del contador es: " + contador);
 	if (contador == 8){
 		return [true,puntos]
 	}else{
@@ -252,14 +252,14 @@ CuentaPCamino = function(Tablero, Ficha, Num, X, Y){
 	Recursiva = function(Tablero, prohibido, flag, X, Y){
 		if ((Tablero[X][Y] != 0) && (flag != 2)){ 		// Caso en el que tenemos ficha en esa dirección y todavía no hemos finalizado camino
 			puntos = puntos + 1; 						// Si hay ficha, tiene que ser camino y por tanto sumamos puntos
-			//alert("Puntos que tengo: " + puntos);
-			alert("X: " + X + "Y: " + Y);
+			//console.log("Puntos que tengo: " + puntos);
+			console.log("X: " + X + "Y: " + Y);
 			if (fincamino.indexOf(Tablero[X][Y].nombre) != -1){ 		// Si la ficha está en fincamino ya hemos finalizado el camino
-				//alert("Recursiva Fincamino, Ficha: " + Tablero[X][Y].nombre);
+				//console.log("Recursiva Fincamino, Ficha: " + Tablero[X][Y].nombre);
 				flag = flag + 1;
 			}
 			else if(contcamino.indexOf(Tablero[X][Y].nombre) != -1){ // Si la ficha está en contcamino seguimos haciendo recursiva
-				alert("Recursiva Contcamino, Ficha: " + Tablero[X][Y].nombre);
+				console.log("Recursiva Contcamino, Ficha: " + Tablero[X][Y].nombre);
 				if ((Tablero[X][Y].u == 'camino') && (prohibido != 'arriba') && DarDirec(X,Y)){
 					Y1 = Y - 1;	
 					MeteDirec(X,Y1);				
@@ -286,28 +286,28 @@ CuentaPCamino = function(Tablero, Ficha, Num, X, Y){
 
 	//Funcion para las fichas iniciales continuas(Con dos posibles direcciones).
 	Continua = function(Tablero, Ficha, X, Y){ 
-		alert("Entra en Continua");		
+		console.log("Entra en Continua");		
 		if (Ficha.u == 'camino'){
 			Y1 = Y - 1;
-			//alert("Cont Ficha arriba: " + Tablero[X][Y1].nombre);
+			//console.log("Cont Ficha arriba: " + Tablero[X][Y1].nombre);
 			MeteDirec(X,Y1);
 			Recursiva(Tablero, "abajo", flag, X, Y1);	
 		}
 		if (Ficha.r == 'camino') {			
 			X1 = X + 1;
-			//alert("Cont Ficha derecha: " + Tablero[X1][Y].nombre);
+			//console.log("Cont Ficha derecha: " + Tablero[X1][Y].nombre);
 			MeteDirec(X1,Y);
 			Recursiva(Tablero, "izquierda", flag, X1, Y);
 		}
 		if (Ficha.d == 'camino') {			
 			Y2 = Y + 1;
-			//alert("Cont Ficha abajo: " + Tablero[X][Y2].nombre);
+			//console.log("Cont Ficha abajo: " + Tablero[X][Y2].nombre);
 			MeteDirec(X,Y2);
 			Recursiva(Tablero, "arriba", flag, X, Y2);
 		}
 		if (Ficha.l == 'camino'){			
 			X2 = X - 1;
-			//alert("Cont Ficha izquierda: " + Tablero[X2][Y].nombre);
+			//console.log("Cont Ficha izquierda: " + Tablero[X2][Y].nombre);
 			MeteDirec(X2,Y);
 			Recursiva(Tablero, "derecha", flag, X2, Y);
 		}
@@ -323,7 +323,7 @@ CuentaPCamino = function(Tablero, Ficha, Num, X, Y){
 			MeteDirec(X,Y);
 		}
 		else if (contcamino.indexOf(Ficha.nombre) != -1){ 	//Aquí le diremos para donde tiene que tirar cada camino
-			//alert("Num = 1 contcamino Ficha: " + Ficha.nombre);						
+			//console.log("Num = 1 contcamino Ficha: " + Ficha.nombre);						
 			Continua(Tablero, Ficha, X, Y);
 		}		
 	}	
@@ -361,10 +361,10 @@ CuentaPCamino = function(Tablero, Ficha, Num, X, Y){
 		}	
 	}
 	else
-		alert("El Num es incorrecto");
+		console.log("El Num es incorrecto");
 	/*for (i = 0; i <= puntos; i++){
-		alert("ArrayPosX: " + arr[i].x);
-		alert("ArrayPosY: " + arr[i].y);
+		console.log("ArrayPosX: " + arr[i].x);
+		console.log("ArrayPosY: " + arr[i].y);
 	}*/
 	return puntos;
 };
@@ -410,7 +410,7 @@ CierraCastillo = function(Tablero, Ficha, PosSeguidor, X, Y){
 	];
 		
 	resultado = TipoCastillo(Ficha.nombre);
-	alert("el resultado del tipo de castillo es: " + resultado);
+	console.log("el resultado del tipo de castillo es: " + resultado);
 	//return resultado;
 	MeteDirec = function(X, Y){         // Diccionario de las posiciones que ha tenido ese camino, para comprobar si hemos retornado al inicio.
     	var obj = {
@@ -522,6 +522,105 @@ CierraCastillo = function(Tablero, Ficha, PosSeguidor, X, Y){
 	else{
 		MeteDirec(X,Y);
 		RecursivaCastillo(Ficha,"nada", X, Y);
+	}
+};
+
+CierraCampo = function(board){
+	
+	this.pointers={
+//Up
+		UL:{
+			id:"UL",
+			points:"DR"
+		},
+		UC:{
+			id:"UC",
+			points:"DC"
+		},
+		UR:{
+			id:"UR",
+			points:"DL"
+		},
+//Rigth
+		RL:{
+			id:"RL",
+			points:"LR"
+		},
+		RC:{
+			id:"RC",
+			points:"LC"
+		},
+		RR:{
+			id:"RR",
+			points:"LL"
+		},
+//Down
+		DL:{
+			id:"DL",
+			points:"UR"
+		},
+		DC:{
+			id:"DC",
+			points:"UC"
+		},
+		DR:{
+			id:"DR",
+			points:"UL"
+		},
+
+//Left
+		LL:{
+			id:"LL",
+			points:"RR"
+		},
+		LC:{
+			id:"LC",
+			points:"RC"
+		},
+		LR:{
+			id:"LR",
+			points:"RL"
+		}
+	}
+	
+	this._rotate=function(t){
+		switch(tile.id){
+			case "UL": return this.Pointers["RL"]; break;
+			case "UC": return this.Pointers["RC"]; break;
+			case "UR": return this.Pointers["RR"]; break;
+			case "RL": return this.Pointers["DL"]; break;
+			case "RC": return this.Pointers["DC"]; break;
+			case "RR": return this.Pointers["DR"]; break;
+			case "DL": return this.Pointers["LL"]; break;
+			case "DC": return this.Pointers["LC"]; break;
+			case "DR": return this.Pointers["LR"]; break;
+			case "LL": return this.Pointers["UL"]; break;
+			case "LC": return this.Pointers["UC"]; break;
+			case "LR": return this.Pointers["UR"]; break;
+		};
+	};
+	
+	this.Rotate = function(tile,times){
+		var tmp = tile;
+		for (var i = 0; i<times, i++){
+			tmp = this._rotate(tmp)
+		};
+		return tmp;
+	}
+	
+	this.RecursiveChecker = function(){
+		
+	};
+	
+	//Main loop
+	for (i in board.length){
+		for (j in board[i].length){
+			var tile = board[i][j];
+			//tile.seguidor??
+			if (tile.seguidor){
+				RecursiveChecker(tile));
+			}
+		}
 	}
 };
 
