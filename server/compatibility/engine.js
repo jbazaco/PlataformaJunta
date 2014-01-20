@@ -59,12 +59,14 @@ Prueba = function(A){
 //Girar Ficha
 GirarFicha = function(Ficha){
 	var aux = 0;
+	console.log("giro inicial de: " + Ficha.gir);
 	while (Ficha.gir != 0){
 		aux = Ficha.l;
 		Ficha.l = Ficha.d;
 		Ficha.d = Ficha.r;
 		Ficha.r = Ficha.u;
 		Ficha.u = aux;
+		console.log("giro intermedio de: " + Ficha.gir + " arriba: " + Ficha.u + "|| derecha: " + Ficha.r + " ||abajo: " + Ficha.d + " ||izquierda: " + Ficha.l);
 		Ficha.gir = Ficha.gir - 1;
 	}
 	return Ficha;
@@ -423,7 +425,6 @@ CierraCastillo = function(Tablero, Ficha, PosSeguidor, X, Y){
 
 	//Funcion que nos devuelve si en esa posicion ya hemos estado
 	DarDirec = function(X, Y){
-		console.log(X+"    "+ Y);
 		for (i = 0; i <= puntos; i++){
 			if (arr[i].x == X && arr[i].y == Y)
 				return false;
@@ -457,15 +458,14 @@ CierraCastillo = function(Tablero, Ficha, PosSeguidor, X, Y){
 			puntos= DarPuntos(puntos, Ficha);
 			if (fichasLadoCastilloConexos.indexOf(Ficha.nombre)!=-1){	//si la ficha esta en este array
 				console.log("la ficha "+ Ficha.nombre + " está en el array conexo.");
-				
+				console.log("arriba: " + Ficha.u + "|| derecha: " + Ficha.r + " ||abajo: " + Ficha.d + " ||izquierda: " + Ficha.l);
+				console.log("la direccion prohibida es: " + Prohibido);
+				console.log("que devuelde DarDirec: " + DarDirec(X,Y));
 				if ((Ficha.u == "castillo") && (Prohibido != "arriba") && DarDirec(X,Y)){
 					A=Y-1;
 					MeteDirec(X,Y);
 					RecursivaCastillo(Tablero[X][A],"abajo",X,A);
 				}	
-				console.log(Ficha.r);
-				console.log(Prohibido);
-				console.log(DarDirec(X,Y));
 				if ((Ficha.r=="castillo") && (Prohibido!= "derecha") && DarDirec(X,Y)){
 					console.log("entra");
 					A=X+1;
