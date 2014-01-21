@@ -2,10 +2,15 @@
     <title> Chat Alien </title>
 	<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0" />
   <script type="text/javascript">
+    function m_jugador(objeto){
+      console.log(objeto.id);
+      Meteor.call('Mostrar_Jugador', objeto.id);
+    }
 	  function hacer_hover(nombre){
-      var ID = nombre.id;
-      Meteor.call('Mostrar_Partida',ID);
- 	    }
+      var ID = nombre.id;  
+      var Estado = Meteor.call('Mostrar_Partida',ID);
+      alert(Estado);
+ 	    };
   </script>
 </head>
 
@@ -210,9 +215,9 @@
 <template name="ListaEstados">
 	{{#each ListaEstados}}
 		{{#if ColorEstado}}
-			<span class="NombreUsuario">{{username}} </span> : <span style="color:green"> {{estado}} </span><br />
+			<span id="{{username}}" onmouseover="m_jugador(this)" class="NombreUsuario">{{username}} </span> : <span style="color:green"> {{estado}} </span><br />
 		{{else}}
-			<span class="NombreUsuario">{{username}} </span> : <span> {{estado}} </span><br />
+			<span id="{{username}}" onmouseover="m_jugador(this)" class="NombreUsuario">{{username}} </span> : <span> {{estado}} </span><br />
 		{{/if}}
 	{{/each}}
 </template>

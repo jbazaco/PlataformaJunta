@@ -267,7 +267,15 @@ Meteor.methods({
 	
   Mostrar_Partida: function(id){
    var Partida = Partidas.findOne({nombre: id});
-    console.log(Partida.estado); 
+   console.log(Partida.estado);
+   return (Partida.estado); 
+  },
+
+  Mostrar_Jugador: function(id){
+  var Jugador = Meteor.users.findOne({username: id});
+  console.log(Jugador.username);
+  console.log(Jugador.estado);
+  console.log(Jugador.historial);
   },
 
 
