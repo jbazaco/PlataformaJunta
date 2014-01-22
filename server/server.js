@@ -167,12 +167,11 @@ Meteor.methods({
 	// de jugadores
 	VerTurno : function(id){
 		console.log("VerTurno");
-	// 	if(jugadorpermitido)?
 		var partida = Partidas.findOne(id).jugadas;
-		if (partida.jugadas.length()){
-			return partida.jugadores[(partida.jugadores.indexOf(partida.jugadas[jugadas.length-1].jugador)+1)%partida.jugadores.length];
+		if (partida.jugadas.length){
+			return partida.jugadores[partida.jugadas.length%partida.jugadores.length];
 		}else{
-			return(partida.jugadores[Math.floor(Math.random()*partida.jugadores.length)]);
+			return partida.jugadores[0];
 		}
 	},
 
