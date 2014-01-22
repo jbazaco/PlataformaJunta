@@ -25,7 +25,6 @@ variable seguid = posicion del seguidor dentro de la ficha entre las 12 posibles
 var CASTILLO = 'castillo';
 var CAMINO = 'camino';
 var CAMPO = 'campo';
-var z = 0;
 
 var FichaPropiedades = {
 /*0*/		murcam:  {nombre:"murcam", u:CAMPO,    r:CAMPO,    d:CASTILLO, l:CASTILLO, gir: 0},        //media ficha muralla media ficha campo
@@ -131,25 +130,25 @@ CrearTablero = function(){
 // Lista de Tableros es una funcion que recoge el identificador de una partida y un Tablero que se
 // le pase y los mete en un array.
 
-var Tableros = new Array(50);
+var Tableros = [];
 
-var ParJugadas = new Array(80);
+var ParJugadas = [];
 
 
 CrearPart = function(id,longitud){
-	console.log("entro en CrerPart"); 
+	console.log("CrearPart(1)"); 
 	encontrado = false;
 
     for(i=0; i<= 80;i++){
-		console.log("dentro del for");
-		console.log("el id en el array es: " + ParJugadas[i].id);
+		console.log("CrearPart(2):dentro del for");
+		console.log("CrearPart(3):el id en el array es: " + ParJugadas[i].id);
 		if(ParJugadas[i].id == id){
 			encontrado = true;
 			break; 
 		}
 	}
 	if(encontrado){
-		console.log("en el array ParJugadas el id coincide con el que me pasan");
+		console.log("CrearPart(4): en el array ParJugadas el id coincide con el que me pasan");
 		if (ParJugadas[i].longitud < longitud){
 			ParJugadas[i].longitud++;
 			return true;
@@ -169,22 +168,21 @@ CrearArJug = function(id){
 		jugada: 0
 	}
 
-	ParJugadas[z]=elementos;
+	ParJugadas.push(elementos);;
 
 	console.log("--------");
-	console.log(ParJugadas[0]);
+	console.log("CrearArJug: " + ParJugadas[0].id);
 	console.log("--------");
 
+	var partida = {
+		id: id,
+		tablero: Tablero
+	}
+	Tableros.push(partida);
 
-	ListaTableros = function(id, Tablero){
-		var partida = {
-			id: id,
-			tablero: Tablero
-		}
-		Tableros.push(partida);
-	};
-	z++;
-};
+	console.log("CrearArJug(1): el id en el tablero es --> " + Tableros[0].id);  
+}
+
 
 //Este Deps lo usaremos para extraer la informacion de la base de datos de como esta actualmente
 //el tablero correspondiente a cada identificador
@@ -245,12 +243,14 @@ colocarficha = function(id, Ficha, X, Y){
 		//Primero extremos el tablero mediante el Id
 
 		var encontrado = false;
+		var colocado = true;
+
 		console.log("ColocarFicha(1)");
 		console.log("ColocarFicha(2): el id es --> " + id);
 		
 
 		for(i=0; i<= 50;i++){
-			console.log("ColocarFicha(3): el id en el tablero es --> " + Tableros[i].id);
+			console.log("ColocarFicha(3): el id en el tablero es --> " + Tableros[i].id); 
 			if(Tableros[i].id == id){
 				encontrado = true;
 				break;
@@ -260,7 +260,7 @@ colocarficha = function(id, Ficha, X, Y){
 			Tablero = Tableros[i].tablero;
 		}
 
-		var colocado = true;
+		console.log("ColocarFicha(4)");
 		if (Tablero[X][Y] == 0){
 			if ((X != 0 && Y != 0) || (X != 72 && Y != 0) || (Y != 0)){ //En cada una comprobamos las esquinas y los bordes(L-U,U,R-A)
 				if (Tablero[X][(Y-1)] != 0){//Arriba
