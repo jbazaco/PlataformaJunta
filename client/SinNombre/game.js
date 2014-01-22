@@ -825,21 +825,10 @@ Seguidor = function(sprite, numjugador, contador, nick) {
 	this.mover = function(x,y) {
 		if (!this.fijado) {
 			this.moviendo = true;
-			//Falta funcion para saber de quien es el turno
-					//Hacerlo con el nick === Meteor.user().username
-<<<<<<< HEAD
-					//TODO cuando podamos jugar varios y se pueda probar comparando con
-					//nick de arriba en esto de turno=mijugador tb en soltar
 			var nickuser=Meteor.user().username;
-			console.log("nickuser: " + nickuser);
-			console.log("nick: " + this.nick);
 			if(nickuser==this.nick  && FichaActual.seHaMovido() 
-								&& (!FichaActual.seguidor || FichaActual.seguidor==this)){
-=======
-					//TODO cuando podamos jugar varios y se pueda probar
-			if(turno==miJugador && this.sprite=="s"+miJugador && FichaActual.seHaMovido() 
 								&& (!FichaActual.seguidor || FichaActual.seguidor==this) && esMiTurno){
->>>>>>> 5c72fa85b5c65c3bfeb5ccf7bb405249e8979945
+
 					this.x = x - this.w/2;
 					this.y = y - this.h/2;
 					FichaActual.pintarRejilla();
@@ -853,11 +842,8 @@ Seguidor = function(sprite, numjugador, contador, nick) {
 				this.resetear();
 				FichaActual.seguidor=null;
 			}else{
-				//Falta funcion para saber de quien es el turno
-						//Hacerlo con el nick === Meteor.user().username
-						//TODO cuando podamos jugar varios y se pueda probar
 				var nickuser=Meteor.user().username;
-				if(nickuser==this.nick  && FichaActual.seHaMovido() && !FichaActual.seguidor){
+				if(nickuser==this.nick && esMiTurno && FichaActual.seHaMovido() && !FichaActual.seguidor){
 					this.cuadrado = this.getCuadrado(x, y, FichaActual);
 					this.recalcular(FichaActual);
 					if (this.zona==="no"){
