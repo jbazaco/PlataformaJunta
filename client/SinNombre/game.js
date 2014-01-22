@@ -500,7 +500,6 @@ FichaActual = new function() {
 	this.rotacion = 0;
 	this.cuadrado = 0;
 	var colocada=false;
-	this.verturno=true;
 	//Devuelve true si se gira la ficha
 	this.pulsado = function(x,y) {
 		
@@ -831,7 +830,7 @@ Seguidor = function(sprite, numjugador, contador, nick) {
 					//Hacerlo con el nick === Meteor.user().username
 					//TODO cuando podamos jugar varios y se pueda probar
 			if(turno==miJugador && this.sprite=="s"+miJugador && FichaActual.seHaMovido() 
-								&& (!FichaActual.seguidor || FichaActual.seguidor==this)){
+								&& (!FichaActual.seguidor || FichaActual.seguidor==this) && esMiTurno){
 					this.x = x - this.w/2;
 					this.y = y - this.h/2;
 					FichaActual.pintarRejilla();
