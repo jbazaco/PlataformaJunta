@@ -46,12 +46,38 @@ ArFi = _.toArray(FichaPropiedades); //Convertimos lo que tenemos en un Array par
 Aleatorio = function(){
 	console.log("Entra en Aleatorio");
 	var a = Math.floor(Math.random()*24);
-	return ArFi[a];
+	var Ficha = { 
+		nombre: "nada", 
+		u: CAMINO, 
+		r: CAMINO, 
+		d: CAMINO, 
+		l: CAMINO, 
+		gir:0
+	};
+	Ficha.nombre = ArFi[a].nombre;
+	Ficha.u = ArFi[a].u;
+	Ficha.r = ArFi[a].r;
+	Ficha.d = ArFi[a].d;
+	Ficha.l = ArFi[a].l;
+	return Ficha;
 };
 
 //Funcion de prueba para comprobar fichas
 Prueba = function(A){
-	return ArFi[A];
+	var Ficha = { 
+		nombre: "nada", 
+		u: CAMINO, 
+		r: CAMINO, 
+		d: CAMINO, 
+		l: CAMINO, 
+		gir:0
+	};
+	Ficha.nombre = ArFi[A].nombre;
+	Ficha.u = ArFi[A].u;
+	Ficha.r = ArFi[A].r;
+	Ficha.d = ArFi[A].d;
+	Ficha.l = ArFi[A].l;
+	return Ficha;
 };
 
 //Girar Ficha
@@ -304,8 +330,7 @@ CuentaPCamino = function(Tablero, Ficha, Num, X, Y){
 		console.log("Entra en Recursiva");
 		if ((Tablero[X][Y] != 0) && (flag != 2)){ 		// Caso en el que tenemos ficha en esa dirección y todavía no hemos finalizado camino
 			puntos = puntos + 1; 						// Si hay ficha, tiene que ser camino y por tanto sumamos puntos
-			console.log("Puntos que tengo: " + puntos);
-			console.log("X: " + X + "Y: " + Y);
+			console.log("X: " + X + "Y: " + Y + " Puntos: " + puntos);
 			if (fincamino.indexOf(Tablero[X][Y].nombre) != -1){ 		// Si la ficha está en fincamino ya hemos finalizado el camino
 				console.log("Recursiva Fincamino, Ficha: " + Tablero[X][Y].nombre);
 				flag = flag + 1;
