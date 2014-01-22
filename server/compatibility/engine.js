@@ -25,6 +25,7 @@ variable seguid = posicion del seguidor dentro de la ficha entre las 12 posibles
 var CASTILLO = 'castillo';
 var CAMINO = 'camino';
 var CAMPO = 'campo';
+var z = 0;
 
 var FichaPropiedades = {
 /*0*/		murcam:  {nombre:"murcam", u:CAMPO,    r:CAMPO,    d:CASTILLO, l:CASTILLO, gir: 0},        //media ficha muralla media ficha campo
@@ -105,8 +106,49 @@ CrearTablero = function(){
 
 var Tableros = new Array(50);
 
+var ParJugadas = new Array(80);
+
+
+CrearPart = function(id,longitud){
+	console.log("entro en CrerPart"); 
+	encontrado = false;
+
+    for(i=0; i<= 80;i++){
+		console.log("dentro del for");
+		console.log("el id en el array es: " + ParJugadas[i].id);
+		if(ParJugadas[i].id == id){
+			encontrado = true;
+			break; 
+		}
+	}
+	if(encontrado){
+		console.log("en el array ParJugadas el id coincide con el que me pasan");
+		if (ParJugadas[i].longitud < longitud){
+			ParJugadas[i].longitud++;
+			return true;
+		}else{
+			return false;
+		}
+	}
+
+}
+
+
 CrearArJug = function(id){
 	Tablero = CrearTablero();
+
+	var elementos = {
+		id: id,
+		jugada: 0
+	}
+
+	ParJugadas[z]=elementos;
+
+	console.log("--------");
+	console.log(ParJugadas[0]);
+	console.log("--------");
+
+
 	ListaTableros = function(id, Tablero){
 		var partida = {
 			id: id,
@@ -114,12 +156,14 @@ CrearArJug = function(id){
 		}
 		Tableros.push(partida);
 	};
+	z++;
 };
 
 //Este Deps lo usaremos para extraer la informacion de la base de datos de como esta actualmente
 //el tablero correspondiente a cada identificador
 Deps.autorun(function(){
 	p = Partidas.find({estado:"Empezada"});
+	console.log("se ha modidifcado el estado de la partida a empezada");
 	p.forEach(function(partida){
 		//j = partida.jugadas[partida.jugadas.length - 1]
 		CrearArJug(partida._id);	
@@ -137,18 +181,10 @@ CrearTabJug = function(id,x,y,ficha,rota){
 			break;
 		}
 	}
-	if (rota == 0){
-		ficha.gir = 0;
-	}
-	if (rota == 90){
-		ficha.gir = 1;
-	}
-	if (rota == 180){
-		ficha.gir = 2;
-	}
-	if (rota == 270){
-		ficha.gir = 3;
-	}
+	if (rota == 0){ficha.gir = 0}
+	if (rota == 90){ficha.gir = 1}
+	if (rota == 180){ficha.gir = 2}
+	if (rota == 270){ficha.gir = 3}
 
 	if (encontrado){
 		Tableros[i].tablero[x][y] = ficha;
@@ -161,13 +197,16 @@ CrearTabJug = function(id,x,y,ficha,rota){
 Deps.autorun(function(){
 	p = Partidas.find({});
 	p.forEach(function(partida){
-		console.log("antes de definir j");
-		console.log("la longitud de jugadas es: " + partida.jugadas.length);
+		//console.log("antes de definir j");
+		//console.log("la longitud de jugadas es: " + partida.jugadas.length);
 		var longitud = partida.jugadas.length;
-		if (longitud != 0){
-			console.log("longitud jugadas no es cero");
+		console.log("la longitud del array es: " + longitud);
+		console.log("el id de la partida es: " + partida._id);
+		var valor = CrearPart(partida._id,longitud);
+		if (valor == true){
+			//console.log("longitud jugadas no es cero");
 			j = partida.jugadas[longitud - 1];
-			console.log(j);
+			//console.log(j);
 			CrearTabJug(partida._id, j.x, j.y, j.sprite, j.rotacion, j.scuadrado);   
 		}
 	});
@@ -175,9 +214,24 @@ Deps.autorun(function(){
 
 //Procedimiento que mira las posiciones del tablero para ver si se puede colocar la ficha
 //Terminología: U: Up, R:Right, D: Down, L:Left. 
-colocarficha = function(Tablero, Ficha, X, Y){
+colocarficha = function(id, Ficha, X, Y){
 		//Primero extremos el tablero mediante el Id
-		//Tablero = ListaTableros[Id];
+
+		var encontrado = false;
+		console.log("ColocarFicha(1)");
+		console.log("ColocarFicha(2): el id es --> " + id);
+		
+
+		for(i=0; i<= 50;i++){
+			console.log("ColocarFicha(3): el id en el tablero es --> " + Tableros[i].id);
+			if(Tableros[i].id == id){
+				encontrado = true;
+				break;
+			}
+		}
+		if(encontrado){
+			Tablero = Tableros[i].tablero;
+		}
 
 		var colocado = true;
 		if (Tablero[X][Y] == 0){
