@@ -227,7 +227,6 @@ Deps.autorun(function(){
 		//console.log("antes de definir j");
 		//console.log("la longitud de jugadas es: " + partida.jugadas.length);
 		var longitud = partida.jugadas.length;
-<<<<<<< HEAD
 		console.log("la longitud del array es: " + longitud);
 		console.log("el id de la partida es: " + partida._id);
 		var valor = CrearPart(partida._id,longitud);
@@ -236,13 +235,6 @@ Deps.autorun(function(){
 			j = partida.jugadas[longitud - 1];
 			//console.log(j);
 			CrearTabJug(partida._id, j.x, j.y, j.sprite, j.rotacion, j.scuadrado);   
-=======
-		if (longitud != 0){
-			//console.log("longitud jugadas no es cero");
-			j = partida.jugadas[longitud - 1];
-			//console.log(j);
-			CrearTabJug(partida._id, j.x, j.y, j.sprite, j.rotacion);
->>>>>>> d54fcb20a3c0d33fbb8a671449bf6e8fee70626f
 		}
 	});
 });
