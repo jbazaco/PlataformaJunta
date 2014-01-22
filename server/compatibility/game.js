@@ -176,19 +176,25 @@
 		Ficha1 = GirarFicha(Ficha1);
 		console.log("con giro 1 >>>>>>>> " + "arriba: " + Ficha1.u + "|| derecha: " + Ficha1.r + " ||abajo: " + Ficha1.d + " ||izquierda: " + Ficha1.l);
 		*/
-		var Ficha2 = Prueba(0);	//murcam
-		//console.log("INICIAL CON GIRO 2 >>>>>>>>>> " + "arriba: " + Ficha2.u + "|| derecha: " + Ficha2.r + " ||abajo: " + Ficha2.d + " ||izquierda: " + Ficha2.l);
-		Ficha2.gir= 2;
-		console.log("hago el giro pero no llamo a girarficha >>>>>>>>>> " + "arriba: " + Ficha2.u + "|| derecha: " + Ficha2.r + " ||abajo: " + Ficha2.d + " ||izquierda: " + Ficha2.l);
-		Ficha2 = GirarFicha(Ficha2);
-		console.log("con giro 2 >>>>>>>>>> " + "arriba: " + Ficha2.u + "|| derecha: " + Ficha2.r + " ||abajo: " + Ficha2.d + " ||izquierda: " + Ficha2.l);
+		var Ficha0 = Prueba(0);	//murcam
+		Ficha0.gir = 0;
+		Ficha0 = GirarFicha(Ficha0);
+		console.log("con giro 0 >>>>>>>> " + "arriba: " + Ficha0.u + "|| derecha: " + Ficha0.r + " ||abajo: " + Ficha0.d + " ||izquierda: " + Ficha0.l);
 		
-		var Ficha3 = Prueba(0);
-		console.log("FICHA 3 >>>>>> " + "arriba: " + Ficha3.u + "|| derecha: " + Ficha3.r + " ||abajo: " + Ficha3.d + " ||izquierda: " + Ficha3.l);
-		/*var Ficha3 = Prueba(0);	//murcam
-		Ficha3.gir= 3;
+		var Ficha1 = Prueba(0);	//murcam
+		Ficha1.gir = 1;
+		Ficha1 = GirarFicha(Ficha1);
+		console.log("con giro 1 >>>>>>>> " + "arriba: " + Ficha1.u + "|| derecha: " + Ficha1.r + " ||abajo: " + Ficha1.d + " ||izquierda: " + Ficha1.l);
+		
+		var Ficha2 = Prueba(0);	//murcam
+		Ficha2.gir = 2;
+		Ficha2 = GirarFicha(Ficha2);
+		console.log("con giro 2 >>>>>>>> " + "arriba: " + Ficha2.u + "|| derecha: " + Ficha2.r + " ||abajo: " + Ficha2.d + " ||izquierda: " + Ficha2.l);
+		
+		var Ficha3 = Prueba(0);	//murcam
+		Ficha3.gir = 3;
 		Ficha3 = GirarFicha(Ficha3);
-		console.log("con giro 3 >>>>>> " + "arriba: " + Ficha3.u + "|| derecha: " + Ficha3.r + " ||abajo: " + Ficha3.d + " ||izquierda: " + Ficha3.l);*/		
+		console.log("con giro 3 >>>>>>>> " + "arriba: " + Ficha3.u + "|| derecha: " + Ficha3.r + " ||abajo: " + Ficha3.d + " ||izquierda: " + Ficha3.l);
 	};
 
 

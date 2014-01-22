@@ -45,68 +45,56 @@ var ArFi = _.toArray(FichaPropiedades); //Convertimos lo que tenemos en un Array
 var Contador = [5,3,3,4,2,1,9,8,4,1,3,1,2,5,3,3,3,1,3,2,2,2,1,2];
 
 //Creo el array y luego hago el random del número que le pasamos al array
-var Aleatorio = function(){
+Aleatorio = function(){
 	console.log("Entra en Aleatorio");
 	var a = Math.floor(Math.random()*24);
-	return ArFi[a];
+	var Ficha = {
+	nombre: "nada",
+		u: CAMINO,
+		r: CAMINO,
+		d: CAMINO,
+		l: CAMINO,
+		gir:0
+	};
+	Ficha.nombre = ArFi[a].nombre;
+	Ficha.u = ArFi[a].u;
+	Ficha.r = ArFi[a].r;
+	Ficha.d = ArFi[a].d;
+	Ficha.l = ArFi[a].l;
+	return Ficha;
 };
 
 //Funcion de prueba para comprobar fichas
 Prueba = function(A){
-	return ArFi[A];
+	var Ficha = {
+		nombre: "nada",
+		u: CAMINO,
+		r: CAMINO,
+		d: CAMINO,
+		l: CAMINO,
+		gir:0
+	};
+	Ficha.nombre = ArFi[A].nombre;
+	Ficha.u = ArFi[A].u;
+	Ficha.r = ArFi[A].r;
+	Ficha.d = ArFi[A].d;
+	Ficha.l = ArFi[A].l;
+	return Ficha;
 };
-
 //Girar Ficha
 GirarFicha = function(Ficha){
-	/*var aux = 0;
-	console.log("giro inicial de: " + Ficha.gir);
+	var aux = 0;
+	//console.log("giro inicial de: " + Ficha.gir);
 	while (Ficha.gir != 0){
 		aux = Ficha.l;
 		Ficha.l = Ficha.d;
 		Ficha.d = Ficha.r;
 		Ficha.r = Ficha.u;
 		Ficha.u = aux;
-		console.log("giro intermedio de: " + Ficha.gir + " arriba: " + Ficha.u + "|| derecha: " + Ficha.r + " ||abajo: " + Ficha.d + " ||izquierda: " + Ficha.l);
+		//console.log("giro intermedio de: " + Ficha.gir + " arriba: " + Ficha.u + "|| derecha: " + Ficha.r + " ||abajo: " + Ficha.d + " ||izquierda: " + Ficha.l);
 		Ficha.gir = Ficha.gir - 1;
-	}*/
-	if (Ficha.gir==0){
-		//console.log("inicio giro 0");
-		//console.log(Ficha.gir);
-		//console.log("fin giro 0");		
-		return Ficha;
 	}
-	if (Ficha.gir==1){
-		//console.log("inicio giro 1");
-		var aux = Ficha.l;
-		Ficha.l = Ficha.d;
-		Ficha.d = Ficha.r;
-		Ficha.r = Ficha.u;
-		Ficha.u = aux;
-		//console.log(Ficha.gir);
-		//console.log("fin giro 1");
-		return Ficha;
-	}
-	if (Ficha.gir==2){
-		//console.log("inicio giro 2");
-		var aux = Ficha.l;
-		var aux2 = Ficha.d;
-		Ficha.l = Ficha.r;
-		Ficha.d = Ficha.u;
-		Ficha.r = aux;
-		Ficha.u = aux2;
-		//console.log(Ficha.gir);
-		//console.log("fin giro 2");
-		return Ficha;
-	}
-	if (Ficha.gir==3){
-		var aux = Ficha.r;
-		Ficha.l = Ficha.u;
-		Ficha.d = Ficha.l;
-		Ficha.r = Ficha.d;
-		Ficha.u = aux;
-		return Ficha;
-	}
-	//return Ficha;
+	return Ficha;
 };
 	
 //Creamos tablero
