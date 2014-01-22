@@ -1,17 +1,6 @@
 <head>
     <title> Chat Alien </title>
 	<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0" />
-  <script type="text/javascript">
-    function m_jugador(objeto){
-      console.log(objeto.id);
-      Meteor.call('Mostrar_Jugador', objeto.id);
-    }
-	  function hacer_hover(nombre){
-      var ID = nombre.id;  
-      var Estado = Meteor.call('Mostrar_Partida',ID);
-      alert(Estado);
- 	    };
-  </script>
 </head>
 
 
@@ -121,6 +110,7 @@
 	</div>
 </template>
 
+
 <template name="button">
 	<input type="text" id="entry"/>
 	<input type="button" class="b1" value="B1"/>
@@ -161,9 +151,10 @@
 <template name="gamesList">
 	{{#each gamesListIn}}
 		<div class='match' style="font-weight:bold;color:green">{{nombre}}
-			<div id={{nombre}} class='match_info' onmouseover="hacer_hover(this)" style="display: none;font-weight:normal;">
+			<div id={{nombre}} class='match_info' style="display: none;font-weight:normal;">
 				{{jugadores}} </br>
 				<a class='watch_match' href="">Obervar partida<a></br>
+        <p class="pop_up">{{estado}}</p>
 			</div>
 		</div>
 	{{/each}}
@@ -215,9 +206,9 @@
 <template name="ListaEstados">
 	{{#each ListaEstados}}
 		{{#if ColorEstado}}
-			<span id="{{username}}" onmouseover="m_jugador(this)" class="NombreUsuario">{{username}} </span> : <span style="color:green"> {{estado}} </span><br />
+			<span id="{{username}}" class="NombreUsuario">{{username}} </span> : <span style="color:green"> {{estado}} </span> <span> {{historial}}</span><br />
 		{{else}}
-			<span id="{{username}}" onmouseover="m_jugador(this)" class="NombreUsuario">{{username}} </span> : <span> {{estado}} </span><br />
+			<span id="{{username}}" class="NombreUsuario">{{username}} </span> : <span> {{estado}} </span><span> {{id}}</span><br />
 		{{/if}}
 	{{/each}}
 </template>

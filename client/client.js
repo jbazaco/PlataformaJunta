@@ -70,8 +70,6 @@ Template.input.events={
 	}
 }
 
-
-
 Template.button.events={
 
 	'click input.b1': function () {
@@ -84,7 +82,7 @@ Template.button.events={
 Template.options.events={
 	'click .submit': function () {
      	var jugadores=[];
-		var opciones={
+		  var opciones={
 			jugadores_maquina: 0,
 			tablero_inteligente: false,
 			niveles: 'facil',
@@ -150,7 +148,8 @@ Template.options.events={
 
 
 Template.ListaEstados.ListaEstados = function(){
-	return Meteor.users.find({},{sort:{estado:1,username:1}})
+  console.log(Meteor.users.find({},{sort:{estado:1,username:1,id:1}}))
+	return Meteor.users.find({},{sort:{estado:1,username:1,id:1}})
 }
 
 Template.ListaEstados.ColorEstado = function(){
@@ -239,10 +238,12 @@ Template.gamesList.gamesListIn = function(){
 	if (usuid){
 		var usu = Meteor.users.findOne(usuid);
 		if (usu){
-			return Partidas.find({jugadores:{$all:[usu.username]}})
+      return Partidas.find({},{sort:{estado:1}});
+			//return Partidas.find({jugadores:{$all:[usu.username]}});
 		}
 	}
 };
+
 
 
 Template.gamesList.gamesListOut = function(){
@@ -260,6 +261,11 @@ Template.gamesList.gamesListOut = function(){
 };
 
 Template.gamesList.events={
+  'mouseover div.match_info':function(){
+   var Partida = Partidas.findOne({nombre:this.nombre});
+   return Partida;
+  },
+
 	'click div.match':function(){
 		$(".matchinfo").hide(100);
 		$('#'+this.nombre).show();
