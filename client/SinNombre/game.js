@@ -792,11 +792,14 @@ Seguidor = function(sprite, numjugador, contador, nick) {
 	this.mover = function(x,y) {
 		if (!this.fijado) {
 			this.moviendo = true;
-			miJugador=1;
-			turno=1;//Falta funcion para saber de quien es el turno
+			//Falta funcion para saber de quien es el turno
 					//Hacerlo con el nick === Meteor.user().username
-					//TODO cuando podamos jugar varios y se pueda probar
-			if(turno==miJugador && this.sprite=="s"+miJugador && FichaActual.seHaMovido() 
+					//TODO cuando podamos jugar varios y se pueda probar comparando con
+					//nick de arriba en esto de turno=mijugador tb en soltar
+			var nickuser=Meteor.user().username;
+			console.log("nickuser: " + nickuser);
+			console.log("nick: " + this.nick);
+			if(nickuser==this.nick  && FichaActual.seHaMovido() 
 								&& (!FichaActual.seguidor || FichaActual.seguidor==this)){
 					this.x = x - this.w/2;
 					this.y = y - this.h/2;
@@ -811,17 +814,18 @@ Seguidor = function(sprite, numjugador, contador, nick) {
 				this.resetear();
 				FichaActual.seguidor=null;
 			}else{
-				miJugador=1;
-				turno=1;//Falta funcion para saber de quien es el turno
+				//Falta funcion para saber de quien es el turno
 						//Hacerlo con el nick === Meteor.user().username
 						//TODO cuando podamos jugar varios y se pueda probar
-				if(turno==miJugador && this.sprite=="s"+miJugador && FichaActual.seHaMovido() && !FichaActual.seguidor){
+				var nickuser=Meteor.user().username;
+				if(nickuser==this.nick  && FichaActual.seHaMovido() && !FichaActual.seguidor){
 					this.cuadrado = this.getCuadrado(x, y, FichaActual);
 					this.recalcular(FichaActual);
 					if (this.zona==="no"){
 						this.resetear();
 					}else{
 						console.log(this.zona);
+						alert("Has situado seguidor en: '"+this.zona+"'. Puede cambiarlo si lo desea.");
 						FichaActual.seguidor=this;
 						if (!this.restado){
 							this.contador.decrementar();
@@ -839,6 +843,8 @@ Seguidor = function(sprite, numjugador, contador, nick) {
 					this.recalcular(FichaActual);
 					if (this.zona==="no"){
 						this.resetear();
+					}else{
+						alert("Has situado seguidor en: '"+this.zona+"'. Puede cambiarlo si lo desea.");
 					}
 				}
 			}
