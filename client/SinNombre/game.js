@@ -1,5 +1,8 @@
 var nfich = 0; //numero de fichas en el tablero
 var esMiTurno=false;
+
+var nmov = 0; //numero de movimientos procesados
+
 Meteor.startup(function(){
 });
 
@@ -117,6 +120,7 @@ playGame = function(){
 	Game.setBoard(Game.boards.length, ficha_inicial);
 	Game.setBoard(Game.boards.length,Fondo);
 	ficha_inicial.buscar_huecos();
+
 	nfich = 1;
 
 	var idpartida=Session.get("Current_Game");
@@ -131,6 +135,8 @@ playGame = function(){
 	
 	}});
 
+	nmov = 1;
+
 }
 
 
@@ -138,10 +144,17 @@ gestionarMov = function(m) {
 	var debajo = elemInPos(ficha_inicial.x+m.x*ficha_inicial.w+ficha_inicial.w/2,
 						ficha_inicial.y-m.y*ficha_inicial.h+ficha_inicial.h/2, 
 						FichaActual.nextBoard);
-	if (debajo instanceof Ficha && debajo.sprite === "interrogante"){
-		var seg = null;
-		if (m.scuadrado && m.szona) seg = seguidores.buscarLibre(m.user);
-		debajo.establecer(m.sprite, m.rotacion, seg, m.scuadrado, m.szona);
+	if (m.esjugada) {
+		if (debajo instanceof Ficha && debajo.sprite === "interrogante"){
+			var seg = null;
+			if (m.scuadrado && m.szona) seg = seguidores.buscarLibre(m.user);
+			debajo.establecer(m.sprite, m.rotacion, seg, m.scuadrado, m.szona);
+		}
+	} else {
+		if(debajo instanceof Ficha && debajo.seguidor) {
+			debajo.seguidor.resetear();
+			debajo.seguidor = null;
+		}	
 	}
 };
 
@@ -326,10 +339,9 @@ BotonFinTurno = new function() {
 				}
 				Meteor.call('RegistrarMovimiento', Session.get("Current_Game"),
 									Meteor.user().username, {user: Meteor.user().username,
-									nmove: nfich-1, sprite: FichaActual.sprite, 
-									rotacion: FichaActual.rotacion, x: debajo.coordenadas.x , 
-									y: debajo.coordenadas.y, scuadrado: scuadrado,
-									szona: szona});
+									sprite: FichaActual.sprite, rotacion: FichaActual.rotacion, 
+									x: debajo.coordenadas.x , y: debajo.coordenadas.y, 
+									scuadrado: scuadrado, szona: szona, esjugada:true});
 				FichaActual.resetear();
 
 				
@@ -1023,15 +1035,15 @@ Deps.autorun(function(){
 		var canv = partida.canvas;
 		if (idcanvas !== canv) {
 			//Carga el tablero de la partida seleccionada
-			nfich = 0;
+			nmov = 0;
 			FichaActual.resetear();
 			idcanvas = canv;
 			Game.initialize(canv,sprites,startGame);//NO DIFERENCIA SI OBSERVA PARTIDA O LA JUEGA POR AHORA/TODO/
-		} else if (nfich > 0) {
+		} else if (nmov > 0) {
 			//Actualiza las fichas segun los movimientos registrados
 			var movs = partida.jugadas;
-			for (i = nfich-1; i < movs.length; i++) { 
-				nfich++;
+			for (i = nmov-1; i < movs.length; i++) { 
+				nmov++;
 				gestionarMov(movs[i]);
 			}
 			var idpartida=Session.get("Current_Game");
@@ -1066,7 +1078,6 @@ Deps.autorun(function(){
 				}
 			} else {
 				playGame();
-				console.log("AAAA");
 			}
 		}
 	}
