@@ -9,6 +9,19 @@
 //    -------
 //       3
 
+/*
+seguidores
+
+			1   2   3
+		12	---------  4
+			|		|
+		11	|		|  5
+			|		|
+		10	---------  6
+			9	8	7
+variable seguid = posicion del seguidor dentro de la ficha entre las 12 posibles.
+*/
+
 var CASTILLO = 'castillo';
 var CAMINO = 'camino';
 var CAMPO = 'campo';
@@ -155,7 +168,7 @@ Deps.autorun(function(){
 			console.log("longitud jugadas no es cero");
 			j = partida.jugadas[longitud - 1];
 			console.log(j);
-			CrearTabJug(partida._id, j.x, j.y, j.sprite, j.rotacion);
+			CrearTabJug(partida._id, j.x, j.y, j.sprite, j.rotacion, j.scuadrado);   
 		}
 	});
 });
