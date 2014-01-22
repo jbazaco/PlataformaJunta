@@ -146,7 +146,7 @@
 		Tablero[2][1]= Ficha21;
 		
 		var Ficha31 = Prueba(12); //mur2c
-		Ficha31.gir= 2;
+		Ficha31.gir= 3;
 		Ficha31 = GirarFicha(Ficha31);
 		Tablero[3][1]= Ficha31;
 		

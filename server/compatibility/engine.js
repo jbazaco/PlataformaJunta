@@ -474,13 +474,13 @@ CierraCastillo = function(Tablero, Ficha, PosSeguidor, X, Y){
 		return puntos;
 	};
 	RecursivaCastillo= function(Ficha, Prohibido,X,Y){
-		console.log("entro en RecursivaCastillo");
+		console.log("                                ");
 		if (Tablero[X][Y]!=0){
 			console.log("el tablero no está vacío.");
 			console.log(Ficha.nombre);
 			console.log("las coordenadas de la ficha " + Ficha.nombre + " son: X= " + X + "||| Y= " + Y);
 			var A=0;
-			puntos= DarPuntos(puntos, Ficha);
+			//puntos= DarPuntos(puntos, Ficha);
 			if (fichasLadoCastilloConexos.indexOf(Ficha.nombre)!=-1){	//si la ficha esta en este array
 				console.log("la ficha "+ Ficha.nombre + " está en el array conexo.");
 				console.log("arriba: " + Ficha.u + "|| derecha: " + Ficha.r + " ||abajo: " + Ficha.d + " ||izquierda: " + Ficha.l);
@@ -489,29 +489,36 @@ CierraCastillo = function(Tablero, Ficha, PosSeguidor, X, Y){
 				if ((Ficha.u == "castillo") && (Prohibido != "arriba") && DarDirec(X,Y)){
 					A=Y-1;
 					MeteDirec(X,Y);
+					puntos= DarPuntos(puntos, Ficha);
 					RecursivaCastillo(Tablero[X][A],"abajo",X,A);
 				}	
 				if ((Ficha.r=="castillo") && (Prohibido!= "derecha") && DarDirec(X,Y)){
 					console.log("entra");
 					A=X+1;
 					MeteDirec(X,Y);
+					puntos= DarPuntos(puntos, Ficha);
 					RecursivaCastillo(Tablero[A][Y],"izquierda",A,Y);
 				}
 				if ((Ficha.d=="castillo") && (Prohibido!= "abajo") && DarDirec(X,Y)){
 					A=Y+1;
 					MeteDirec(X,Y);
+					puntos= DarPuntos(puntos, Ficha);
 					RecursivaCastillo(Tablero[X][A],"arriba",X,A);
 				}
 				if ((Ficha.l=="castillo") && (Prohibido!= "izquierda") && DarDirec(X,Y)){
 					A=X-1;
 					MeteDirec(X,Y);
+					puntos= DarPuntos(puntos, Ficha);
 					RecursivaCastillo(Tablero[A][Y],"derecha",A,Y);
 				}
 			}
-			else{
-				console.log("la ficha "+ Ficha.nombre + " es inconexa.");
-				puntos=puntos+2;
-				console.log("los puntos totales son: " + puntos);
+			else if (DarDirec(X,Y)){
+				console.log("la ficha "+ Ficha.nombre + " está en el array inconexo.");
+				console.log("arriba: " + Ficha.u + "|| derecha: " + Ficha.r + " ||abajo: " + Ficha.d + " ||izquierda: " + Ficha.l);
+				console.log("la direccion prohibida es: " + Prohibido);
+				console.log("que devuelde DarDirec: " + DarDirec(X,Y));
+				puntos= DarPuntos(puntos, Ficha);;
+				console.log("los puntos intermedios en la ficha inconexa " + Ficha.nombre + " son: " + puntos);
 			}
 		}
 		else{
