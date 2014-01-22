@@ -27,6 +27,8 @@
 		*/
 			//////////////////////////////////////////////////////////////
 		
+
+
 			////////////////////////PRUEBA CON FICHA DADA//////
 		/*
 		Tablero = CrearTablero();
@@ -52,7 +54,10 @@
 		*/
 			///////////////////////////////////////////////////
 		
+
+
 		///////////PROBAMOS CIERRACAMINO //////////
+		/*
 			//Creamos Tablero
 		Tablero = CrearTablero();
 			//Asignamos unas determinadas fichas para ver si funciona la función y cuenta los puntos correctamente.
@@ -91,8 +96,10 @@
 		var Y = 1; 		
 		var PuntosCamino = CuentaPCamino(Tablero, Ficha3, Num, X, Y);
 		console.log("Los puntos de este camino son: " + PuntosCamino);
-
+		*/
 		////////////////////////////////////////////
+
+
 
 		///////Compruebo el CierraClaustro//////////
 		/*

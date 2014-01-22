@@ -66,7 +66,8 @@ Aleatorio = function(){
 		r: CAMINO, 
 		d: CAMINO, 
 		l: CAMINO, 
-		gir:0
+		gir:0,
+		nomjug: "nada",
 	};
 	Ficha.nombre = ArFi[a].nombre;
 	Ficha.u = ArFi[a].u;
