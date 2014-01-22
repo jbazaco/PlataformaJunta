@@ -69,7 +69,7 @@
 
 		console.log("Ficha3");
 		var Ficha3 = Prueba(6); //cc [gira 2] De momento 3
-		Ficha3.gir = 3;
+		Ficha3.gir = 2;
 		Ficha3 = GirarFicha(Ficha3);
 		Tablero[3][1] = Ficha3;
 
@@ -86,12 +86,11 @@
 		Tablero[3][2] = Ficha6;
 		
 			//Le pasamos a la funcion la ficha donde este el seguidor y en que posición determinada está. 
-		var Num = 2;
-		var X = 1;
+		var Num = 3;
+		var X = 3;
 		var Y = 1; 		
-		var PuntosCamino = CuentaPCamino(Tablero, Ficha1, Num, X, Y);
-		console.log(PuntosCamino);
-		//alert("Puntos que tengo: " + PuntosCamino);
+		var PuntosCamino = CuentaPCamino(Tablero, Ficha3, Num, X, Y);
+		console.log("Los puntos de este camino son: " + PuntosCamino);
 
 		////////////////////////////////////////////
 
