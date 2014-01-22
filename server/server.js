@@ -167,12 +167,11 @@ Meteor.methods({
 	// de jugadores
 	VerTurno : function(id){
 		console.log("VerTurno");
-	// 	if(jugadorpermitido)?
-		var partida = Partidas.findOne(id).jugadas;
-		if (partida.jugadas.length()){
-			return partida.jugadores[(partida.jugadores.indexOf(partida.jugadas[jugadas.length-1].jugador)+1)%partida.jugadores.length];
+		var partida = Partidas.findOne(id);
+		if (partida.jugadas.length){
+			return partida.jugadores[partida.jugadas.length%partida.jugadores.length];
 		}else{
-			return(partida.jugadores[Math.floor(Math.random()*partida.jugadores.length)]);
+			return partida.jugadores[0];
 		}
 	},
 
@@ -304,8 +303,13 @@ Meteor.methods({
 		return Aleatorio();
 	},
 	//Hay que pasar una Tablero dado de momento, hare que nosotros cojamos el tablero de plataforma
+<<<<<<< HEAD
 	ColocaFicha:function(Tablero, Ficha, x, y){  // Dado una ficha y dos posiciones, se devuelve un booleano para si se puede o no colocar esa ficha	
 		return true;							 
+=======
+	ColocaFicha:function(Tablero, Ficha, x, y){  // Dado una ficha y dos posiciones, se devuelve un booleano para si se puede o no colocar esa ficha
+		return true;								 
+>>>>>>> 5c72fa85b5c65c3bfeb5ccf7bb405249e8979945
 		//return colocarficha();
 	},
 	
