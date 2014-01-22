@@ -1,5 +1,5 @@
 var nfich = 0; //numero de fichas en el tablero
-
+var esMiTurno=false;
 Meteor.startup(function(){
 });
 
@@ -118,6 +118,19 @@ playGame = function(){
 	Game.setBoard(Game.boards.length,Fondo);
 	ficha_inicial.buscar_huecos();
 	nfich = 1;
+
+	var idpartida=Session.get("Current_Game");
+	Meteor.call("VerTurno", idpartida, function(err, results){
+		if(err){
+			console.log(err.reason);
+		}else{
+		console.log("Resultado: " + results);
+		if (Meteor.user().username==results){
+			esMiTurno=true;
+		}
+	
+	}});
+
 }
 
 
@@ -318,6 +331,9 @@ BotonFinTurno = new function() {
 									y: debajo.coordenadas.y, scuadrado: scuadrado,
 									szona: szona});
 				FichaActual.resetear();
+
+				
+
 			}
 		}
 	}
@@ -472,10 +488,12 @@ FichaActual = new function() {
 	this.rotacion = 0;
 	this.cuadrado = 0;
 	var colocada=false;
+	this.verturno=true;
 	//Devuelve true si se gira la ficha
 	this.pulsado = function(x,y) {
-	
-		if (this.sprite === 'interrogante') {
+		
+
+		if (this.sprite === 'interrogante' && esMiTurno) {
 			Meteor.call('DevuelveFicha', function(err, results){
 				if(err){
       					console.log(err.reason);
@@ -484,7 +502,11 @@ FichaActual = new function() {
     				}});		
 			return true;
 		}
-		if (!this.seHaMovido()){
+
+		console.log("turno : " + esMiTurno);
+
+
+		if (!this.seHaMovido() && esMiTurno){
 			if (this.rotacion === 270)
 				this.rotacion = 0;
 			else
@@ -1012,6 +1034,19 @@ Deps.autorun(function(){
 				nfich++;
 				gestionarMov(movs[i]);
 			}
+			var idpartida=Session.get("Current_Game");
+			Meteor.call("VerTurno", idpartida, function(err, results){
+				if(err){
+					console.log(err.reason);
+				}else{
+				console.log("Resultado: " + results);
+				if (Meteor.user().username==results){
+					esMiTurno=true;
+				}else{
+					esMiTurno=false;
+				}
+			
+			}});
 		}
 	}
 });

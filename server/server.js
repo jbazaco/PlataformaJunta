@@ -167,7 +167,7 @@ Meteor.methods({
 	// de jugadores
 	VerTurno : function(id){
 		console.log("VerTurno");
-		var partida = Partidas.findOne(id).jugadas;
+		var partida = Partidas.findOne(id);
 		if (partida.jugadas.length){
 			return partida.jugadores[partida.jugadas.length%partida.jugadores.length];
 		}else{
@@ -304,8 +304,8 @@ Meteor.methods({
 	},
 	//Hay que pasar una Tablero dado de momento, hare que nosotros cojamos el tablero de plataforma
 	ColocaFicha:function(Tablero, Ficha, x, y){  // Dado una ficha y dos posiciones, se devuelve un booleano para si se puede o no colocar esa ficha
-										 
-		return colocarficha();
+		return true;								 
+		//return colocarficha();
 	},
 	
 	ColocarSeguidor:function(ficha, campoficha, rotacion, x, y){
