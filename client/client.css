@@ -63,7 +63,7 @@ table {
 }
 
 #container {
-	width:70%;
+	width:69%;
 	height:65%;
 	float:left;
 	margin-left:2%;
@@ -72,7 +72,7 @@ table {
 #container2 {
  	 background-color:#CBAD48;
   	background: #CBAD48;
-  	width:25%;
+  	width:26%;
   	height:30%;
   	float:right;
   	margin-right: 2%;
@@ -88,7 +88,7 @@ table {
 }
 
 #container3 {
-	width:25%;
+	width:26%;
 	height:58%;
 	background-color:#CBAD48;
 	background: #CBAD48;

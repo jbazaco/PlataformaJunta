@@ -29,6 +29,7 @@
 			<li><a href="#tabs-1" >Usuarios</a></li>
 			<li><a href="#tabs-2" >Juego</a></li>
 			<li><a href="#tabs-3" >Ajustes</a></li>
+			<li><a href="#tabs-4" >Ránking</a></li>
 			</ul>
 			<div id="tabs-1" class="tabs">
 				{{>ListaEstados}}
@@ -47,15 +48,14 @@
 				<p>Quisque eu urna vel enim commodo pellentesque. Praesent eu risus hendrerit ligula tempus pretium.</p>
 				<p>Duis cursus. Maecenas ligula eros.</p>
 			</div>
+			<div id="tabs-4" class="tabs">
+				{{>RankingJuego}}
+			</div>
 		</div>
 		<div id='container3'>
 			<div>
 				{{>button}}
 				{{>games}}
-			</div>
-			<div>
-				<h3>Ranking</h3>
-				{{>ranking}}
 			</div>
 		</div>
 		<div id='container4' class="chatAreadiv">
@@ -211,18 +211,13 @@
 	{{/each}}
 </template>
 
-<template name="ranking">
-  <h3 id="selectedgame"></h3>
-  <table>  
-    <tbody>
-      {{#each ranking}}
-      <tr>
-	<td><strong>{{name}}</strong></td>
-	<td>{{points}}</td>
-      </tr>
-      {{/each}}
-    </tbody>
-  </table>
-
+<template name="RankingJuego">
+  <h3 id="selectedgame" style="color:red"></h3>
+    {{#each ranking}}
+		{{#if Puntu}}
+     		<span class="NombreUsuario">{{username}} : {{Puntu}} </span><br />
+		{{/if}}
+    {{/each}}
 </template>
+
 

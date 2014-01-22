@@ -58,13 +58,18 @@ Template.input.events={
 				}else{
 					var name="Anon";
 				}
-				Messages.insert({
-					name:name,
-					message:message.val(),
-					time:Date.now()
-				});
+				if(Meteor.users.findOne(Meteor.userId) != undefined){
+					Messages.insert({
+						name:name,
+						message:message.val(),
+						time:Date.now()
+					});
+				}
+				else{
+					alert('Debes estar registrado para poder mandar mensages')
+				}
 			}
-			message.val("");	
+			message.val("");        
 		}
 	}
 }
@@ -207,14 +212,29 @@ Template.games.events={
 	} 
 }
 
-Template.ranking.ranking = function (){
-    var users_data = [];
-	
-	var usu = Meteor.user();
-  	if (usu){
-   	    users_data.push({name:usu.username, points:usu.puntuacion});
-  	}
-	return users_data;
+
+Template.RankingJuego.ranking = function(){
+	return Meteor.users.find({},{sort:{'puntuacion.0.total':-1,'puntuacion.1.total':-1,'puntuacion.2.total':-1}})
+}
+
+
+Template.RankingJuego.Puntu = function(){
+	//alert(Session.get('Current_Game_id'))
+	if(!Session.get('Current_Game_id')){
+		return false
+	}
+	else{
+		if(Session.get('Current_Game_id')===1){
+			p = this.puntuacion[0].total
+		}
+		if(Session.get('Current_Game_id')===2){
+			p = this.puntuacion[1].total
+		}
+		if(Session.get('Current_Game_id')===3){
+			p = this.puntuacion[2].total
+		}
+	return p
+	}
 }
 
 
@@ -227,6 +247,8 @@ Template.gamesList.gamesListIn = function(){
 		}
 	}
 };
+
+
 Template.gamesList.gamesListOut = function(){
 	var usuid = Meteor.userId();
 	if (usuid){
@@ -260,7 +282,7 @@ Template.gamesList.events={
 						$(".canvas").hide();
 						if(!$("#"+canvas).length){
 							$("#container").append("<canvas id='"+canvas+"' class='canvas' width='1150' height='1150'></canvas>");
-							console.log(canvas);
+							console.log(canvas+'                        1');
 						}
 						$("#"+canvas).show();
 					}
@@ -275,7 +297,7 @@ Template.gamesList.events={
 						var canvas = "Canvas"+res;
 						$(".canvas").hide();
 						$("#container").append("<canvas id='"+canvas+"' class='canvas' width='1150' height='1150'></canvas>");
-						console.log(canvas);
+						console.log(canvas+'                            2');
 						$("#"+canvas).show();
 				}
 			})
@@ -288,20 +310,12 @@ Template.gamesList.events={
 			var usu = Meteor.users.findOne(usuid);
 			if (usu){
 				Meteor.call('IncluirJugador',this._id,usu.username,function(err,res){
-					console.log(res)
 					if(! err){
-						console.log('2')
 						Meteor.subscribe(res)
-						console.log('2.1')
 						$('.canvas').hide()
 						$("#container").append("<canvas id='Canvas_"+res+"' class='canvas' width='1150' height='1150'></canvas>");
-						console.log('2.2')
 						Session.set("Current_Game",res)
-					}else{
-						console.log('3')
-						console.log(err)
 					}
-					console.log('4')
 				})
 			}
 		return false;
@@ -326,8 +340,11 @@ Deps.autorun(function(){
 
 Deps.autorun(function(){
 	if (Meteor.user()){
+	//alert(Meteor.user().username)
 		var user = Meteor.user();
 		if(user.registrado != 1){
+			//alert("Cliente inicializado")
+			//alert("registrado : "+user.registrado)
 			Meteor.call('InicializaCliente',user._id);
 		}
 	}
@@ -343,5 +360,7 @@ Deps.autorun(function(){
 	}
 })
 
-
+Deps.autorun(function(){
+	alert(Partidas.findOne(Session.get("Current_Game")).estado)
+})
 
