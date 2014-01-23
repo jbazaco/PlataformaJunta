@@ -340,8 +340,11 @@ Deps.autorun(function(){
 
 Deps.autorun(function(){
 	if (Meteor.user()){
+	//alert(Meteor.user().username)
 		var user = Meteor.user();
 		if(user.registrado != 1){
+			//alert("Cliente inicializado")
+			//alert("registrado : "+user.registrado)
 			Meteor.call('InicializaCliente',user._id);
 		}
 	}
