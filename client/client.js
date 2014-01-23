@@ -137,6 +137,7 @@ Template.options.events={
 					$("#"+canvas).show();
 				}
 			});
+			$("#nombre").val("");
 			$('#opciones').hide();
 		}
 		else
@@ -271,14 +272,18 @@ Template.gamesList.events={
 	'click a.watch_match':function(){
 		var usuid = Meteor.userId();
 		
+		//console.log(usuid)
+		
 		if (usuid){
 			var usu = Meteor.users.findOne(usuid);
+			
+			//Partidas.find( { jugadores: { $all: [ usu.username ] } } );
 			if (usu){
 				Meteor.call('IncluirInvitado',this._id,usu.username,function(err,res){
 					if(! err){
 						Meteor.subscribe(res)
 						Session.set("Current_Game",res);
-						var canvas = "Canvas"+res;
+						var canvas = "Canvas_"+res;
 						$(".canvas").hide();
 						if(!$("#"+canvas).length){
 							$("#container").append("<canvas id='"+canvas+"' class='canvas' width='1150' height='1150'></canvas>");
@@ -294,11 +299,11 @@ Template.gamesList.events={
 				if(! err){
 					Meteor.subscribe(res)
 					Session.set("Current_Game",res);
-						var canvas = "Canvas"+res;
-						$(".canvas").hide();
-						$("#container").append("<canvas id='"+canvas+"' class='canvas' width='1150' height='1150'></canvas>");
-						console.log(canvas+'                            2');
-						$("#"+canvas).show();
+					var canvas = "Canvas_"+res;
+					$(".canvas").hide();
+					$("#container").append("<canvas id='"+canvas+"' class='canvas' width='1150' height='1150'></canvas>");
+					console.log(canvas+'                            2');
+					$("#"+canvas).show();
 				}
 			})
 		}
@@ -318,7 +323,7 @@ Template.gamesList.events={
 					}
 				})
 			}
-		return false;
+			return false;
 		}else{
 				alert('Debes estar registrado para unirte a una partida');
 		}

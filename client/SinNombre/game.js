@@ -1020,20 +1020,30 @@ Deps.autorun(function(){
 //o ejecuta playGame si la partida ya está empezada o ha acabado
 Deps.autorun(function(){
 	var idpartida = Session.get("Current_Game");
+	
+	console.log('la id de la partida es:          '+idpartida)
 	if (idpartida){
 		var partida = Partidas.findOne(idpartida);
+		console.log('esta es mi partida     '+partida);
+		
 		var board1 = Game.boards[0];
+		
+		console.log('Este es el estado de mi partida es 111111111111111:        '+partida.estado)
+		
 		if (board1 instanceof TitleScreen) {
+			console.log('El estado de mi partida es 222222222222222:        '+partida.estado)
 			if (partida.estado === "Lobby") {
 				board1.jugadores = partida.jugadores;
 				if(partida.jugadores.length >= MAX_JUGADORES) {
 					board1.pulsado();
 				}
-			} else {
+			} else if(partida.estado === "Empezada") {
+				console.log('tu puta madreeeeeeeeeeeeeeeeeeee')
 				playGame();
-				console.log("AAAA");
+				console.log("AAAA 11111111111");
 			}
 		}
+		
 	}
 });
 

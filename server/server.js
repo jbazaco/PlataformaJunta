@@ -6,7 +6,7 @@ Meteor.publish('messages', function(){
 });
 
 Meteor.publish('partidas',function(){
-	return Partidas.find({},{fields: {nombre:1, jugadores:1,opciones:1}});
+	return Partidas.find({},{fields: {nombre:1, jugadores:1,opciones:1, canvas:1,estado:1}});
 });
 
 // Publicacion del campo puntuacion para que puedan acceder los clientes.
@@ -279,7 +279,7 @@ Meteor.methods({
 	// máximo de invitados.  
 	IncluirInvitado: function(id, invitado){
 		Partidas.update(id,{$addToSet:{invitados:invitado}})
-		return ("_"+id);
+		return (id);
 	},
 	
 	// Cambia el estado de una partida a "Empezada" dado su identificador.
