@@ -276,7 +276,6 @@ Meteor.methods({
 	},
 	//Hay que pasar una Tablero dado de momento, hare que nosotros cojamos el tablero de plataforma
 	ColocaFicha:function(Tablero, Ficha, x, y){  // Dado una ficha y dos posiciones, se devuelve un booleano para si se puede o no colocar esa ficha
-										 
 		return colocarficha();
 	},
 	

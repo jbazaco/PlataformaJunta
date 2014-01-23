@@ -188,10 +188,11 @@ CrearArJug = function(id){
 //el tablero correspondiente a cada identificador
 Deps.autorun(function(){
 	p = Partidas.find({estado:"Empezada"});
-	console.log("se ha modidifcado el estado de la partida a empezada");
+	console.log("Deps.autorun(1): se ha modidificado el estado de la partida a empezada");
 	p.forEach(function(partida){
+		console.log("Deps.autorun(2)");
 		//j = partida.jugadas[partida.jugadas.length - 1]
-		CrearArJug(partida._id);	
+		CrearArJug(partida._id);	 
 	});
 });
 
@@ -239,14 +240,15 @@ Deps.autorun(function(){
 
 //Procedimiento que mira las posiciones del tablero para ver si se puede colocar la ficha
 //Terminología: U: Up, R:Right, D: Down, L:Left. 
-colocarficha = function(id, Ficha, X, Y){
+colocarficha = function(id_part, Ficha, X, Y){
 		//Primero extremos el tablero mediante el Id
 
 		var encontrado = false;
 		var colocado = true;
-
+		//var id_aux = id;
+   
 		console.log("ColocarFicha(1)");
-		console.log("ColocarFicha(2): el id es --> " + id);
+		console.log("ColocarFicha(2): el id que me pasan es -------> " + id_part);
 		
 
 		for(i=0; i<= 50;i++){
