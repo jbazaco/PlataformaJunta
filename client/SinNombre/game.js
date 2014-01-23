@@ -487,7 +487,6 @@ Ficha = function(x, y, sprite) {
 
 //Es un singleton
 FichaActual = new function() {
-	this.p="";
 	this.h = FICHA_H;
 	this.w = FICHA_W;
 	this.inicialx = 940;
@@ -499,7 +498,6 @@ FichaActual = new function() {
 	this.seguidor=null;
 	this.rotacion = 0;
 	this.cuadrado = 0;
-	var colocada=false;
 	//Devuelve true si se gira la ficha
 	this.pulsado = function(x,y) {
 		
@@ -564,24 +562,24 @@ FichaActual = new function() {
 		if (this.sprite !== "interrogante") {
 			//CAMBIAR cuando se coloquen las fichas
 			var debajo = elemInPos(x,y, this.nextBoard);
-			
 		//aqui seria para ver si se puede o no colocar la ficha?	
 			if (debajo instanceof Ficha && debajo.sprite === "interrogante"){
 				var id = Session.get("Current_Game");
 				Meteor.call('ColocaFicha',id,this.sprite,debajo.coordenadas.x, 
 				debajo.coordenadas.y,function(err, result){
+
 					if(err){
       						console.log(err.reason);
    					}else{
-						FichaActual.colocada=result;
-    					}});		
-				if (FichaActual.colocada===true){
-					this.x=debajo.x;
-					this.y=debajo.y;
-				}else {
-					this.x=this.inicialx;
-					this.y=this.inicialy;
-				}
+   						if (result===true){
+							FichaActual.x=debajo.x;
+							FichaActual.y=debajo.y;
+						}else {
+							FichaActual.x=FichaActual.inicialx;
+							FichaActual.y=FichaActual.inicialy;
+						}   						
+    					}});    					
+					
 			} else {	
 				this.x = this.inicialx;
 				this.y = this.inicialy;	
