@@ -191,7 +191,7 @@ CuentaPCamino = function(Tablero, Ficha, Num, X, Y){
 		}	
 	}
 	else
-		alert("El Num es incorrecto");
+		//alert("El Num es incorrecto");
 	//Hay que comprobar el que no revisemos dos posiciones iguales!!!
 	//Funcion para las fichas iniciales continuas(Con dos posibles direcciones).
 	Continua = function(Tablero, Ficha, X, Y){ 

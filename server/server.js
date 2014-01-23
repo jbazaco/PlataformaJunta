@@ -71,7 +71,7 @@ PuntuacionTotal = function(jugador,punt,juego){
 EliminarJugador = function(jugador){
 	Partidas.find({jugadores:{$in:[jugador]}}).forEach(function(partida){
 		partida.jugadores[partida.jugadores.indexOf(jugador)]="";
-		Partidas.update(partida._id,{$set:{jugadores:partida.jugadores}})
+		Partidas.update(partida._id,{$set:{jugadores:partida.jugadores}})		
 		AgregarPenalizacion(jugador,1);
 	});
 }
