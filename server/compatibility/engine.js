@@ -131,21 +131,22 @@ var Tableros = [];
 
 var ParJugadas = [];
 
+ContadorJugadas = 0;
 
 CrearPart = function(id,longitud){
-	console.log("CrearPart(1)"); 
+	//console.log("CrearPart(1)"); 
 	encontrado = false;
 
-    for(i=0; i<= 80;i++){
-		console.log("CrearPart(2):dentro del for");
-		console.log("CrearPart(3):el id en el array es: " + ParJugadas[i].id);
+    for(i=0; i<= ContadorJugadas - 1; i++){ 
+		//console.log("CrearPart(2):dentro del for");
+		//console.log("CrearPart(3):el id en el array es: " + ParJugadas[i].id);
 		if(ParJugadas[i].id == id){
 			encontrado = true;
 			break; 
 		}
 	}
 	if(encontrado){
-		console.log("CrearPart(4): en el array ParJugadas el id coincide con el que me pasan");
+		//console.log("CrearPart(4): en el array ParJugadas el id coincide con el que me pasan");
 		if (ParJugadas[i].longitud < longitud){
 			ParJugadas[i].longitud++;
 			return true;
@@ -165,11 +166,12 @@ CrearArJug = function(id){
 		jugada: 0
 	}
 
-	ParJugadas.push(elementos);;
+	ParJugadas.push(elementos);
+	ContadorJugadas++;
 
-	console.log("--------");
-	console.log("CrearArJug: " + ParJugadas[0].id);
-	console.log("--------");
+	//console.log("--------");
+	//console.log("CrearArJug: " + ParJugadas[0].id);
+	//console.log("--------");
 
 	var partida = {
 		id: id,
@@ -177,7 +179,7 @@ CrearArJug = function(id){
 	}
 	Tableros.push(partida);
 
-	console.log("CrearArJug(1): el id en el tablero es --> " + Tableros[0].id);  
+	//console.log("CrearArJug(1): el id en el tablero es --> " + Tableros[0].id);  
 }
 
 
@@ -185,11 +187,11 @@ CrearArJug = function(id){
 //el tablero correspondiente a cada identificador
 Deps.autorun(function(){
 	p = Partidas.find({estado:"Empezada"});
-	console.log("Deps.autorun(1): se ha modidificado el estado de la partida a empezada");
+	//console.log("Deps.autorun(1): se ha modidificado el estado de la partida a empezada");
 	p.forEach(function(partida){
-		console.log("Deps.autorun(2)");
+		//console.log("Deps.autorun(1) dentro de forEach");
 		//j = partida.jugadas[partida.jugadas.length - 1]
-		CrearArJug(partida._id);	 
+		CrearArJug(partida._id); 	 
 	});
 });
 
@@ -219,13 +221,14 @@ CrearTabJug = function(id,x,y,ficha,rota){
 //Autorun para mirar las jugadas nuevas que aparecen e incluirlas en el tablero
 Deps.autorun(function(){
 	p = Partidas.find({});
+	console.log("Se rellena el tablero con jugadas");
 	p.forEach(function(partida){
 		//console.log("antes de definir j");
 		//console.log("la longitud de jugadas es: " + partida.jugadas.length);
 		var longitud = partida.jugadas.length;
 		console.log("la longitud del array es: " + longitud);
 		console.log("el id de la partida es: " + partida._id);
-		var valor = CrearPart(partida._id,longitud);
+		valor = CrearPart(partida._id,longitud);
 		if (valor == true){
 			//console.log("longitud jugadas no es cero");
 			j = partida.jugadas[longitud - 1];
