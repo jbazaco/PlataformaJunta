@@ -151,7 +151,7 @@
 		Tablero[3][1]= Ficha31;
 		
 		var Ficha12 = Prueba(18);	//ccmur2 
-		Ficha12.gir= 1;
+		Ficha12.gir= 2;
 		Ficha12 = GirarFicha(Ficha12);
 		Tablero[1][2]= Ficha12;
 		

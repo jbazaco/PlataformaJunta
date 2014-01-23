@@ -255,23 +255,24 @@ CuentaPCamino = function(Tablero, Ficha, Num, X, Y){
 	puntos = 0;
 	flag = 0;			 			// 2 fincamino. 
 	var arr = [];					//Array con todas las direcciones por las que ya hemos pasado
-
+	constante = 0;
 	MeteDirec = function(X, Y){ 	// Diccionario de las posiciones que ha tenido ese camino, para comprobar si hemos retornado al inicio.
 		var obj = {
 			x: X,
 			y: Y
 		}
 		arr.push(obj);
+		constante++;
 	};
 
 	//Funcion que nos devuelve si en esa posicion ya hemos estado
 	DarDirec = function(X, Y){
-		for (i = 0; i <= puntos; i++){
+		Encontrado = true;
+		for (i = 0; i <= constante - 1; i++){
 			if (arr[i].x == X && arr[i].y == Y)
-				return false;
-			else
-				return true;
+				Encontrado = false;
 		}
+		return Encontrado;
 	};
 
 	//Funcion recursiva a la que le voy pasando la ficha siguiente (a partir de la ficha inicial)
@@ -437,88 +438,101 @@ CierraCastillo = function(Tablero, Ficha, PosSeguidor, X, Y){
 	];
 		
 	var arr = [];	//Array con todas las direcciones por las que ya hemos pasado
+	var constante = 0; //Con esta constante sabremos cuantas fichas hemos investigado en MeteDirec
 	//resultado = TipoCastillo(Ficha.nombre);
 	//console.log("Estoy dentro de CierraCastillo");
 	//return resultado;
+	var Entrar = 0;
 	MeteDirec = function(X, Y){         // Diccionario de las posiciones que ha tenido ese camino, para comprobar si hemos retornado al inicio.
+		console.log("Metemos direccion: " + X + "," + Y);
     	var obj = {
 			x: X,
 			y: Y
 		}
 		arr.push(obj);
+		constante++;
+		Entrar = 1;
 	};
 
 	//Funcion que nos devuelve si en esa posicion ya hemos estado
 	DarDirec = function(X, Y){
-		for (i = 0; i <= puntos; i++){
-			if (arr[i].x == X && arr[i].y == Y)
-				return false;
-			else
-				return true;
-		}
+		Encontrado = true;
+		if (Entrar == 1){
+			for (i = 0; i <= constante - 1; i++){
+				if (arr[i].x == X && arr[i].y == Y)				
+					Encontrado = false;
+			}
+			return Encontrado;
+		}		
+		else
+			return true;
 	};
 	
 	var puntos=0;
 	
 	DarPuntos= function(puntos, Ficha){
 		if (fichasConEscudo.indexOf(Ficha.nombre)!=-1){
-			console.log("entro en ficha con escudo");
+			//console.log("entro en ficha con escudo");
 			puntos= puntos + 4;
-			console.log("los puntos intermedios son: " + puntos);
+			console.log("los puntos intermedios CE son: " + puntos);
 		}
 		else{
-			console.log("entro en ficha sin escudo");
+			//console.log("entro en ficha sin escudo");
 			puntos=puntos+2;
-			console.log("los puntos intermedios son: " + puntos);
+			console.log("los puntos intermedios SE son: " + puntos);
 		}
 		return puntos;
 	};
 	RecursivaCastillo= function(Ficha, Prohibido,X,Y){
 		console.log("                                ");
 		if (Tablero[X][Y]!=0){
-			console.log("el tablero no está vacío.");
-			console.log(Ficha.nombre);
-			console.log("las coordenadas de la ficha " + Ficha.nombre + " son: X= " + X + "||| Y= " + Y);
-			var A=0;
-			//puntos= DarPuntos(puntos, Ficha);
+			console.log("LA FICHA: " + Ficha.nombre + " Coordenadas: X= " + X + "||| Y= " + Y);
+			Points = true;
 			if (fichasLadoCastilloConexos.indexOf(Ficha.nombre)!=-1){	//si la ficha esta en este array
-				console.log("la ficha "+ Ficha.nombre + " está en el array conexo.");
-				console.log("arriba: " + Ficha.u + "|| derecha: " + Ficha.r + " ||abajo: " + Ficha.d + " ||izquierda: " + Ficha.l);
-				console.log("la direccion prohibida es: " + Prohibido);
-				console.log("que devuelde DarDirec: " + DarDirec(X,Y));
-				if ((Ficha.u == "castillo") && (Prohibido != "arriba") && DarDirec(X,Y)){
-					A=Y-1;
-					MeteDirec(X,Y);
-					puntos= DarPuntos(puntos, Ficha);
-					RecursivaCastillo(Tablero[X][A],"abajo",X,A);
-				}	
-				if ((Ficha.r=="castillo") && (Prohibido!= "derecha") && DarDirec(X,Y)){
-					console.log("entra");
-					A=X+1;
-					MeteDirec(X,Y);
-					puntos= DarPuntos(puntos, Ficha);
-					RecursivaCastillo(Tablero[A][Y],"izquierda",A,Y);
-				}
-				if ((Ficha.d=="castillo") && (Prohibido!= "abajo") && DarDirec(X,Y)){
-					A=Y+1;
-					MeteDirec(X,Y);
-					puntos= DarPuntos(puntos, Ficha);
-					RecursivaCastillo(Tablero[X][A],"arriba",X,A);
-				}
-				if ((Ficha.l=="castillo") && (Prohibido!= "izquierda") && DarDirec(X,Y)){
-					A=X-1;
-					MeteDirec(X,Y);
-					puntos= DarPuntos(puntos, Ficha);
-					RecursivaCastillo(Tablero[A][Y],"derecha",A,Y);
+				console.log("la ficha "+ Ficha.nombre + " está en el array conexo | CX: " + X + "||| CY: " + Y);
+				console.log("DarDirec es: " + DarDirec(X,Y));
+				if (DarDirec(X,Y)){
+					if ((Ficha.u == "castillo") && (Prohibido != "arriba")){
+						Y1=Y-1;						
+						MeteDirec(X,Y);
+						puntos= DarPuntos(puntos, Ficha);
+						RecursivaCastillo(Tablero[X][Y1],"abajo",X,Y1);
+						Points = false;
+					}		
+					if ((Ficha.r=="castillo") && (Prohibido!= "derecha")){
+						if (Points){						
+							MeteDirec(X,Y);
+							puntos= DarPuntos(puntos, Ficha);
+						}
+						X1=X+1;
+						RecursivaCastillo(Tablero[X1][Y],"izquierda",X1,Y);
+						Points = false;
+					}
+					if ((Ficha.d=="castillo") && (Prohibido!= "abajo")){
+						if (Points){						
+							MeteDirec(X,Y);
+							puntos= DarPuntos(puntos, Ficha);
+						}
+						Y2=Y+1;
+						RecursivaCastillo(Tablero[X][Y2],"arriba",X,Y2);
+						Points = false;
+					}
+					if ((Ficha.l=="castillo") && (Prohibido!= "izquierda")){
+						if (Points){					
+							MeteDirec(X,Y);
+							puntos= DarPuntos(puntos, Ficha);
+						}
+						X2=X-1;
+						RecursivaCastillo(Tablero[X2][Y],"derecha",X2,Y);
+						Points = false;
+					}
 				}
 			}
 			else if (DarDirec(X,Y)){
 				console.log("la ficha "+ Ficha.nombre + " está en el array inconexo.");
-				console.log("arriba: " + Ficha.u + "|| derecha: " + Ficha.r + " ||abajo: " + Ficha.d + " ||izquierda: " + Ficha.l);
-				console.log("la direccion prohibida es: " + Prohibido);
-				console.log("que devuelde DarDirec: " + DarDirec(X,Y));
 				puntos= DarPuntos(puntos, Ficha);;
-				console.log("los puntos intermedios en la ficha inconexa " + Ficha.nombre + " son: " + puntos);
+				MeteDirec(X,Y);				
+				//console.log("los puntos intermedios en la ficha inconexa " + Ficha.nombre + " son: " + puntos);
 			}
 		}
 		else{
@@ -529,69 +543,79 @@ CierraCastillo = function(Tablero, Ficha, PosSeguidor, X, Y){
 	
 	//tratamos el caso de que llega una ficha con seguidor
 	//entramos en el caso de las fichas inconexas
-	console.log("la ficha de la que empezamos es: " + Ficha.nombre);
-	console.log("la ficha " +Ficha.nombre + " tiene los siguientes campos: " + "arriba: " + Ficha.u + "|| derecha: " + Ficha.r + " ||abajo: " + Ficha.d + " ||izquierda: " + Ficha.l);
 	if (fichas2LadosCierranCastillo.indexOf(Ficha.nombre)!=-1){
-		console.log("la ficha es inconexa, caso inicial.");
-		var A=0;
 		console.log("x e y iniciales "+X+"   "+ Y);
 		//tengo que ver las 4 posiciones del seguidor
 		if (PosSeguidor==1){
-			console.log("posicion del seguidor es: " + PosSeguidor);
-			A=Y-1;
+			//console.log("posicion del seguidor es: " + PosSeguidor);
+			Y1=Y-1;
 			puntos= DarPuntos(puntos, Ficha);
 			MeteDirec(X,Y);
-			RecursivaCastillo(Tablero[X][A], "abajo", X, A);
-			
+			RecursivaCastillo(Tablero[X][Y1], "abajo", X, Y1);	
 		}
 		else if (PosSeguidor==2){
-			console.log("posicion del seguidor es: " + PosSeguidor);
-			A=X+1;
+			//console.log("posicion del seguidor es: " + PosSeguidor);
+			X1=X+1;
 			puntos= DarPuntos(puntos,Ficha);
 			MeteDirec(X,Y);
-			RecursivaCastillo(Tablero[A][Y], "izquierda", A, Y);
+			RecursivaCastillo(Tablero[X1][Y], "izquierda", X1, Y);
 		}
 		else if (PosSeguidor==3){
-			console.log("posicion del seguidor es: " + PosSeguidor);
-			A=Y+1;
+			//console.log("posicion del seguidor es: " + PosSeguidor);
+			Y2=Y+1;
 			puntos= DarPuntos(puntos, Ficha);
 			MeteDirec(X,Y);
-			RecursivaCastillo(Tablero[X][A], "arriba", X, A);
+			RecursivaCastillo(Tablero[X][Y2], "arriba", X, Y2);
 		}
 		else if (PosSeguidor==4){
-			console.log("posicion del seguidor es: " + PosSeguidor);
-			A=X-1;
+			//console.log("posicion del seguidor es: " + PosSeguidor);
+			X2=X-1;
 			puntos= DarPuntos(puntos, Ficha);
 			MeteDirec(X,Y);
-			RecursivaCastillo(Tablero[A][Y], "derecha", A, Y);
+			RecursivaCastillo(Tablero[X2][Y], "derecha", X2, Y);
 		}
 	}
 	else{
-		var A=0;
-		console.log("la ficha es conexa, caso inicial.");
+		console.log("La ficha inicial es conexa");
 		MeteDirec(X,Y);
+		Points = true;
 		if (Ficha.u == "castillo"){
-			A=Y-1;
+			console.log("Entra Arriba");
+			Y1=Y-1;
 			puntos= DarPuntos(puntos, Ficha);
-			RecursivaCastillo(Tablero[X][A],"abajo",X,A);
+			RecursivaCastillo(Tablero[X][Y1],"abajo",X,Y1);
+			Points = false;
 		}
-		if (Ficha.r=="castillo"){
-			A=X+1;
-			puntos= DarPuntos(puntos, Ficha);
-			RecursivaCastillo(Tablero[A][Y],"izquierda",A,Y);
+		if ((Ficha.r=="castillo")){
+			console.log("Entra Derecha");
+			X1=X+1;
+			if (Points)
+				puntos= DarPuntos(puntos, Ficha);
+			RecursivaCastillo(Tablero[X1][Y],"izquierda",X1,Y);
+			Points = false;
 		}
-		if (Ficha.d=="castillo"){
-			A=Y+1;
-			puntos= DarPuntos(puntos, Ficha);
-			RecursivaCastillo(Tablero[X][A],"arriba",X,A);
+		if ((Ficha.d=="castillo")){
+			console.log("Ficha.nombre: " + Ficha.nombre);
+			console.log("Entra Abajo");
+			Y2=Y+1;
+			if (Points)			
+				puntos= DarPuntos(puntos, Ficha);
+			RecursivaCastillo(Tablero[X][Y2],"arriba",X,Y2);
+			Points = false;
 		}
-		if (Ficha.l=="castillo"){
-			A=X-1;
-			puntos= DarPuntos(puntos, Ficha);
-			RecursivaCastillo(Tablero[A][Y],"derecha",A,Y);
+		if ((Ficha.l=="castillo")){
+			console.log("Entra Izquierda");
+			X2=X-1;
+			if (Points)
+				puntos= DarPuntos(puntos, Ficha);
+			RecursivaCastillo(Tablero[X2][Y],"derecha",X2,Y);
 		}
 		
 	}
+
+	for (i = 0; i <= constante-1; i++)
+		console.log("PosX: " + arr[i].x + " PosY: " + arr[i].y);
+
 	if (puntos==4){
 		puntos= 2;
 		return puntos;
