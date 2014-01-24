@@ -278,7 +278,8 @@ Template.gamesList.events={
 					if(! err){
 						Meteor.subscribe(res)
 						Session.set("Current_Game",res);
-						var canvas = "Canvas"+res;
+						console.log('esta es la res del susbcribe:      '+res)
+						var canvas = "Canvas_"+res;
 						$(".canvas").hide();
 						if(!$("#"+canvas).length){
 							$("#container").append("<canvas id='"+canvas+"' class='canvas' width='1150' height='1150'></canvas>");
@@ -294,7 +295,7 @@ Template.gamesList.events={
 				if(! err){
 					Meteor.subscribe(res)
 					Session.set("Current_Game",res);
-						var canvas = "Canvas"+res;
+						var canvas = "Canvas_"+res;
 						$(".canvas").hide();
 						$("#container").append("<canvas id='"+canvas+"' class='canvas' width='1150' height='1150'></canvas>");
 						console.log(canvas+'                            2');
