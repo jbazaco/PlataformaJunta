@@ -191,13 +191,8 @@ Deps.autorun(function(){
 	p = Partidas.find({estado:"Empezada"});
 	//console.log("Deps.autorun(1): se ha modidificado el estado de la partida a empezada");
 	p.forEach(function(partida){
-		//console.log("Deps.autorun(1) dentro de forEach");
-		//j = partida.jugadas[partida.jugadas.length - 1]
-<<<<<<< HEAD
-		CrearArJug(partida._id);	  
-=======
-		CrearArJug(partida._id); 	 
->>>>>>> efe2a259795e08dc3edf4c420d063ae20edea15c
+		console.log("Deps.autorun(2) dento de forEach");
+		CrearArJug(partida._id);
 	});
 });
 
@@ -264,6 +259,7 @@ colocarficha = function(id_part, Ficha, X, Y){
 				break;
 			}
 		}
+		console.log("Tableros[i].tablero: " + Tableros[0].id);
 		if(encontrado){
 			Tablero = Tableros[i].tablero;
 			console.log("Se crea tablero");
