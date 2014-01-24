@@ -25,12 +25,16 @@ ActualizarEstado = function(){
 			EliminarJugador(user.username);
 		}else{
 			//Usuario: Conectado
-			Meteor.users.update(user,{$set:{estado:"Conectado"}});
+			if(user.estado === undefined){
+				Meteor.call('InicializaCliente',user._id);
+				console.log(user.username+": Inicializado")
+			}
+			else{Meteor.users.update(user,{$set:{estado:"Conectado"}});}
 		}
 	});
-	Meteor.setTimeout(ActualizarEstado,1000);
+	Meteor.setTimeout(ActualizarEstado,500);
 };
-Meteor.setTimeout(ActualizarEstado,5000);
+Meteor.setTimeout(ActualizarEstado,1000);
 
 // Al terminar una partida se debe llamar a este método para todos y cada uno de los jugadores de esa
 // partida y comprobar si han conseguido un nuevo record.
@@ -304,15 +308,9 @@ Meteor.methods({
 	},
 	//Hay que pasar una Tablero dado de momento, hare que nosotros cojamos el tablero de plataforma
 
-<<<<<<< HEAD
-	ColocaFicha:function(Tablero, Ficha, x, y){  // Dado una ficha y dos posiciones, se devuelve un booleano para si se puede o no colocar esa ficha
-		//return true;								 
-		//return colocarficha();
-		return colocarficha(Tablero,Ficha,x,y);
-=======
+
 	ColocaFicha:function(Id, Ficha, x, y){  // Dado una ficha y dos posiciones, se devuelve un booleano para si se puede o no colocar esa ficha
 		colocarficha(Id, Ficha, x ,y);
->>>>>>> efe2a259795e08dc3edf4c420d063ae20edea15c
 	},
 	
 	ColocarSeguidor:function(ficha, campoficha, rotacion, x, y){

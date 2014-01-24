@@ -338,7 +338,7 @@ Deps.autorun(function(){
 		chatArea.prepend("<tr><td><strong>"+message['name']+"</strong>:</td><td><div>"+message['message']+"</div></td>");
 	});
 });
-
+/*
 Deps.autorun(function(){
 	if (Meteor.user()){
 	//alert(Meteor.user().username)
@@ -351,7 +351,7 @@ Deps.autorun(function(){
 	}
 	Meteor.call('ActualizarEstado');
 });
-
+*/
 Deps.autorun(function(){
 	var id = Session.get("Current_Game_id");
 	if (id){

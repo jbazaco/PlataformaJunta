@@ -193,11 +193,7 @@ Deps.autorun(function(){
 	p.forEach(function(partida){
 		//console.log("Deps.autorun(1) dentro de forEach");
 		//j = partida.jugadas[partida.jugadas.length - 1]
-<<<<<<< HEAD
 		CrearArJug(partida._id);	  
-=======
-		CrearArJug(partida._id); 	 
->>>>>>> efe2a259795e08dc3edf4c420d063ae20edea15c
 	});
 });
 
