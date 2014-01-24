@@ -23,6 +23,13 @@ Meteor.startup(function(){
 		$( "#opciones" ).fadeToggle( "slow", "linear" );
 	});
 	Session.setDefault('Current_Game_id',0);
+  $("#pop_up").on('mouseenter', '.datos', function(){
+   var id = Session.get("id_pop_up");
+   Meteor.clearTimeout(id);
+  });
+  $("#pop_up").on('mouseleave', '.datos', function(){
+    $("#"+this.id).remove();
+  });
 });
 
 var screenauto= function(){
@@ -148,8 +155,7 @@ Template.options.events={
 
 
 Template.ListaEstados.ListaEstados = function(){
-  console.log(Meteor.users.find({},{sort:{estado:1,username:1,id:1}}))
-	return Meteor.users.find({},{sort:{estado:1,username:1,id:1}})
+	return Meteor.users.find({},{sort:{estado:1,username:1,puntuacion:1}});
 }
 
 Template.ListaEstados.ColorEstado = function(){
@@ -160,6 +166,19 @@ Template.ListaEstados.ColorEstado = function(){
 		return false;
 	}
 }
+Template.ListaEstados.events={
+  'mouseover .NombreUsuario':function(){
+    $("#pop_up").append("<div id='"+this.username+"' class='datos' style='display:none'>"+this.username +": "+ this.estado+"</br> "+ this.puntuacion[0].juego+"=> Puntuación Total:"+ this.puntuacion[0].total+" Puntuación Record: "+this.puntuacion[0].record+"</br>"+this.puntuacion[1].juego+"=> Puntuación Total:"+ this.puntuacion[1].total+" Puntuación Record: "+this.puntuacion[1].record+"</br>"+
+this.puntuacion[2].juego+"=> Puntuación Total:"+ this.puntuacion[2].total+" Puntuación Record: "+this.puntuacion[2].record+"</div>");
+    $("#"+this.username).show(500);
+  },
+
+  'mouseleave .NombreUsuario':function(){
+    var id = Meteor.setTimeout(function(){$("#"+this.username).remove()},5000);
+    Session.set("id_pop_up",id);
+  }
+}
+
 
 Template.gamesList.gamesList = function(){
 	return Partidas.find({})
@@ -238,7 +257,7 @@ Template.gamesList.gamesListIn = function(){
 	if (usuid){
 		var usu = Meteor.users.findOne(usuid);
 		if (usu){
-      return Partidas.find({},{sort:{estado:1}});
+      return Partidas.find({},{sort:{jugadores:1}})
 			//return Partidas.find({jugadores:{$all:[usu.username]}});
 		}
 	}
@@ -261,15 +280,35 @@ Template.gamesList.gamesListOut = function(){
 };
 
 Template.gamesList.events={
-  'mouseover div.match_info':function(){
+
+	'mouseover div.match':function(){
    var Partida = Partidas.findOne({nombre:this.nombre});
-   return Partida;
+   var usuid = Meteor.userId();
+	 var cadena = "";
+
+	 if (usuid){
+	    var usu = Meteor.users.findOne(usuid);
+      if (usu){
+          if ((usu.username in Partida.jugadores) || (Partida.estado /= "Lobby")){
+            cadena = "<a class='watch_match' href=''>Obervar partida<a></br>"
+          }else{
+            cadena = "<a class='join_match' href=''>Unirse a partida </a></br><a class='watch_match' href=''>Obervar partida<a></br>"
+          }
+      }
+    }
+     var jugadores = "";
+     for(var i=0; i<this.jugadores.length; i++){
+      jugadores = jugadores + "Jugador"+i+": "+this.jugadores[i]+"</br>";
+     };
+     $("#pop_up").append("<div id='"+this.nombre+"' class='datos' style='display:none'>Nombre Partida: "+this.nombre+"</br>"+jugadores+"Tipo escenario:"+this.opciones.escenario +"</br>"+ "Numero jugadores maquina:" +this.opciones.jugadores_maquina+"</br> "+ "Nivel:"+this.opciones.niveles+"</br>"+ "Tablero inteligente"+ this.opciones.tablero_inteligente+"</br>"+cadena+"</br></div>");
+     $("#"+this.nombre).show(500);
+	},
+
+  'mouseleave div.match':function(){
+    var id = Meteor.setTimeout(function(){$("#"+this.username).remove()},5000);
+    Session.set("id_pop_up",id);
   },
 
-	'click div.match':function(){
-		$(".matchinfo").hide(100);
-		$('#'+this.nombre).show();
-	},
 	'click a.watch_match':function(){
 		var usuid = Meteor.userId();
 		
@@ -330,7 +369,6 @@ Template.gamesList.events={
 Accounts.ui.config({
 	passwordSignupFields:"USERNAME_AND_OPTIONAL_EMAIL"
 });
-
 
 Deps.autorun(function(){
 	var chatArea = $('#firstRow');

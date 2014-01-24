@@ -12,7 +12,7 @@ Meteor.publish('partidas',function(){
 
 // Publicacion del campo puntuacion para que puedan acceder los clientes.
 Meteor.publish("DatosUsuarios", function () {
-	return Meteor.users.find({},{fields: {username:1,puntuacion: 1,registrado: 1,services: 1,estado:1}});
+	return Meteor.users.find({},{fields: {username:1,puntuacion:1, historial:1, registrado: 1, services: 1,estado:1}});
 });
 
 
