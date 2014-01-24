@@ -68,6 +68,8 @@
 		</div>
 	</div>
 	{{>options}}
+  <div id="pop_up">
+  </div>
 </body>
 
 
@@ -110,6 +112,7 @@
 	</div>
 </template>
 
+
 <template name="button">
 	<input type="text" id="entry"/>
 	<input type="button" class="b1" value="B1"/>
@@ -150,19 +153,10 @@
 <template name="gamesList">
 	{{#each gamesListIn}}
 		<div class='match' style="font-weight:bold;color:green">{{nombre}}
-			<div id={{nombre}} class='match_info' style="display: none;font-weight:normal;">
-				{{jugadores}} </br>
-				<a class='watch_match' href="">Obervar partida<a></br>
-			</div>
 		</div>
 	{{/each}}
 	{{#each gamesListOut}}
 		<div class='match' style="font-weight:bold;">{{nombre}}
-			<div id={{nombre}} class='matchinfo' style="display: none;font-weight:normal;">
-				{{jugadores}} </br>
-				<a class='join_match' href="">Unirse a partida </a>
-				<a class='watch_match' href="">Obervar partida<a></br>
-			</div>
 		</div>
 	{{/each}}
 </template>
@@ -204,9 +198,9 @@
 <template name="ListaEstados">
 	{{#each ListaEstados}}
 		{{#if ColorEstado}}
-			<span class="NombreUsuario">{{username}} </span> : <span style="color:green"> {{estado}} </span><br />
+        <span class="NombreUsuario">{{username}}</span> : <span style="color:green">{{estado}}</span>    
 		{{else}}
-			<span class="NombreUsuario">{{username}} </span> : <span> {{estado}} </span><br />
+        <span class="NombreUsuario">{{username}}</span> : <span>{{estado}}</span>    
 		{{/if}}
 	{{/each}}
 </template>
