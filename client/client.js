@@ -248,7 +248,7 @@ Template.gamesList.gamesListIn = function(){
 	if (usuid){
 		var usu = Meteor.users.findOne(usuid);
 		if (usu){
-			return Partidas.find({jugadores:{$all:[usu.username]}})
+			return Partidas.find({$or:[{jugadores:{$all:[usu.username]}},{estado:"Empezada"}]});
 		}
 	}
 };
@@ -259,7 +259,7 @@ Template.gamesList.gamesListOut = function(){
 	if (usuid){
 		var usu = Meteor.users.findOne(usuid);
 		if (usu){
-			return Partidas.find({jugadores:{$not:{$all:[usu.username]}}});
+			return Partidas.find({$nor:[{jugadores:{$all:['usu1']}},{estado:"Empezada"},{estado:"Terminada"}]});
 		}else{
 			return Partidas.find();
 		}
