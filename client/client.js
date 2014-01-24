@@ -74,17 +74,6 @@ Template.input.events={
 	}
 }
 
-
-
-Template.button.events={
-
-	'click input.b1': function () {
-
-	},
-	'click input.b2': function(){
-
-	}
-}
 Template.options.events={
 	'click .submit': function () {
      	var jugadores=[];
@@ -209,7 +198,23 @@ Template.games.events={
 		$("#selectedgame").html("Carcassonne");	
 		$("#container3").tabs( "option", "active", 1);
 		return false;
-	} 
+	},
+	'mouseenter a#game_1':function(){
+		$('#juego_descripcion').html('Haz click en la imagen y empieza a jugar ya a AlienInvasion!');
+		return false;
+	},
+	'mouseenter a#game_2':function(){
+		$('#juego_descripcion').html('Haz click en la imagen y empieza a jugar ya a AngryFruits!');
+		return false;
+	},
+	'mouseenter a#game_3':function(){
+		$('#juego_descripcion').html('Haz click en la imagen y empieza a jugar ya a este juego sin nombre!');
+		return false;
+	},
+	'mouseleave':function(){
+		$('#juego_descripcion').html('Haz click en cualquiera de los juegos de la izquierda para empezar a jugar!');
+		return false;
+	}
 }
 
 
@@ -358,9 +363,5 @@ Deps.autorun(function(){
 		$('.subtab').hide(500);
 		$(str).show(500);
 	}
-})
-
-Deps.autorun(function(){
-	alert(Partidas.findOne(Session.get("Current_Game")).estado)
 })
 
