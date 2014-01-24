@@ -12,7 +12,7 @@ Meteor.startup(function(){
 	screenauto();
     $("#opciones").hide();
 	screenauto();	//Refresh automatico de la pantalla aunque el tamaño cambie
-	$( "#container2" ).tabs({ hide: { effect: "slide",direction:'up', duration: 100 }, show:{ effect: "slide",direction:'up', duration: 100 }  });
+	$( "#container3" ).tabs({ hide: { effect: "slide",direction:'up', duration: 100 }, show:{ effect: "slide",direction:'up', duration: 100 }  });
 	$(".subtab").hide();	//Esconde los subtans que se encuentran en la segunda pestaña del acordeon
 	$(".canvas").hide();	//Esconde todos los canvas
 	$('.escenario').attr("disabled",true);
@@ -189,7 +189,7 @@ Template.games.events={
 		$('#game').show(500);
 		
 		$("#selectedgame").html("Alien Invasion");
-		$("#container2").tabs( "option", "active", 1 );
+		$("#container3").tabs( "option", "active", 1 );
 		return false;
 	},
 	'click a#game_2':function(){
@@ -198,7 +198,7 @@ Template.games.events={
 		$('#gamecanvas').show(500);
 		
 		$("#selectedgame").html("Angry Fruits");
-		$("#container2").tabs( "option", "active", 1 );
+		$("#container3").tabs( "option", "active", 1 );
 		return false;
 	},
 	'click a#game_3':function(){
@@ -207,7 +207,7 @@ Template.games.events={
 		$('#tablero').show(500);
 
 		$("#selectedgame").html("Carcassonne");	
-		$("#container2").tabs( "option", "active", 1);
+		$("#container3").tabs( "option", "active", 1);
 		return false;
 	} 
 }
