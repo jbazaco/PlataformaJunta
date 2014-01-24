@@ -1,17 +1,17 @@
 // Publicaciones de las colecciones
 
-
 Meteor.publish('messages', function(){
 	return Messages.find({}, {sort: {time:-1}});
 });
 
+// Añadimos el campo ficha que representa el string de la ultima ficha que se ha movido
 Meteor.publish('partidas',function(){
-	return Partidas.find({},{fields: {nombre:1, jugadores:1,opciones:1}});
+	return Partidas.find({},{fields: {nombre:1, jugadores:1,opciones:1,canvas:1,estado:1, ficha:1}});
 });
 
 // Publicacion del campo puntuacion para que puedan acceder los clientes.
 Meteor.publish("DatosUsuarios", function () {
-	return Meteor.users.find({},{fields: {username:1,puntuacion: 1,registrado: 1,services: 1,estado:1}});
+	return Meteor.users.find({},{fields: {username:1,puntuacion:1, historial:1, registrado: 1, services: 1,estado:1}});
 });
 
 
@@ -26,12 +26,16 @@ ActualizarEstado = function(){
 			EliminarJugador(user.username);
 		}else{
 			//Usuario: Conectado
-			Meteor.users.update(user,{$set:{estado:"Conectado"}});
+			if(user.estado === undefined){
+				Meteor.call('InicializaCliente',user._id);
+				console.log(user.username+": Inicializado")
+			}
+			else{Meteor.users.update(user,{$set:{estado:"Conectado"}});}
 		}
 	});
-	Meteor.setTimeout(ActualizarEstado,1000);
+	Meteor.setTimeout(ActualizarEstado,500);
 };
-Meteor.setTimeout(ActualizarEstado,5000);
+Meteor.setTimeout(ActualizarEstado,1000);
 
 // Al terminar una partida se debe llamar a este método para todos y cada uno de los jugadores de esa
 // partida y comprobar si han conseguido un nuevo record.
@@ -222,7 +226,19 @@ Meteor.methods({
 		})
 		return sid;
 	},
-	
+  // Metodo para comprobar el estado de dicho campo ficha
+  UltimaFicha : function(id){
+    var UltimaFicha = Partidas.findOne(id).ultimaficha;
+    return UltimaFicha;
+  },
+
+  // Metodo para actualizar la ultima ficha que se ha utilizado
+
+  ActualizaFicha : function(id,ficha){
+    var Partida = Partidas.findOne(id);
+    Partidas.update(id,{$set:{ultimaficha: ficha}});
+  },
+
 	// Al terminar una partida se debe llamar a este método para todos y cada uno de los jugadores de esa
 	// partida y comprobar si han conseguido un nuevo record.
 	PuntuacionRecord : function(jugador,punt,juego){
@@ -281,7 +297,7 @@ Meteor.methods({
 	// máximo de invitados.  
 	IncluirInvitado: function(id, invitado){
 		Partidas.update(id,{$addToSet:{invitados:invitado}})
-		return ("_"+id);
+		return (id);
 	},
 	
 	// Cambia el estado de una partida a "Empezada" dado su identificador.
@@ -303,17 +319,22 @@ Meteor.methods({
 	
 	//Disponible
 	DevuelveFicha:function(){
+		console.log("1");
 		return Aleatorio();
 	},
 	//Hay que pasar una Tablero dado de momento, hare que nosotros cojamos el tablero de plataforma
 
-	ColocaFicha:function(Tablero, Ficha, x, y){  // Dado una ficha y dos posiciones, se devuelve un booleano para si se puede o no colocar esa ficha
-		return true;								 
-		//return colocarficha();
+
+	ColocaFicha:function(Id, Ficha, x, y){  // Dado una ficha y dos posiciones, se devuelve un booleano para si se puede o no colocar esa ficha
+		colocarficha(Id, Ficha, x ,y);
 	},
 	
 	ColocarSeguidor:function(ficha, campoficha, rotacion, x, y){
 		return 1;	//funcion que devuelve si se puede poner un seguidor en la posicion de la ficha correspondiente.
+	},
+	
+	EjecutaTotal: function(){
+		EjecutaTotal();
 	}
 })
 

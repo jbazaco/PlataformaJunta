@@ -8,6 +8,7 @@ Meteor.subscribe("messages");
 Meteor.subscribe("partidas");
 Meteor.subscribe("DatosUsuarios");
 
+
 Meteor.startup(function(){
 	screenauto();
     $("#opciones").hide();
@@ -17,17 +18,21 @@ Meteor.startup(function(){
 	$(".canvas").hide();	//Esconde todos los canvas
 	$('.escenario').attr("disabled",true);
 // 	Meteor.setTimeout(function(){$(".user").click(ShowUserInfo)},500);		//Hacer click muestra estadisticas de usuario, otro click lo cierra.
+  //Meteor.setTimeout(function(){(".match").onmouseover(ShowPartidaInfo)},500);
 	$( ".startgame" ).click(function() {
 		$( "#opciones" ).fadeToggle( "slow", "linear" );
 	});
 	Session.setDefault('Current_Game_id',0);
+
+  $("#pop_up").on('mouseenter', '.datos', function(){
+   var id = Session.get("id_pop_up");
+   Meteor.clearTimeout(id);
+  });
+  $("#pop_up").on('mouseleave', '.datos', function(){
+    $(".datos").remove();
+  });
+
 });
-
-// var ShowUserInfo = function(){
-// 	console.log('Over User');
-// 	return false;
-// }
-
 
 var screenauto= function(){
 	$("#containermain").css("width",document.documentElement.clientWidth.toString()+'px');
@@ -77,7 +82,7 @@ Template.input.events={
 Template.options.events={
 	'click .submit': function () {
      	var jugadores=[];
-		var opciones={
+		  var opciones={
 			jugadores_maquina: 0,
 			tablero_inteligente: false,
 			niveles: 'facil',
@@ -143,7 +148,7 @@ Template.options.events={
 
 
 Template.ListaEstados.ListaEstados = function(){
-	return Meteor.users.find({},{sort:{estado:1,username:1}})
+	return Meteor.users.find({},{sort:{estado:1,username:1,puntuacion:1}});
 }
 
 Template.ListaEstados.ColorEstado = function(){
@@ -154,6 +159,20 @@ Template.ListaEstados.ColorEstado = function(){
 		return false;
 	}
 }
+Template.ListaEstados.events={
+  'mouseover .NombreUsuario':function(){
+    $(".datos").hide();
+    $("#pop_up").append("<div id='"+this.username+"' class='datos' style='display:none'>"+this.username +": "+ this.estado+"</br> "+ this.puntuacion[0].juego+"=> Puntuación Total:"+ this.puntuacion[0].total+" Puntuación Record: "+this.puntuacion[0].record+"</br>"+this.puntuacion[1].juego+"=> Puntuación Total:"+ this.puntuacion[1].total+" Puntuación Record: "+this.puntuacion[1].record+"</br>"+
+this.puntuacion[2].juego+"=> Puntuación Total:"+ this.puntuacion[2].total+" Puntuación Record: "+this.puntuacion[2].record+"</div>");
+    $("#"+this.username).show(500);
+  },
+
+  'mouseleave .NombreUsuario':function(){
+    var id = Meteor.setTimeout(function(){$("#"+this.username).remove()},5000);
+    Session.set("id_pop_up",id);
+  }
+}
+
 
 Template.gamesList.gamesList = function(){
 	return Partidas.find({})
@@ -254,6 +273,7 @@ Template.gamesList.gamesListIn = function(){
 };
 
 
+
 Template.gamesList.gamesListOut = function(){
 	var usuid = Meteor.userId();
 	if (usuid){
@@ -269,10 +289,26 @@ Template.gamesList.gamesListOut = function(){
 };
 
 Template.gamesList.events={
-	'click div.match':function(){
-		$(".matchinfo").hide(100);
-		$('#'+this.nombre).show();
+
+	'mouseover div.match':function(){
+		$(".datos").hide();
+		var Partida = Partidas.findOne({nombre:this.nombre});
+		var usuid = Meteor.userId();
+		var cadena = "";
+
+		var jugadores = "";
+		for(var i=0; i<this.jugadores.length; i++){
+		jugadores = jugadores + "Jugador"+i+": "+this.jugadores[i]+"</br>";
+		};
+		$("#pop_up").append("<div id='"+this.nombre+"' class='datos' style='display:none'>Nombre Partida: "+this.nombre+"</br>"+jugadores+"Tipo escenario:"+this.opciones.escenario +"</br>"+ "Numero jugadores maquina:" +this.opciones.jugadores_maquina+"</br> "+ "Nivel:"+this.opciones.niveles+"</br>"+ "Tablero inteligente"+ this.opciones.tablero_inteligente+"</br>"+cadena+"</br></div>");
+		$("#"+this.nombre).show(500);
 	},
+
+  'mouseleave div.match':function(){
+    var id = Meteor.setTimeout(function(){$("#"+this.username).remove()},2000);
+    Session.set("id_pop_up",id);
+  },
+
 	'click a.watch_match':function(){
 		var usuid = Meteor.userId();
 		
@@ -283,10 +319,11 @@ Template.gamesList.events={
 					if(! err){
 						Meteor.subscribe(res)
 						Session.set("Current_Game",res);
-						var canvas = "Canvas"+res;
+						console.log('esta es la res del susbcribe:      '+res)
+						var canvas = "Canvas_"+res;
 						$(".canvas").hide();
 						if(!$("#"+canvas).length){
-							$("#container").append("<canvas id='"+canvas+"' class='canvas' width='1150' height='1150'></canvas>");
+							$("#container").append("<canvas id='"+canvas+"' class='canvas' width='1070' height='650'></canvas>");
 							console.log(canvas+'                        1');
 						}
 						$("#"+canvas).show();
@@ -299,9 +336,9 @@ Template.gamesList.events={
 				if(! err){
 					Meteor.subscribe(res)
 					Session.set("Current_Game",res);
-						var canvas = "Canvas"+res;
+						var canvas = "Canvas_"+res;
 						$(".canvas").hide();
-						$("#container").append("<canvas id='"+canvas+"' class='canvas' width='1150' height='1150'></canvas>");
+						$("#container").append("<canvas id='"+canvas+"' class='canvas' width='1070' height='650'></canvas>");
 						console.log(canvas+'                            2');
 						$("#"+canvas).show();
 				}
@@ -318,7 +355,7 @@ Template.gamesList.events={
 					if(! err){
 						Meteor.subscribe(res)
 						$('.canvas').hide()
-						$("#container").append("<canvas id='Canvas_"+res+"' class='canvas' width='1150' height='1150'></canvas>");
+						$("#container").append("<canvas id='Canvas_"+res+"' class='canvas' width='1070' height='650'></canvas>");
 						Session.set("Current_Game",res)
 					}
 				})
@@ -334,26 +371,12 @@ Accounts.ui.config({
 	passwordSignupFields:"USERNAME_AND_OPTIONAL_EMAIL"
 });
 
-
 Deps.autorun(function(){
 	var chatArea = $('#firstRow');
 	var msgs = Messages.find({},{sort:{time:-1}, limit:1});	
 	msgs.forEach(function(message){
 		chatArea.prepend("<tr><td><strong>"+message['name']+"</strong>:</td><td><div>"+message['message']+"</div></td>");
 	});
-});
-
-Deps.autorun(function(){
-	if (Meteor.user()){
-	//alert(Meteor.user().username)
-		var user = Meteor.user();
-		if(user.registrado != 1){
-			//alert("Cliente inicializado")
-			//alert("registrado : "+user.registrado)
-			Meteor.call('InicializaCliente',user._id);
-		}
-	}
-	Meteor.call('ActualizarEstado');
 });
 
 Deps.autorun(function(){

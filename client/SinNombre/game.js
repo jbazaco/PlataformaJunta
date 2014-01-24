@@ -84,6 +84,7 @@ var seguidores = {
 startGame = function() {
 	Game.setBoard(0,new TitleScreen("Carcassonline.",
 				"Haga click para empezar sin esperar a más jugadores.",playGame));
+	Game.autorun2._compute();
 }
 
 
@@ -91,6 +92,7 @@ startGame = function() {
 playGame = function(){
 	Game.boards.length = 0;
 	Game.setBoard(Game.boards.length, BotonAyuda);
+	var jugadores = Partidas.findOne(Session.get("Current_Game")).jugadores;
 	var jugadores = Partidas.findOne(Session.get("Current_Game")).jugadores;
 	var numjugadores = jugadores.length <= MAX_JUGADORES ? jugadores.length:MAX_JUGADORES;
 	var numseg;
@@ -116,12 +118,14 @@ playGame = function(){
 	Game.setBoard(Game.boards.length, new BotonMoverTablero(900, 570, 180));
 	Game.setBoard(Game.boards.length, new BotonMoverTablero(950, 540, 270));
 	
+
+
 	ficha_inicial = new Ficha(394, 263,"cmur");
 	Game.setBoard(Game.boards.length, ficha_inicial);
 	Game.setBoard(Game.boards.length,Fondo);
 	ficha_inicial.buscar_huecos();
-
-	nfich = 1;
+	nmov = 1;
+	Game.autorun._compute();
 
 	var idpartida=Session.get("Current_Game");
 	Meteor.call("VerTurno", idpartida, function(err, results){
@@ -134,8 +138,6 @@ playGame = function(){
 		}
 	
 	}});
-
-	nmov = 1;
 
 }
 
@@ -487,7 +489,6 @@ Ficha = function(x, y, sprite) {
 
 //Es un singleton
 FichaActual = new function() {
-	this.p="";
 	this.h = FICHA_H;
 	this.w = FICHA_W;
 	this.inicialx = 940;
@@ -499,7 +500,6 @@ FichaActual = new function() {
 	this.seguidor=null;
 	this.rotacion = 0;
 	this.cuadrado = 0;
-	var colocada=false;
 	//Devuelve true si se gira la ficha
 	this.pulsado = function(x,y) {
 		
@@ -564,24 +564,24 @@ FichaActual = new function() {
 		if (this.sprite !== "interrogante") {
 			//CAMBIAR cuando se coloquen las fichas
 			var debajo = elemInPos(x,y, this.nextBoard);
-			
 		//aqui seria para ver si se puede o no colocar la ficha?	
 			if (debajo instanceof Ficha && debajo.sprite === "interrogante"){
 				var id = Session.get("Current_Game");
 				Meteor.call('ColocaFicha',id,this.sprite,debajo.coordenadas.x, 
 				debajo.coordenadas.y,function(err, result){
+
 					if(err){
       						console.log(err.reason);
    					}else{
-						FichaActual.colocada=result;
-    					}});		
-				if (FichaActual.colocada===true){
-					this.x=debajo.x;
-					this.y=debajo.y;
-				}else {
-					this.x=this.inicialx;
-					this.y=this.inicialy;
-				}
+   						if (result===true){
+							FichaActual.x=debajo.x;
+							FichaActual.y=debajo.y;
+						}else {
+							FichaActual.x=FichaActual.inicialx;
+							FichaActual.y=FichaActual.inicialy;
+						}   						
+    					}});    					
+					
 			} else {	
 				this.x = this.inicialx;
 				this.y = this.inicialy;	
@@ -1025,7 +1025,7 @@ GamePoints = function(numjugador, nick) {
 };
 
 var idcanvas = null;
-Deps.autorun(function(){
+Game.autorun = Deps.autorun(function(){
 	var idpartida = Session.get("Current_Game");
 	if (idpartida){
 		var partida = Partidas.findOne(idpartida);
@@ -1036,9 +1036,11 @@ Deps.autorun(function(){
 			FichaActual.resetear();
 			idcanvas = canv;
 			Game.initialize(canv,sprites,startGame);//NO DIFERENCIA SI OBSERVA PARTIDA O LA JUEGA POR AHORA/TODO/
+			
 		} else if (nmov > 0) {
 			//Actualiza las fichas segun los movimientos registrados
 			var movs = partida.jugadas;
+			//console.log(movs.length);
 			for (i = nmov-1; i < movs.length; i++) { 
 				nmov++;
 				gestionarMov(movs[i]);
@@ -1060,20 +1062,26 @@ Deps.autorun(function(){
 	}
 });
 
+
 //Si esta en la pantalla de inicio se encarga de añadir jugadores nuevos
 //o ejecuta playGame si la partida ya está empezada o ha acabado
-Deps.autorun(function(){
+Game.autorun2 = Deps.autorun(function(){
 	var idpartida = Session.get("Current_Game");
+	console.log('esta es la id de la partida:             '+idpartida);
 	if (idpartida){
 		var partida = Partidas.findOne(idpartida);
 		var board1 = Game.boards[0];
+		console.log('este es el estado de la partida:   '+partida.estado)
 		if (board1 instanceof TitleScreen) {
+			console.log("dentro 1");
 			if (partida.estado === "Lobby") {
+				console.log("dentro 2");
 				board1.jugadores = partida.jugadores;
 				if(partida.jugadores.length >= MAX_JUGADORES) {
 					board1.pulsado();
 				}
 			} else {
+				console.log("ya empezada");
 				playGame();
 			}
 		}
