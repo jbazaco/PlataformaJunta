@@ -573,7 +573,7 @@ FichaActual = new function() {
 			if (debajo instanceof Ficha && debajo.sprite === "interrogante"){
 				var id = Session.get("Current_Game");
 				Meteor.call('ColocaFicha',id,this.sprite,debajo.coordenadas.x, 
-				debajo.coordenadas.y,function(err, result){
+				debajo.coordenadas.y,this.rotacion,function(err, result){
 
 					if(err){
       						console.log(err.reason);

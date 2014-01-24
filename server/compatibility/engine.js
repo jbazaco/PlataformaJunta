@@ -90,6 +90,37 @@ Prueba = function(A){
 	Ficha.l = ArFi[A].l;
 	return Ficha;
 };
+
+PruebaItera = function(Ficha,rotacion){
+	var FichaDev = {
+		nombre: "nada",
+		u: CAMINO,
+		r: CAMINO,
+		d: CAMINO,
+		l: CAMINO,
+		gir:0
+	};
+	for(i = 0; i < 24; i++){
+		if (ArFi[i].nombre == Ficha){
+			console.log("ArFi.nombre: " + ArFi[i].nombre + " Ficha: " + Ficha);
+			/*FichaDev.nombre = ArFi[i].nombre;
+			FichaDev.u = ArFi[i].u;
+			FichaDev.r = ArFi[i].r;
+			FichaDev.d = ArFi[i].d;
+			FichaDev.l = ArFi[i].l;*/
+			FichaDev = ArFi[i];
+			console.log("Rotacion: " + rotacion);
+			if (rotacion == 0){FichaDev.gir = 0}
+			if (rotacion == 90){FichaDev.gir = 1}
+			if (rotacion == 180){FichaDev.gir = 2}
+			if (rotacion == 270){FichaDev.gir = 3}
+			console.log("Nombre: " + FichaDev.nombre + "U: " + FichaDev.u + " R: " + FichaDev.r + " D: " + FichaDev.d + " L: " + FichaDev.l + " Ficha.gir: " + FichaDev.gir);
+			return FichaDev;
+		}
+	}
+};
+
+
 //Girar Ficha
 GirarFicha = function(Ficha){
 	var aux = 0;
@@ -107,22 +138,18 @@ GirarFicha = function(Ficha){
 	
 //Creamos tablero
 CrearTablero = function(){
-	var x = new Array(10);
-	for (var i = 0; i < 10; i++){
-		x[i] = new Array(10);
-	}//Rellenamos el tablero con cero para identificar posiciones vacías
-	for (var i = 0; i < 10; i++){
-		for (var j = 0; j < 10; j++){
-			x[i][j] = 0;
+	var iMax = 50;
+	f = new Array();
+
+	for(i = -iMax; i < iMax ; i++){
+		f[i] = new Array();
+		for(j = -iMax; j < iMax ; j++){
+			f[i][j] = 0;
 		}
 	}
-	return x;
+	return f;
 };
-//ELIMINAR
-//Meteor.call("DevuelveFicha", function(error,resultado){
-//	console.log(error)
-//	console.lo(resultado)	
-//})
+
 
 // Lista de Tableros es una funcion que recoge el identificador de una partida y un Tablero que se
 // le pase y los mete en un array.
@@ -160,7 +187,8 @@ CrearPart = function(id,longitud){
 
 
 CrearArJug = function(id){
-	Tablero = CrearTablero();
+	var Tablero = CrearTablero();
+	Tablero[0][0] = Prueba(14);
 
 	var elementos = {
 		id: id,
@@ -172,7 +200,7 @@ CrearArJug = function(id){
 
 	//console.log("--------");
 	//console.log("CrearArJug: " + ParJugadas[0].id);
-	//console.log("--------");
+	//console.log("--------"); 
 
 	var partida = {
 		id: id,
@@ -187,16 +215,16 @@ CrearArJug = function(id){
 
 //Este Deps lo usaremos para extraer la informacion de la base de datos de como esta actualmente
 //el tablero correspondiente a cada identificador
+/*
 Deps.autorun(function(){
 	p = Partidas.find({estado:"Empezada"});
-	//console.log("Deps.autorun(1): se ha modidificado el estado de la partida a empezada");
+	console.log("Deps.autorun(1): se ha modidificado el estado de la partida a empezada");
 	p.forEach(function(partida){
-		//console.log("Deps.autorun(1) dentro de forEach");
-		//j = partida.jugadas[partida.jugadas.length - 1]
+		console.log("Deps.autorun(2) dentro de forEach");
 		CrearArJug(partida._id); 	 
 	});
 });
-
+*/
 
 //.......................................
 //función añadir jugada nueva en tablero
@@ -242,16 +270,21 @@ Deps.autorun(function(){
 
 //Procedimiento que mira las posiciones del tablero para ver si se puede colocar la ficha
 //Terminología: U: Up, R:Right, D: Down, L:Left. 
-colocarficha = function(id_part, Ficha, X, Y){
+colocarficha = function(id_part, Ficha, X, Y, rotacion){
 		//Primero extremos el tablero mediante el Id
-
+		console.log("Rotacion: " + rotacion);
+		Ficha = PruebaItera(Ficha,rotacion);
+		console.log("Nombre: " + Ficha.nombre + "U: " + Ficha.u + " R: " + Ficha.r + " D: " + Ficha.d + " L: " + Ficha.l + " Ficha.gir: " + Ficha.gir);
+		Ficha = GirarFicha(Ficha);
+		console.log("Nombre: " + Ficha.nombre + "U: " + Ficha.u + " R: " + Ficha.r + " D: " + Ficha.d + " L: " + Ficha.l + " Ficha.gir: " + Ficha.gir);
 		var encontrado = false;
 		var colocado = true;
 		//var id_aux = id;
    
-		console.log("ColocarFicha(1)");
-		console.log("ColocarFicha(2): el id que me pasan es -------> " + id_part);
+		console.log("ColocarFicha(0)");
+		console.log("ColocarFicha(1): el id que me pasan es -------> " + id_part);
 		
+		console.log("ColocarFicha(2): el id en el tablero es --> " + Tableros[0].id); 
 
 		for(i=0; i<= CuentaTableros - 1;i++){
 			console.log("ColocarFicha(3): el id en el tablero es --> " + Tableros[i].id); 
@@ -260,38 +293,49 @@ colocarficha = function(id_part, Ficha, X, Y){
 				break;
 			}
 		}
+		console.log("ColocarFicha(4): el valor de encontrado es: " + encontrado );
 		if(encontrado){
 			Tablero = Tableros[i].tablero;
-			console.log("Se crea tablero");
+			console.log("ColocarFicha(5): Se busca");
 		}
 
-		console.log("ColocarFicha(4)");
+		console.log("Pos X: " + X + " Pos Y: " + Y);		
 		if (Tablero[X][Y] == 0){
-			if ((X != 0 && Y != 0) || (X != 72 && Y != 0) || (Y != 0)){ //En cada una comprobamos las esquinas y los bordes(L-U,U,R-A)
-				if (Tablero[X][(Y-1)] != 0){//Arriba
-					if (Tablero[X][(Y-1)].d != Ficha.u)
-						colocado = false;
+			//if ((X != 0 && Y != 0) || (X != 72 && Y != 0) || (Y != 0)){ //En cada una comprobamos las esquinas y los bordes(L-U,U,R-A)
+			if (Tablero[X][(Y+1)] != 0){//Arriba
+				if (Tablero[X][(Y+1)].d != Ficha.u){
+					console.log(Tablero[X][(Y+1)].d + "  " + Ficha.u);
+					console.log("ColocarFicha(en el for): colocado es------------->: " + encontrado );
+					colocado = false;
 				}
 			}
-			if ((X != 72 && Y != 0) || (X != 72 && Y != 72) || (X != 0)){// (R-U,R,R-D)
-				if (Tablero[(X+1)][Y] != 0){//Derecha
-					if (Tablero[(X+1)][Y].l != Ficha.r)
-						colocado = false;				
+			//if ((X != 72 && Y != 0) || (X != 72 && Y != 72) || (X != 0)){// (R-U,R,R-D)
+			if (Tablero[(X+1)][Y] != 0){//Derecha
+				if (Tablero[(X+1)][Y].l != Ficha.r){
+					console.log(Tablero[(X+1)][Y].l + "  " + Ficha.r);
+					console.log("ColocarFicha(en el for2): colocado es------------->: " + encontrado );
+					colocado = false;
+				}				
+			}
+			//if ((X != 0 && Y != 72) || (X != 72 && Y != 72) || (Y != 72)){//(R-D, D, L-D)
+			if (Tablero[X][(Y-1)] != 0){ //Abajo
+				if (Tablero[X][(Y-1)].u != Ficha.d){	
+					console.log(Tablero[X][(Y-1)].u + "  " + Ficha.d);
+					console.log("ColocarFicha(en el for3): colocado es------------->: " + encontrado );
+					colocado = false;
 				}
 			}
-			if ((X != 0 && Y != 72) || (X != 72 && Y != 72) || (Y != 72)){//(R-D, D, L-D)
-				if (Tablero[X][(Y+1)] != 0){ //Abajo
-					if (Tablero[X][(Y+1)].u != Ficha.d)
-						colocado = false;
-				}
-			}
-			if ((X != 0 && Y != 0) || (X != 0 && Y != 72) || (X != 0)){//(L-D, L, L-U)
-				if (Tablero[(X-1)][Y] != 0){ //Izquierda
-					if (Tablero[(X-1)][Y].r != Ficha.l)
-						colocado = false;
+			//if ((X != 0 && Y != 0) || (X != 0 && Y != 72) || (X != 0)){//(L-D, L, L-U)
+			if (Tablero[(X-1)][Y] != 0){ //Izquierda
+				if (Tablero[(X-1)][Y].r != Ficha.l){
+					console.log(Tablero[(X-1)][Y].r + "  " + Ficha.l);
+					console.log("ColocarFicha(en el for4): colocado es------------->: " + encontrado );
+					colocado = false;
 				}
 			}			
 		}
+
+		console.log("ColocarFicha(4): el valor de colocado es: " + colocado);
 		return colocado;			
 };
 
