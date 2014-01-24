@@ -193,7 +193,7 @@ Deps.autorun(function(){
 	p.forEach(function(partida){
 		console.log("Deps.autorun(2)");
 		//j = partida.jugadas[partida.jugadas.length - 1]
-		CrearArJug(partida._id);	 
+		CrearArJug(partida._id);	  
 	});
 });
 
