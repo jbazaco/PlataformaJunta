@@ -282,7 +282,7 @@ Template.gamesList.events={
 						var canvas = "Canvas_"+res;
 						$(".canvas").hide();
 						if(!$("#"+canvas).length){
-							$("#container").append("<canvas id='"+canvas+"' class='canvas' width='1150' height='1150'></canvas>");
+							$("#container").append("<canvas id='"+canvas+"' class='canvas' width='1070' height='650'></canvas>");
 							console.log(canvas+'                        1');
 						}
 						$("#"+canvas).show();
@@ -297,7 +297,7 @@ Template.gamesList.events={
 					Session.set("Current_Game",res);
 						var canvas = "Canvas_"+res;
 						$(".canvas").hide();
-						$("#container").append("<canvas id='"+canvas+"' class='canvas' width='1150' height='1150'></canvas>");
+						$("#container").append("<canvas id='"+canvas+"' class='canvas' width='1070' height='650'></canvas>");
 						console.log(canvas+'                            2');
 						$("#"+canvas).show();
 				}
@@ -314,7 +314,7 @@ Template.gamesList.events={
 					if(! err){
 						Meteor.subscribe(res)
 						$('.canvas').hide()
-						$("#container").append("<canvas id='Canvas_"+res+"' class='canvas' width='1150' height='1150'></canvas>");
+						$("#container").append("<canvas id='Canvas_"+res+"' class='canvas' width='1070' height='650'></canvas>");
 						Session.set("Current_Game",res)
 					}
 				})
