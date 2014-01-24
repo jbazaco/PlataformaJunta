@@ -338,20 +338,7 @@ Deps.autorun(function(){
 		chatArea.prepend("<tr><td><strong>"+message['name']+"</strong>:</td><td><div>"+message['message']+"</div></td>");
 	});
 });
-/*
-Deps.autorun(function(){
-	if (Meteor.user()){
-	//alert(Meteor.user().username)
-		var user = Meteor.user();
-		if(user.registrado != 1){
-			//alert("Cliente inicializado")
-			//alert("registrado : "+user.registrado)
-			Meteor.call('InicializaCliente',user._id);
-		}
-	}
-	Meteor.call('ActualizarEstado');
-});
-*/
+
 Deps.autorun(function(){
 	var id = Session.get("Current_Game_id");
 	if (id){
