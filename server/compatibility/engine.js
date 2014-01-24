@@ -262,6 +262,7 @@ colocarficha = function(id_part, Ficha, X, Y){
 		}
 		if(encontrado){
 			Tablero = Tableros[i].tablero;
+			console.log("Se crea tablero");
 		}
 
 		console.log("ColocarFicha(4)");
