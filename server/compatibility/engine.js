@@ -215,16 +215,6 @@ CrearArJug = function(id){
 
 //Este Deps lo usaremos para extraer la informacion de la base de datos de como esta actualmente
 //el tablero correspondiente a cada identificador
-/*
-Deps.autorun(function(){
-	p = Partidas.find({estado:"Empezada"});
-	console.log("Deps.autorun(1): se ha modidificado el estado de la partida a empezada");
-	p.forEach(function(partida){
-		console.log("Deps.autorun(2) dentro de forEach");
-		CrearArJug(partida._id); 	 
-	});
-});
-*/
 
 //.......................................
 //función añadir jugada nueva en tablero
