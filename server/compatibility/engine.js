@@ -132,6 +132,7 @@ var Tableros = [];
 var ParJugadas = [];
 
 ContadorJugadas = 0;
+CuentaTableros = 0;
 
 CrearPart = function(id,longitud){
 	//console.log("CrearPart(1)"); 
@@ -178,6 +179,7 @@ CrearArJug = function(id){
 		tablero: Tablero
 	}
 	Tableros.push(partida);
+	CuentaTableros++;
 
 	//console.log("CrearArJug(1): el id en el tablero es --> " + Tableros[0].id);  
 }
@@ -221,7 +223,6 @@ CrearTabJug = function(id,x,y,ficha,rota){
 //Autorun para mirar las jugadas nuevas que aparecen e incluirlas en el tablero
 Deps.autorun(function(){
 	p = Partidas.find({});
-	console.log("Se rellena el tablero con jugadas");
 	p.forEach(function(partida){
 		//console.log("antes de definir j");
 		//console.log("la longitud de jugadas es: " + partida.jugadas.length);
@@ -230,6 +231,7 @@ Deps.autorun(function(){
 		console.log("el id de la partida es: " + partida._id);
 		valor = CrearPart(partida._id,longitud);
 		if (valor == true){
+			console.log("Se rellena el tablero con jugadas");
 			//console.log("longitud jugadas no es cero");
 			j = partida.jugadas[longitud - 1];
 			//console.log(j);
@@ -251,15 +253,16 @@ colocarficha = function(id_part, Ficha, X, Y){
 		console.log("ColocarFicha(2): el id que me pasan es -------> " + id_part);
 		
 
-		for(i=0; i<= 50;i++){
+		for(i=0; i<= CuentaTableros - 1;i++){
 			console.log("ColocarFicha(3): el id en el tablero es --> " + Tableros[i].id); 
-			if(Tableros[i].id == id){
+			if(Tableros[i].id == id_part){
 				encontrado = true;
 				break;
 			}
 		}
 		if(encontrado){
 			Tablero = Tableros[i].tablero;
+			console.log("Se crea tablero");
 		}
 
 		console.log("ColocarFicha(4)");
