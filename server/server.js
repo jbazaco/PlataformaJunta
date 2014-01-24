@@ -1,12 +1,11 @@
 // Publicaciones de las colecciones
 
-
 Meteor.publish('messages', function(){
 	return Messages.find({}, {sort: {time:-1}});
 });
 
 Meteor.publish('partidas',function(){
-	return Partidas.find({},{fields: {nombre:1, jugadores:1,opciones:1}});
+	return Partidas.find({},{fields: {nombre:1, jugadores:1,opciones:1,canvas:1,estado:1, partidas:1}});
 });
 
 // Publicacion del campo puntuacion para que puedan acceder los clientes.
@@ -278,7 +277,7 @@ Meteor.methods({
 	// máximo de invitados.  
 	IncluirInvitado: function(id, invitado){
 		Partidas.update(id,{$addToSet:{invitados:invitado}})
-		return ("_"+id);
+		return (id);
 	},
 	
 	// Cambia el estado de una partida a "Empezada" dado su identificador.
@@ -300,17 +299,22 @@ Meteor.methods({
 	
 	//Disponible
 	DevuelveFicha:function(){
+		console.log("1");
 		return Aleatorio();
 	},
 	//Hay que pasar una Tablero dado de momento, hare que nosotros cojamos el tablero de plataforma
 
-	ColocaFicha:function(Tablero, Ficha, x, y){  // Dado una ficha y dos posiciones, se devuelve un booleano para si se puede o no colocar esa ficha
-		return true;								 
-		//return colocarficha();
+
+	ColocaFicha:function(Id, Ficha, x, y){  // Dado una ficha y dos posiciones, se devuelve un booleano para si se puede o no colocar esa ficha
+		colocarficha(Id, Ficha, x ,y);
 	},
 	
 	ColocarSeguidor:function(ficha, campoficha, rotacion, x, y){
 		return 1;	//funcion que devuelve si se puede poner un seguidor en la posicion de la ficha correspondiente.
+	},
+	
+	EjecutaTotal: function(){
+		EjecutaTotal();
 	}
 })
 
