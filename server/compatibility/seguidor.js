@@ -32,5 +32,29 @@ ColSeguidor = function(Id, Ficha, PosSeg, x, Y){
 	Es un esbozo del algoritmo a usar===>>> tengo que hablar con Alberto y Pedro para acabar de concretar
 */
 ColocarSeguidorCastillo = function(Id, Ficha, PosSeg, X, Y){
+	// Posibles fichas que tengo que comprobar
+	//no estoy seguro de que pueda coger los datos de estos arrays. De momento se mantiene
+	var FichasLadoCastilloConexos =[
+		'c3mur',
+		'mur1',
+		'cmur',
+		'ccmur',
+		'ccmur3',
+		'murcam',
+		'ccmur2',
+		'ccmur2e',
+		'murcame',
+		'ciucam2e',
+		'ciucam',
+		'ciucam2',
+		'chmur',
+		'chmure',
+		'ciucame',
+		'ciudad'
+	];
 	
+	var Fichas2LadosCierranCastillo =[
+		'mur2',
+		'mur2c'
+	];
 };
