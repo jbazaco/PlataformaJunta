@@ -24,3 +24,13 @@ ColSeguidor = function(Id, Ficha, PosSeg, x, Y){
 	 
 };
 */
+
+/* Funcion para colocar seguidor en un castillo
+
+	hay que ver si hay otro seguidor de otro jugador ya puesto en ese castillo para decir si se puede poner o no.
+	
+	Es un esbozo del algoritmo a usar===>>> tengo que hablar con Alberto y Pedro para acabar de concretar
+*/
+ColocarSeguidorCastillo = function(Id, Ficha, PosSeg, X, Y){
+	
+};
