@@ -399,7 +399,7 @@ CuentaPCamino = function(Tablero, Ficha, Num, X, Y){
 			else if(contcamino.indexOf(Tablero[X][Y].nombre) != -1){ // Si la ficha está en contcamino seguimos haciendo recursiva
 				if ((Tablero[X][Y].u == 'camino') && (prohibido != 'arriba') && DarDirec(X,Y)){
 					puntos = puntos + 1; 						
-					Y1 = Y - 1;	
+					Y1 = Y + 1;	
 					MeteDirec(X,Y);				
 					Recursiva(Tablero, 'abajo', flag, X, Y1);
 				}
@@ -411,7 +411,7 @@ CuentaPCamino = function(Tablero, Ficha, Num, X, Y){
 				}
 				if ((Tablero[X][Y].d == 'camino') && (prohibido != 'abajo') && DarDirec(X,Y)){
 					puntos = puntos + 1; 						
-					Y2 = Y + 1;
+					Y2 = Y - 1;
 					MeteDirec(X,Y);
 					Recursiva(Tablero, 'arriba', flag, X, Y2);
 				}
@@ -429,7 +429,7 @@ CuentaPCamino = function(Tablero, Ficha, Num, X, Y){
 	Continua = function(Tablero, Ficha, X, Y){ 
 		puntos = puntos + 1;		
 		if (Ficha.u == 'camino'){
-			Y1 = Y - 1;
+			Y1 = Y + 1;
 			//alert("Cont Ficha arriba: " + Tablero[X][Y1].nombre);
 			MeteDirec(X,Y);
 			Recursiva(Tablero, "abajo", flag, X, Y1);	
@@ -441,7 +441,7 @@ CuentaPCamino = function(Tablero, Ficha, Num, X, Y){
 			Recursiva(Tablero, "izquierda", flag, X1, Y);
 		}
 		if (Ficha.d == 'camino') {		
-			Y2 = Y + 1;
+			Y2 = Y - 1;
 			//alert("Cont Ficha abajo: " + Tablero[X][Y2].nombre);
 			MeteDirec(X,Y);
 			Recursiva(Tablero, "arriba", flag, X, Y2);
@@ -460,7 +460,7 @@ CuentaPCamino = function(Tablero, Ficha, Num, X, Y){
 		if (fincamino.indexOf(Ficha.nombre) != -1){ // Buscamos si la ficha esta en fincamino
 			puntos = puntos + 1;		
 			flag = flag + 1; 								// Le sumamos uno porque va a ser un extremo del cierra camino(Va a haber dos)
-			Y1 = Y - 1; 										// Vamos para arriba
+			Y1 = Y + 1; 										// Vamos para arriba
 			MeteDirec(X,Y);
 			Recursiva(Tablero, "abajo", flag, X, Y1); 		// Llamamos a la funcion Recursiva pasandole la siguiente ficha y donde tiene que ir	
 		}
@@ -485,7 +485,7 @@ CuentaPCamino = function(Tablero, Ficha, Num, X, Y){
 		if (fincamino.indexOf(Ficha.nombre) != -1){
 			puntos = puntos + 1;
 			flag = flag + 1;
-			Y2 = Y + 1; //Vamos para abajo
+			Y2 = Y - 1; //Vamos para abajo
 			MeteDirec(X,Y);
 			Recursiva(Tablero, "arriba", flag, X, Y2);
 		}
@@ -613,7 +613,7 @@ CierraCastillo = function(Tablero, Ficha, PosSeguidor, X, Y){
 				console.log("DarDirec es: " + DarDirec(X,Y));
 				if (DarDirec(X,Y)){
 					if ((Ficha.u == "castillo") && (Prohibido != "arriba")){
-						Y1=Y-1;						
+						Y1=Y+1;						
 						MeteDirec(X,Y);
 						puntos= DarPuntos(puntos, Ficha);
 						RecursivaCastillo(Tablero[X][Y1],"abajo",X,Y1);
@@ -633,7 +633,7 @@ CierraCastillo = function(Tablero, Ficha, PosSeguidor, X, Y){
 							MeteDirec(X,Y);
 							puntos= DarPuntos(puntos, Ficha);
 						}
-						Y2=Y+1;
+						Y2=Y-1;
 						RecursivaCastillo(Tablero[X][Y2],"arriba",X,Y2);
 						Points = false;
 					}
@@ -667,7 +667,7 @@ CierraCastillo = function(Tablero, Ficha, PosSeguidor, X, Y){
 		console.log("x e y iniciales "+X+"   "+ Y);
 		//tengo que ver las 4 posiciones del seguidor
 		if (PosSeguidor==1){
-			Y1=Y-1;
+			Y1=Y+1;
 			puntos= DarPuntos(puntos, Ficha);
 			MeteDirec(X,Y);
 			RecursivaCastillo(Tablero[X][Y1], "abajo", X, Y1);
@@ -681,7 +681,7 @@ CierraCastillo = function(Tablero, Ficha, PosSeguidor, X, Y){
 		}
 		else if (PosSeguidor==3){
 			//console.log("posicion del seguidor es: " + PosSeguidor);
-			Y2=Y+1;
+			Y2=Y-1;
 			puntos= DarPuntos(puntos, Ficha);
 			MeteDirec(X,Y);
 			RecursivaCastillo(Tablero[X][Y2], "arriba", X, Y2);
@@ -700,7 +700,7 @@ CierraCastillo = function(Tablero, Ficha, PosSeguidor, X, Y){
 		Points = true;
 		if (Ficha.u == "castillo"){
 			console.log("Entra Arriba");
-			Y1=Y-1;
+			Y1=Y+1;
 			puntos= DarPuntos(puntos, Ficha);
 			RecursivaCastillo(Tablero[X][Y1],"abajo",X,Y1);
 			Points = false;
@@ -716,7 +716,7 @@ CierraCastillo = function(Tablero, Ficha, PosSeguidor, X, Y){
 		if ((Ficha.d=="castillo")){
 			console.log("Ficha.nombre: " + Ficha.nombre);
 			console.log("Entra Abajo");
-			Y2=Y+1;
+			Y2=Y-1;
 			if (Points)			
 				puntos= DarPuntos(puntos, Ficha);
 			RecursivaCastillo(Tablero[X][Y2],"arriba",X,Y2);
