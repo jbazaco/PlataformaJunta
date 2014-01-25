@@ -225,6 +225,15 @@ colocarficha = function(id_part, Ficha, X, Y, rotacion){
 				Tablero = Tableros[i].Tablero;
 			}
 		}
+<<<<<<< HEAD
+=======
+		console.log("Tableros[i].tablero: " + Tableros[0].id);
+		console.log("ColocarFicha(4): el valor de encontrado es: " + encontrado );
+		if(encontrado){
+			Tablero = Tableros[i].tablero;
+			console.log("ColocarFicha(5): Se busca");
+		}
+>>>>>>> c213c9587e6843056f72bf1fc0b3741a38a30a54
 
 		//console.log("Pos X: " + X + " Pos Y: " + Y);		
 		if (Tablero[X][Y] == 0){
