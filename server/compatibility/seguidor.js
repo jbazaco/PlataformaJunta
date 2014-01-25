@@ -57,4 +57,35 @@ ColocarSeguidorCastillo = function(Id, Ficha, PosSeg, X, Y){
 		'mur2',
 		'mur2c'
 	];
+	
+	var arr = [];	//Array con todas las direcciones por las que ya hemos pasado
+	var constante = 0; //Con esta constante sabremos cuantas fichas hemos investigado en MeteDirec
+
+	var Entrar = 0;
+	MeteDirec = function(X, Y){         // Diccionario de las posiciones que ha tenido ese camino, para comprobar si hemos retornado al inicio.
+		console.log("Metemos direccion: " + X + "," + Y);
+    	var obj = {
+			x: X,
+			y: Y
+		}
+		arr.push(obj);
+		constante++;
+		Entrar = 1;
+	};
+
+	//Funcion que nos devuelve si en esa posicion ya hemos estado
+	DarDirec = function(X, Y){
+		Encontrado = true;
+		if (Entrar == 1){
+			for (i = 0; i <= constante - 1; i++){
+				if (arr[i].x == X && arr[i].y == Y)				
+					Encontrado = false;
+			}
+			return Encontrado;
+		}		
+		else
+			return true;
+	};
+	
+	
 };
