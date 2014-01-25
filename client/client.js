@@ -179,7 +179,7 @@ Template.ListaEstados.events={
 		}
 		cadena+="</div>"
 		$("#pop_up").append(cadena);
-		//La chapuza es premeditada, no funciona si no le pasas la variable username aunque luego no la utilices. Dunno y.
+		//La chapuza sin sentido es premeditada, no funciona si no le pasas la variable username aunque luego no la utilices. Dunno y.
 		username= this.username
 		var id = Meteor.setTimeout(function(username){$("#"+this.username+"_datos").show()},500);
 		Session.set("id_pop_up",id);
@@ -291,94 +291,99 @@ Template.gamesList.gamesListOut = function(){
 	}
 };
 
-Template.gamesList.events={
-
-	'mouseover div.match':function(){
-		$(".datos").hide();
-		var Partida = Partidas.findOne({nombre:this.nombre});
-		var usuid = Meteor.userId();
-		var cadena = "";
-
-		if (usuid){
-			var usu = Meteor.users.findOne(usuid);
-			if (usu){
-				if ((usu.username in Partida.jugadores) || (Partida.estado /= "Lobby")){
-					cadena = "<a class='watch_match' href=''>Obervar partida<a></br>"
-				}else{
-					cadena = "<a class='join_match' href=''>Unirse a partida </a></br><a class='watch_match' href=''>Obervar partida<a></br>"
-				}
-			}
-		}
-		var jugadores = "";
-		for(var i=0; i<this.jugadores.length; i++){
-			jugadores = jugadores + "Jugador"+i+": "+this.jugadores[i]+"</br>";
-		};
-		$("#pop_up").append("<div id='"+this.nombre+"_datos' class='datos' style='display:none'>Nombre Partida: "+this.nombre+"</br>"+jugadores+"Tipo escenario:"+this.opciones.escenario +"</br>"+ "Numero jugadores maquina:" +this.opciones.jugadores_maquina+"</br> "+ "Nivel:"+this.opciones.niveles+"</br>"+ "Tablero inteligente"+ this.opciones.tablero_inteligente+"</br>"+cadena+"</br></div>");
-		$("#"+this.nombre+"_datos").show(500);
-	},
-
-	'mouseleave div.match':function(){
-		var id = Meteor.setTimeout(function(){$("#"+this.username+"_datos").remove()},5000);
-		Session.set("id_pop_up",id);
-	},
-
+Template.popup.events={
 	'click a.watch_match':function(){
 		var usuid = Meteor.userId();
-		
 		if (usuid){
 			var usu = Meteor.users.findOne(usuid);
 			if (usu){
-				Meteor.call('IncluirInvitado',this._id,usu.username,function(err,res){
+				Meteor.call('IncluirInvitado',Session.get('Game_Data_id'),usu.username,function(err,res){
 					if(! err){
 						Meteor.subscribe(res)
 						Session.set("Current_Game",res);
-						console.log('esta es la res del susbcribe:      '+res)
 						var canvas = "Canvas_"+res;
 						$(".canvas").hide();
 						if(!$("#"+canvas).length){
 							$("#container").append("<canvas id='"+canvas+"' class='canvas' width='1070' height='650'></canvas>");
-							console.log(canvas+'                        1');
 						}
 						$("#"+canvas).show();
+						$("#"+Session.get('Game_Data_id')+"_datos").remove()
 					}
 				})
 			}
 		}else{
-			Meteor.call('IncluirInvitado',this._id,"Invitado",function(err,res){
+			Meteor.call('IncluirInvitado',Session.get('Game_Data_id'),"Invitado",function(err,res){
 				console.log(res)
 				if(! err){
 					Meteor.subscribe(res)
 					Session.set("Current_Game",res);
 						var canvas = "Canvas_"+res;
 						$(".canvas").hide();
-						$("#container").append("<canvas id='"+canvas+"' class='canvas' width='1070' height='650'></canvas>");
-						console.log(canvas+'                            2');
+						if(!$("#"+canvas).length){
+							$("#container").append("<canvas id='"+canvas+"' class='canvas' width='1070' height='650'></canvas>");
+						}
 						$("#"+canvas).show();
+						$("#"+Session.get('Game_Data_id')+"_datos").remove()
 				}
 			})
 		}
 		return false;
 	},
 	'click a.join_match':function(){
+		partida=Partidas.findOne(Session.get('Game_Data_id'));
 		var usuid = Meteor.userId();
 		if (usuid){
 			var usu = Meteor.users.findOne(usuid);
 			if (usu){
-				Meteor.call('IncluirJugador',this._id,usu.username,function(err,res){
+				Meteor.call('IncluirJugador',Session.get('Game_Data_id'),usu.username,function(err,res){
 					if(! err){
 						Meteor.subscribe(res)
 						$('.canvas').hide()
 						$("#container").append("<canvas id='Canvas_"+res+"' class='canvas' width='1070' height='650'></canvas>");
 						Session.set("Current_Game",res)
+						$("#"+Session.get('Game_Data_id')+"_datos").remove()
 					}
 				})
 			}
-		return false;
 		}else{
 				alert('Debes estar registrado para unirte a una partida');
 		}
+		return false;
 	}
-};
+}
+
+Template.gamesList.events={
+
+	'mouseover div.match':function(){
+		$(".datos").remove();
+		Session.set('Game_Data_id',this._id)
+		var usuid = Meteor.userId();
+		var cadena = "";
+
+// 		if (usuid){
+// 			var usu = Meteor.users.findOne(usuid);
+// 			if (usu){
+// 				if ((usu.username in Partida.jugadores) || (Partida.estado /= "Lobby")){
+// 					cadena = "<a class='watch_match' href=''>Obervar partida<a></br>"
+// 				}else{
+					cadena = "<a class='join_match' href=''>Unirse a partida </a></br><a class='watch_match' href=''>Obervar partida<a></br>"
+// 				}
+// 			}
+// 		}
+		var jugadores = "";
+		for(var i=0; i<this.jugadores.length; i++){
+			jugadores = jugadores + "Jugador"+i+": "+this.jugadores[i]+"</br>";
+		};
+		$("#pop_up").append("<div id='"+this._id+"_datos' class='datos' style='display:none'>Nombre Partida: "+this.nombre+"</br>"+jugadores+"Tipo escenario:"+this.opciones.escenario +"</br>"+ "Numero jugadores maquina:" +this.opciones.jugadores_maquina+"</br> "+ "Nivel:"+this.opciones.niveles+"</br>"+ "Tablero inteligente"+ this.opciones.tablero_inteligente+"</br>"+cadena+"</br></div>");
+		$("#"+this._id+"_datos").show(500);
+	},
+
+	'mouseleave div.match':function(){
+		var partida_id = this._id;	//Otra chapuza premeditada sin sentido.
+		var id = Meteor.setTimeout(function(partida_id){$("#"+Session.get('Game_Data_id')+"_datos").remove()},500);
+		Session.set("id_pop_up",id);
+	}
+}
 
 Accounts.ui.config({
 	passwordSignupFields:"USERNAME_AND_OPTIONAL_EMAIL"
