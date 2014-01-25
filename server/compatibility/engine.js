@@ -111,7 +111,11 @@ PruebaItera = function(Ficha,rotacion){
 	};
 	for(i = 0; i < 24; i++){
 		if (ArFi[i].nombre == Ficha){
-			FichaDev = ArFi[i];
+			FichaDev.nombre = ArFi[i].nombre;
+			FichaDev.u = ArFi[i].u;
+			FichaDev.r = ArFi[i].r;
+			FichaDev.d = ArFi[i].d;
+			FichaDev.l = ArFi[i].l;
 			//console.log("Rotacion: " + rotacion); //Comprobamos la rotación que se nos pasa
 			if (rotacion == 0)
 				FichaDev.gir = 0;
@@ -121,6 +125,7 @@ PruebaItera = function(Ficha,rotacion){
 				FichaDev.gir = 2;
 			if (rotacion == 270)
 				FichaDev.gir = 3;
+			//console.log("AGF FichaDev.u: " + FichaDev.u + " FichaDev.r: " + FichaDev.r + " FichaDev.d: " + FichaDev.d + " FichaDev.l: " + FichaDev.l);
 			return FichaDev;
 		}
 	}
@@ -185,12 +190,12 @@ CrearArJug = function(id){
 //SEGUNDA FUNCIÓN AUTORUN JUGADAS
 //función añadir jugada nueva en tablero
 CrearTabJug = function(id, x, y, ficha, rota, user, cuadrado, zona){
-	var Ficha1 = PruebaItera(ficha,rota);
+	Ficha1 = PruebaItera(ficha,rota);
 	Ficha1.nomjug = user;
 	console.log("COMPROBACION GENERAL DE COMO INSERTO LA FICHA EN TABLERO");
 	console.log("AGF Ficha1.u: " + Ficha1.u + " Ficha1.r: " + Ficha1.r + " Ficha1.d: " + Ficha1.d + " Ficha1.l: " + Ficha1.l + "Ficha.gir" + Ficha1.gir);
-	//Ficha1 = GirarFicha(Ficha1);
-	//console.log("AGF Ficha1.u: " + Ficha1.u + " Ficha1.r: " + Ficha1.r + " Ficha1.d: " + Ficha1.d + " Ficha1.l: " + Ficha1.l + "Ficha.gir" + Ficha1.gir);
+	Ficha1 = GirarFicha(Ficha1);
+	console.log("AGF Ficha1.u: " + Ficha1.u + " Ficha1.r: " + Ficha1.r + " Ficha1.d: " + Ficha1.d + " Ficha1.l: " + Ficha1.l + "Ficha.gir" + Ficha1.gir);
 	for(i=0; i<= CuentaTableros - 1;i++){
 		if (Tableros[i].id == id){
 			console.log("INSERTA FICHA EN TABLERO");
@@ -208,6 +213,7 @@ RegMov = function(id, jugador, m){
 //Procedimiento que mira las posiciones del tablero para ver si se puede colocar la ficha
 //Terminología: U: Up, R:Right, D: Down, L:Left. 
 colocarficha = function(id_part, Ficha, X, Y, rotacion){
+		console.log("                                           ");
 		console.log("                   JUGADA NUEVA            ");
 		//Primero extremos el tablero mediante el Id
 		console.log("MIRANDO ROTACION");
