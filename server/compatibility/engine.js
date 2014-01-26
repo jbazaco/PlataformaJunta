@@ -287,7 +287,6 @@ colocarficha = function(id_part, Ficha, X, Y, rotacion){
 };
 
 
-
 //funcion cierra claustro
 
 CierraClaustro = function(Tablero,X,Y){
