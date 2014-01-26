@@ -59,26 +59,19 @@ var ParJugadas = [];
 ContadorJugadas = 0;
 CuentaTableros = 0;
 
-//Creo el array y luego hago el random del número que le pasamos al array
 Aleatorio = function(){
-	console.log("Entra en Aleatorio");
+	var decision = false
 	var a = Math.floor(Math.random()*24);
 	var Ficha = { 
-		nombre: "nada", 
-		u: CAMINO, 
-		r: CAMINO, 
-		d: CAMINO, 
-		l: CAMINO, 
-		gir:0,
-		nomjug: "nada",
+		nombre: "nada"
 	};
 	Ficha.nombre = ArFi[a].nombre;
-	Ficha.u = ArFi[a].u;
-	Ficha.r = ArFi[a].r;
-	Ficha.d = ArFi[a].d;
-	Ficha.l = ArFi[a].l;
+	if (decision = false)
+		decision = true;
+	else
+		decision
 	return Ficha;
-};
+}
 
 //Funcion de prueba para comprobar fichas dada una posicion A (int)
 Prueba = function(A){
@@ -181,7 +174,7 @@ CrearArJug = function(id){
 		id: id,
 		Tablero: Tablero
 	}
-	console.log("CREAMOS TABLERO DE PARTIDA");
+	//console.log("CREAMOS TABLERO DE PARTIDA");
 	Tableros.push(partida);
 	CuentaTableros++;  
 	//console.log("CrearArJug(2) CuentaTableros: " + CuentaTableros);
@@ -192,13 +185,13 @@ CrearArJug = function(id){
 CrearTabJug = function(id, x, y, ficha, rota, user, cuadrado, zona){
 	Ficha1 = PruebaItera(ficha,rota);
 	Ficha1.nomjug = user;
-	console.log("COMPROBACION GENERAL DE COMO INSERTO LA FICHA EN TABLERO");
-	console.log("AGF Ficha1.u: " + Ficha1.u + " Ficha1.r: " + Ficha1.r + " Ficha1.d: " + Ficha1.d + " Ficha1.l: " + Ficha1.l + "Ficha.gir" + Ficha1.gir);
+	//console.log("COMPROBACION GENERAL DE COMO INSERTO LA FICHA EN TABLERO");
+	//console.log("AGF Ficha1.u: " + Ficha1.u + " Ficha1.r: " + Ficha1.r + " Ficha1.d: " + Ficha1.d + " Ficha1.l: " + Ficha1.l + "Ficha.gir" + Ficha1.gir);
 	Ficha1 = GirarFicha(Ficha1);
-	console.log("AGF Ficha1.u: " + Ficha1.u + " Ficha1.r: " + Ficha1.r + " Ficha1.d: " + Ficha1.d + " Ficha1.l: " + Ficha1.l + "Ficha.gir" + Ficha1.gir);
+	//console.log("AGF Ficha1.u: " + Ficha1.u + " Ficha1.r: " + Ficha1.r + " Ficha1.d: " + Ficha1.d + " Ficha1.l: " + Ficha1.l + "Ficha.gir" + Ficha1.gir);
 	for(i=0; i<= CuentaTableros - 1;i++){
 		if (Tableros[i].id == id){
-			console.log("INSERTA FICHA EN TABLERO");
+			//console.log("INSERTA FICHA EN TABLERO");
 			//console.log("CrearTabJug(1). Tableros[i].id: " + Tableros[i].id + " id: " + id);
 			Tableros[i].Tablero[x][y] = Ficha1;	
 		}
@@ -213,15 +206,14 @@ RegMov = function(id, jugador, m){
 //Procedimiento que mira las posiciones del tablero para ver si se puede colocar la ficha
 //Terminología: U: Up, R:Right, D: Down, L:Left. 
 colocarficha = function(id_part, Ficha, X, Y, rotacion){
-		console.log("                                           ");
-		console.log("                   JUGADA NUEVA            ");
-		//Primero extremos el tablero mediante el Id
-		console.log("MIRANDO ROTACION");
-		console.log("Rotacion que nos pasan: " + rotacion);
+		//console.log("                                           ");
+		//console.log("                   JUGADA NUEVA            ");
+		//console.log("MIRANDO ROTACION");
+		//console.log("Rotacion que nos pasan: " + rotacion);
 		Ficha = PruebaItera(Ficha,rotacion);
-		console.log("Gira que tenemos: " + Ficha.gir);
+		//console.log("Gira que tenemos: " + Ficha.gir);
 		Ficha = GirarFicha(Ficha);
-		console.log("Gira que tenemos: " + Ficha.gir);
+		//console.log("Gira que tenemos: " + Ficha.gir);
 		
 		var encontrado = false;
 		var colocado = true;
