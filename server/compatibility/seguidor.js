@@ -238,31 +238,30 @@ ColocarSeguidorCastillo = function(Tablero, cuadrado, X, Y){
     //entramos en el caso de las fichas inconexas
     if (fichas2LadosCierranCastillo.indexOf(Ficha.nombre)!=-1){
         console.log("x e y iniciales "+X+"   "+ Y);
+        if (cuadrado== 0){
+        	console.log("no estas pasando seguidor yaq que la posicion del seguidor es: " + cuadrado);
+        }
         //tengo que ver las 4 posiciones del seguidor
-        if (PosSeguidor==2){
+        else if (cuadrado==2){
             Y1=Y+1;
-            //puntos= DarPuntos(puntos, Ficha);
             MeteDirec(X,Y);
             RecursivaSeguidor(Tablero[X][Y1], "abajo", X, Y1);
         }
-        else if (PosSeguidor==6){
-            //console.log("posicion del seguidor es: " + PosSeguidor);
+        else if (cuadrado==6){
+            //console.log("posicion del seguidor es: " + cuadrado);
             X1=X+1;
-            //puntos= DarPuntos(puntos,Ficha);
             MeteDirec(X,Y);
             RecursivaSeguidor(Tablero[X1][Y], "izquierda", X1, Y);
         }
-        else if (PosSeguidor==8){
-            //console.log("posicion del seguidor es: " + PosSeguidor);
+        else if (cuadrado==8){
+            //console.log("posicion del seguidor es: " + cuadrado);
             Y2=Y-1;
-            //puntos= DarPuntos(puntos, Ficha);
             MeteDirec(X,Y);
             RecursivaSeguidor(Tablero[X][Y2], "arriba", X, Y2);
         }
-        else if (PosSeguidor==4){
-            //console.log("posicion del seguidor es: " + PosSeguidor);
+        else if (cuadrado==4){
+            //console.log("posicion del seguidor es: " + cuadrado);
             X2=X-1;
-            //puntos= DarPuntos(puntos, Ficha);
             MeteDirec(X,Y);
             RecursivaSeguidor(Tablero[X2][Y], "derecha", X2, Y);
         }
