@@ -1087,7 +1087,13 @@ Game.autorun = Deps.autorun(function(){
 			console.log('este es el estado de la partida:   '+partida.estado)
 			if (partida.estado==="Terminada"){
 				Terminada=true;
-				alert("La partida ha finalizado");
+
+				var mayor = _.max(partida.jugadores, function(nick){
+					var jug = partida.jugadores.indexOf(nick);
+					return partida.puntuacion[jug];
+				});
+
+				alert("La partida ha finalizado. El ganador es " + mayor);
 			}
 			
 		}
