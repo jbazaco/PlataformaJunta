@@ -12,7 +12,7 @@ Meteor.subscribe("DatosUsuarios");
 Meteor.startup(function(){
 	screenauto();
     $("#opciones").hide();
-	screenauto();	//Refresh automatico de la pantalla aunque el tamaño cambie
+	//screenauto();	//Refresh automatico de la pantalla aunque el tamaño cambie
 	$( "#container3" ).tabs({ hide: { effect: "slide",direction:'up', duration: 100 }, show:{ effect: "slide",direction:'up', duration: 100 }  });
 	$(".subtab").hide();	//Esconde los subtans que se encuentran en la segunda pestaña del acordeon
 	$(".canvas").hide();	//Esconde todos los canvas
@@ -21,15 +21,18 @@ Meteor.startup(function(){
 		$( "#opciones" ).fadeToggle( "slow", "linear" );
 	});
 	
-	Session.setDefault('Current_Game_id',0);
+	Session.setDefault('Current_Game_id',0);	
 
-	
+	$(".ajust").accordion();
 	$("#pop_up").on('mouseenter', '.datos', function(){
 		var id = Session.get("id_pop_up");
 		Meteor.clearTimeout(id);
 	});
 	$("#pop_up").on('mouseleave', '.datos', function(){
 		$(".datos").remove();
+	});
+	$("#fondoPantalla").click(function(){
+		$(".fondos").toggle();
 	});
 });
 
@@ -197,6 +200,38 @@ Template.gamesList.imIn = function(){
 	}else{
 		return false;
 	};
+}
+
+
+Template.ajustes.events={
+	'click a#fondo0':function(){
+		$("#containermain").css("background-image",'url(../imagenes/fondo3.jpg)');
+		$("#container").css("border","3px solid black")
+		$("#container2").css("background-color","#CBAD48")
+		$("#container3").css("background-color","#CBAD48")
+		$("#container4").css("background-color","white")
+		$("#container5").css({"background-color":"#CBAD48","border":"1px solid black"})
+		return false;
+	},
+	'click a#fondo1':function(){
+		$("#containermain").css("background-image",'url(../imagenes/papel.jpg)');
+		$("#container").css("border","3px solid black")
+		$("#container2").css("background-color","#ADD8E6")
+		$("#container3").css("background-color","#ADD8E6")
+		$("#container4").css("background-color","white")
+		$("#container5").css({"background-color":"#ADD8E6","border":"2px solid black"})
+		return false;
+	},
+	'click a#fondo2':function(){
+		$("#containermain").css("background-image",'url(../imagenes/negro.jpg)');
+		$("#container").css("border","3px solid white")
+		$("#container2").css("background-color","#DCDCDC")
+		$("#container3").css("background-color","#DCDCDC")
+		$("#container4").css("background-color","#C0C0C0")
+		$("#container5").css({"background-color":"#C0C0C0","border":"2px solid white"})
+		//$("#input").css("background-color","green")
+		return false;
+	},
 }
 
 

@@ -34,7 +34,7 @@
 			<li><a href="#tabs-1" >Usuarios</a></li>
 			<li><a href="#tabs-2" >Juego</a></li>
 			<li><a href="#tabs-3" >Ajustes</a></li>
-			<li><a href="#tabs-4" >Ránking</a></li>
+			<li><a href="#tabs-4" >Rank</a></li>
 			</ul>
 			<div id="tabs-1" class="tabs">
 				{{>ListaEstados}}
@@ -50,8 +50,7 @@
 				</div>				
 			</div>
 			<div id="tabs-3" class="tabs">
-				<p>Quisque eu urna vel enim commodo pellentesque. Praesent eu risus hendrerit ligula tempus pretium.</p>
-				<p>Duis cursus. Maecenas ligula eros.</p>
+				{{>ajustes}}
 			</div>
 			<div id="tabs-4" class="tabs">
 				{{>RankingJuego}}
@@ -83,6 +82,15 @@
 
 <template name="input">
 	<p> <strong>Message:</strong><input type="text" id="message"> </p>
+</template>
+
+<template name="ajustes" class="ajust">
+	<div id="fondoPantalla" >
+		<p style="font-weight:bold" color=black>Fondos de pantalla</p><br /> 
+		<a id="fondo0" class="fondos" href="">Fondo principal</a><br /> 
+		<a id="fondo1" class="fondos" href="">Fondo de papel</a><br /> 
+		<a id="fondo2" class="fondos" href="">Fondo negro</a><br /> 
+	</div>
 </template>
 
 <template name="options">
@@ -215,7 +223,7 @@
 <template name="ListaEstados">
 	{{#each ListaEstados}}
 		{{#if ColorEstado}}
-        <span class="NombreUsuario">{{username}}</span> : <span style="color:green">{{estado}}</span>  <br />  
+        <span class="NombreUsuario">{{username}}</span> : <span style="color:black">{{estado}}</span>  <br />  
 		{{else}}
         <span class="NombreUsuario">{{username}}</span> : <span>{{estado}}</span>  <br />  
 		{{/if}}

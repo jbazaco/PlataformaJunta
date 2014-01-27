@@ -52,9 +52,15 @@ table {
 	width:100%;
 	height:100%;
 	position: absolute;
-	background-image: url(../imagenes/fondo3.jpg);
+	background-image: url(../imagenes/fondo3.jpg)
 }
 
+/*
+#fondoPantalla {
+	border: 2px solid  black;
+	padding: 1em; 	
+}
+*/
 .publi{
 	width: 165px;
 	height: 31px;
@@ -66,11 +72,12 @@ table {
 	height:65%;
 	float:left;
 	margin-left:2%;
-	border-radius:5px;
+	border-radius:20px;
+	border:3px solid black;
 }
+
 #container2 {
- 	 background-color:#CBAD48;
-  	background: #CBAD48;
+ 	background-color:#CBAD48;
   	width:26%;
   	height:30%;
   	float:right;
@@ -87,10 +94,9 @@ table {
 }
 
 #container3 {
-	width:26%;
+	width:25.5%;
 	height:58%;
 	background-color:#CBAD48;
-	background: #CBAD48;
 	float:right;
 	margin-right: 2%;
 	margin-top: 20px;
@@ -99,15 +105,18 @@ table {
 	opacity:0.6;
 }
 #container4 {
-	width:68%;
+	width:69%;
 	height:20%;
 	margin-left:2%;
+	background-color:white;
 }
 #container5 {
-	width:70%;
+	width:69%;
 	float:left;
 	height:5%;
 	margin-left:2%;
+	border:2px solid black;
+	background-color:#CBAD48;
 }
 #message {
 	width: 85%;
