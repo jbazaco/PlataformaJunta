@@ -93,7 +93,8 @@ Template.options.events={
 			return false;
 		}
 		else{
-			name=$("#nombre").val();	
+			name=$("#nombre").val();
+			$("#nombre").val("");	
 		}
 		n_players= parseInt($('input[name=n_jugadores]:checked', '#opciones').val());	
 		opciones.jugadores_maquina=n_players;
