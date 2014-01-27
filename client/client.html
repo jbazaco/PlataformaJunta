@@ -25,6 +25,11 @@
 			<canvas id='tablero' class='canvas' width='1150' height='1150'></canvas>
 		</div>
 		<div id='container2'>
+			<div>
+				{{>games}}
+			</div>
+		</div>
+		<div id='container3'>
 			<ul>
 			<li><a href="#tabs-1" >Usuarios</a></li>
 			<li><a href="#tabs-2" >Juego</a></li>
@@ -50,12 +55,6 @@
 			</div>
 			<div id="tabs-4" class="tabs">
 				{{>RankingJuego}}
-			</div>
-		</div>
-		<div id='container3'>
-			<div>
-				{{>button}}
-				{{>games}}
 			</div>
 		</div>
 		<div id='container4' class="chatAreadiv">
@@ -116,51 +115,65 @@
 	</div>
 </template>
 
-
-<template name="button">
-	<input type="text" id="entry"/>
-	<input type="button" class="b1" value="B1"/>
-	<input type="button" class="b2" value="B2"/>
-</template>
-
 <template name="games">
-	<div>	
-		<ul class="list">
-			<li class="item" >
-				<a id="game_1" href="" title="AlienInvasion" align="left">
-					<img src="alienInvasion.png" width="60px" height="41px">
-				</a>
-				<div class="ListaPartidas" id='ListaPartidas_1'>
-					<!-- Slideshow de capturas de pantalla del alien-->
-				</div>
-			</li>
-			<li class="item">
-				<a id="game_2" href="" title="Angryfruits">
-					<img src="agryfruits.png" width="60px" height="41px">
-				</a>
-				<div class="ListaPartidas" id='ListaPartidas_2'>
-					<!-- Slideshow de capturas de pantalla del fruits-->
-				</div>
-			</li>
-			<li class="item">
-				<a id="game_3" href="" title="Carcassonne">
-					<img src="carcassonne-logo.jpg" width="60px" height="41px">
-				</a>
-				<div class="ListaPartidas" id='ListaPartidas_3'>
-					<!-- Slideshow de capturas de pantalla del carca-->
-				</div>
-			</li>                                                                  
-		</ul>
+	<div style='text-align:center'>
+		Juegos en la plataforma
 	</div>
+	<table style='margin-top:10px'>
+		<td style='width:25%'>
+			<ul class="list">
+				<li class="item" >
+					<a id="game_1" href="" title="AlienInvasion" align="left">
+						<img src="alienInvasion.png" width="60px" height="41px">
+					</a>
+					<div class="ListaPartidas" id='ListaPartidas_1'>
+						<!-- Slideshow de capturas de pantalla del alien-->
+					</div>
+				</li>
+				<li class="item">
+					<a id="game_2" href="" title="Angryfruits">
+						<img src="agryfruits.png" width="60px" height="41px">
+					</a>
+					<div class="ListaPartidas" id='ListaPartidas_2'>
+						<!-- Slideshow de capturas de pantalla del fruits-->
+					</div>
+				</li>
+				<li class="item">
+					<a id="game_3" href="" title="Carcassonne">
+						<img src="carcassonne-logo.jpg" width="60px" height="41px">
+					</a>
+					<div class="ListaPartidas" id='ListaPartidas_3'>
+						<!-- Slideshow de capturas de pantalla del carca-->
+					</div>
+				</li>                                                                  
+			</ul>
+		</td>
+		<td style='width:75%'>
+			<div id='juego_descripcion' style='text-align:center'>
+				Haz click en cualquiera de los juegos de la izquierda para empezar a jugar!
+			</div>
+		</td>
+	</table>
 </template>
 
 <template name="gamesList">
 	{{#each gamesListIn}}
-		<div class='match' style="font-weight:bold;color:green">{{nombre}}
+		<div class='match' style="font-weight:bold;color:green">
+			{{nombre}}
+			<div id={{nombre}} class='match_info' style="display: none;font-weight:normal;">
+				{{jugadores}} </br>
+				<a class='watch_match' href="">Observar partida<a></br>
+			</div>
 		</div>
 	{{/each}}
 	{{#each gamesListOut}}
-		<div class='match' style="font-weight:bold;">{{nombre}}
+		<div class='match' style="font-weight:bold;">
+			{{nombre}}
+			<div id={{nombre}} class='matchinfo' style="display: none;font-weight:normal;">
+				{{jugadores}} </br>
+				<a class='join_match' href="">Unirse a partida </a>
+				<a class='watch_match' href="">Observar partida<a></br>
+			</div>
 		</div>
 	{{/each}}
 </template>
@@ -202,9 +215,9 @@
 <template name="ListaEstados">
 	{{#each ListaEstados}}
 		{{#if ColorEstado}}
-        <span class="NombreUsuario">{{username}}</span> : <span style="color:green">{{estado}}</span>    
+        <span class="NombreUsuario">{{username}}</span> : <span style="color:green">{{estado}}</span>  <br />  
 		{{else}}
-        <span class="NombreUsuario">{{username}}</span> : <span>{{estado}}</span>    
+        <span class="NombreUsuario">{{username}}</span> : <span>{{estado}}</span>  <br />  
 		{{/if}}
 	{{/each}}
 </template>

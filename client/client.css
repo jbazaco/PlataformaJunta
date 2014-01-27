@@ -2,7 +2,6 @@
 v2.0 | 20110126
 License: none (public domain)
 */
-
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -100,8 +99,8 @@ table {
 	opacity:0.6;
 }
 #container4 {
-	width:70%;
-	height:22%;
+	width:68%;
+	height:20%;
 	margin-left:2%;
 }
 #container5 {
@@ -199,5 +198,10 @@ textarea
 .startgame
 {
 	cursor: pointer;
+}
+
+div
+{
+	border: 1px;
 }
 
