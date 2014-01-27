@@ -180,7 +180,7 @@ ColocarSeguidorCastillo = function(Tablero, cuadrado, X, Y){
         console.log("                                ");
         if (Tablero[X][Y]!=0){
             console.log("LA FICHA: " + Ficha.nombre + " Coordenadas: X= " + X + "||| Y= " + Y);
-            Points = true;
+            Flag = true;
             if (fichasLadoCastilloConexos.indexOf(Ficha.nombre)!=-1){    //si la ficha esta en este array
                 console.log("la ficha "+ Ficha.nombre + " está en el array conexo | CX: " + X + "||| CY: " + Y);
                 console.log("DarDirec es: " + DarDirec(X,Y));
@@ -190,34 +190,34 @@ ColocarSeguidorCastillo = function(Tablero, cuadrado, X, Y){
                         MeteDirec(X,Y);
                         //puntos= DarPuntos(puntos, Ficha);
                         RecursivaSeguidor(Tablero[X][Y1],"abajo",X,Y1);
-                        Points = false;
+                        Flag = false;
                     }       
                     if ((Ficha.r=="castillo") && (Prohibido!= "derecha")){
-                        if (Points){                       
+                        if (Flag){                       
                             MeteDirec(X,Y);
                             //puntos= DarPuntos(puntos, Ficha);
                         }
                         X1=X+1;
                         RecursivaSeguidor(Tablero[X1][Y],"izquierda",X1,Y);
-                        Points = false;
+                        Flag = false;
                     }
                     if ((Ficha.d=="castillo") && (Prohibido!= "abajo")){
-                        if (Points){                       
+                        if (Flag){                       
                             MeteDirec(X,Y);
                             //puntos= DarPuntos(puntos, Ficha);
                         }
                         Y2=Y-1;
                         RecursivaSeguidor(Tablero[X][Y2],"arriba",X,Y2);
-                        Points = false;
+                        Flag = false;
                     }
                     if ((Ficha.l=="castillo") && (Prohibido!= "izquierda")){
-                        if (Points){                   
+                        if (Flag){                   
                             MeteDirec(X,Y);
                             //puntos= DarPuntos(puntos, Ficha);
                         }
                         X2=X-1;
                         RecursivaSeguidor(Tablero[X2][Y],"derecha",X2,Y);
-                        Points = false;
+                        Flag = false;
                     }
                 }
             }
@@ -270,35 +270,35 @@ ColocarSeguidorCastillo = function(Tablero, cuadrado, X, Y){
     else{
         console.log("La ficha inicial es conexa");
         MeteDirec(X,Y);
-        Points = true;
+        Flag = true;
         if (Ficha.u == "castillo"){
             console.log("Entra Arriba");
             Y1=Y+1;
             //puntos= DarPuntos(puntos, Ficha);
             RecursivaSeguidor(Tablero[X][Y1],"abajo",X,Y1);
-            Points = false;
+            Flag = false;
         }
         if ((Ficha.r=="castillo")){
             console.log("Entra Derecha");
             X1=X+1;
-            if (Points)
+            if (Flag)
                 //puntos= DarPuntos(puntos, Ficha);
             RecursivaSeguidor(Tablero[X1][Y],"izquierda",X1,Y);
-            Points = false;
+            Flag = false;
         }
         if ((Ficha.d=="castillo")){
             console.log("Ficha.nombre: " + Ficha.nombre);
             console.log("Entra Abajo");
             Y2=Y-1;
-            if (Points)           
+            if (Flag)           
                 //puntos= DarPuntos(puntos, Ficha);
             RecursivaSeguidor(Tablero[X][Y2],"arriba",X,Y2);
-            Points = false;
+            Flag = false;
         }
         if ((Ficha.l=="castillo")){
             console.log("Entra Izquierda");
             X2=X-1;
-            if (Points)
+            if (Flag)
                 //puntos= DarPuntos(puntos, Ficha);
             RecursivaSeguidor(Tablero[X2][Y],"derecha",X2,Y);
         }
