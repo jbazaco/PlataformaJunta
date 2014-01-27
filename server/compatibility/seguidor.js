@@ -149,7 +149,7 @@ ColocarSeguidorCastillo = function(Tablero, cuadrado, X, Y){
 	
 	var arr = [];	//Array con todas las direcciones por las que ya hemos pasado
 	var constante = 0; //Con esta constante sabremos cuantas fichas hemos investigado en MeteDirec
-
+	var PuedesPonerSeguidor= true;
 	var Entrar = 0;
 	MeteDirec = function(X, Y){         // Diccionario de las posiciones que ha tenido ese camino, para comprobar si hemos retornado al inicio.
 		console.log("Metemos direccion: " + X + "," + Y);
@@ -224,6 +224,11 @@ ColocarSeguidorCastillo = function(Tablero, cuadrado, X, Y){
             else if (DarDirec(X,Y)){
                 console.log("la ficha "+ Ficha.nombre + " está en el array inconexo.");
                 //puntos= DarPuntos(puntos, Ficha);;
+                if (Ficha.scuadrado==2 || Ficha.scuadrado==4 || Ficha.scuadrado==6 ||Ficha.scuadrado==8 ){
+                	console.log("no puedes poner seguidor en la ficha porque ya hay un seguidor en " + Ficha.nombre + "en la posicion " + Ficha.scuadrado);
+                	PuedesPonerSeguidor = false;
+                	return PuedesPonerSeguidor;
+                }
                 MeteDirec(X,Y);               
                 //console.log("los puntos intermedios en la ficha inconexa " + Ficha.nombre + " son: " + puntos);
             }
@@ -273,32 +278,25 @@ ColocarSeguidorCastillo = function(Tablero, cuadrado, X, Y){
         if (Ficha.u == "castillo"){
             console.log("Entra Arriba");
             Y1=Y+1;
-            //puntos= DarPuntos(puntos, Ficha);
             RecursivaSeguidor(Tablero[X][Y1],"abajo",X,Y1);
             Flag = false;
         }
         if ((Ficha.r=="castillo")){
             console.log("Entra Derecha");
             X1=X+1;
-            if (Flag)
-                //puntos= DarPuntos(puntos, Ficha);
             RecursivaSeguidor(Tablero[X1][Y],"izquierda",X1,Y);
             Flag = false;
         }
         if ((Ficha.d=="castillo")){
             console.log("Ficha.nombre: " + Ficha.nombre);
             console.log("Entra Abajo");
-            Y2=Y-1;
-            if (Flag)           
-                //puntos= DarPuntos(puntos, Ficha);
+            Y2=Y-1;           
             RecursivaSeguidor(Tablero[X][Y2],"arriba",X,Y2);
             Flag = false;
         }
         if ((Ficha.l=="castillo")){
             console.log("Entra Izquierda");
             X2=X-1;
-            if (Flag)
-                //puntos= DarPuntos(puntos, Ficha);
             RecursivaSeguidor(Tablero[X2][Y],"derecha",X2,Y);
         }
        
