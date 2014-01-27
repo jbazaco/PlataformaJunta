@@ -32,8 +32,24 @@ Meteor.startup(function(){
 	$("#pop_up").on('mouseleave', '.datos', function(){
 		$(".datos").remove();
 	});
+/*
 	$("#fondoPantalla").click(function(){
 		$(".fondos").toggle();
+	});
+*/
+	$(function() {
+		$( "#accordion1" ).accordion({
+		heightStyle: "fill"
+		});
+	});
+
+	$(function() {
+		$( "#accordionGeneral" ).resizable({
+			
+			resize: function() {
+				$( "#accordion1" ).accordion( "refresh" );
+			}
+		});
 	});
 });
 
@@ -218,8 +234,8 @@ Template.ajustes.events={
 	'click a#fondo1':function(){
 		$("#containermain").css("background-image",'url(../imagenes/papel.jpg)');
 		$("#container").css("border","3px solid black")
-		$("#container2").css("background-color","#ADD8E6")
-		$("#container3").css("background-color","#ADD8E6")
+		$("#container2").css("background-color","#20B2AA")
+		$("#container3").css("background-color","#20B2AA")
 		$("#container4").css("background-color","white")
 		$("#container5").css({"background-color":"#ADD8E6","border":"2px solid black"})
 		return false;
@@ -229,6 +245,16 @@ Template.ajustes.events={
 		$("#container").css("border","3px solid white")
 		$("#container2").css("background-color","#DCDCDC")
 		$("#container3").css("background-color","#DCDCDC")
+		$("#container4").css("background-color","#C0C0C0")
+		$("#container5").css({"background-color":"#C0C0C0","border":"2px solid white"})
+		//$("#input").css("background-color","green")
+		return false;
+	},
+	'click a#fondo3':function(){
+		$("#containermain").css("background-image",'url(../imagenes/lluvia.jpg)');
+		$("#container").css("border","3px solid white")
+		$("#container2").css("background-color","#20B2AA")
+		$("#container3").css("background-color","#20B2AA")
 		$("#container4").css("background-color","#C0C0C0")
 		$("#container5").css({"background-color":"#C0C0C0","border":"2px solid white"})
 		//$("#input").css("background-color","green")

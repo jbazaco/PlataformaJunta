@@ -102,11 +102,20 @@
 </template>
 
 <template name="ajustes" class="ajust">
-	<div id="fondoPantalla" >
-		<p style="font-weight:bold" color=black>Fondos de pantalla</p><br /> 
-		<a id="fondo0" class="fondos" href="">Fondo principal</a><br /> 
-		<a id="fondo1" class="fondos" href="">Fondo de papel</a><br /> 
-		<a id="fondo2" class="fondos" href="">Fondo negro</a><br /> 
+	<div id="accordionGeneral" class="ui-widget-content">
+		<div id="accordion1">
+			<h3><p style="font-weight:bold" color=black>Temas</p></h3>
+			<div style='color:black' id="fondoPantalla" >
+				<a id="fondo0" class="fondos" href="">Desierto agrietado</a><br /> 
+				<a id="fondo1" class="fondos" href="">Papel arrugado</a><br /> 
+				<a id="fondo2" class="fondos" href="">Agujero Negro</a><br /> 
+				<a id="fondo3" class="fondos" href="">Móstoles lluvioso</a><br />
+			</div>
+			<h3><p style="font-weight:bold" color=black>Otras cosas</p></h3>
+			<div id="parrafo" >
+				<p style="font-weight:bold" color=black>Otras cosas</p>
+			</div>
+		</div>
 	</div>
 </template>
 
@@ -240,7 +249,7 @@
 <template name="ListaEstados">
 	{{#each ListaEstados}}
 		{{#if ColorEstado}}
-        <span class="NombreUsuario">{{username}}</span> : <span style="color:black">{{estado}}</span>  <br />  
+        <span class="NombreUsuario">{{username}}</span> : <span style="color:green">{{estado}}</span>  <br />  
 		{{else}}
         <span class="NombreUsuario">{{username}}</span> : <span>{{estado}}</span>  <br />  
 		{{/if}}
