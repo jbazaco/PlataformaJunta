@@ -371,7 +371,7 @@ Template.gamesList.events={
 		if (usuid){
 			var usu = Meteor.users.findOne(usuid);
  			if (usu){
- 				if ((Partida.jugadores.indexOf(usu.username)==(-1))) || (Partida.estado != "Lobby")){
+ 				if ((Partida.jugadores.indexOf(usu.username)!=(-1)) || (Partida.estado != "Lobby")){
  					cadena = "<a class='watch_match' href=''>Observar partida<a></br>"
  				}else{
 					cadena = "<a class='join_match' href=''>Unirse a partida </a></br><a class='watch_match' href=''>Observar partida<a></br>"
