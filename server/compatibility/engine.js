@@ -54,12 +54,11 @@ ArFi = _.toArray(FichaPropiedades); //Convertimos lo que tenemos en un Array par
 
 var Tableros = []; //Array de [ID | Tablero correspondiente a ese ID] 
 
-var ParJugadas = [];
 
 ContadorJugadas = 0;
 CuentaTableros = 0;
 
-Aleatorio = function(){
+Aleatorio = function(id){
 	var decision = false
 	var a = Math.floor(Math.random()*24);
 	var Ficha = { 

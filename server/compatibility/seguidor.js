@@ -53,7 +53,7 @@ var FichaPAmp = {
 /*23*/  	ciucam2e:{nombre:"ciucam2e", si:"campo", sc:"ciudad", sd:"campo",
 						ci:"campo", cc:"ciudad", cd:"campo", ii:"campo", ic:"ciudad", id:"campo"}      
 };
-
+/*
 ArFiAmp = _.toArray(FichaPAmp);
 
 
@@ -157,16 +157,12 @@ ColocarLadron = function(Tablero, cuadrado, zona, X, Y){
 	//FichaAct = Transforma(Tablero, X, Y);
 	
 	//Primero entramos aqui
-	if (zona == 'campo'){
-		
-	}
-	else if (zona == 'campo2'){
+	if (cuadrado == 1){
 
 	}
-	else if (zona == 'campo3'){
+	else if (cuadrado == 2){
 
 	}
-	else if (zona == 'campo4'){}
 
 };
 
@@ -385,8 +381,7 @@ PonerSeguidorCamino = function(Tablero, Pos, X, Y){
 		
 };
 
-
-
+*/
 
 
 
