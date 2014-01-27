@@ -252,16 +252,10 @@ Meteor.methods({
   },
 
   // Metodo para actualizar la ultima ficha que se ha utilizado
-
-<<<<<<< HEAD
-  ActualizaFicha : function(id,ficha){
-	ActualizarFicha(id,ficha);
-=======
   ActualizaFicha : function(id){
     var Partida = Partidas.findOne(id);
     var ficha = Aleatorio();
     Partidas.update(id,{$set:{ultimaficha: ficha["nombre"]}});		
->>>>>>> c9ab5265657b98ec79c38712b2a7583d36131c97
   },
 
 	// Al terminar una partida se debe llamar a este método para todos y cada uno de los jugadores de esa
@@ -349,6 +343,8 @@ Meteor.methods({
 		return Aleatorio();
 	},
 	
+
+	//Hay que pasar una Tablero dado de momento, hare que nosotros cojamos el tablero de plataforma
 	ColocaFicha:function(Id, Ficha, x, y, rotacion){  // Dado una ficha y dos posiciones, se devuelve un booleano para si se puede o no colocar esa ficha
 		return colocarficha(Id,Ficha,x,y, rotacion);
 	},

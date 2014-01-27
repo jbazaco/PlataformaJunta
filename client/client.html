@@ -59,9 +59,7 @@
 			</div>
 		</div>
 		<div id='container4' class="chatAreadiv">
-			<table class="chatAreaTable" id ="ChatArea">
-				<tr id="firstRow"><td></td><td></td></tr>
-			</table>
+			{{>chat}}
 		</div>
 		<div id='container5'>
 			{{>input}}
@@ -71,6 +69,24 @@
 	{{>popup}}
 </body>
 
+<template name='chat'>
+	<table>
+		<td id='chat_salas' style='width:15%'>
+			<ul>
+				<li id='sala_general'><a>Sala General</a></li>
+				<li id='sala_juego'><a>Juego</a></li>
+				<li id='sala_privada'><a>Privados</a></li>
+			</ul>
+		</td>
+		<td style='width:85%'>
+			<div>
+				<table class="chatAreaTable" id ="ChatArea">
+					<tr id="firstRow"><td></td><td></td></tr>
+				</table>
+			</div>
+		</td>
+	</table>
+</template>
 
 <template name="popup">
 	<div id="pop_up">
