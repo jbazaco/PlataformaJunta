@@ -345,7 +345,8 @@ BotonFinTurno = new function() {
 									x: debajo.coordenadas.x , y: debajo.coordenadas.y, 
 									scuadrado: scuadrado, szona: szona, esjugada:true});
 				FichaActual.resetear();
-
+			
+				
 				
 
 			}
@@ -505,12 +506,7 @@ FichaActual = new function() {
 		
 
 		if (this.sprite === 'interrogante' && esMiTurno) {
-			Meteor.call('DevuelveFicha', function(err, results){
-				if(err){
-      					console.log(err.reason);
-   				}else{
-					FichaActual.sprite=results.nombre;
-    				}});		
+			Meteor.call('ActualizaFicha', Session.get("Current_Game"));		
 			return true;
 		}
 
@@ -619,6 +615,17 @@ FichaActual = new function() {
 		this.rotacion=0;	
 	}
 	
+	this.actualizar = function(){
+		var idpartida=Session.get("Current_Game");
+		Meteor.call("UltimaFicha", idpartida, function(err, results){
+			if(err){
+				console.log(err.reason);
+			}else{
+				if(results) FichaActual.sprite = results;		
+			}
+			
+		});
+	}
 	this.pintarRejilla = function(){
 		
 		Game.ctx.fillStyle = "#000000";
@@ -1045,6 +1052,8 @@ Game.autorun = Deps.autorun(function(){
 				nmov++;
 				gestionarMov(movs[i]);
 			}
+			
+			FichaActual.actualizar();
 			var idpartida=Session.get("Current_Game");
 			Meteor.call("VerTurno", idpartida, function(err, results){
 				if(err){
