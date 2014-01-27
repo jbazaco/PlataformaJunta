@@ -45,7 +45,6 @@ Meteor.startup(function(){
 
 	$(function() {
 		$( "#accordionGeneral" ).resizable({
-			
 			resize: function() {
 				$( "#accordion1" ).accordion( "refresh" );
 			}
@@ -227,8 +226,8 @@ Template.ajustes.events={
 		$("#container").css("border","3px solid black")
 		$("#container2").css("background-color","#CBAD48")
 		$("#container3").css("background-color","#CBAD48")
-		$("#container4").css("background-color","white")
-		$("#container5").css({"background-color":"#CBAD48","border":"1px solid black"})
+		$("#container4").css("background-color","#CBAD48")
+		$("#container5").css({"background-color":"#CBAD48","border":"2px solid black"})
 		return false;
 	},
 	'click a#fondo1':function(){
@@ -238,6 +237,7 @@ Template.ajustes.events={
 		$("#container3").css("background-color","#20B2AA")
 		$("#container4").css("background-color","white")
 		$("#container5").css({"background-color":"#ADD8E6","border":"2px solid black"})
+		$('.bienvenida').css("color","black")
 		return false;
 	},
 	'click a#fondo2':function(){
@@ -247,6 +247,7 @@ Template.ajustes.events={
 		$("#container3").css("background-color","#DCDCDC")
 		$("#container4").css("background-color","#C0C0C0")
 		$("#container5").css({"background-color":"#C0C0C0","border":"2px solid white"})
+		$('.bienvenida').css("color","white")
 		//$("#input").css("background-color","green")
 		return false;
 	},
@@ -257,6 +258,18 @@ Template.ajustes.events={
 		$("#container3").css("background-color","#20B2AA")
 		$("#container4").css("background-color","#C0C0C0")
 		$("#container5").css({"background-color":"#C0C0C0","border":"2px solid white"})
+		$('.bienvenida').css("color","black")
+		//$("#input").css("background-color","green")
+		return false;
+	},
+	'click a#fondo4':function(){
+		$("#containermain").css("background-image",'url(../imagenes/nieve.jpg)');
+		$("#container").css("border","3px solid white")
+		$("#container2").css("background-color","#7B68EE")
+		$("#container3").css("background-color","#7B68EE")
+		$("#container4").css("background-color","#7B68EE")
+		$("#container5").css({"background-color":"#7B68EE","border":"2px solid white"})
+		$('.bienvenida').css("color","black")
 		//$("#input").css("background-color","green")
 		return false;
 	},
