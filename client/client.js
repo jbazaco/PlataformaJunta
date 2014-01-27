@@ -290,7 +290,7 @@ Template.gamesList.gamesListOut = function(){
 	if (usuid){
 		var usu = Meteor.users.findOne(usuid);
 		if (usu){
-			return Partidas.find({$nor:[{jugadores:{$all:['usu1']}},{estado:"Empezada"},{estado:"Terminada"}]});
+			return Partidas.find({$nor:[{jugadores:{$all:[usu.username]}},{estado:"Empezada"},{estado:"Terminada"}]});
 		}else{
 			return Partidas.find();
 		}
