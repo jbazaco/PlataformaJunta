@@ -259,8 +259,11 @@ TitleScreen = function TitleScreen(title,subtitle,callback) {
 	this.soltar = function(x,y) {	}
 
 	this.pulsado = function() {
-		Meteor.call("EmpezarPartida", Session.get("Current_Game"));
-		callback();
+		//Si esta observando la partida no puede empezarla
+		if (this.jugadores.indexOf(Meteor.user().username) >= 0) {
+			Meteor.call("EmpezarPartida", Session.get("Current_Game"));
+			callback();
+		}
 	}
 	
 	//Si estan todos los jugadores se empieza (para el caso de todos jugadores maquina)
