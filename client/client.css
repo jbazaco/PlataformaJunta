@@ -1,0 +1,207 @@
+/* http://meyerweb.com/eric/tools/css/reset/
+v2.0 | 20110126
+License: none (public domain)
+*/
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	border: 0;
+	font-size: 100%;
+	font-family:verdana,sans-serif;
+	vertical-align: baseline;
+	cursor: default;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+
+/* Center the container */
+#containermain {
+	width:100%;
+	height:100%;
+	position: absolute;
+	background-image: url(../imagenes/fondo3.jpg);
+}
+
+.publi{
+	width: 165px;
+	height: 31px;
+	background-image: url(../imagenes/fondo3.jpg)
+}
+
+#container {
+	width:69%;
+	height:65%;
+	float:left;
+	margin-left:2%;
+	border-radius:5px;
+}
+#container2 {
+ 	 background-color:#CBAD48;
+  	background: #CBAD48;
+  	width:26%;
+  	height:30%;
+  	float:right;
+  	margin-right: 2%;
+	overflow:auto;
+	border-radius:20px;
+    opacity:0.6;
+}
+
+.tabs{
+  color:black;
+	overflow:auto;
+	color:black;
+}
+
+#container3 {
+	width:26%;
+	height:58%;
+	background-color:#CBAD48;
+	background: #CBAD48;
+	float:right;
+	margin-right: 2%;
+	margin-top: 20px;
+	overflow:auto;
+	border-radius:20px;
+	opacity:0.6;
+}
+#container4 {
+	width:68%;
+	height:20%;
+	margin-left:2%;
+}
+#container5 {
+	width:70%;
+	float:left;
+	height:5%;
+	margin-left:2%;
+}
+#message {
+	width: 85%;
+	float:right;
+	margin-right: 2px;
+	color: black;
+}
+#logo {
+	width: 100%;
+	height: 8%;
+	float:left;
+}
+#login {
+	margin-right:2%;
+	margin-top: 8px;
+	float: right;
+}
+#opciones {
+	padding: 2ex;
+	position: absolute;
+	border: 2px double grey;
+	background: wheat;
+	left: 400px;
+	width: 400px;
+	top: 100px;
+}
+/* Give canvas a background */
+canvas {
+	background-color:black;
+	width:100%;
+	height:100%;
+	border-radius:20px;
+
+}
+
+gamelayer {
+	background-color:black;
+	width:100%;
+	height:100%;
+	border-radius:20px;
+
+}
+textarea
+{
+	border:1px solid #999999;
+	width:100%;
+	height: 22%;
+	margin:5px 0;
+	padding:3px;
+}
+
+.chatAreadiv
+{
+	overflow-y: scroll;
+	overflow-x: visible;
+	width: 70%;
+	height: 22%;
+}
+
+.chatAreaTable
+{
+	width: 70%;
+	table-layout:fixed;
+}
+
+.chatAreaTable td div
+{
+	width:75%;
+	margin-top: 5px;
+	word-wrap: break-word;
+}
+
+.NombreUsuario
+{
+	color:black;
+}
+
+.datos {
+	padding: 2ex;
+	position: absolute;
+	border: 2px double grey;
+	background: wheat;
+	left: 400px;
+	width: 460px;
+	top: 100px;
+}
+
+.startgame
+{
+	cursor: pointer;
+}
+
+div
+{
+	border: 1px;
+}
+
