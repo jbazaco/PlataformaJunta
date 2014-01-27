@@ -89,19 +89,22 @@ startGame = function() {
 
 
 
+var puntuaciones;
+ 
 playGame = function(){
-	Game.boards.length = 0;
-	Game.setBoard(Game.boards.length, BotonAyuda);
-	var jugadores = Partidas.findOne(Session.get("Current_Game")).jugadores;
-	var jugadores = Partidas.findOne(Session.get("Current_Game")).jugadores;
-	var numjugadores = jugadores.length <= MAX_JUGADORES ? jugadores.length:MAX_JUGADORES;
-	var numseg;
-	var nick;
-	for (i=1;i<=numjugadores;i++){
-		numseg = new NumSeguidores(i);
-		Game.setBoard(Game.boards.length, numseg);
-		nick = jugadores[i-1]||"Maquina"+i;
-		Game.setBoard(Game.boards.length, new GamePoints(i, nick));
+    puntuaciones = [];
+    Game.boards.length = 0;
+    Game.setBoard(Game.boards.length, BotonAyuda);
+    var jugadores = Partidas.findOne(Session.get("Current_Game")).jugadores;
+    var numjugadores = jugadores.length <= MAX_JUGADORES ? jugadores.length:MAX_JUGADORES;
+    var numseg;
+    var nick;
+    for (i=1;i<=numjugadores;i++){
+        numseg = new NumSeguidores(i);
+        Game.setBoard(Game.boards.length, numseg);
+        nick = jugadores[i-1]||"Maquina"+i;
+        puntuaciones[nick]= new GamePoints(i, nick);
+        Game.setBoard(Game.boards.length, puntuaciones[nick]);
 		seguidores[nick] = [];
 		for (k=1;k<=7;k++){
 			seguidores[nick][k-1] = new Seguidor("s"+i, i, numseg, nick);
@@ -1062,6 +1065,12 @@ Game.autorun = Deps.autorun(function(){
 				nmov++;
 				gestionarMov(movs[i]);
 			}
+			//Actualiza las puntuaciones de los jugadores
+			partida.jugadores.forEach(function(nick){
+				var jug = partida.jugadores.indexOf(nick);
+				puntuaciones[nick].points = partida.puntuacion[jug];
+		   	});
+
 			var idpartida=Session.get("Current_Game");
 			Meteor.call("VerTurno", idpartida, function(err, results){
 				if(err){
@@ -1108,5 +1117,3 @@ Game.autorun2 = Deps.autorun(function(){
 		}
 	}
 });
-
-
