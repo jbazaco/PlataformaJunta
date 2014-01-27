@@ -259,8 +259,8 @@ TitleScreen = function TitleScreen(title,subtitle,callback) {
 	this.soltar = function(x,y) {	}
 
 	this.pulsado = function() {
-		//Si esta observando la partida no puede empezarla
-		if (this.jugadores.indexOf(Meteor.user().username) >= 0) {
+		//Si esta observando la partida o si solo hay un jugador no puede empezar
+		if (this.jugadores.indexOf(Meteor.user().username) >= 0 && this.jugadores.length > 1) {
 			Meteor.call("EmpezarPartida", Session.get("Current_Game"));
 			callback();
 		}
@@ -283,7 +283,7 @@ TitleScreen = function TitleScreen(title,subtitle,callback) {
 		ctx.font = "bold 40px arial";
 
 		ctx.textAlign = "left";
-		ctx.fillText(subtitle,20, 230);
+		if (this.jugadores.length > 1) ctx.fillText(subtitle,20, 230);
 		ctx.font = "bold 40px arial";
 		
 		ctx.fillText("Jugadores actuales:", 20, 300);
