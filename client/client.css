@@ -209,8 +209,11 @@ textarea
 	cursor: pointer;
 }
 
-div
-{
-	border: 1px;
+#chat_salas ul li{
+	background-color:#eee;
+	border:1px solid;
+	border-color:#f3f3f3 #bbb #bbb #f3f3f3;
+	margin:0;
+	padding:.5em;
 }
 

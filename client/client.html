@@ -24,6 +24,7 @@
      		{{> froot_wars}}
 			<canvas id='tablero' class='canvas' width='1150' height='1150'></canvas>
 		</div>
+    <iframe src="//www.facebook.com/plugins/like.php?href=http%3A%2F%2Fplataformajuntaisi.meteor.com%2F&amp;width&amp;layout=standard&amp;action=like&amp;show_faces=false&amp;share=true&amp;height=35&amp;appId=714087085268763" scrolling="no" frameborder="0" style="border:none; overflow:hidden; height:35px;" allowTransparency="true"></iframe>
 		<div id='container2'>
 			<div>
 				{{>games}}
@@ -57,9 +58,7 @@
 			</div>
 		</div>
 		<div id='container4' class="chatAreadiv">
-			<table class="chatAreaTable" id ="ChatArea">
-				<tr id="firstRow"><td></td><td></td></tr>
-			</table>
+			{{>chat}}
 		</div>
 		<div id='container5'>
 			{{>input}}
@@ -69,6 +68,24 @@
 	{{>popup}}
 </body>
 
+<template name='chat'>
+	<table>
+		<td id='chat_salas' style='width:15%'>
+			<ul>
+				<li id='sala_general'><a>Sala General</a></li>
+				<li id='sala_juego'><a>Juego</a></li>
+				<li id='sala_privada'><a>Privados</a></li>
+			</ul>
+		</td>
+		<td style='width:85%'>
+			<div>
+				<table class="chatAreaTable" id ="ChatArea">
+					<tr id="firstRow"><td></td><td></td></tr>
+				</table>
+			</div>
+		</td>
+	</table>
+</template>
 
 <template name="popup">
 	<div id="pop_up">
