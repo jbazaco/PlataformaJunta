@@ -13,7 +13,7 @@ Meteor.startup(function(){
 	screenauto();
     $("#opciones").hide();
 	screenauto();	//Refresh automatico de la pantalla aunque el tamaño cambie
-	$( "#container2" ).tabs({ hide: { effect: "slide",direction:'up', duration: 100 }, show:{ effect: "slide",direction:'up', duration: 100 }  });
+	$( "#container3" ).tabs({ hide: { effect: "slide",direction:'up', duration: 100 }, show:{ effect: "slide",direction:'up', duration: 100 }  });
 	$(".subtab").hide();	//Esconde los subtans que se encuentran en la segunda pestaña del acordeon
 	$(".canvas").hide();	//Esconde todos los canvas
 	$('.escenario').attr("disabled",true);
@@ -22,6 +22,7 @@ Meteor.startup(function(){
 	});
 	
 	Session.setDefault('Current_Game_id',0);
+
 	
 	$("#pop_up").on('mouseenter', '.datos', function(){
 		var id = Session.get("id_pop_up");
@@ -77,15 +78,6 @@ Template.input.events={
 	}
 }
 
-Template.button.events={
-
-	'click input.b1': function () {
-
-	},
-	'click input.b2': function(){
-
-	}
-}
 Template.options.events={
 	'click .submit': function () {
      	var jugadores=[];
@@ -101,7 +93,8 @@ Template.options.events={
 			return false;
 		}
 		else{
-			name=$("#nombre").val();	
+			name=$("#nombre").val();
+			$("#nombre").val("");	
 		}
 		n_players= parseInt($('input[name=n_jugadores]:checked', '#opciones').val());	
 		opciones.jugadores_maquina=n_players;
@@ -215,7 +208,7 @@ Template.games.events={
 		$('#game').show(500);
 		
 		$("#selectedgame").html("Alien Invasion");
-		$("#container2").tabs( "option", "active", 1 );
+		$("#container3").tabs( "option", "active", 1 );
 		return false;
 	},
 	'click a#game_2':function(){
@@ -224,7 +217,7 @@ Template.games.events={
 		$('#gamecanvas').show(500);
 		
 		$("#selectedgame").html("Angry Fruits");
-		$("#container2").tabs( "option", "active", 1 );
+		$("#container3").tabs( "option", "active", 1 );
 		return false;
 	},
 	'click a#game_3':function(){
@@ -233,9 +226,25 @@ Template.games.events={
 		$('#tablero').show(500);
 
 		$("#selectedgame").html("Carcassonne");	
-		$("#container2").tabs( "option", "active", 1);
+		$("#container3").tabs( "option", "active", 1);
 		return false;
-	} 
+	},
+	'mouseenter a#game_1':function(){
+		$('#juego_descripcion').html('Haz click en la imagen y empieza a jugar ya a AlienInvasion!');
+		return false;
+	},
+	'mouseenter a#game_2':function(){
+		$('#juego_descripcion').html('Haz click en la imagen y empieza a jugar ya a AngryFruits!');
+		return false;
+	},
+	'mouseenter a#game_3':function(){
+		$('#juego_descripcion').html('Haz click en la imagen y empieza a jugar ya a este juego sin nombre!');
+		return false;
+	},
+	'mouseleave':function(){
+		$('#juego_descripcion').html('Haz click en cualquiera de los juegos de la izquierda para empezar a jugar!');
+		return false;
+	}
 }
 
 
@@ -269,8 +278,7 @@ Template.gamesList.gamesListIn = function(){
 	if (usuid){
 		var usu = Meteor.users.findOne(usuid);
 		if (usu){
-      return Partidas.find({},{sort:{jugadores:1}})
-			//return Partidas.find({jugadores:{$all:[usu.username]}});
+			return Partidas.find({$or:[{jugadores:{$all:[usu.username]}},{estado:"Empezada"}]});
 		}
 	}
 };
@@ -282,7 +290,7 @@ Template.gamesList.gamesListOut = function(){
 	if (usuid){
 		var usu = Meteor.users.findOne(usuid);
 		if (usu){
-			return Partidas.find({jugadores:{$not:{$all:[usu.username]}}});
+			return Partidas.find({$nor:[{jugadores:{$all:[usu.username]}},{estado:"Empezada"},{estado:"Terminada"}]});
 		}else{
 			return Partidas.find();
 		}
@@ -357,19 +365,20 @@ Template.gamesList.events={
 	'mouseover div.match':function(){
 		$(".datos").remove();
 		Session.set('Game_Data_id',this._id)
+		var Partida = Partidas.findOne({nombre:this.nombre});
 		var usuid = Meteor.userId();
 		var cadena = "";
 
-// 		if (usuid){
-// 			var usu = Meteor.users.findOne(usuid);
-// 			if (usu){
-// 				if ((usu.username in Partida.jugadores) || (Partida.estado /= "Lobby")){
-// 					cadena = "<a class='watch_match' href=''>Obervar partida<a></br>"
-// 				}else{
-					cadena = "<a class='join_match' href=''>Unirse a partida </a></br><a class='watch_match' href=''>Obervar partida<a></br>"
-// 				}
-// 			}
-// 		}
+		if (usuid){
+			var usu = Meteor.users.findOne(usuid);
+ 			if (usu){
+ 				if ((Partida.jugadores.indexOf(usu.username)!=(-1)) || (Partida.estado != "Lobby")){
+ 					cadena = "<a class='watch_match' href=''>Observar partida<a></br>"
+ 				}else{
+					cadena = "<a class='join_match' href=''>Unirse a partida </a></br><a class='watch_match' href=''>Observar partida<a></br>"
+ 				}
+ 			}
+ 		}
 		var jugadores = "";
 		for(var i=0; i<this.jugadores.length; i++){
 			jugadores = jugadores + "Jugador"+i+": "+this.jugadores[i]+"</br>";
@@ -405,5 +414,4 @@ Deps.autorun(function(){
 		$(str).show(500);
 	}
 })
-
 
