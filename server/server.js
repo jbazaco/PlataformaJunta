@@ -266,6 +266,7 @@ Meteor.methods({
 	PuntuacionTotal : function(jugador,punt,juego){
 		return PuntuacionTotal(jugador,punt,juego);
 	},
+
 	//Se llama a este metodo para actualizar la puntuacion de cada jugada (punt) de cada 
 	//jugador (jugador) en la partida (id)
 	PuntuacionJugadorPartida: function(id,jugador,punt){
