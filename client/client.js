@@ -17,21 +17,20 @@ Meteor.startup(function(){
 	$(".subtab").hide();	//Esconde los subtans que se encuentran en la segunda pestaña del acordeon
 	$(".canvas").hide();	//Esconde todos los canvas
 	$('.escenario').attr("disabled",true);
-// 	Meteor.setTimeout(function(){$(".user").click(ShowUserInfo)},500);		//Hacer click muestra estadisticas de usuario, otro click lo cierra.
-  //Meteor.setTimeout(function(){(".match").onmouseover(ShowPartidaInfo)},500);
 	$( ".startgame" ).click(function() {
 		$( "#opciones" ).fadeToggle( "slow", "linear" );
 	});
+	
 	Session.setDefault('Current_Game_id',0);
 
-  $("#pop_up").on('mouseenter', '.datos', function(){
-   var id = Session.get("id_pop_up");
-   Meteor.clearTimeout(id);
-  });
-  $("#pop_up").on('mouseleave', '.datos', function(){
-    $(".datos").remove();
-  });
-
+	
+	$("#pop_up").on('mouseenter', '.datos', function(){
+		var id = Session.get("id_pop_up");
+		Meteor.clearTimeout(id);
+	});
+	$("#pop_up").on('mouseleave', '.datos', function(){
+		$(".datos").remove();
+	});
 });
 
 var screenauto= function(){
@@ -160,17 +159,28 @@ Template.ListaEstados.ColorEstado = function(){
 	}
 }
 Template.ListaEstados.events={
-  'mouseover .NombreUsuario':function(){
-    $(".datos").hide();
-    $("#pop_up").append("<div id='"+this.username+"' class='datos' style='display:none'>"+this.username +": "+ this.estado+"</br> "+ this.puntuacion[0].juego+"=> Puntuación Total:"+ this.puntuacion[0].total+" Puntuación Record: "+this.puntuacion[0].record+"</br>"+this.puntuacion[1].juego+"=> Puntuación Total:"+ this.puntuacion[1].total+" Puntuación Record: "+this.puntuacion[1].record+"</br>"+
-this.puntuacion[2].juego+"=> Puntuación Total:"+ this.puntuacion[2].total+" Puntuación Record: "+this.puntuacion[2].record+"</div>");
-    $("#"+this.username).show(500);
-  },
+	'mouseover .NombreUsuario':function(){
+		$(".datos").hide();
+		cadena="";
+		cadena+="<div id='"+this.username+"_datos' class='datos' style='display:none'>"+this.username +": "+ this.estado+"</br>"
+		switch (Session.get("Current_Game_id")){
+			case 1 : cadena+=this.puntuacion[0].juego+" </br>Puntos: "+ this.puntuacion[0].total+" Record: "+this.puntuacion[0].record+"</br>"; break;
+			case 2 : cadena+=this.puntuacion[1].juego+" </br>Puntos: "+ this.puntuacion[1].total+" Record: "+this.puntuacion[1].record+"</br>"; break;
+			case 3 : cadena+=this.puntuacion[2].juego+" </br>Puntos: "+ this.puntuacion[2].total+" Record: "+this.puntuacion[2].record; break;
+			default: console.log(Session.get("Current_Game_id"))
+		}
+		cadena+="</div>"
+		$("#pop_up").append(cadena);
+		//La chapuza sin sentido es premeditada, no funciona si no le pasas la variable username aunque luego no la utilices. Dunno y.
+		username= this.username
+		var id = Meteor.setTimeout(function(username){$("#"+this.username+"_datos").show()},500);
+		Session.set("id_pop_up",id);
+	},
 
-  'mouseleave .NombreUsuario':function(){
-    var id = Meteor.setTimeout(function(){$("#"+this.username).remove()},5000);
-    Session.set("id_pop_up",id);
-  }
+	'mouseleave .NombreUsuario':function(){
+		Meteor.clearTimeout(Session.get("id_pop_up"));
+		$("#"+this.username+"_datos").remove();
+	}
 }
 
 
@@ -288,84 +298,100 @@ Template.gamesList.gamesListOut = function(){
 	}
 };
 
-Template.gamesList.events={
-
-	'mouseover div.match':function(){
-		$(".datos").hide();
-		var Partida = Partidas.findOne({nombre:this.nombre});
-		var usuid = Meteor.userId();
-		var cadena = "";
-
-		var jugadores = "";
-		for(var i=0; i<this.jugadores.length; i++){
-		jugadores = jugadores + "Jugador"+i+": "+this.jugadores[i]+"</br>";
-		};
-		$("#pop_up").append("<div id='"+this.nombre+"' class='datos' style='display:none'>Nombre Partida: "+this.nombre+"</br>"+jugadores+"Tipo escenario:"+this.opciones.escenario +"</br>"+ "Numero jugadores maquina:" +this.opciones.jugadores_maquina+"</br> "+ "Nivel:"+this.opciones.niveles+"</br>"+ "Tablero inteligente"+ this.opciones.tablero_inteligente+"</br>"+cadena+"</br></div>");
-		$("#"+this.nombre).show(500);
-	},
-
-  'mouseleave div.match':function(){
-    var id = Meteor.setTimeout(function(){$("#"+this.username).remove()},2000);
-    Session.set("id_pop_up",id);
-  },
-
+Template.popup.events={
 	'click a.watch_match':function(){
 		var usuid = Meteor.userId();
-		
 		if (usuid){
 			var usu = Meteor.users.findOne(usuid);
 			if (usu){
-				Meteor.call('IncluirInvitado',this._id,usu.username,function(err,res){
+				Meteor.call('IncluirInvitado',Session.get('Game_Data_id'),usu.username,function(err,res){
 					if(! err){
 						Meteor.subscribe(res)
 						Session.set("Current_Game",res);
-						console.log('esta es la res del susbcribe:      '+res)
 						var canvas = "Canvas_"+res;
 						$(".canvas").hide();
 						if(!$("#"+canvas).length){
 							$("#container").append("<canvas id='"+canvas+"' class='canvas' width='1070' height='650'></canvas>");
-							console.log(canvas+'                        1');
 						}
 						$("#"+canvas).show();
+						$("#"+Session.get('Game_Data_id')+"_datos").remove()
 					}
 				})
 			}
 		}else{
-			Meteor.call('IncluirInvitado',this._id,"Invitado",function(err,res){
+			Meteor.call('IncluirInvitado',Session.get('Game_Data_id'),"Invitado",function(err,res){
 				console.log(res)
 				if(! err){
 					Meteor.subscribe(res)
 					Session.set("Current_Game",res);
 						var canvas = "Canvas_"+res;
 						$(".canvas").hide();
-						$("#container").append("<canvas id='"+canvas+"' class='canvas' width='1070' height='650'></canvas>");
-						console.log(canvas+'                            2');
+						if(!$("#"+canvas).length){
+							$("#container").append("<canvas id='"+canvas+"' class='canvas' width='1070' height='650'></canvas>");
+						}
 						$("#"+canvas).show();
+						$("#"+Session.get('Game_Data_id')+"_datos").remove()
 				}
 			})
 		}
 		return false;
 	},
 	'click a.join_match':function(){
+		partida=Partidas.findOne(Session.get('Game_Data_id'));
 		var usuid = Meteor.userId();
 		if (usuid){
 			var usu = Meteor.users.findOne(usuid);
 			if (usu){
-				Meteor.call('IncluirJugador',this._id,usu.username,function(err,res){
+				Meteor.call('IncluirJugador',Session.get('Game_Data_id'),usu.username,function(err,res){
 					if(! err){
 						Meteor.subscribe(res)
 						$('.canvas').hide()
 						$("#container").append("<canvas id='Canvas_"+res+"' class='canvas' width='1070' height='650'></canvas>");
 						Session.set("Current_Game",res)
+						$("#"+Session.get('Game_Data_id')+"_datos").remove()
 					}
 				})
 			}
-		return false;
 		}else{
 				alert('Debes estar registrado para unirte a una partida');
 		}
+		return false;
 	}
-};
+}
+
+Template.gamesList.events={
+
+	'mouseover div.match':function(){
+		$(".datos").remove();
+		Session.set('Game_Data_id',this._id)
+		var Partida = Partidas.findOne({nombre:this.nombre});
+		var usuid = Meteor.userId();
+		var cadena = "";
+
+		if (usuid){
+			var usu = Meteor.users.findOne(usuid);
+ 			if (usu){
+ 				if ((Partida.jugadores.indexOf(usu.username)==(-1))) || (Partida.estado != "Lobby")){
+ 					cadena = "<a class='watch_match' href=''>Observar partida<a></br>"
+ 				}else{
+					cadena = "<a class='join_match' href=''>Unirse a partida </a></br><a class='watch_match' href=''>Observar partida<a></br>"
+ 				}
+ 			}
+ 		}
+		var jugadores = "";
+		for(var i=0; i<this.jugadores.length; i++){
+			jugadores = jugadores + "Jugador"+i+": "+this.jugadores[i]+"</br>";
+		};
+		$("#pop_up").append("<div id='"+this._id+"_datos' class='datos' style='display:none'>Nombre Partida: "+this.nombre+"</br>"+jugadores+"Tipo escenario:"+this.opciones.escenario +"</br>"+ "Numero jugadores maquina:" +this.opciones.jugadores_maquina+"</br> "+ "Nivel:"+this.opciones.niveles+"</br>"+ "Tablero inteligente"+ this.opciones.tablero_inteligente+"</br>"+cadena+"</br></div>");
+		$("#"+this._id+"_datos").show(500);
+	},
+
+	'mouseleave div.match':function(){
+		var partida_id = this._id;	//Otra chapuza premeditada sin sentido.
+		var id = Meteor.setTimeout(function(partida_id){$("#"+Session.get('Game_Data_id')+"_datos").remove()},500);
+		Session.set("id_pop_up",id);
+	}
+}
 
 Accounts.ui.config({
 	passwordSignupFields:"USERNAME_AND_OPTIONAL_EMAIL"

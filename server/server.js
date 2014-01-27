@@ -37,6 +37,23 @@ ActualizarEstado = function(){
 };
 Meteor.setTimeout(ActualizarEstado,1000);
 
+
+//Función que devuelve una Ficha aleatoria
+
+/*Aleatorio = function(){
+	var decision = false
+	var a = Math.floor(Math.random()*24);
+	var Ficha = { 
+		nombre: "nada"
+	};
+	Ficha.nombre = ArFi[a].nombre;
+	if (decision = false)
+		decision = true;
+	else
+		decision
+	return Ficha;
+};*/
+
 // Al terminar una partida se debe llamar a este método para todos y cada uno de los jugadores de esa
 // partida y comprobar si han conseguido un nuevo record.
 PuntuacionRecord = function(jugador,punt,juego){
@@ -154,6 +171,7 @@ Meteor.methods({
 		console.log("Registrar Movimientos");
 		//if(jugadorpermitido)
 		Partidas.update(id,{$push:{jugadas:movimiento}});
+		RegMov(id,jugador,movimiento);
 	},
 
 	// Esta función devuelve el ultimo movimiento jugado en la partida
@@ -236,7 +254,8 @@ Meteor.methods({
 
   ActualizaFicha : function(id,ficha){
     var Partida = Partidas.findOne(id);
-    Partidas.update(id,{$set:{ultimaficha: ficha}});
+	//var ficha = Aleatorio();
+    Partidas.update(id,{$set:{ultimaficha: ficha}});		
   },
 
 	// Al terminar una partida se debe llamar a este método para todos y cada uno de los jugadores de esa
@@ -303,6 +322,7 @@ Meteor.methods({
 	// Cambia el estado de una partida a "Empezada" dado su identificador.
 	EmpezarPartida:function(id){
 		Partidas.update(id,{$set:{estado:"Empezada"}});
+		CrearArJug(id); 
 	},
 	
 	// Cambia el estado de una partida a "Terminada" dado su identificador.
@@ -319,14 +339,13 @@ Meteor.methods({
 	
 	//Disponible
 	DevuelveFicha:function(){
-		console.log("1");
+		console.log("Aleatorio");
 		return Aleatorio();
 	},
+	
 	//Hay que pasar una Tablero dado de momento, hare que nosotros cojamos el tablero de plataforma
-
-
-	ColocaFicha:function(Id, Ficha, x, y){  // Dado una ficha y dos posiciones, se devuelve un booleano para si se puede o no colocar esa ficha
-		colocarficha(Id, Ficha, x ,y);
+	ColocaFicha:function(Id, Ficha, x, y, rotacion){  // Dado una ficha y dos posiciones, se devuelve un booleano para si se puede o no colocar esa ficha
+		return colocarficha(Id,Ficha,x,y, rotacion);
 	},
 	
 	ColocarSeguidor:function(ficha, campoficha, rotacion, x, y){
