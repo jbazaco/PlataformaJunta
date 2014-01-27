@@ -84,6 +84,7 @@ var seguidores = {
 startGame = function() {
 	Game.setBoard(0,new TitleScreen("Carcassonline.",
 				"Haga click para empezar sin esperar a más jugadores.",playGame));
+	Game.autorun2._compute();
 }
 
 
@@ -109,7 +110,7 @@ playGame = function(){
 	}
 	Game.setBoard(Game.boards.length,FichaActual);
 	FichaActual.nextBoard = Game.boards.length;
-
+	Game.setBoard(Game.boards.length, Turno);
 	Game.setBoard(Game.boards.length, BotonReset);
 	Game.setBoard(Game.boards.length,BotonFinTurno);
 	Game.setBoard(Game.boards.length, new BotonMoverTablero(1000, 570, 0));
@@ -119,16 +120,12 @@ playGame = function(){
 	
 
 
-	//if(! Partidas.findOne(Session.get("Current_Game")).estado == "Empezada"){
-		ficha_inicial = new Ficha(394, 263,"cmur");
-		Game.setBoard(Game.boards.length, ficha_inicial);
-		Game.setBoard(Game.boards.length,Fondo);
-		ficha_inicial.buscar_huecos();
-	//}else{
-		//Game.autorun._compute()
-	//}
-
-	nfich = 1;
+	ficha_inicial = new Ficha(394, 263,"cmur");
+	Game.setBoard(Game.boards.length, ficha_inicial);
+	Game.setBoard(Game.boards.length,Fondo);
+	ficha_inicial.buscar_huecos();
+	nmov = 1;
+	Game.autorun._compute();
 
 	var idpartida=Session.get("Current_Game");
 	Meteor.call("VerTurno", idpartida, function(err, results){
@@ -141,8 +138,6 @@ playGame = function(){
 		}
 	
 	}});
-
-	nmov = 1;
 
 }
 
@@ -216,6 +211,28 @@ BotonAyuda = new function() {
 	}    
 }
 
+Turno = new function() {
+	this.name="";
+	this.mover = function(x,y) {	}
+	this.soltar = function(x,y) {	}
+	this.pulsado = function() {	}
+	this.draw = function(ctx) {
+		if(esMiTurno){
+			ctx.fillStyle= "#ffffff";
+			ctx.font = "bold 16px arial";
+			ctx.fillText("Es tu turno", 900, 40);
+		}else{
+			ctx.font = "bold 16px arial";
+			ctx.fillStyle= "#ffffff";
+			ctx.fillText("Es el turno de", 880, 40);
+			ctx.fillText(this.name, 880, 55);
+		}
+	}
+	this.cambiarNick = function(nick){
+		this.name=nick;
+	}
+
+}
 MenuAyuda = new function(){
 	this.x = 0;
 	this.y = 0;
@@ -573,7 +590,7 @@ FichaActual = new function() {
 			if (debajo instanceof Ficha && debajo.sprite === "interrogante"){
 				var id = Session.get("Current_Game");
 				Meteor.call('ColocaFicha',id,this.sprite,debajo.coordenadas.x, 
-				debajo.coordenadas.y,function(err, result){
+				debajo.coordenadas.y,this.rotacion,function(err, result){
 
 					if(err){
       						console.log(err.reason);
@@ -1055,6 +1072,7 @@ Game.autorun = Deps.autorun(function(){
 				if(err){
 					console.log(err.reason);
 				}else{
+				Turno.cambiarNick(results);
 				console.log("Resultado: " + results);
 				if (Meteor.user().username==results){
 					esMiTurno=true;
@@ -1070,7 +1088,7 @@ Game.autorun = Deps.autorun(function(){
 
 //Si esta en la pantalla de inicio se encarga de añadir jugadores nuevos
 //o ejecuta playGame si la partida ya está empezada o ha acabado
-Deps.autorun(function(){
+Game.autorun2 = Deps.autorun(function(){
 	var idpartida = Session.get("Current_Game");
 	console.log('esta es la id de la partida:             '+idpartida);
 	if (idpartida){

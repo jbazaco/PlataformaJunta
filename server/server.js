@@ -4,13 +4,14 @@ Meteor.publish('messages', function(){
 	return Messages.find({}, {sort: {time:-1}});
 });
 
+// Añadimos el campo ficha que representa el string de la ultima ficha que se ha movido
 Meteor.publish('partidas',function(){
-	return Partidas.find({},{fields: {nombre:1, jugadores:1,opciones:1,canvas:1,estado:1, partidas:1}});
+	return Partidas.find({},{fields: {nombre:1, jugadores:1,opciones:1,canvas:1,estado:1, ficha:1}});
 });
 
 // Publicacion del campo puntuacion para que puedan acceder los clientes.
 Meteor.publish("DatosUsuarios", function () {
-	return Meteor.users.find({},{fields: {username:1,puntuacion: 1,registrado: 1,services: 1,estado:1}});
+	return Meteor.users.find({},{fields: {username:1,puntuacion:1, historial:1, registrado: 1, services: 1,estado:1}});
 });
 
 
@@ -25,12 +26,33 @@ ActualizarEstado = function(){
 			EliminarJugador(user.username);
 		}else{
 			//Usuario: Conectado
-			Meteor.users.update(user,{$set:{estado:"Conectado"}});
+			if(user.estado === undefined){
+				Meteor.call('InicializaCliente',user._id);
+				console.log(user.username+": Inicializado")
+			}
+			else{Meteor.users.update(user,{$set:{estado:"Conectado"}});}
 		}
 	});
-	Meteor.setTimeout(ActualizarEstado,1000);
+	Meteor.setTimeout(ActualizarEstado,500);
 };
-Meteor.setTimeout(ActualizarEstado,5000);
+Meteor.setTimeout(ActualizarEstado,1000);
+
+
+//Función que devuelve una Ficha aleatoria
+
+/*Aleatorio = function(){
+	var decision = false
+	var a = Math.floor(Math.random()*24);
+	var Ficha = { 
+		nombre: "nada"
+	};
+	Ficha.nombre = ArFi[a].nombre;
+	if (decision = false)
+		decision = true;
+	else
+		decision
+	return Ficha;
+};*/
 
 // Al terminar una partida se debe llamar a este método para todos y cada uno de los jugadores de esa
 // partida y comprobar si han conseguido un nuevo record.
@@ -70,8 +92,11 @@ PuntuacionTotal = function(jugador,punt,juego){
 EliminarJugador = function(jugador){
 	Partidas.find({jugadores:{$in:[jugador]}}).forEach(function(partida){
 		partida.jugadores[partida.jugadores.indexOf(jugador)]="";
-		Partidas.update(partida._id,{$set:{jugadores:partida.jugadores}})
+		Partidas.update(partida._id,{$set:{jugadores:partida.jugadores}})		
 		AgregarPenalizacion(jugador,1);
+		if (partida.jugadores.reduce(function(m,j){return m & j==''},true)){	//si no quedan jugadores humanos
+			Partidas.remove(partida._id);
+		}
 	});
 }
 
@@ -146,6 +171,7 @@ Meteor.methods({
 		console.log("Registrar Movimientos");
 		//if(jugadorpermitido)
 		Partidas.update(id,{$push:{jugadas:movimiento}});
+		RegMov(id,jugador,movimiento);
 	},
 
 	// Esta función devuelve el ultimo movimiento jugado en la partida
@@ -218,7 +244,18 @@ Meteor.methods({
 		})
 		return sid;
 	},
-	
+  // Metodo para comprobar el estado de dicho campo ficha
+  UltimaFicha : function(id){
+    var UltimaFicha = Partidas.findOne(id).ultimaficha;
+    return UltimaFicha;
+  },
+
+  // Metodo para actualizar la ultima ficha que se ha utilizado
+
+  ActualizaFicha : function(id,ficha){
+	ActualizarFicha(id,ficha);
+  },
+
 	// Al terminar una partida se debe llamar a este método para todos y cada uno de los jugadores de esa
 	// partida y comprobar si han conseguido un nuevo record.
 	PuntuacionRecord : function(jugador,punt,juego){
@@ -283,6 +320,7 @@ Meteor.methods({
 	// Cambia el estado de una partida a "Empezada" dado su identificador.
 	EmpezarPartida:function(id){
 		Partidas.update(id,{$set:{estado:"Empezada"}});
+		CrearArJug(id); 
 	},
 	
 	// Cambia el estado de una partida a "Terminada" dado su identificador.
@@ -299,14 +337,20 @@ Meteor.methods({
 	
 	//Disponible
 	DevuelveFicha:function(){
-		console.log("1");
+		console.log("Aleatorio");
 		return Aleatorio();
 	},
+	
 	//Hay que pasar una Tablero dado de momento, hare que nosotros cojamos el tablero de plataforma
+<<<<<<< HEAD
 
 
 	ColocaFicha:function(Id, Ficha, x, y){  // Dado una ficha y dos posiciones, se devuelve un booleano para si se puede o no colocar esa ficha
 		colocarficha(Id, Ficha, x ,y);
+=======
+	ColocaFicha:function(Id, Ficha, x, y, rotacion){  // Dado una ficha y dos posiciones, se devuelve un booleano para si se puede o no colocar esa ficha
+		return colocarficha(Id,Ficha,x,y, rotacion);
+>>>>>>> 80c3a8593b6b7ed44aff9bbdbcdc38e1f6c8cb53
 	},
 	
 	ColocarSeguidor:function(ficha, campoficha, rotacion, x, y){
