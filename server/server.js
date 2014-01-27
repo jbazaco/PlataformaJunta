@@ -342,15 +342,8 @@ Meteor.methods({
 	},
 	
 	//Hay que pasar una Tablero dado de momento, hare que nosotros cojamos el tablero de plataforma
-<<<<<<< HEAD
-
-
-	ColocaFicha:function(Id, Ficha, x, y){  // Dado una ficha y dos posiciones, se devuelve un booleano para si se puede o no colocar esa ficha
-		colocarficha(Id, Ficha, x ,y);
-=======
 	ColocaFicha:function(Id, Ficha, x, y, rotacion){  // Dado una ficha y dos posiciones, se devuelve un booleano para si se puede o no colocar esa ficha
 		return colocarficha(Id,Ficha,x,y, rotacion);
->>>>>>> 80c3a8593b6b7ed44aff9bbdbcdc38e1f6c8cb53
 	},
 	
 	ColocarSeguidor:function(ficha, campoficha, rotacion, x, y){
