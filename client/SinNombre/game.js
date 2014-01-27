@@ -110,7 +110,7 @@ playGame = function(){
 	}
 	Game.setBoard(Game.boards.length,FichaActual);
 	FichaActual.nextBoard = Game.boards.length;
-
+	Game.setBoard(Game.boards.length, Turno);
 	Game.setBoard(Game.boards.length, BotonReset);
 	Game.setBoard(Game.boards.length,BotonFinTurno);
 	Game.setBoard(Game.boards.length, new BotonMoverTablero(1000, 570, 0));
@@ -211,6 +211,28 @@ BotonAyuda = new function() {
 	}    
 }
 
+Turno = new function() {
+	this.name="";
+	this.mover = function(x,y) {	}
+	this.soltar = function(x,y) {	}
+	this.pulsado = function() {	}
+	this.draw = function(ctx) {
+		if(esMiTurno){
+			ctx.fillStyle= "#ffffff";
+			ctx.font = "bold 16px arial";
+			ctx.fillText("Es tu turno", 900, 40);
+		}else{
+			ctx.font = "bold 16px arial";
+			ctx.fillStyle= "#ffffff";
+			ctx.fillText("Es el turno de", 880, 40);
+			ctx.fillText(this.name, 880, 55);
+		}
+	}
+	this.cambiarNick = function(nick){
+		this.name=nick;
+	}
+
+}
 MenuAyuda = new function(){
 	this.x = 0;
 	this.y = 0;
@@ -1050,6 +1072,7 @@ Game.autorun = Deps.autorun(function(){
 				if(err){
 					console.log(err.reason);
 				}else{
+				Turno.cambiarNick(results);
 				console.log("Resultado: " + results);
 				if (Meteor.user().username==results){
 					esMiTurno=true;
