@@ -1050,9 +1050,10 @@ Game.autorun = Deps.autorun(function(){
 			}
 			//Actualiza las puntuaciones de los jugadores
 			partida.jugadores.forEach(function(nick){
-				console.log("puntos "+nick+": "+ partida.puntuacion[nick]);
-				puntuaciones[nick].points = partida.puntuacion[nick];
+				var jug = partida.jugadores.indexOf(nick);
+				puntuaciones[nick].points = partida.puntuacion[jug];
 		   	});
+
 			var idpartida=Session.get("Current_Game");
 			Meteor.call("VerTurno", idpartida, function(err, results){
 				if(err){
