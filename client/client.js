@@ -280,6 +280,8 @@ Template.games.events={
 	'click a#game_1':function(){
 		Session.set('Current_Game_id',1);
 		Session.set("Chat_Selector",1);
+		$('#chat_salas li').css('background-color','#eee');
+		$('#sala_juego').css('background-color','#ccc');
 		$(".canvas").hide();
 		$(".gamelayer").hide();
 		$('#game').show(500);
@@ -292,6 +294,8 @@ Template.games.events={
 	'click a#game_2':function(){
 		Session.set('Current_Game_id',2)
 		Session.set("Chat_Selector",2);
+		$('#chat_salas li').css('background-color','#eee');
+		$('#sala_juego').css('background-color','#ccc');
 		$(".canvas").hide();
 		$('#gamecanvas').show(500);
 		
@@ -303,6 +307,8 @@ Template.games.events={
 	'click a#game_3':function(){
 		Session.set('Current_Game_id',3)
 		Session.set("Chat_Selector",3);
+		$('#chat_salas li').css('background-color','#eee');
+		$('#sala_juego').css('background-color','#ccc');
 		$(".canvas").hide();
 		$('#tablero').show(500);
 
