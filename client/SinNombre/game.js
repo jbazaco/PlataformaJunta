@@ -372,7 +372,8 @@ BotonFinTurno = new function() {
 									x: debajo.coordenadas.x , y: debajo.coordenadas.y, 
 									scuadrado: scuadrado, szona: szona, esjugada:true});
 				FichaActual.resetear();
-
+			
+				
 				
 
 			}
@@ -541,6 +542,14 @@ FichaActual = new function() {
 				return true;
 			}
 
+			if (this.sprite === 'interrogante' && esMiTurno) {
+				Meteor.call('ActualizaFicha', Session.get("Current_Game"));		
+				return true;
+			}
+
+			console.log("turno : " + esMiTurno);
+
+
 			if (!this.seHaMovido() && esMiTurno){
 				if (this.rotacion === 270)
 					this.rotacion = 0;
@@ -550,9 +559,10 @@ FichaActual = new function() {
 				//Si se pulsa sobre la ficha actual colocada se coloca un seguidor
 				var seg = this.seguidor || seguidores.buscarLibre(Meteor.user().username);
 				if (seg) seg.soltar(x,y);
+
 			}
+			return false;
 		}
-		return false;
 	}
 	//tendra que informar al resto de clientes que ficha le ha salido a este jugador
 	//tiene que comprobar que el que hace click es el jugador al que le toca jugar, si no no puede mover
@@ -642,6 +652,18 @@ FichaActual = new function() {
 		if(this.seguidor) this.seguidor.resetear();
 		this.seguidor=null;
 		this.rotacion=0;	
+	}
+	
+	this.actualizar = function(){
+		var idpartida=Session.get("Current_Game");
+		Meteor.call("UltimaFicha", idpartida, function(err, results){
+			if(err){
+				console.log(err.reason);
+			}else{
+				if(results) FichaActual.sprite = results;		
+			}
+			
+		});
 	}
 	
 	this.pintarRejilla = function(){
@@ -1068,26 +1090,29 @@ Game.autorun = Deps.autorun(function(){
 				nmov++;
 				gestionarMov(movs[i]);
 			}
+
 			//Actualiza las puntuaciones de los jugadores
 			partida.jugadores.forEach(function(nick){
 				var jug = partida.jugadores.indexOf(nick);
 				puntuaciones[nick].points = partida.puntuacion[jug];
 		   	});
 
+			FichaActual.actualizar();
+
 			var idpartida=Session.get("Current_Game");
 			Meteor.call("VerTurno", idpartida, function(err, results){
 				if(err){
 					console.log(err.reason);
 				}else{
-				Turno.cambiarNick(results);
-				if (Meteor.user().username==results){
-					esMiTurno=true;
-				}else{
-					esMiTurno=false;
+					Turno.cambiarNick(results);
+					if (Meteor.user().username==results){
+						esMiTurno=true;
+					}else{
+						esMiTurno=false;
+					}
 				}
-			
-			}});
-			console.log('este es el estado de la partida:   '+partida.estado)
+			});
+			console.log('este es el estado de la partida:   '+partida.estado);
 			if (partida.estado==="Terminada"){
 				Terminada=true;
 
@@ -1109,7 +1134,6 @@ Game.autorun = Deps.autorun(function(){
 //o ejecuta playGame si la partida ya está empezada o ha acabado
 Game.autorun2 = Deps.autorun(function(){
 	var idpartida = Session.get("Current_Game");
-	console.log('esta es la id de la partida:             '+idpartida);
 	if (idpartida){
 		var partida = Partidas.findOne(idpartida);
 		var board1 = Game.boards[0];

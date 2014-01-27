@@ -100,7 +100,9 @@ PruebaItera = function(Ficha,rotacion){
 		d: CAMINO,
 		l: CAMINO,
 		gir:0,
-		nomjug:"nada"
+		nomjug:"nada",
+		scuadrado: 0,
+		szona: "nada"
 	};
 	for(i = 0; i < 24; i++){
 		if (ArFi[i].nombre == Ficha){
@@ -128,6 +130,7 @@ PruebaItera = function(Ficha,rotacion){
 //Girar Ficha a partir del campo Ficha.gir 
 GirarFicha = function(Ficha){
 	var aux = 0;
+	var gira = Ficha.gir;
 	//console.log("giro inicial de: " + Ficha.gir);
 	while (Ficha.gir != 0){
 		aux = Ficha.l;
@@ -137,6 +140,7 @@ GirarFicha = function(Ficha){
 		Ficha.u = aux;
 		Ficha.gir = Ficha.gir - 1;
 	}
+	Ficha.gir = gira; //Con esto lo que hago es recordar como de girada esta la ficha ya estando girada
 	return Ficha;
 };
 	
@@ -185,6 +189,8 @@ CrearArJug = function(id){
 CrearTabJug = function(id, x, y, ficha, rota, user, cuadrado, zona){
 	Ficha1 = PruebaItera(ficha,rota);
 	Ficha1.nomjug = user;
+	Ficha1.scuadrado = cuadrado;
+	Ficha1.szona = zona;
 	//console.log("COMPROBACION GENERAL DE COMO INSERTO LA FICHA EN TABLERO");
 	//console.log("AGF Ficha1.u: " + Ficha1.u + " Ficha1.r: " + Ficha1.r + " Ficha1.d: " + Ficha1.d + " Ficha1.l: " + Ficha1.l + "Ficha.gir" + Ficha1.gir);
 	Ficha1 = GirarFicha(Ficha1);
@@ -453,7 +459,7 @@ CuentaPCamino = function(Tablero, Ficha, Num, X, Y){
 
 	// Saber que aquí para probarlo solo van a entrar las fichas que estén en cont y fin camino
 	// Comprobamos donde esta la ficha -- 4 Posibilidades (U-R-D-L)
-	if(Num == 1){ //Miro Arriba
+	if(Num == 2){ //Miro Arriba
 		if (fincamino.indexOf(Ficha.nombre) != -1){ // Buscamos si la ficha esta en fincamino
 			puntos = puntos + 1;		
 			flag = flag + 1; 								// Le sumamos uno porque va a ser un extremo del cierra camino(Va a haber dos)
@@ -466,7 +472,7 @@ CuentaPCamino = function(Tablero, Ficha, Num, X, Y){
 			Continua(Tablero, Ficha, X, Y);
 		}		
 	}	
-	else if (Num == 2){ //Miro Derecha
+	else if (Num == 6){ //Miro Derecha
 		if (fincamino.indexOf(Ficha.nombre) != -1){
 			puntos = puntos + 1;
 			flag = flag + 1;
@@ -478,7 +484,7 @@ CuentaPCamino = function(Tablero, Ficha, Num, X, Y){
 			Continua(Tablero, Ficha, X, Y);
 		}
 	}
-	else if (Num == 3){ //Miro Abajo
+	else if (Num == 8){ //Miro Abajo
 		if (fincamino.indexOf(Ficha.nombre) != -1){
 			puntos = puntos + 1;
 			flag = flag + 1;
@@ -663,20 +669,20 @@ CierraCastillo = function(Tablero, Ficha, PosSeguidor, X, Y){
 	if (fichas2LadosCierranCastillo.indexOf(Ficha.nombre)!=-1){
 		console.log("x e y iniciales "+X+"   "+ Y);
 		//tengo que ver las 4 posiciones del seguidor
-		if (PosSeguidor==1){
+		if (PosSeguidor==2){
 			Y1=Y+1;
 			puntos= DarPuntos(puntos, Ficha);
 			MeteDirec(X,Y);
 			RecursivaCastillo(Tablero[X][Y1], "abajo", X, Y1);
 		}
-		else if (PosSeguidor==2){
+		else if (PosSeguidor==6){
 			//console.log("posicion del seguidor es: " + PosSeguidor);
 			X1=X+1;
 			puntos= DarPuntos(puntos,Ficha);
 			MeteDirec(X,Y);
 			RecursivaCastillo(Tablero[X1][Y], "izquierda", X1, Y);
 		}
-		else if (PosSeguidor==3){
+		else if (PosSeguidor==8){
 			//console.log("posicion del seguidor es: " + PosSeguidor);
 			Y2=Y-1;
 			puntos= DarPuntos(puntos, Ficha);
