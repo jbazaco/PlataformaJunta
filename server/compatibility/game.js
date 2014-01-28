@@ -144,7 +144,7 @@
 		*/
 		
 		
-		var Ficha11 = Prueba(0);	//murcam
+		/*var Ficha11 = Prueba(0);	//murcam
 		Ficha11.gir= 3;
 		Ficha11 = GirarFicha(Ficha11);
 		Tablero[1][1]= Ficha11;
@@ -173,7 +173,7 @@
 		Ficha32.gir= 1;
 		Ficha32 = GirarFicha(Ficha32);
 		Tablero[3][2]= Ficha32;
-
+		*/
 		/*
 		//caso base
 		var Ficha1 = Prueba(13); //mur1
@@ -215,47 +215,21 @@
 		Tablero[3][1]= Ficha3;
 		*/
 		
-		var puntoscastillo = CierraCastillo(Tablero, Ficha11, 2, 1, 1);
-		console.log("la puntuacion total es: " + puntoscastillo);
+		//var puntoscastillo = CierraCastillo(Tablero, Ficha11, 2, 1, 1);
+		//console.log("la puntuacion total es: " + puntoscastillo);
+		var Ficha1 =PruebaItera("mur2", 0);
+		Ficha1.szona="ciudad2";
+		Ficha1.scuadrado=6;
+		Tablero[1][1]= Ficha1;
 		
-		/*
-		var Ficha0 = Prueba(10);	//ciucam
-		Ficha0.gir = 3;
-		Ficha0 = GirarFicha(Ficha0);
-		console.log("con giro 3 >>>>>>>> " + "arriba: " + Ficha0.u + "|| derecha: " + Ficha0.r + " ||abajo: " + Ficha0.d + " ||izquierda: " + Ficha0.l);
-		*/
+		var Ficha2 =PruebaItera("ciucam2", 90);
+		Tablero[1][2]= Ficha2;
 		
+		var Ficha3 = PruebaItera("mur2c", 0);
+		Tablero[1][3]= Ficha3;
 		
-		/*var Ficha0 = Prueba(0);	//murcam
-		Ficha0.gir= 0;
-		Ficha0 = GirarFicha(Ficha0);
-		console.log("sin giro>>>>>> " + "arriba: " + Ficha0.u + "|| derecha: " + Ficha0.r + " ||abajo: " + Ficha0.d + " ||izquierda: " + Ficha0.l);
-		
-		var Ficha1 = Prueba(0);	//murcam
-		Ficha1.gir= 1;
-		Ficha1 = GirarFicha(Ficha1);
-		console.log("con giro 1 >>>>>>>> " + "arriba: " + Ficha1.u + "|| derecha: " + Ficha1.r + " ||abajo: " + Ficha1.d + " ||izquierda: " + Ficha1.l);
-		*/
-		/*var Ficha0 = Prueba(0);	//murcam
-		Ficha0.gir = 0;
-		Ficha0 = GirarFicha(Ficha0);
-		console.log("con giro 0 >>>>>>>> " + "arriba: " + Ficha0.u + "|| derecha: " + Ficha0.r + " ||abajo: " + Ficha0.d + " ||izquierda: " + Ficha0.l);
-		
-		var Ficha1 = Prueba(0);	//murcam
-		Ficha1.gir = 1;
-		Ficha1 = GirarFicha(Ficha1);
-		console.log("con giro 1 >>>>>>>> " + "arriba: " + Ficha1.u + "|| derecha: " + Ficha1.r + " ||abajo: " + Ficha1.d + " ||izquierda: " + Ficha1.l);
-		
-		var Ficha2 = Prueba(0);	//murcam
-		Ficha2.gir = 2;
-		Ficha2 = GirarFicha(Ficha2);
-		console.log("con giro 2 >>>>>>>> " + "arriba: " + Ficha2.u + "|| derecha: " + Ficha2.r + " ||abajo: " + Ficha2.d + " ||izquierda: " + Ficha2.l);
-		
-		var Ficha3 = Prueba(0);	//murcam
-		Ficha3.gir = 3;
-		Ficha3 = GirarFicha(Ficha3);
-		console.log("con giro 3 >>>>>>>> " + "arriba: " + Ficha3.u + "|| derecha: " + Ficha3.r + " ||abajo: " + Ficha3.d + " ||izquierda: " + Ficha3.l);
-		*/
+		var resultado= ColocarSeguidorCastillo(Tablero, 6, 1, 1);
+		console.log("¿Puedo poner el seguidor? >>>>>> " + resultado);
 	};
 
 

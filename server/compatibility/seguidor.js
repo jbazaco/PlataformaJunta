@@ -119,7 +119,7 @@ ColocarSeguidorCastillo = function(Tablero, cuadrado, X, Y){
 	};
 	
 	ComprobarSeguidor = function(Ficha){
-		if (fichas2LadosCierranCastillo.indexOf(Ficha.nombre)!=-1){
+		if (Fichas2LadosCierranCastillo.indexOf(Ficha.nombre)!=-1){
 			if (Ficha.gir==0){
 				if (Ficha.nombre=="mur2"){
 					if((Ficha.szona=="ciudad") && (Ficha.scuadrado==4)){
@@ -332,10 +332,9 @@ ColocarSeguidorCastillo = function(Tablero, cuadrado, X, Y){
     };
    
     //tratamos el caso de que llega una ficha con seguidor
-    
     if (Tablero[X][Y].szona=="ciudad" || Tablero[X][Y].szona=="ciudad2"){
 		//entramos en el caso de las fichas inconexas
-		if (fichas2LadosCierranCastillo.indexOf(Tablero[X][Y].nombre)!=-1){
+		if (Fichas2LadosCierranCastillo.indexOf(Tablero[X][Y].nombre)!=-1){
 		    console.log("x e y iniciales "+X+"   "+ Y);
 		    if (cuadrado== 0){
 		    	console.log("no estas pasando seguidor ya que la posicion del seguidor es: " + cuadrado);
