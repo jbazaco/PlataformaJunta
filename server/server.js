@@ -267,6 +267,9 @@ Meteor.methods({
 	// Al terminar una partida se debe llamar a este método para todos y cada uno de los jugadores de esa
 	// partida y sumar la puntuación obtenida a la puntuación que tenía anteriormente.
 	PuntuacionTotal : function(jugador,punt,juego){
+    console.log(jugador);
+    console.log(punt);
+    console.log(juego);
 		return PuntuacionTotal(jugador,punt,juego);
 	},
 
