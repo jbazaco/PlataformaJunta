@@ -53,7 +53,7 @@ var FichaPAmp = {
 /*23*/  	ciucam2e:{nombre:"ciucam2e", si:"campo", sc:"ciudad", sd:"campo",
 						ci:"campo", cc:"ciudad", cd:"campo", ii:"campo", ic:"ciudad", id:"campo"}      
 };
-/*
+
 ArFiAmp = _.toArray(FichaPAmp);
 
 
@@ -384,7 +384,7 @@ PonerSeguidorCamino = function(Tablero, Pos, X, Y){
 	return colocar_seguidor;;
 		
 };
-*/
+
 
 
 
