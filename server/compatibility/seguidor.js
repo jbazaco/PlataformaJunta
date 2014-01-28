@@ -224,9 +224,28 @@ ColocarSeguidorCastillo = function(Tablero, cuadrado, X, Y){
             else if (DarDirec(X,Y)){
                 console.log("la ficha "+ Ficha.nombre + " está en el array inconexo.");
                 //puntos= DarPuntos(puntos, Ficha);;
-                if (Ficha.scuadrado==2 || Ficha.scuadrado==4 || Ficha.scuadrado==6 ||Ficha.scuadrado==8 ){
+                if ((Ficha.scuadrado==8) && (Prohibido=="abajo")){
                 	console.log("no puedes poner seguidor en la ficha porque ya hay un seguidor en " + Ficha.nombre + "en la posicion " + Ficha.scuadrado);
                 	PuedesPonerSeguidor = false;
+                	return PuedesPonerSeguidor;
+                }
+                else if ((Ficha.scuadrado==6) && (Prohibido=="derecha")){
+                	console.log("no puedes poner seguidor en la ficha porque ya hay un seguidor en " + Ficha.nombre + "en la posicion " + Ficha.scuadrado);
+                	PuedesPonerSeguidor = false;
+                	return PuedesPonerSeguidor;
+                }
+                else if ((Ficha.scuadrado==4) && (Prohibido=="izquierda")){
+                	console.log("no puedes poner seguidor en la ficha porque ya hay un seguidor en " + Ficha.nombre + "en la posicion " + Ficha.scuadrado);
+                	PuedesPonerSeguidor = false;
+                	return PuedesPonerSeguidor;
+                }
+                else if ((Ficha.scuadrado==2) && (Prohibido=="arriba")){
+                	console.log("no puedes poner seguidor en la ficha porque ya hay un seguidor en " + Ficha.nombre + "en la posicion " + Ficha.scuadrado);
+                	PuedesPonerSeguidor = false;
+                	return PuedesPonerSeguidor;
+                }
+                else{
+                	PuedesPonerSeguidor = true;
                 	return PuedesPonerSeguidor;
                 }
                 MeteDirec(X,Y);               
@@ -244,7 +263,7 @@ ColocarSeguidorCastillo = function(Tablero, cuadrado, X, Y){
     if (fichas2LadosCierranCastillo.indexOf(Ficha.nombre)!=-1){
         console.log("x e y iniciales "+X+"   "+ Y);
         if (cuadrado== 0){
-        	console.log("no estas pasando seguidor yaq que la posicion del seguidor es: " + cuadrado);
+        	console.log("no estas pasando seguidor ya que la posicion del seguidor es: " + cuadrado);
         }
         //tengo que ver las 4 posiciones del seguidor
         else if (cuadrado==2){
