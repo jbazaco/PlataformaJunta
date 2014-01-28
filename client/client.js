@@ -10,25 +10,46 @@ Meteor.subscribe("DatosUsuarios");
 
 
 Meteor.startup(function(){
-	screenauto();
+	Session.set("Chat_Selector","General");
+	$('#sala_general').css('background-color','#ccc');
     $("#opciones").hide();
-	screenauto();	//Refresh automatico de la pantalla aunque el tamaño cambie
-	$( "#container2" ).tabs({ hide: { effect: "slide",direction:'up', duration: 100 }, show:{ effect: "slide",direction:'up', duration: 100 }  });
+
+	$( "#container3" ).tabs({ hide: { effect: "slide",direction:'up', duration: 100 }, show:{ effect: "slide",direction:'up', duration: 100 }  });
 	$(".subtab").hide();	//Esconde los subtans que se encuentran en la segunda pestaña del acordeon
 	$(".canvas").hide();	//Esconde todos los canvas
 	$('.escenario').attr("disabled",true);
+  $('.gamelayer').hide();
 	$( ".startgame" ).click(function() {
 		$( "#opciones" ).fadeToggle( "slow", "linear" );
 	});
 	
-	Session.setDefault('Current_Game_id',0);
-	
+	Session.setDefault('Current_Game_id',0);	
+
+	$(".ajust").accordion();
 	$("#pop_up").on('mouseenter', '.datos', function(){
 		var id = Session.get("id_pop_up");
 		Meteor.clearTimeout(id);
 	});
 	$("#pop_up").on('mouseleave', '.datos', function(){
 		$(".datos").remove();
+	});
+/*
+	$("#fondoPantalla").click(function(){
+		$(".fondos").toggle();
+	});
+*/
+	$(function() {
+		$( "#accordion1" ).accordion({
+		heightStyle: "fill"
+		});
+	});
+
+	$(function() {
+		$( "#accordionGeneral" ).resizable({
+			resize: function() {
+				$( "#accordion1" ).accordion( "refresh" );
+			}
+		});
 	});
 });
 
@@ -55,17 +76,18 @@ Template.input.events={
 		if (event.which==13){
 			var message=$("#message");
 			if (message.val()!=""){
-				var msg=Clip(message.val(),50);
+				var msg=Clip(message.val(),30);
 				if (Meteor.user()){
 					var name = Meteor.user().username;
 				}else{
-					var name="Anon";
+					var name="Anonymous";
 				}
 				if(Meteor.users.findOne(Meteor.userId) != undefined){
 					Messages.insert({
 						name:name,
 						message:message.val(),
-						time:Date.now()
+						time:Date.now(),
+						sala:Session.get("Chat_Selector")
 					});
 				}
 				else{
@@ -77,15 +99,6 @@ Template.input.events={
 	}
 }
 
-Template.button.events={
-
-	'click input.b1': function () {
-
-	},
-	'click input.b2': function(){
-
-	}
-}
 Template.options.events={
 	'click .submit': function () {
      	var jugadores=[];
@@ -101,7 +114,8 @@ Template.options.events={
 			return false;
 		}
 		else{
-			name=$("#nombre").val();	
+			name=$("#nombre").val();
+			$("#nombre").val("");	
 		}
 		n_players= parseInt($('input[name=n_jugadores]:checked', '#opciones').val());	
 		opciones.jugadores_maquina=n_players;
@@ -179,7 +193,6 @@ Template.ListaEstados.events={
 		}
 		cadena+="</div>"
 		$("#pop_up").append(cadena);
-		//La chapuza sin sentido es premeditada, no funciona si no le pasas la variable username aunque luego no la utilices. Dunno y.
 		username= this.username
 		var id = Meteor.setTimeout(function(username){$("#"+this.username+"_datos").show()},500);
 		Session.set("id_pop_up",id);
@@ -207,35 +220,119 @@ Template.gamesList.imIn = function(){
 }
 
 
+Template.ajustes.events={
+	'click a#fondo0':function(){
+		$("#containermain").css("background-image",'url(../imagenes/fondo3.jpg)');
+		$("#container").css("border","3px solid black")
+		$("#container2").css("background-color","#CBAD48")
+		$("#container3").css("background-color","#CBAD48")
+		$("#container4").css("background-color","#CBAD48")
+		$("#container5").css({"background-color":"#CBAD48","border":"2px solid black"})
+		return false;
+	},
+	'click a#fondo1':function(){
+		$("#containermain").css("background-image",'url(../imagenes/papel.jpg)');
+		$("#container").css("border","3px solid black")
+		$("#container2").css("background-color","#20B2AA")
+		$("#container3").css("background-color","#20B2AA")
+		$("#container4").css("background-color","white")
+		$("#container5").css({"background-color":"#ADD8E6","border":"2px solid black"})
+		$('.bienvenida').css("color","black")
+		return false;
+	},
+	'click a#fondo2':function(){
+		$("#containermain").css("background-image",'url(../imagenes/negro.jpg)');
+		$("#container").css("border","3px solid white")
+		$("#container2").css("background-color","#DCDCDC")
+		$("#container3").css("background-color","#DCDCDC")
+		$("#container4").css("background-color","#C0C0C0")
+		$("#container5").css({"background-color":"#C0C0C0","border":"2px solid white"})
+		$('.bienvenida').css("color","white")
+		//$("#input").css("background-color","green")
+		return false;
+	},
+	'click a#fondo3':function(){
+		$("#containermain").css("background-image",'url(../imagenes/lluvia.jpg)');
+		$("#container").css("border","3px solid white")
+		$("#container2").css("background-color","#20B2AA")
+		$("#container3").css("background-color","#20B2AA")
+		$("#container4").css("background-color","#C0C0C0")
+		$("#container5").css({"background-color":"#C0C0C0","border":"2px solid white"})
+		$('.bienvenida').css("color","black")
+		//$("#input").css("background-color","green")
+		return false;
+	},
+	'click a#fondo4':function(){
+		$("#containermain").css("background-image",'url(../imagenes/nieve.jpg)');
+		$("#container").css("border","3px solid white")
+		$("#container2").css("background-color","#7B68EE")
+		$("#container3").css("background-color","#7B68EE")
+		$("#container4").css("background-color","#7B68EE")
+		$("#container5").css({"background-color":"#7B68EE","border":"2px solid white"})
+		$('.bienvenida').css("color","black")
+		//$("#input").css("background-color","green")
+		return false;
+	},
+}
+
+
 Template.games.events={
 	'click a#game_1':function(){
 		Session.set('Current_Game_id',1);
+		Session.set("Chat_Selector",1);
+		$('#chat_salas li').css('background-color','#eee');
+		$('#sala_juego').css('background-color','#ccc');
 		$(".canvas").hide();
 		$(".gamelayer").hide();
 		$('#game').show(500);
 		
 		$("#selectedgame").html("Alien Invasion");
-		$("#container2").tabs( "option", "active", 1 );
+		$("#container3").tabs( "option", "active", 1 );
+		Clear_Chat();
 		return false;
 	},
 	'click a#game_2':function(){
 		Session.set('Current_Game_id',2)
+		Session.set("Chat_Selector",2);
+		$('#chat_salas li').css('background-color','#eee');
+		$('#sala_juego').css('background-color','#ccc');
 		$(".canvas").hide();
-		$('#gamecanvas').show(500);
-		
+		game.showLevelScreen();
+
 		$("#selectedgame").html("Angry Fruits");
-		$("#container2").tabs( "option", "active", 1 );
+		$("#container3").tabs( "option", "active", 1 );
+		Clear_Chat();
 		return false;
 	},
 	'click a#game_3':function(){
 		Session.set('Current_Game_id',3)
+		Session.set("Chat_Selector",3);
+		$('#chat_salas li').css('background-color','#eee');
+		$('#sala_juego').css('background-color','#ccc');
 		$(".canvas").hide();
 		$('#tablero').show(500);
-
+    $(".gamelayer").hide();
 		$("#selectedgame").html("Carcassonne");	
-		$("#container2").tabs( "option", "active", 1);
+		$("#container3").tabs( "option", "active", 1);
+		Clear_Chat();
 		return false;
-	} 
+	},
+	'mouseenter a#game_1':function(){
+		$('#juego_descripcion').html('Haz click en la imagen y empieza a jugar ya a AlienInvasion!');
+		return false;
+	},
+	'mouseenter a#game_2':function(){
+		$('#juego_descripcion').html('Haz click en la imagen y empieza a jugar ya a AngryFruits!');
+		return false;
+	},
+	'mouseenter a#game_3':function(){
+		$('#juego_descripcion').html('Haz click en la imagen y empieza a jugar ya a este juego sin nombre!');
+		return false;
+	},
+	'mouseleave':function(){
+		$('#juego_descripcion').html('Haz click en cualquiera de los juegos de la izquierda para empezar a jugar!');
+		return false;
+	}
 }
 
 
@@ -269,8 +366,7 @@ Template.gamesList.gamesListIn = function(){
 	if (usuid){
 		var usu = Meteor.users.findOne(usuid);
 		if (usu){
-      return Partidas.find({},{sort:{jugadores:1}})
-			//return Partidas.find({jugadores:{$all:[usu.username]}});
+			return Partidas.find({$or:[{jugadores:{$all:[usu.username]}},{estado:"Empezada"}]});
 		}
 	}
 };
@@ -282,7 +378,7 @@ Template.gamesList.gamesListOut = function(){
 	if (usuid){
 		var usu = Meteor.users.findOne(usuid);
 		if (usu){
-			return Partidas.find({jugadores:{$not:{$all:[usu.username]}}});
+			return Partidas.find({$nor:[{jugadores:{$all:[usu.username]}},{estado:"Empezada"},{estado:"Terminada"}]});
 		}else{
 			return Partidas.find();
 		}
@@ -357,24 +453,25 @@ Template.gamesList.events={
 	'mouseover div.match':function(){
 		$(".datos").remove();
 		Session.set('Game_Data_id',this._id)
+		var Partida = Partidas.findOne({nombre:this.nombre});
 		var usuid = Meteor.userId();
 		var cadena = "";
 
-// 		if (usuid){
-// 			var usu = Meteor.users.findOne(usuid);
-// 			if (usu){
-// 				if ((usu.username in Partida.jugadores) || (Partida.estado /= "Lobby")){
-// 					cadena = "<a class='watch_match' href=''>Obervar partida<a></br>"
-// 				}else{
-					cadena = "<a class='join_match' href=''>Unirse a partida </a></br><a class='watch_match' href=''>Obervar partida<a></br>"
-// 				}
-// 			}
-// 		}
+		if (usuid){
+			var usu = Meteor.users.findOne(usuid);
+ 			if (usu){
+ 				if ((Partida.jugadores.indexOf(usu.username)!=(-1)) || (Partida.estado != "Lobby")){
+ 					cadena = "<a class='watch_match' href=''>Observar partida<a></br>"
+ 				}else{
+					cadena = "<a class='join_match' href=''>Unirse a partida </a></br><a class='watch_match' href=''>Observar partida<a></br>"
+ 				}
+ 			}
+ 		}
 		var jugadores = "";
 		for(var i=0; i<this.jugadores.length; i++){
 			jugadores = jugadores + "Jugador"+i+": "+this.jugadores[i]+"</br>";
 		};
-		$("#pop_up").append("<div id='"+this._id+"_datos' class='datos' style='display:none'>Nombre Partida: "+this.nombre+"</br>"+jugadores+"Tipo escenario:"+this.opciones.escenario +"</br>"+ "Numero jugadores maquina:" +this.opciones.jugadores_maquina+"</br> "+ "Nivel:"+this.opciones.niveles+"</br>"+ "Tablero inteligente"+ this.opciones.tablero_inteligente+"</br>"+cadena+"</br></div>");
+		$("#pop_up").append("<div id='"+this._id+"_datos' class='datos' style='display:none'>Nombre Partida: "+this.nombre+"</br>Estado: "+this.estado +"</br>Jugadores: "+jugadores+"Tipo escenario:"+this.opciones.escenario +"</br>"+ "Numero jugadores maquina:" +this.opciones.jugadores_maquina+"</br> "+ "Nivel:"+this.opciones.niveles+"</br>"+ "Tablero inteligente"+ this.opciones.tablero_inteligente+"</br>"+cadena+"</br></div>");
 		$("#"+this._id+"_datos").show(500);
 	},
 
@@ -385,15 +482,58 @@ Template.gamesList.events={
 	}
 }
 
+Template.chat.events={
+	'click #sala_general':function(){
+		console.log('1')
+		if (Session.get("Chat_Selector") != "General"){
+			console.log('11')
+			$('#chat_salas li').css('background-color','#eee');
+			$('#sala_general').css('background-color','#ccc');
+			$('#container5').show();
+			Session.set("Chat_Selector","General");
+			Clear_Chat();
+		}		
+	},
+	'click #sala_juego':function(){
+		console.log('2')
+		if (Session.get("Chat_Selector") != Session.get("Current_Game_id")){
+			console.log('22')
+			$('#chat_salas li').css('background-color','#eee');
+			$('#sala_juego').css('background-color','#ccc');
+			$('#container5').show();
+			Session.set("Chat_Selector",Session.get("Current_Game_id"));
+			Clear_Chat();
+		}
+	},
+	'click #sala_privada':function(){
+		console.log('3')
+		if (Session.get("Chat_Selector") != "Privada"){
+			console.log('33')
+			$('#chat_salas li').css('background-color','#eee');
+			$('#sala_privada').css('background-color','#ccc');
+			$('#container5').hide();
+			Session.set("Chat_Selector","Privada");
+			Clear_Chat();
+		}
+	}
+}
+
+Clear_Chat = function(){
+	$('#ChatArea').html('<tr id="firstRow"><td></td><td></td></tr>');
+	console.log('cleared')
+	msgs_autorun._compute()
+}
+
 Accounts.ui.config({
 	passwordSignupFields:"USERNAME_AND_OPTIONAL_EMAIL"
 });
 
-Deps.autorun(function(){
+msgs_autorun = Deps.autorun(function(){
+	console.log('filling')
 	var chatArea = $('#firstRow');
-	var msgs = Messages.find({},{sort:{time:-1}, limit:1});	
+	var msgs = Messages.find({sala:Session.get("Chat_Selector")},{sort:{time:-1}, limit:10});	
 	msgs.forEach(function(message){
-		chatArea.prepend("<tr><td><strong>"+message['name']+"</strong>:</td><td><div>"+message['message']+"</div></td>");
+		chatArea.prepend("<tr><td><strong>"+message['name']+"</strong>:</td><td><a>"+message['message']+"</a></td>");
 	});
 });
 
@@ -405,5 +545,4 @@ Deps.autorun(function(){
 		$(str).show(500);
 	}
 })
-
 

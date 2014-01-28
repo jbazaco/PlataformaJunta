@@ -1,5 +1,5 @@
 <head>
-    <title> Chat Alien </title>
+    <title> Plataforma Juegos </title>
 	<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0" />
 </head>
 
@@ -7,8 +7,10 @@
 <body>
 	<script src='engine.js'></script>
 	<script src='game.js'></script>
+  <script src='engine_alien.js'></script>
+	<script src='game_alien.js'></script>
 	<script src='jquery-1.10.2.js' type='text/javascript'></script>
-  <script src='Box2dWeb-2.1.a.3.min.js' type='text/javascript'></script>
+  <script src='compatibility/Box2dWeb-2.1.a.3.min.js' type='text/javascript'></script>
 
   <script src='underscore.js' type='text/javascript'></script>
 	<div id='containermain'>
@@ -16,7 +18,7 @@
 		    <div id='login'>
 		            {{loginButtons align="right"}}<br>
 		    </div>
-			<h1>Plataforma Juegos</h1>
+			<h1 class="bienvenida">Plataforma de juegos</h1>
 			{{>welcome}}
 		</div>
 		<div id='container'>
@@ -24,12 +26,18 @@
      		{{> froot_wars}}
 			<canvas id='tablero' class='canvas' width='1150' height='1150'></canvas>
 		</div>
+    <iframe src="//www.facebook.com/plugins/like.php?href=http%3A%2F%2Fplataformajuntaisi.meteor.com%2F&amp;width&amp;layout=standard&amp;action=like&amp;show_faces=false&amp;share=true&amp;height=35&amp;appId=714087085268763" scrolling="no" frameborder="0" style="border:none; overflow:hidden; height:35px;" allowTransparency="true"></iframe>
 		<div id='container2'>
+			<div>
+				{{>games}}
+			</div>
+		</div>
+		<div id='container3'>
 			<ul>
 			<li><a href="#tabs-1" >Usuarios</a></li>
 			<li><a href="#tabs-2" >Juego</a></li>
 			<li><a href="#tabs-3" >Ajustes</a></li>
-			<li><a href="#tabs-4" >Ránking</a></li>
+			<li><a href="#tabs-4" >Rank</a></li>
 			</ul>
 			<div id="tabs-1" class="tabs">
 				{{>ListaEstados}}
@@ -45,23 +53,14 @@
 				</div>				
 			</div>
 			<div id="tabs-3" class="tabs">
-				<p>Quisque eu urna vel enim commodo pellentesque. Praesent eu risus hendrerit ligula tempus pretium.</p>
-				<p>Duis cursus. Maecenas ligula eros.</p>
+				{{>ajustes}}
 			</div>
 			<div id="tabs-4" class="tabs">
 				{{>RankingJuego}}
 			</div>
 		</div>
-		<div id='container3'>
-			<div>
-				{{>button}}
-				{{>games}}
-			</div>
-		</div>
 		<div id='container4' class="chatAreadiv">
-			<table class="chatAreaTable" id ="ChatArea">
-				<tr id="firstRow"><td></td><td></td></tr>
-			</table>
+			{{>chat}}
 		</div>
 		<div id='container5'>
 			{{>input}}
@@ -71,6 +70,24 @@
 	{{>popup}}
 </body>
 
+<template name='chat'>
+	<table>
+		<td id='chat_salas' style='width:15%'>
+			<ul>
+				<li id='sala_general'><a>Sala General</a></li>
+				<li id='sala_juego'><a>Juego</a></li>
+				<li id='sala_privada'><a>Privados</a></li>
+			</ul>
+		</td>
+		<td style='width:85%'>
+			<div>
+				<table class="chatAreaTable" id ="ChatArea">
+					<tr id="firstRow"><td></td><td></td></tr>
+				</table>
+			</div>
+		</td>
+	</table>
+</template>
 
 <template name="popup">
 	<div id="pop_up">
@@ -78,12 +95,31 @@
 </template>
 
 <template name="welcome">
-	<p>Welcome to "UnnamedProject"! Please Log in.</p>
+	<p class="bienvenida">¡Bienvenido a la nueva plataforma de juegos! </p>
 </template>
 
 
 <template name="input">
 	<p> <strong>Message:</strong><input type="text" id="message"> </p>
+</template>
+
+<template name="ajustes" class="ajust">
+	<div id="accordionGeneral" class="ui-widget-content">
+		<div id="accordion1" class="accord">
+			<h3><p style="font-weight:bold" color=black>Temas</p></h3>
+			<div id="fondoPantalla" >
+				<a id="fondo0" class="fondos" href="">Desierto agrietado</a><br /> 
+				<a id="fondo1" class="fondos" href="">Papel arrugado</a><br /> 
+				<a id="fondo2" class="fondos" href="">Agujero Negro</a><br /> 
+				<a id="fondo3" class="fondos" href="">Móstoles lluvioso</a><br />
+				<a id="fondo4" class="fondos" href="">Invierno saharaui</a><br />
+			</div>
+			<h3><p style="font-weight:bold" color=black>Otras cosas</p></h3>
+			<div id="parrafo" class="accord">
+				<p style="font-weight:bold" color=black>Otras cosas</p>
+			</div>
+		</div>
+	</div>
 </template>
 
 <template name="options">
@@ -116,58 +152,72 @@
 	</div>
 </template>
 
-
-<template name="button">
-	<input type="text" id="entry"/>
-	<input type="button" class="b1" value="B1"/>
-	<input type="button" class="b2" value="B2"/>
-</template>
-
 <template name="games">
-	<div>	
-		<ul class="list">
-			<li class="item" >
-				<a id="game_1" href="" title="AlienInvasion" align="left">
-					<img src="alienInvasion.png" width="60px" height="41px">
-				</a>
-				<div class="ListaPartidas" id='ListaPartidas_1'>
-					<!-- Slideshow de capturas de pantalla del alien-->
-				</div>
-			</li>
-			<li class="item">
-				<a id="game_2" href="" title="Angryfruits">
-					<img src="agryfruits.png" width="60px" height="41px">
-				</a>
-				<div class="ListaPartidas" id='ListaPartidas_2'>
-					<!-- Slideshow de capturas de pantalla del fruits-->
-				</div>
-			</li>
-			<li class="item">
-				<a id="game_3" href="" title="Carcassonne">
-					<img src="carcassonne-logo.jpg" width="60px" height="41px">
-				</a>
-				<div class="ListaPartidas" id='ListaPartidas_3'>
-					<!-- Slideshow de capturas de pantalla del carca-->
-				</div>
-			</li>                                                                  
-		</ul>
+	<div style='text-align:center'>
+		Juegos en la plataforma
 	</div>
+	<table style='margin-top:10px'>
+		<td style='width:25%'>
+			<ul class="list">
+				<li class="item" >
+					<a id="game_1" href="" title="AlienInvasion" align="left">
+						<img src="alienInvasion.png" width="60px" height="41px">
+					</a>
+					<div class="ListaPartidas" id='ListaPartidas_1'>
+						<!-- Slideshow de capturas de pantalla del alien-->
+					</div>
+				</li>
+				<li class="item">
+					<a id="game_2" href="" title="Angryfruits">
+						<img src="agryfruits.png" width="60px" height="41px">
+					</a>
+					<div class="ListaPartidas" id='ListaPartidas_2'>
+						<!-- Slideshow de capturas de pantalla del fruits-->
+					</div>
+				</li>
+				<li class="item">
+					<a id="game_3" href="" title="Carcassonne">
+						<img src="carcassonne-logo.jpg" width="60px" height="41px">
+					</a>
+					<div class="ListaPartidas" id='ListaPartidas_3'>
+						<!-- Slideshow de capturas de pantalla del carca-->
+					</div>
+				</li>                                                                  
+			</ul>
+		</td>
+		<td style='width:75%'>
+			<div id='juego_descripcion' style='text-align:center'>
+				Haz click en cualquiera de los juegos de la izquierda para empezar a jugar!
+			</div>
+		</td>
+	</table>
 </template>
 
 <template name="gamesList">
 	{{#each gamesListIn}}
-		<div class='match' style="font-weight:bold;color:green">{{nombre}}
+		<div class='match' style="font-weight:bold;color:green">
+			{{nombre}}
+			<div id={{nombre}} class='match_info' style="display: none;font-weight:normal;">
+				{{jugadores}} </br>
+				<a class='watch_match' href="">Observar partida<a></br>
+			</div>
 		</div>
 	{{/each}}
 	{{#each gamesListOut}}
-		<div class='match' style="font-weight:bold;">{{nombre}}
+		<div class='match' style="font-weight:bold;">
+			{{nombre}}
+			<div id={{nombre}} class='matchinfo' style="display: none;font-weight:normal;">
+				{{jugadores}} </br>
+				<a class='join_match' href="">Unirse a partida </a>
+				<a class='watch_match' href="">Observar partida<a></br>
+			</div>
 		</div>
 	{{/each}}
 </template>
 
 <template name="froot_wars">
 
-  <canvas id="gamecanvas" width="640" height="480" class="canvas">
+  <canvas id="gamecanvas" width="640" height="480" class="gamelayer">
   </canvas>
   
   <div id="scorescreen" class="gamelayer">
@@ -202,9 +252,9 @@
 <template name="ListaEstados">
 	{{#each ListaEstados}}
 		{{#if ColorEstado}}
-        <span class="NombreUsuario">{{username}}</span> : <span style="color:green">{{estado}}</span>    
+        <span class="NombreUsuario">{{username}}</span> : <span style="color:green">{{estado}}</span>  <br />  
 		{{else}}
-        <span class="NombreUsuario">{{username}}</span> : <span>{{estado}}</span>    
+        <span class="NombreUsuario">{{username}}</span> : <span>{{estado}}</span>  <br />  
 		{{/if}}
 	{{/each}}
 </template>

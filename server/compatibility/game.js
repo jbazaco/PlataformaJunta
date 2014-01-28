@@ -103,7 +103,6 @@
 		///////Compruebo el CierraClaustro//////////
 		/*
 		Tablero = CrearTablero();
-=======
 
 		//asigno posicion a varias fichas
 		var Ficha1 = Prueba(10);    //ciucam

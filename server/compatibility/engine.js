@@ -194,7 +194,6 @@ CrearArJug = function(id){
 	//console.log("CrearArJug(2) CuentaTableros: " + CuentaTableros);
 }
 
-//SEGUNDA FUNCIÓN AUTORUN JUGADAS
 //función añadir jugada nueva en tablero
 CrearTabJug = function(id, x, y, ficha, rota, user, cuadrado, zona){
 	Ficha1 = PruebaItera(ficha,rota);

@@ -123,7 +123,7 @@ ColocarLadron = function(Tablero, cuadrado, zona, X, Y){
 	//Funcion para transformar ficha de modelo simple a compuesto
 	Transforma = function(Tablero, X, Y){
 		var F = {
-			nombre = "nada",
+			nombre: "nada",
 			si: "nada",
 			sc: "nada",
 			sd: "nada",
