@@ -259,66 +259,71 @@ ColocarSeguidorCastillo = function(Tablero, cuadrado, X, Y){
     };
    
     //tratamos el caso de que llega una ficha con seguidor
-    //entramos en el caso de las fichas inconexas
-    if (fichas2LadosCierranCastillo.indexOf(Ficha.nombre)!=-1){
-        console.log("x e y iniciales "+X+"   "+ Y);
-        if (cuadrado== 0){
-        	console.log("no estas pasando seguidor ya que la posicion del seguidor es: " + cuadrado);
-        }
-        //tengo que ver las 4 posiciones del seguidor
-        else if (cuadrado==2){
-            Y1=Y+1;
-            MeteDirec(X,Y);
-            RecursivaSeguidor(Tablero[X][Y1], "abajo", X, Y1);
-        }
-        else if (cuadrado==6){
-            //console.log("posicion del seguidor es: " + cuadrado);
-            X1=X+1;
-            MeteDirec(X,Y);
-            RecursivaSeguidor(Tablero[X1][Y], "izquierda", X1, Y);
-        }
-        else if (cuadrado==8){
-            //console.log("posicion del seguidor es: " + cuadrado);
-            Y2=Y-1;
-            MeteDirec(X,Y);
-            RecursivaSeguidor(Tablero[X][Y2], "arriba", X, Y2);
-        }
-        else if (cuadrado==4){
-            //console.log("posicion del seguidor es: " + cuadrado);
-            X2=X-1;
-            MeteDirec(X,Y);
-            RecursivaSeguidor(Tablero[X2][Y], "derecha", X2, Y);
-        }
+    
+    if (Tablero[X][Y].szona=="ciudad" || Tablero[X][Y].szona=="ciudad2"){
+		//entramos en el caso de las fichas inconexas
+		if (fichas2LadosCierranCastillo.indexOf(Tablero[X][Y].nombre)!=-1){
+		    console.log("x e y iniciales "+X+"   "+ Y);
+		    if (cuadrado== 0){
+		    	console.log("no estas pasando seguidor ya que la posicion del seguidor es: " + cuadrado);
+		    }
+		    //tengo que ver las 4 posiciones del seguidor
+		    else if (cuadrado==2){
+		        Y1=Y+1;
+		        MeteDirec(X,Y);
+		        RecursivaSeguidor(Tablero[X][Y1], "abajo", X, Y1);
+		    }
+		    else if (cuadrado==6){
+		        //console.log("posicion del seguidor es: " + cuadrado);
+		        X1=X+1;
+		        MeteDirec(X,Y);
+		        RecursivaSeguidor(Tablero[X1][Y], "izquierda", X1, Y);
+		    }
+		    else if (cuadrado==8){
+		        //console.log("posicion del seguidor es: " + cuadrado);
+		        Y2=Y-1;
+		        MeteDirec(X,Y);
+		        RecursivaSeguidor(Tablero[X][Y2], "arriba", X, Y2);
+		    }
+		    else if (cuadrado==4){
+		        //console.log("posicion del seguidor es: " + cuadrado);
+		        X2=X-1;
+		        MeteDirec(X,Y);
+		        RecursivaSeguidor(Tablero[X2][Y], "derecha", X2, Y);
+		    }
+		}
+		else{
+		    console.log("La ficha inicial es conexa");
+		    MeteDirec(X,Y);
+		    
+		    Flag = true;
+		    if ((cuadrado==1) || (cuadrado==2) || (cuadrado==3) || (cuadrado==5)){
+		        console.log("Entra Arriba");
+		        Y1=Y+1;
+		        RecursivaSeguidor(Tablero[X][Y1],"abajo",X,Y1);
+		        Flag = false;
+		    }
+		    if ((cuadrado==3) || (cuadrado==6) || (cuadrado==9) || (cuadrado==5)){
+		        console.log("Entra Derecha");
+		        X1=X+1;
+		        RecursivaSeguidor(Tablero[X1][Y],"izquierda",X1,Y);
+		        Flag = false;
+		    }
+		    if ((cuadrado==7) || (cuadrado==8) || (cuadrado==9) || (cuadrado==5)){
+		        console.log("Ficha.nombre: " + Ficha.nombre);
+		        console.log("Entra Abajo");
+		        Y2=Y-1;           
+		        RecursivaSeguidor(Tablero[X][Y2],"arriba",X,Y2);
+		        Flag = false;
+		    }
+		    if ((cuadrado==1) || (cuadrado==4) || (cuadrado==7) || (cuadrado==5)){
+		        console.log("Entra Izquierda");
+		        X2=X-1;
+		        RecursivaSeguidor(Tablero[X2][Y],"derecha",X2,Y);
+		    }
+		   
+		}
     }
-    else{
-        console.log("La ficha inicial es conexa");
-        MeteDirec(X,Y);
-        Flag = true;
-        if (Ficha.u == "castillo"){
-            console.log("Entra Arriba");
-            Y1=Y+1;
-            RecursivaSeguidor(Tablero[X][Y1],"abajo",X,Y1);
-            Flag = false;
-        }
-        if ((Ficha.r=="castillo")){
-            console.log("Entra Derecha");
-            X1=X+1;
-            RecursivaSeguidor(Tablero[X1][Y],"izquierda",X1,Y);
-            Flag = false;
-        }
-        if ((Ficha.d=="castillo")){
-            console.log("Ficha.nombre: " + Ficha.nombre);
-            console.log("Entra Abajo");
-            Y2=Y-1;           
-            RecursivaSeguidor(Tablero[X][Y2],"arriba",X,Y2);
-            Flag = false;
-        }
-        if ((Ficha.l=="castillo")){
-            console.log("Entra Izquierda");
-            X2=X-1;
-            RecursivaSeguidor(Tablero[X2][Y],"derecha",X2,Y);
-        }
-       
-    }
+    
 	
 };
