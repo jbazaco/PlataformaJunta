@@ -123,14 +123,13 @@ sigLevel = function(){
 };
 winGame = function() {
     var user=Meteor.users.findOne(Meteor.userId());
-    console.log(user);
     Alien_Game.setBoard(3,new TitleScreen("You win!", 
                                     "Press fire to play again",
                                     Alien_playGame));
 	//$("#points").html(Game.points);
 	//Meteor.call("IncrementarPuntuacion", Meteor.user()._id, Alien_Game.points);
-  Meteor.call("PuntuacionTotal",Meteor.userId().username,Alien_Game.points,"AlienInvasion");
-  Meteor.call("PuntuacionRecord",Meteor.userId().username,Alien_Game.points,"AlienInvasion");
+  Meteor.call("PuntuacionTotal",user.username,Alien_Game.points,"AlienInvasion");
+  Meteor.call("PuntuacionRecord",user.username,Alien_Game.points,"AlienInvasion");
 };
 
 
