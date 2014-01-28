@@ -223,10 +223,17 @@
 		Tablero[1][1]= Ficha1;
 		
 		var Ficha2 =PruebaItera("ciucam2", 90);
-		Tablero[1][2]= Ficha2;
+		//Ficha2.szona="ciudad";
+		//Ficha2.scuadrado=4;
+		Tablero[2][1]= Ficha2;
 		
-		var Ficha3 = PruebaItera("mur2c", 0);
-		Tablero[1][3]= Ficha3;
+		var Ficha3 =PruebaItera("ciucam2", 90);
+		Ficha3.szona="ciudad";
+		Ficha3.scuadrado=4;
+		Tablero[3][1]= Ficha3;
+		
+		var Ficha4 = PruebaItera("mur2c", 0);
+		Tablero[4][1]= Ficha4;
 		
 	
 		var resultado= ColocarSeguidorCastillo(Tablero, 6, 1, 1);

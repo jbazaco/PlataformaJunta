@@ -119,6 +119,7 @@ ColocarSeguidorCastillo = function(Tablero, cuadrado, X, Y){
 	};
 	
 	ComprobarSeguidor = function(Ficha){
+		console.log(">>>>>>>>>>>>>>entro en comprobarseguidor<<<<<<<<<<<<<<");
 		if (Fichas2LadosCierranCastillo.indexOf(Ficha.nombre)!=-1){
 			if (Ficha.gir==0){
 				if (Ficha.nombre=="mur2"){
@@ -259,7 +260,7 @@ ColocarSeguidorCastillo = function(Tablero, cuadrado, X, Y){
 	        console.log("LA FICHA: " + Ficha.nombre + " Coordenadas: X= " + X + "||| Y= " + Y);
         	Flag = true;
         	ComprobarSeguidor(Ficha);
-		    if (fichasLadoCastilloConexos.indexOf(Ficha.nombre)!=-1){    //si la ficha esta en este array
+		    if (FichasLadoCastilloConexos.indexOf(Ficha.nombre)!=-1){    //si la ficha esta en este array
 		        console.log("la ficha "+ Ficha.nombre + " está en el array conexo | CX: " + X + "||| CY: " + Y);
 		        console.log("DarDirec es: " + DarDirec(X,Y));
 		        if (DarDirec(X,Y)){
@@ -327,7 +328,6 @@ ColocarSeguidorCastillo = function(Tablero, cuadrado, X, Y){
 	    }
 	    else{
 	        console.log("El tablero está vacío.");
-	        //puntos=0;
 	    }
     };
    
@@ -346,7 +346,7 @@ ColocarSeguidorCastillo = function(Tablero, cuadrado, X, Y){
 		        RecursivaSeguidor(Tablero[X][Y1], "abajo", X, Y1);
 		    }
 		    else if (cuadrado==6){
-		        //console.log("posicion del seguidor es: " + cuadrado);
+		        console.log("posicion del seguidor es: " + cuadrado);
 		        X1=X+1;
 		        MeteDirec(X,Y);
 		        RecursivaSeguidor(Tablero[X1][Y], "izquierda", X1, Y);
