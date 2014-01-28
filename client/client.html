@@ -1,5 +1,5 @@
 <head>
-    <title> Chat Alien </title>
+    <title> Plataforma Juegos </title>
 	<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0" />
 </head>
 
@@ -18,7 +18,7 @@
 		    <div id='login'>
 		            {{loginButtons align="right"}}<br>
 		    </div>
-			<h1>Plataforma Juegos</h1>
+			<h1 class="bienvenida">Plataforma de juegos</h1>
 			{{>welcome}}
 		</div>
 		<div id='container'>
@@ -95,7 +95,7 @@
 </template>
 
 <template name="welcome">
-	<p>Welcome to "UnnamedProject"! Please Log in.</p>
+	<p class="bienvenida">¡Bienvenido a la nueva plataforma de juegos! </p>
 </template>
 
 
@@ -105,16 +105,17 @@
 
 <template name="ajustes" class="ajust">
 	<div id="accordionGeneral" class="ui-widget-content">
-		<div id="accordion1">
+		<div id="accordion1" class="accord">
 			<h3><p style="font-weight:bold" color=black>Temas</p></h3>
-			<div style='color:black' id="fondoPantalla" >
+			<div id="fondoPantalla" >
 				<a id="fondo0" class="fondos" href="">Desierto agrietado</a><br /> 
 				<a id="fondo1" class="fondos" href="">Papel arrugado</a><br /> 
 				<a id="fondo2" class="fondos" href="">Agujero Negro</a><br /> 
 				<a id="fondo3" class="fondos" href="">Móstoles lluvioso</a><br />
+				<a id="fondo4" class="fondos" href="">Invierno saharaui</a><br />
 			</div>
 			<h3><p style="font-weight:bold" color=black>Otras cosas</p></h3>
-			<div id="parrafo" >
+			<div id="parrafo" class="accord">
 				<p style="font-weight:bold" color=black>Otras cosas</p>
 			</div>
 		</div>
