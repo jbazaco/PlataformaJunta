@@ -40,7 +40,7 @@ Meteor.setTimeout(ActualizarEstado,1000);
 
 //Función que devuelve una Ficha aleatoria
 
-/*Aleatorio = function(){
+Aleatorio = function(){
 	var decision = false
 	var a = Math.floor(Math.random()*24);
 	var Ficha = { 
@@ -52,7 +52,7 @@ Meteor.setTimeout(ActualizarEstado,1000);
 	else
 		decision
 	return Ficha;
-};*/
+};
 
 // Al terminar una partida se debe llamar a este método para todos y cada uno de los jugadores de esa
 // partida y comprobar si han conseguido un nuevo record.
@@ -172,6 +172,7 @@ Meteor.methods({
 		//if(jugadorpermitido)
 		Partidas.update(id,{$push:{jugadas:movimiento}});
 		RegMov(id,jugador,movimiento);
+		Partidas.update(id,{$set:{ultimaficha: "interrogante"}});	
 	},
 
 	// Esta función devuelve el ultimo movimiento jugado en la partida
@@ -251,11 +252,10 @@ Meteor.methods({
   },
 
   // Metodo para actualizar la ultima ficha que se ha utilizado
-
-  ActualizaFicha : function(id,ficha){
+  ActualizaFicha : function(id){
     var Partida = Partidas.findOne(id);
-	//var ficha = Aleatorio();
-    Partidas.update(id,{$set:{ultimaficha: ficha}});		
+    var ficha = Aleatorio();
+    Partidas.update(id,{$set:{ultimaficha: ficha["nombre"]}});		
   },
 
 	// Al terminar una partida se debe llamar a este método para todos y cada uno de los jugadores de esa
@@ -269,6 +269,7 @@ Meteor.methods({
 	PuntuacionTotal : function(jugador,punt,juego){
 		return PuntuacionTotal(jugador,punt,juego);
 	},
+
 	//Se llama a este metodo para actualizar la puntuacion de cada jugada (punt) de cada 
 	//jugador (jugador) en la partida (id)
 	PuntuacionJugadorPartida: function(id,jugador,punt){
@@ -343,6 +344,7 @@ Meteor.methods({
 		return Aleatorio();
 	},
 	
+
 	//Hay que pasar una Tablero dado de momento, hare que nosotros cojamos el tablero de plataforma
 	ColocaFicha:function(Id, Ficha, x, y, rotacion){  // Dado una ficha y dos posiciones, se devuelve un booleano para si se puede o no colocar esa ficha
 		return colocarficha(Id,Ficha,x,y, rotacion);

@@ -37,7 +37,7 @@
 			<li><a href="#tabs-1" >Usuarios</a></li>
 			<li><a href="#tabs-2" >Juego</a></li>
 			<li><a href="#tabs-3" >Ajustes</a></li>
-			<li><a href="#tabs-4" >Ránking</a></li>
+			<li><a href="#tabs-4" >Rank</a></li>
 			</ul>
 			<div id="tabs-1" class="tabs">
 				{{>ListaEstados}}
@@ -53,17 +53,14 @@
 				</div>				
 			</div>
 			<div id="tabs-3" class="tabs">
-				<p>Quisque eu urna vel enim commodo pellentesque. Praesent eu risus hendrerit ligula tempus pretium.</p>
-				<p>Duis cursus. Maecenas ligula eros.</p>
+				{{>ajustes}}
 			</div>
 			<div id="tabs-4" class="tabs">
 				{{>RankingJuego}}
 			</div>
 		</div>
 		<div id='container4' class="chatAreadiv">
-			<table class="chatAreaTable" id ="ChatArea">
-				<tr id="firstRow"><td></td><td></td></tr>
-			</table>
+			{{>chat}}
 		</div>
 		<div id='container5'>
 			{{>input}}
@@ -73,6 +70,24 @@
 	{{>popup}}
 </body>
 
+<template name='chat'>
+	<table>
+		<td id='chat_salas' style='width:15%'>
+			<ul>
+				<li id='sala_general'><a>Sala General</a></li>
+				<li id='sala_juego'><a>Juego</a></li>
+				<li id='sala_privada'><a>Privados</a></li>
+			</ul>
+		</td>
+		<td style='width:85%'>
+			<div>
+				<table class="chatAreaTable" id ="ChatArea">
+					<tr id="firstRow"><td></td><td></td></tr>
+				</table>
+			</div>
+		</td>
+	</table>
+</template>
 
 <template name="popup">
 	<div id="pop_up">
@@ -86,6 +101,24 @@
 
 <template name="input">
 	<p> <strong>Message:</strong><input type="text" id="message"> </p>
+</template>
+
+<template name="ajustes" class="ajust">
+	<div id="accordionGeneral" class="ui-widget-content">
+		<div id="accordion1">
+			<h3><p style="font-weight:bold" color=black>Temas</p></h3>
+			<div style='color:black' id="fondoPantalla" >
+				<a id="fondo0" class="fondos" href="">Desierto agrietado</a><br /> 
+				<a id="fondo1" class="fondos" href="">Papel arrugado</a><br /> 
+				<a id="fondo2" class="fondos" href="">Agujero Negro</a><br /> 
+				<a id="fondo3" class="fondos" href="">Móstoles lluvioso</a><br />
+			</div>
+			<h3><p style="font-weight:bold" color=black>Otras cosas</p></h3>
+			<div id="parrafo" >
+				<p style="font-weight:bold" color=black>Otras cosas</p>
+			</div>
+		</div>
+	</div>
 </template>
 
 <template name="options">
