@@ -54,22 +54,30 @@ ArFi = _.toArray(FichaPropiedades); //Convertimos lo que tenemos en un Array par
 
 var Tableros = []; //Array de [ID | Tablero correspondiente a ese ID] 
 
-var ParJugadas = [];
-
 ContadorJugadas = 0;
 CuentaTableros = 0;
 
-Aleatorio = function(){
-	var decision = false
+Aleatorio = function(id){
+	//Buscamos el tablero con las fichas que le quedan
 	var a = Math.floor(Math.random()*24);
+	for(i=0; i<= CuentaTableros - 1;i++){
+		console.log("Dentro del FOR");
+		console.log(Tableros[i].id);
+		console.log(id);
+		if(Tableros[i].id == id){
+			console.log("Hago el if");
+			while(Tableros[i].Fichas[a] < 1){
+				a = Math.floor(Math.random()*24);
+				console.log("Hago el while");	
+			}
+			Tableros[i].Fichas[a] = Tableros[i].Fichas[a] - 1;
+		}
+	}
 	var Ficha = { 
 		nombre: "nada"
 	};
+	console.log("Nombre aleatorio: " + a);
 	Ficha.nombre = ArFi[a].nombre;
-	if (decision = false)
-		decision = true;
-	else
-		decision
 	return Ficha;
 }
 
@@ -164,19 +172,21 @@ CrearTablero = function(){
 
 //PRIMERA FUNCION: AUTORUN PARTIDAS
 CrearArJug = function(id){
+	FichasNum = [5,3,3,4,2,1,9,8,4,1,4,3,2,5,4,3,3,3,5,2,2,2,1,1];
+	var bar = [];
+	var l = FichasNum.length;
+  	for ( var i = 0;i < l; i++ ){
+   		bar[i] = FichasNum[i];
+	}
 	var Tablero = CrearTablero();
 	Tablero[0][0] = Prueba(14);
 
-	ContadorJugadas = ContadorJugadas + 1;;
-	//console.log("CrearArJug(1) ContadorJugadas: " + ContadorJugadas);
-
-	//console.log("--------");
-	//console.log("CrearArJug: " + ParJugadas[0].id);
-	//console.log("--------"); 
-
+	ContadorJugadas = ContadorJugadas + 1;; 
+	
 	var partida = {
 		id: id,
-		Tablero: Tablero
+		Tablero: Tablero,
+		Fichas: bar
 	}
 	//console.log("CREAMOS TABLERO DE PARTIDA");
 	Tableros.push(partida);
