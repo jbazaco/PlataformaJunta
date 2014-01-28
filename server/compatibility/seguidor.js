@@ -178,84 +178,87 @@ ColocarSeguidorCastillo = function(Tablero, cuadrado, X, Y){
 	
 	 RecursivaSeguidor= function(Ficha, Prohibido,X,Y){
         console.log("                                ");
-        if (Tablero[X][Y]!=0){
-            console.log("LA FICHA: " + Ficha.nombre + " Coordenadas: X= " + X + "||| Y= " + Y);
-            Flag = true;
-            if (fichasLadoCastilloConexos.indexOf(Ficha.nombre)!=-1){    //si la ficha esta en este array
-                console.log("la ficha "+ Ficha.nombre + " está en el array conexo | CX: " + X + "||| CY: " + Y);
-                console.log("DarDirec es: " + DarDirec(X,Y));
-                if (DarDirec(X,Y)){
-                    if ((Ficha.u == "castillo") && (Prohibido != "arriba")){
-                        Y1=Y+1;                       
-                        MeteDirec(X,Y);
-                        //puntos= DarPuntos(puntos, Ficha);
-                        RecursivaSeguidor(Tablero[X][Y1],"abajo",X,Y1);
-                        Flag = false;
-                    }       
-                    if ((Ficha.r=="castillo") && (Prohibido!= "derecha")){
-                        if (Flag){                       
-                            MeteDirec(X,Y);
-                            //puntos= DarPuntos(puntos, Ficha);
-                        }
-                        X1=X+1;
-                        RecursivaSeguidor(Tablero[X1][Y],"izquierda",X1,Y);
-                        Flag = false;
-                    }
-                    if ((Ficha.d=="castillo") && (Prohibido!= "abajo")){
-                        if (Flag){                       
-                            MeteDirec(X,Y);
-                            //puntos= DarPuntos(puntos, Ficha);
-                        }
-                        Y2=Y-1;
-                        RecursivaSeguidor(Tablero[X][Y2],"arriba",X,Y2);
-                        Flag = false;
-                    }
-                    if ((Ficha.l=="castillo") && (Prohibido!= "izquierda")){
-                        if (Flag){                   
-                            MeteDirec(X,Y);
-                            //puntos= DarPuntos(puntos, Ficha);
-                        }
-                        X2=X-1;
-                        RecursivaSeguidor(Tablero[X2][Y],"derecha",X2,Y);
-                        Flag = false;
-                    }
-                }
-            }
-            else if (DarDirec(X,Y)){
-                console.log("la ficha "+ Ficha.nombre + " está en el array inconexo.");
-                //puntos= DarPuntos(puntos, Ficha);;
-                if ((Ficha.scuadrado==8) && (Prohibido=="abajo")){
-                	console.log("no puedes poner seguidor en la ficha porque ya hay un seguidor en " + Ficha.nombre + "en la posicion " + Ficha.scuadrado);
-                	PuedesPonerSeguidor = false;
-                	return PuedesPonerSeguidor;
-                }
-                else if ((Ficha.scuadrado==6) && (Prohibido=="derecha")){
-                	console.log("no puedes poner seguidor en la ficha porque ya hay un seguidor en " + Ficha.nombre + "en la posicion " + Ficha.scuadrado);
-                	PuedesPonerSeguidor = false;
-                	return PuedesPonerSeguidor;
-                }
-                else if ((Ficha.scuadrado==4) && (Prohibido=="izquierda")){
-                	console.log("no puedes poner seguidor en la ficha porque ya hay un seguidor en " + Ficha.nombre + "en la posicion " + Ficha.scuadrado);
-                	PuedesPonerSeguidor = false;
-                	return PuedesPonerSeguidor;
-                }
-                else if ((Ficha.scuadrado==2) && (Prohibido=="arriba")){
-                	console.log("no puedes poner seguidor en la ficha porque ya hay un seguidor en " + Ficha.nombre + "en la posicion " + Ficha.scuadrado);
-                	PuedesPonerSeguidor = false;
-                	return PuedesPonerSeguidor;
-                }
-                else{
-                	PuedesPonerSeguidor = true;
-                	return PuedesPonerSeguidor;
-                }
-                MeteDirec(X,Y);               
-                //console.log("los puntos intermedios en la ficha inconexa " + Ficha.nombre + " son: " + puntos);
-            }
-        }
-        else{
-            console.log("El tablero está vacío.");
-            //puntos=0;
-        }
+	    if (Tablero[X][Y]!=0){
+	        console.log("LA FICHA: " + Ficha.nombre + " Coordenadas: X= " + X + "||| Y= " + Y);
+	        if ((Ficha.szona=="ciudad") || (Ficha.szona=="ciudad2")){
+	        	Flag = true;
+			    if (fichasLadoCastilloConexos.indexOf(Ficha.nombre)!=-1){    //si la ficha esta en este array
+			        console.log("la ficha "+ Ficha.nombre + " está en el array conexo | CX: " + X + "||| CY: " + Y);
+			        console.log("DarDirec es: " + DarDirec(X,Y));
+			        if (DarDirec(X,Y)){
+			            if ((Ficha.u == "castillo") && (Prohibido != "arriba")){
+			                Y1=Y+1;                       
+			                MeteDirec(X,Y);
+			                //puntos= DarPuntos(puntos, Ficha);
+			                RecursivaSeguidor(Tablero[X][Y1],"abajo",X,Y1);
+			                Flag = false;
+			            }       
+			            if ((Ficha.r=="castillo") && (Prohibido!= "derecha")){
+			                if (Flag){                       
+			                    MeteDirec(X,Y);
+			                    //puntos= DarPuntos(puntos, Ficha);
+			                }
+			                X1=X+1;
+			                RecursivaSeguidor(Tablero[X1][Y],"izquierda",X1,Y);
+			                Flag = false;
+			            }
+			            if ((Ficha.d=="castillo") && (Prohibido!= "abajo")){
+			                if (Flag){                       
+			                    MeteDirec(X,Y);
+			                    //puntos= DarPuntos(puntos, Ficha);
+			                }
+			                Y2=Y-1;
+			                RecursivaSeguidor(Tablero[X][Y2],"arriba",X,Y2);
+			                Flag = false;
+			            }
+			            if ((Ficha.l=="castillo") && (Prohibido!= "izquierda")){
+			                if (Flag){                   
+			                    MeteDirec(X,Y);
+			                    //puntos= DarPuntos(puntos, Ficha);
+			                }
+			                X2=X-1;
+			                RecursivaSeguidor(Tablero[X2][Y],"derecha",X2,Y);
+			                Flag = false;
+			            }
+			        }
+			    }
+			    else if (DarDirec(X,Y)){
+			        console.log("la ficha "+ Ficha.nombre + " está en el array inconexo.");
+			        //puntos= DarPuntos(puntos, Ficha);;
+			        if ((Ficha.scuadrado==8) && (Prohibido=="abajo")){
+			        	console.log("no puedes poner seguidor en la ficha porque ya hay un seguidor en " + Ficha.nombre + "en la posicion " + Ficha.scuadrado);
+			        	PuedesPonerSeguidor = false;
+			        	return PuedesPonerSeguidor;
+			        }
+			        else if ((Ficha.scuadrado==6) && (Prohibido=="derecha")){
+			        	console.log("no puedes poner seguidor en la ficha porque ya hay un seguidor en " + Ficha.nombre + "en la posicion " + Ficha.scuadrado);
+			        	PuedesPonerSeguidor = false;
+			        	return PuedesPonerSeguidor;
+			        }
+			        else if ((Ficha.scuadrado==4) && (Prohibido=="izquierda")){
+			        	console.log("no puedes poner seguidor en la ficha porque ya hay un seguidor en " + Ficha.nombre + "en la posicion " + Ficha.scuadrado);
+			        	PuedesPonerSeguidor = false;
+			        	return PuedesPonerSeguidor;
+			        }
+			        else if ((Ficha.scuadrado==2) && (Prohibido=="arriba")){
+			        	console.log("no puedes poner seguidor en la ficha porque ya hay un seguidor en " + Ficha.nombre + "en la posicion " + Ficha.scuadrado);
+			        	PuedesPonerSeguidor = false;
+			        	return PuedesPonerSeguidor;
+			        }
+			        else{
+			        	PuedesPonerSeguidor = true;
+			        	return PuedesPonerSeguidor;
+			        }
+			        MeteDirec(X,Y);               
+			        //console.log("los puntos intermedios en la ficha inconexa " + Ficha.nombre + " son: " + puntos);
+			    }
+	        }
+	        
+	    }
+	    else{
+	        console.log("El tablero está vacío.");
+	        //puntos=0;
+	    }
     };
    
     //tratamos el caso de que llega una ficha con seguidor
