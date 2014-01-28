@@ -256,6 +256,11 @@ ColocarSeguidorCastillo = function(Tablero, cuadrado, X, Y){
 	
 	 RecursivaSeguidor= function(Ficha, Prohibido,X,Y){
         console.log("                                ");
+        console.log(Ficha.u);
+        console.log(Ficha.r);
+        console.log(Ficha.d);
+        console.log(Ficha.l);
+        console.log("prohibido es:   " + Prohibido);
 	    if (Tablero[X][Y]!=0){
 	        console.log("LA FICHA: " + Ficha.nombre + " Coordenadas: X= " + X + "||| Y= " + Y);
         	Flag = true;
