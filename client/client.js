@@ -278,7 +278,7 @@ Template.ajustes.events={
 		return false;
 	},
 	'click a#abrir':function(){
-		abrir('privacidad/PoliticaPrivacidad.html')
+		abrir('../../privacidad')
 		return false;
 	},
 }
