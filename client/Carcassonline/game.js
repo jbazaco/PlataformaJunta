@@ -531,23 +531,12 @@ FichaActual = new function() {
 	this.pulsado = function(x,y) {
 		
 		if(!Terminada){
-			if (this.sprite === 'interrogante' && esMiTurno) {
-				Meteor.call('DevuelveFicha', function(err, results){
-					if(err){
-	      					console.log(err.reason);
-	   				}else{
-						FichaActual.sprite=results.nombre;
-	    				}});		
-				return true;
-			}
+			
 
 			if (this.sprite === 'interrogante' && esMiTurno) {
 				Meteor.call('ActualizaFicha', Session.get("Current_Game"));		
 				return true;
 			}
-
-			console.log("turno : " + esMiTurno);
-
 
 			if (!this.seHaMovido() && esMiTurno){
 				if (this.rotacion === 270)
@@ -584,7 +573,7 @@ FichaActual = new function() {
 	this.moviendo = false;
 	this.mover = function(x,y) {
 		this.moviendo = true;
-		if (this.sprite !== 'interrogante') {
+		if (this.sprite !== 'interrogante' && esMiTurno) {
 			this.x = x - this.w/2;
 			this.y = y - this.h/2;
 			if (this.seguidor){	
@@ -595,7 +584,7 @@ FichaActual = new function() {
 	}
 
 	this.soltar = function(x,y) {
-		if (this.sprite !== "interrogante") {
+		if (this.sprite !== "interrogante" && esMiTurno) {
 			//CAMBIAR cuando se coloquen las fichas
 			var debajo = C_elemInPos(x,y, this.nextBoard);
 		//aqui seria para ver si se puede o no colocar la ficha?	
@@ -988,7 +977,7 @@ var desplazarTablero = function(difx, dify) {
 	 for(var i=0; i<C_Game.boards.length; i++) {
 		if (C_Game.boards[i]){
 			if (C_Game.boards[i] instanceof Ficha || 
-					(C_Game.boards[i] instanceof Seguidor && C_Game.boards[i].seHaMovido())) {
+					(C_Game.boards[i] instanceof C_Seguidor && C_Game.boards[i].seHaMovido())) {
 				C_Game.boards[i].x += difx;
 				C_Game.boards[i].y += dify;
 			}
@@ -1111,7 +1100,6 @@ C_Game.autorun = Deps.autorun(function(){
 					}
 				}
 			});
-			console.log('este es el estado de la partida:   '+partida.estado);
 			if (partida.estado==="Terminada"){
 				Terminada=true;
 
@@ -1136,16 +1124,13 @@ C_Game.autorun2 = Deps.autorun(function(){
 	if (idpartida){
 		var partida = Partidas.findOne(idpartida);
 		var board1 = C_Game.boards[0];
-		console.log('este es el estado de la partida:   '+partida.estado)
 		if (board1 instanceof C_TitleScreen) {
-			console.log("dentro 1");
 			if (partida.estado === "Lobby") {
 				board1.jugadores = partida.jugadores;
 				if(partida.jugadores.length >= MAX_JUGADORES) {
 					board1.pulsado();
 				}
 			} else {
-				console.log("ya empezada");
 				C_playGame();
 			}
 		}

@@ -8,6 +8,7 @@ var b2World = Box2D.Dynamics.b2World;
 var b2PolygonShape = Box2D.Collision.Shapes.b2PolygonShape;
 var b2CircleShape = Box2D.Collision.Shapes.b2CircleShape;
 var b2DebugDraw = Box2D.Dynamics.b2DebugDraw;
+var puntuacion = 0;
 
 // Setup requestAnimationFrame and cancelAnimationFrame for use in the game code
 (function() {
@@ -289,9 +290,10 @@ var game = {
 
 	  	},
 		showEndingScreen:function(){
-			game.stopBackgroundMusic();				
+			game.stopBackgroundMusic();		
 			if (game.mode=="level-success"){			
 				if(game.currentLevel.number<levels.data.length-1){
+          var user=Meteor.users.findOne(Meteor.userId());
 					$('#endingmessage').html('Level Complete. Well Done!!!');
           $("#endingmessage").show();
           $("#endingscreen").show();
@@ -300,19 +302,24 @@ var game = {
           $("#playcurrentlevel").show();
           $("#playnextlevel").show();
           $("#returntolevelscreen").show();
+          Meteor.call("PuntuacionTotal", user.username, game.score, "AngryFruits");
+          puntuacion = game.score;
 				} else {
+          var user=Meteor.users.findOne(Meteor.userId());
 					$('#endingmessage').html('All Levels Complete. Well Done!!!');
           $("#endingmessage").show();
           $("#endingscreen").show()
 					$("#playnextlevel").hide();
           $("#playcurrentlevel").show();
           $("#returntolevelscreen").show();
-   				        Meteor.call("matchFinish", Session.get("current_game"), game.score);				        
+          puntuacion = puntuacion + game.score;
+          Meteor.call("PuntuacionTotal", user.username, game.score, "AngryFruits");
+          Meteor.call("PuntuacionRecord", user.username, puntuacion, "AngryFruits");
+   				Meteor.call("matchFinish", Session.get("current_game"), game.score);				        
 
 				}
-			} else if (game.mode=="level-failure"){			
-   			    Meteor.call("matchFinish", Session.get("current_game"), game.score);				        
-			    
+			} else if (game.mode=="level-failure"){
+          var user=Meteor.users.findOne(Meteor.userId());	
 			    $('#endingmessage').html('Failed. Play Again?');
           $("#endingmessage").show();
           $("#endingscreen").show();
@@ -320,6 +327,10 @@ var game = {
           $("#endingmessage").show();
           $("#playcurrentlevel").show();
           $("#returntolevelscreen").show();
+          puntuacion = puntuacion + game.score;        
+			    Meteor.call("PuntuacionTotal", user.username, game.score, "AngryFruits");
+          Meteor.call("PuntuacionRecord", user.username, puntuacion, "AngryFruits");
+          Meteor.call("matchFinish", Session.get("current_game"), game.score);		
 			}		
 
 		},
