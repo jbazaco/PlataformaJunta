@@ -69,7 +69,7 @@ table {
 
 #accordionGeneral {
 	padding: 10px;
-	height: 110%;
+	height: 140%;
 }
 
 #accordion1,{
@@ -119,6 +119,7 @@ table {
 	border-radius:20px;
 	opacity:0.6;
 }
+
 #container4 {
 	width:69%;
 	height:18%;
@@ -126,6 +127,7 @@ table {
 	background-color:#CBAD48;
 	border-radius:20px;
 }
+
 #container5 {
 	width:69%;
 	float:left;
