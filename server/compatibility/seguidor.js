@@ -1,6 +1,37 @@
+//Añadidos de Jose
+var FieldPointers={
+        //Up
+        UL:{id:"UL",points:"DR"        },
+        UC:{id:"UC",points:"DC"        },
+        UR:{id:"UR",points:"DL"        },
+        //Rigth
+        RL:{id:"RL",points:"LR"        },
+        RC:{id:"RC",points:"LC"        },
+        RR:{id:"RR",points:"LL"        },
+        //Down
+        DL:{id:"DL",points:"UR"        },
+        DC:{id:"DC",points:"UC"        },
+        DR:{id:"DR",points:"UL"        },
+        //Left
+        LL:{id:"LL",points:"RR"        },
+        LC:{id:"LC",points:"RC"        },
+        LR:{id:"LR",points:"RL"        }
+}
 
-//Función para comprobar donde esta el seguidor
-//PosSeg = function(){
+var UL = FieldPointers["UL"];
+var UC = FieldPointers["UC"];
+var UR = FieldPointers["UR"];
+var RL = FieldPointers["RL"];
+var RC = FieldPointers["RC"];
+var RR = FieldPointers["RR"];
+var DL = FieldPointers["DL"];
+var DC = FieldPointers["DC"];
+var DR = FieldPointers["DR"];
+var LL = FieldPointers["LL"];
+var LC = FieldPointers["LC"];
+var LR = FieldPointers["LR"];
+var SIDE = 0;
+var SUBSIDE = 1;
 
 //Descriptor de fichas dada la posicion del seguidor
 var FichaPAmp = {
@@ -53,10 +84,97 @@ var FichaPAmp = {
 /*23*/  	ciucam2e:{nombre:"ciucam2e", si:"campo", sc:"ciudad", sd:"campo",
 						ci:"campo", cc:"ciudad", cd:"campo", ii:"campo", ic:"ciudad", id:"campo"}      
 };
+
+//New field properties to the tiles.
+FichaPropiedades["murcam"]["fieldMap"]={
+        1:{id:"1",fieldOwner:[],fieldPointers:[UC,RC]}
+}
+FichaPropiedades["c3mur"]["fieldMap"]={
+        1:{id:"1",fieldOwner:[],fieldPointers:[UL,DR]},
+        2:{id:"2",fieldOwner:[],fieldPointers:[UR,RL]},
+        3:{id:"3",fieldOwner:[],fieldPointers:[RR,DL]}
+}
+FichaPropiedades["mur2"]["fieldMap"]={
+        1:{id:"1",fieldOwner:[],fieldPointers:[UC,DC]}
+}
+FichaPropiedades["m"]["fieldMap"]={
+        1:{id:"1",fieldOwner:[],fieldPointers:[UC,RC,DC,LC]}
+}
+FichaPropiedades["mc"]["fieldMap"]={
+        1:{id:"1",fieldOwner:[],fieldPointers:[UC,RL,RR,DC,LC]}
+}
+FichaPropiedades["c4"]["fieldMap"]={
+        1:{id:"1",fieldOwner:[],fieldPointers:[UL,LR]},
+        2:{id:"2",fieldOwner:[],fieldPointers:[UR,RL]},
+        3:{id:"3",fieldOwner:[],fieldPointers:[LL,DR]},
+        4:{id:"4",fieldOwner:[],fieldPointers:[RR,DL]}
+}
+FichaPropiedades["cc"]["fieldMap"]={
+        1:{id:"1",fieldOwner:[],fieldPointers:[UL,RR,DC,LC]},
+        2:{id:"2",fieldOwner:[],fieldPointers:[UR,RL]}        
+}
+FichaPropiedades["cr"]["fieldMap"]={
+        1:{id:"1",fieldOwner:[],fieldPointers:[UC,RL,LR]},
+        2:{id:"2",fieldOwner:[],fieldPointers:[RR,DC,LL]}
+}
+FichaPropiedades["c3"]["fieldMap"]={
+        1:{id:"1",fieldOwner:[],fieldPointers:[UL,DR,LC]},
+        2:{id:"2",fieldOwner:[],fieldPointers:[UR,RL]},
+        3:{id:"3",fieldOwner:[],fieldPointers:[RR,DL]}
+}
+FichaPropiedades["ciucam"]["fieldMap"]={
+        1:{id:"1",fieldOwner:[],fieldPointers:[RC]}
+}
+FichaPropiedades["chmur"]["fieldMap"]={
+        1:{id:"1",fieldOwner:[],fieldPointers:[RL]},
+        2:{id:"2",fieldOwner:[],fieldPointers:[RR]}
+}
+FichaPropiedades["mur2c"]["fieldMap"]={
+        1:{id:"1",fieldOwner:[],fieldPointers:[RC,DC]}
+}
+FichaPropiedades["mur1"]["fieldMap"]={
+        1:{id:"1",fieldOwner:[],fieldPointers:[UC,RC,DC]}
+}
+FichaPropiedades["cmur"]["fieldMap"]={
+        1:{id:"1",fieldOwner:[],fieldPointers:[UL,DR]},
+        2:{id:"2",fieldOwner:[],fieldPointers:[UR,RC,DL]}
+}
+FichaPropiedades["ccmur"]["fieldMap"]={
+        1:{id:"1",fieldOwner:[],fieldPointers:[UL,RR,DC]},
+        2:{id:"2",fieldOwner:[],fieldPointers:[UR,RL]}
+}
+FichaPropiedades["ccmur3"]["fieldMap"]={
+        1:{id:"1",fieldOwner:[],fieldPointers:[UC,RL,DR]},
+        2:{id:"2",fieldOwner:[],fieldPointers:[RR,DL]}
+}
+FichaPropiedades["ciucam2"]["fieldMap"]={
+        1:{id:"1",fieldOwner:[],fieldPointers:[LC]},
+        2:{id:"2",fieldOwner:[],fieldPointers:[RC]}
+}
+FichaPropiedades["ccmur2"]["fieldMap"]={
+        1:{id:"1",fieldOwner:[],fieldPointers:[UL,RR]},
+        2:{id:"2",fieldOwner:[],fieldPointers:[UR,RL]}
+}
+FichaPropiedades["chmure"]["fieldMap"]={
+        1:{id:"1",fieldOwner:[],fieldPointers:[RL]},
+        2:{id:"2",fieldOwner:[],fieldPointers:[RR]}
+}
+FichaPropiedades["ccmur2e"]["fieldMap"]={
+        1:{id:"1",fieldOwner:[],fieldPointers:[UL,RR]},
+        2:{id:"2",fieldOwner:[],fieldPointers:[UR,RL]}
+}
+FichaPropiedades["murcame"]["fieldMap"]={
+        1:{id:"1",fieldOwner:[],fieldPointers:[UC,RC]}
+}
+FichaPropiedades["ciucame"]["fieldMap"]={
+        1:{id:"1",fieldOwner:[],fieldPointers:[RC]}
+}
+FichaPropiedades["ciucam2e"]["fieldMap"]={
+        1:{id:"1",fieldOwner:[],fieldPointers:[LC]},
+        2:{id:"2",fieldOwner:[],fieldPointers:[RC]}
+}
+
 /*
-ArFiAmp = _.toArray(FichaPAmp);
-
-
 //Funcion para girar ficha de fichas ampliadas
 GirarFichaAmp = function (F){
 	var Gir = F.gir;
@@ -77,47 +195,10 @@ GirarFichaAmp = function (F){
 	}
 	F.gir = Gir;
 };
-
-//Función para comprobar donde esta el seguidor
-ColocaSeguidor = function(Id, X, Y, cuadrado, zona){
-	var puede = false;
-	var Campo = [
-	'campo',
-	'campo2',
-	'campo3',
-	'campo4'
-	];
-
-	var Ciudad = [
-	'ciudad',
-	'ciudad2'
-	];
-
-	var Camino = [
-	'camino',
-	'camino2',
-	'camino3',
-	'camino4'
-	];
-	//Buscamos el tablero correspondiente a esa ficha
-	for (i=0; i < CuentaTableros; i++){
-		if(Tableros[i].id == Id){
-			Tablero = Tableros[i].Tablero;
-		}
-	}
-	// Si la zona esta en campo
-	if (Campo.indexOf(zona) != 1){
-		puede = ColocarLadron(Tablero, cuadrado, zona, X, Y)  //Pedro
-	}		
-	else if (Ciudad.indexOf(zona) != 1){
-		puede = ColocarSeguidorCastillo(Tablero, cuadrado, X, Y); //Isra
-	}
-	else if (Camino.indexOf(zona) != 1){
-		puede = PonerSeguidorCamino(Tablero, cuadrado, X, Y); //Alberto
-	}	
-};
+*/
 
 
+/*
 //Funcion para saber si se puede colocar un Ladron (seguidor en campo)
 ColocarLadron = function(Tablero, cuadrado, zona, X, Y){
 	//Funcion para transformar ficha de modelo simple a compuesto
@@ -165,9 +246,135 @@ ColocarLadron = function(Tablero, cuadrado, zona, X, Y){
 	}
 
 };
+*/
 
+//Función para comprobar donde esta el seguidor
+ColocaSeguidor = function(Id, X, Y, cuadrado, zona){
+	var puede = false;
+	var Campo = [
+	'campo',
+	'campo2',
+	'campo3',
+	'campo4'
+	];
 
+	var Ciudad = [
+	'ciudad',
+	'ciudad2'
+	];
 
+	var Camino = [
+	'camino',
+	'camino2',
+	'camino3',
+	'camino4'
+	];
+	//Buscamos el tablero correspondiente a esa ficha
+	for (i=0; i < CuentaTableros; i++){
+		if(Tableros[i].id == Id){
+			Tablero = Tableros[i].Tablero;
+		}
+	}
+	// Si la zona esta en campo
+	if (Campo.indexOf(zona) != 1){
+		puede = ColocarLadron(Tablero, cuadrado, zona, X, Y)  //Pedro
+	}		
+	else if (Ciudad.indexOf(zona) != 1){
+		puede = ColocarSeguidorCastillo(Tablero, cuadrado, X, Y); //Isra
+	}
+	else if (Camino.indexOf(zona) != 1){
+		puede = PonerSeguidorCamino(Tablero, cuadrado, X, Y); //Alberto
+	}
+	return puede;	
+};
+
+ColocarLadron = function(Tablero, cuadrado, zona, X, Y){
+	//Rotate the tile, 90deg clockwise
+	_rotate=function(t){
+		switch(tile.id){
+			case "UL": return RL; break;
+            case "UC": return RC; break;
+            case "UR": return RR; break;
+            case "RL": return DL; break;
+            case "RC": return DC; break;
+            case "RR": return DR; break;
+            case "DL": return LL; break;
+            case "DC": return LC; break;
+            case "DR": return LR; break;
+            case "LL": return UL; break;
+            case "LC": return UC; break;
+            case "LR": return UR; break;
+		};
+	};
+        
+	//Rotate the tile n times.
+    Rotate = function(tile){
+		var tmp = tile;
+        var times = tile.rotacion/90;
+        for (var i = 0; i<times; i++){
+                tmp = this._rotate(tmp);
+        };
+        return tmp;
+	};
+
+	var board=Tablero;
+	
+	RecursiveChecker = function(board,xpos,ypos,from,owner,id){
+		var tile = board[xpos][ypos];
+        if (! tile.fielded){
+         	//first time to be fielded
+            tile.fielded=[];
+            board[xpos][ypos].fielded=[];
+        }
+        if (! id in tile.fielded){
+			//we have not fielded this tile before
+			board[xpos][ypos].fielded.push(id);        //push our id, next time we wont field it again
+			if (from == ""){
+				//initial growing point tile
+                tile= this.Rotate(tile);
+                console.log(tile.scuadrado)
+                var fieldId = 0;
+                var owner = 0;
+        	}else{
+        		//find the field id
+            	for(field in tile.fieldMap){
+					if (from in field.fieldPointers){
+						var fieldId = field.id;
+							break;
+					}
+				}
+			}	
+			board[xpos][ypos].fieldMap[fieldId].fieldOwner.push(owner)                //push the owner
+			for (pointer in tile.fieldMap[fieldId].fieldPointers){                        //each new direction in the same field
+				if (pointer.id != from){
+					// except the direction from where i came
+            		switch(pointer.points[SIDE]){
+						case "U": RecursiveChecker(board,xpos,ypos-1,dir.points,owner);break;
+						case "R": RecursiveChecker(board,xpos+1,ypos,dir.points,owner);break;
+						case "D": RecursiveChecker(board,xpos,ypos+1,dir.points,owner);break;
+						case "L": RecursiveChecker(board,xpos-1,ypos,dir.points,owner);break;
+					}
+				}
+			}
+		}	
+   };
+              
+	//Main loop.
+	if (board){
+		var i = 0;
+		for (i in board.length){
+        	for (j in board[i].length){
+				var tile = board[i][j];
+                if (tile.szona=='campo'){
+					RecursiveChecker(board,i,j,tile,"","",i);
+					i++;
+				}
+			}
+		}
+	}else{
+		console.log("Board not found..!!")
+    }
+}
 
 //Función que mira si se puede poner el seguidor en la ficha, teniendo en cuenta los caminos
 //Pos = posicion del seguidor dentro de la ficha
@@ -381,7 +588,7 @@ PonerSeguidorCamino = function(Tablero, Pos, X, Y){
 		
 };
 
-*/
+
 
 
 
