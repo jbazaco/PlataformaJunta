@@ -310,6 +310,7 @@ CrearTabJug = function(id, x, y, ficha, rota, user, cuadrado, zona){
         Ficha1.nomjug = user;
         Ficha1.scuadrado = cuadrado;
         Ficha1.szona = zona;
+		Ficha1.rotacion = rota;
         //console.log("COMPROBACION GENERAL DE COMO INSERTO LA FICHA EN TABLERO");
         //console.log("AGF Ficha1.u: " + Ficha1.u + " Ficha1.r: " + Ficha1.r + " Ficha1.d: " + Ficha1.d + " Ficha1.l: " + Ficha1.l + "Ficha.gir" + Ficha1.gir);
         Ficha1 = GirarFicha(Ficha1);
@@ -866,10 +867,10 @@ CierraCastillo = function(Tablero, Ficha, PosSeguidor, X, Y){
         }
 };
 
-CierraCampo = function(board){
+CierraCampo = function(id){
 	
 	//Rotate the tile, 90deg clockwise
-	this._rotate=function(t){
+	_rotate=function(t){
 		switch(tile.id){
 			case "UL": return RL; break;
 			case "UC": return RC; break;
@@ -887,8 +888,9 @@ CierraCampo = function(board){
 	};
 	
 	//Rotate the tile n times.
-	this.Rotate = function(tile,times){
+	Rotate = function(tile){
 		var tmp = tile;
+		var times = tile.rotacion/90;
 		for (var i = 0; i<times; i++){
 			tmp = this._rotate(tmp);
 		};
@@ -896,7 +898,7 @@ CierraCampo = function(board){
 	};
 	
 	
-	this.RecursiveChecker = function(board,xpos,ypos,from,owner,id){
+	RecursiveChecker = function(board,xpos,ypos,from,owner,id){
 		var tile = board[xpos][ypos];
 		if (! tile.fielded){
 			//first time to be fielded
@@ -908,8 +910,10 @@ CierraCampo = function(board){
 			board[xpos][ypos].fielded.push(id);	//push our id, next time we wont field it again
 			if (from == ""){
 				//initial growing point tile
-				var fieldId = 0
-				var owner = 0
+				tile= this.Rotate(tile);
+				console.log(tile.scuadrado)
+				var fieldId = 0;
+				var owner = 0;
 			}else{
 				//find the field id
 				for(field in tile.fieldMap){
@@ -934,18 +938,26 @@ CierraCampo = function(board){
 		}
 	};
 	
-	//Main loop
-	this.Run = function(){
+	//First, find the board.
+	for (var tmp in Tableros){
+		if (tmp.id==id){
+			var board=tml.Tablero;
+			break;
+		}
+	}	
+	//Main loop.
+	if (board){
 		var i = 0;
 		for (i in board.length){
 			for (j in board[i].length){
 				var tile = board[i][j];
-				//tile.seguidor??
-				if (tile.seguidor){
+				if (tile.szona=='campo'){
 					RecursiveChecker(board,i,j,tile,"","",i);
 					i++;
 				}
 			}
 		}
+	}else{
+		console.log("Board not found..!!")
 	}
 };

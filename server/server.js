@@ -356,6 +356,10 @@ Meteor.methods({
 	
 	EjecutaTotal: function(){
 		EjecutaTotal();
+	},
+	
+	CierraCampo:function(id){
+		CierraCampo(id);
 	}
 })
 
