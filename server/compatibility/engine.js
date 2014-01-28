@@ -37,6 +37,95 @@ var FichaPropiedades = {
 /*23*/  	ciucam2e:{nombre:"ciucam2e", u:CASTILLO, r:CAMPO,    d:CASTILLO, l:CAMPO, gir: 0}          //ciudad 2 lados opuestos campo con escudo
 }; 
 
+//New field properties to the tiles.
+FichaPropiedades["murcam"]["fieldMap"]={
+	1:{id:"1",fieldOwner:[],fieldPointers:[UC,RC]}
+}
+FichaPropiedades["c3mur"]["fieldMap"]={
+	1:{id:"1",fieldOwner:[],fieldPointers:[UL,DR]},
+	2:{id:"2",fieldOwner:[],fieldPointers:[UR,RL]},
+	3:{id:"3",fieldOwner:[],fieldPointers:[RR,DL]}
+}
+FichaPropiedades["mur2"]["fieldMap"]={
+	1:{id:"1",fieldOwner:[],fieldPointers:[UC,DC]}
+}
+FichaPropiedades["m"]["fieldMap"]={
+	1:{id:"1",fieldOwner:[],fieldPointers:[UC,RC,DC,LC]}
+}
+FichaPropiedades["mc"]["fieldMap"]={
+	1:{id:"1",fieldOwner:[],fieldPointers:[UC,RL,RR,DC,LC]}
+}
+FichaPropiedades["c4"]["fieldMap"]={
+	1:{id:"1",fieldOwner:[],fieldPointers:[UL,LR]},
+	2:{id:"2",fieldOwner:[],fieldPointers:[UR,RL]},
+	3:{id:"3",fieldOwner:[],fieldPointers:[LL,DR]},
+	4:{id:"4",fieldOwner:[],fieldPointers:[RR,DL]}
+}
+FichaPropiedades["cc"]["fieldMap"]={
+	1:{id:"1",fieldOwner:[],fieldPointers:[UL,RR,DC,LC]},
+	2:{id:"2",fieldOwner:[],fieldPointers:[UR,RL]}	
+}
+FichaPropiedades["cr"]["fieldMap"]={
+	1:{id:"1",fieldOwner:[],fieldPointers:[UC,RL,LR]},
+	2:{id:"2",fieldOwner:[],fieldPointers:[RR,DC,LL]}
+}
+FichaPropiedades["c3"]["fieldMap"]={
+	1:{id:"1",fieldOwner:[],fieldPointers:[UL,DR,LC]},
+	2:{id:"2",fieldOwner:[],fieldPointers:[UR,RL]},
+	3:{id:"3",fieldOwner:[],fieldPointers:[RR,DL]}
+}
+FichaPropiedades["ciucam"]["fieldMap"]={
+	1:{id:"1",fieldOwner:[],fieldPointers:[RC]}
+}
+FichaPropiedades["chmur"]["fieldMap"]={
+	1:{id:"1",fieldOwner:[],fieldPointers:[RL]},
+	2:{id:"2",fieldOwner:[],fieldPointers:[RR]}
+}
+FichaPropiedades["mur2c"]["fieldMap"]={
+	1:{id:"1",fieldOwner:[],fieldPointers:[RC,DC]}
+}
+FichaPropiedades["mur1"]["fieldMap"]={
+	1:{id:"1",fieldOwner:[],fieldPointers:[UC,RC,DC]}
+}
+FichaPropiedades["cmur"]["fieldMap"]={
+	1:{id:"1",fieldOwner:[],fieldPointers:[UL,DR]},
+	2:{id:"2",fieldOwner:[],fieldPointers:[UR,RC,DL]}
+}
+FichaPropiedades["ccmur"]["fieldMap"]={
+	1:{id:"1",fieldOwner:[],fieldPointers:[UL,RR,DC]},
+	2:{id:"2",fieldOwner:[],fieldPointers:[UR,RL]}
+}
+FichaPropiedades["ccmur3"]["fieldMap"]={
+	1:{id:"1",fieldOwner:[],fieldPointers:[UC,RL,DR]},
+	2:{id:"2",fieldOwner:[],fieldPointers:[RR,DL]}
+}
+FichaPropiedades["ciucam2"]["fieldMap"]={
+	1:{id:"1",fieldOwner:[],fieldPointers:[LC]},
+	2:{id:"2",fieldOwner:[],fieldPointers:[RC]}
+}
+FichaPropiedades["ccmur2"]["fieldMap"]={
+	1:{id:"1",fieldOwner:[],fieldPointers:[UL,RR]},
+	2:{id:"2",fieldOwner:[],fieldPointers:[UR,RL]}
+}
+FichaPropiedades["chmure"]["fieldMap"]={
+	1:{id:"1",fieldOwner:[],fieldPointers:[RL]},
+	2:{id:"2",fieldOwner:[],fieldPointers:[RR]}
+}
+FichaPropiedades["ccmur2e"]["fieldMap"]={
+	1:{id:"1",fieldOwner:[],fieldPointers:[UL,RR]},
+	2:{id:"2",fieldOwner:[],fieldPointers:[UR,RL]}
+}
+FichaPropiedades["murcame"]["fieldMap"]={
+	1:{id:"1",fieldOwner:[],fieldPointers:[UC,RC]}
+}
+FichaPropiedades["ciucame"]["fieldMap"]={
+	1:{id:"1",fieldOwner:[],fieldPointers:[RC]}
+}
+FichaPropiedades["ciucam2e"]["fieldMap"]={
+	1:{id:"1",fieldOwner:[],fieldPointers:[LC]},
+	2:{id:"2",fieldOwner:[],fieldPointers:[RC]}
+}
+
 var ArFi = _.toArray(FichaPropiedades); //Convertimos lo que tenemos en un Array para poder tratarlo
 
 var Contador = [5,3,3,4,2,1,9,8,4,1,3,1,2,5,3,3,3,1,3,2,2,2,1,2];
@@ -625,94 +714,6 @@ CierraCampo = function(board){
 		return tmp;
 	};
 	
-	//New field properties to the tiles.
-	FichaPropiedades["murcam"]["fieldMap"]={
-		1:{id:"1",fieldOwner:[],fieldPointers:[UC,RC]}
-	}
-	FichaPropiedades["c3mur"]["fieldMap"]={
-		1:{id:"1",fieldOwner:[],fieldPointers:[UL,DR]},
-		2:{id:"2",fieldOwner:[],fieldPointers:[UR,RL]},
-		3:{id:"3",fieldOwner:[],fieldPointers:[RR,DL]}
-	}
-	FichaPropiedades["mur2"]["fieldMap"]={
-		1:{id:"1",fieldOwner:[],fieldPointers:[UC,DC]}
-	}
-	FichaPropiedades["m"]["fieldMap"]={
-		1:{id:"1",fieldOwner:[],fieldPointers:[UC,RC,DC,LC]}
-	}
-	FichaPropiedades["mc"]["fieldMap"]={
-		1:{id:"1",fieldOwner:[],fieldPointers:[UC,RL,RR,DC,LC]}
-	}
-	FichaPropiedades["c4"]["fieldMap"]={
-		1:{id:"1",fieldOwner:[],fieldPointers:[UL,LR]},
-		2:{id:"2",fieldOwner:[],fieldPointers:[UR,RL]},
-		3:{id:"3",fieldOwner:[],fieldPointers:[LL,DR]},
-		4:{id:"4",fieldOwner:[],fieldPointers:[RR,DL]}
-	}
-	FichaPropiedades["cc"]["fieldMap"]={
-		1:{id:"1",fieldOwner:[],fieldPointers:[UL,RR,DC,LC]},
-		2:{id:"2",fieldOwner:[],fieldPointers:[UR,RL]}	
-	}
-	FichaPropiedades["cr"]["fieldMap"]={
-		1:{id:"1",fieldOwner:[],fieldPointers:[UC,RL,LR]},
-		2:{id:"2",fieldOwner:[],fieldPointers:[RR,DC,LL]}
-	}
-	FichaPropiedades["c3"]["fieldMap"]={
-		1:{id:"1",fieldOwner:[],fieldPointers:[UL,DR,LC]},
-		2:{id:"2",fieldOwner:[],fieldPointers:[UR,RL]},
-		3:{id:"3",fieldOwner:[],fieldPointers:[RR,DL]}
-	}
-	FichaPropiedades["ciucam"]["fieldMap"]={
-		1:{id:"1",fieldOwner:[],fieldPointers:[RC]}
-	}
-	FichaPropiedades["chmur"]["fieldMap"]={
-		1:{id:"1",fieldOwner:[],fieldPointers:[RL]},
-		2:{id:"2",fieldOwner:[],fieldPointers:[RR]}
-	}
-	FichaPropiedades["mur2c"]["fieldMap"]={
-		1:{id:"1",fieldOwner:[],fieldPointers:[RC,DC]}
-	}
-	FichaPropiedades["mur1"]["fieldMap"]={
-		1:{id:"1",fieldOwner:[],fieldPointers:[UC,RC,DC]}
-	}
-	FichaPropiedades["cmur"]["fieldMap"]={
-		1:{id:"1",fieldOwner:[],fieldPointers:[UL,DR]},
-		2:{id:"2",fieldOwner:[],fieldPointers:[UR,RC,DL]}
-	}
-	FichaPropiedades["ccmur"]["fieldMap"]={
-		1:{id:"1",fieldOwner:[],fieldPointers:[UL,RR,DC]},
-		2:{id:"2",fieldOwner:[],fieldPointers:[UR,RL]}
-	}
-	FichaPropiedades["ccmur3"]["fieldMap"]={
-		1:{id:"1",fieldOwner:[],fieldPointers:[UC,RL,DR]},
-		2:{id:"2",fieldOwner:[],fieldPointers:[RR,DL]}
-	}
-	FichaPropiedades["ciucam2"]["fieldMap"]={
-		1:{id:"1",fieldOwner:[],fieldPointers:[LC]},
-		2:{id:"2",fieldOwner:[],fieldPointers:[RC]}
-	}
-	FichaPropiedades["ccmur2"]["fieldMap"]={
-		1:{id:"1",fieldOwner:[],fieldPointers:[UL,RR]},
-		2:{id:"2",fieldOwner:[],fieldPointers:[UR,RL]}
-	}
-	FichaPropiedades["chmure"]["fieldMap"]={
-		1:{id:"1",fieldOwner:[],fieldPointers:[RL]},
-		2:{id:"2",fieldOwner:[],fieldPointers:[RR]}
-	}
-	FichaPropiedades["ccmur2e"]["fieldMap"]={
-		1:{id:"1",fieldOwner:[],fieldPointers:[UL,RR]},
-		2:{id:"2",fieldOwner:[],fieldPointers:[UR,RL]}
-	}
-	FichaPropiedades["murcame"]["fieldMap"]={
-		1:{id:"1",fieldOwner:[],fieldPointers:[UC,RC]}
-	}
-	FichaPropiedades["ciucame"]["fieldMap"]={
-		1:{id:"1",fieldOwner:[],fieldPointers:[RC]}
-	}
-	FichaPropiedades["ciucam2e"]["fieldMap"]={
-		1:{id:"1",fieldOwner:[],fieldPointers:[LC]},
-		2:{id:"2",fieldOwner:[],fieldPointers:[RC]}
-	}
 	
 	this.RecursiveChecker = function(board,xpos,ypos,from,owner,id){
 		var tile = board[xpos][ypos];
