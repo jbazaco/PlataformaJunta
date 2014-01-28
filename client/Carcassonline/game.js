@@ -538,9 +538,6 @@ FichaActual = new function() {
 				return true;
 			}
 
-			console.log("turno : " + esMiTurno);
-
-
 			if (!this.seHaMovido() && esMiTurno){
 				if (this.rotacion === 270)
 					this.rotacion = 0;
@@ -1103,7 +1100,6 @@ C_Game.autorun = Deps.autorun(function(){
 					}
 				}
 			});
-			console.log('este es el estado de la partida:   '+partida.estado);
 			if (partida.estado==="Terminada"){
 				Terminada=true;
 
@@ -1128,16 +1124,13 @@ C_Game.autorun2 = Deps.autorun(function(){
 	if (idpartida){
 		var partida = Partidas.findOne(idpartida);
 		var board1 = C_Game.boards[0];
-		console.log('este es el estado de la partida:   '+partida.estado)
 		if (board1 instanceof C_TitleScreen) {
-			console.log("dentro 1");
 			if (partida.estado === "Lobby") {
 				board1.jugadores = partida.jugadores;
 				if(partida.jugadores.length >= MAX_JUGADORES) {
 					board1.pulsado();
 				}
 			} else {
-				console.log("ya empezada");
 				C_playGame();
 			}
 		}
