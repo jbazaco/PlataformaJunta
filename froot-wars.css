@@ -1,22 +1,24 @@
 #gamecontainer {
     margin:1cm;
-    width:640px;
-    height:480px;
+    width:1150px;
+    height:1150px;
     background: url(images/splashscreen.png);
     border: 1px solid black;
 }
 
 .gamelayer {
-    width:640px;
-    height:480px;
-    position:absolute;
-    display:none;
+	width:94%;
+	height:100%;
+	border-radius:20px;
 }
 
 /* Game Starting Menu Screen */
 #gamestartscreen {
+    visibility:hidden;
+    position:absolute;
+    top: 0px;
+    right: 750px;
     padding-top:250px;
-    text-align:center;
 }
 
 #gamestartscreen img {
@@ -26,7 +28,8 @@
 
 /* Level Selection Screen */
 #levelselectscreen {
-    padding-top:150px;
+    visibility:hidden;
+    padding-top:0px;
     padding-left:50px;	
 }
 
@@ -43,7 +46,8 @@
 
 /* Loading Screen */
 #loadingscreen {
-    background:rgba(100,100,100,0.3);	
+    visibility:hidden;
+    background:rgba(100,100,100,0.3);		
 }
 
 #loadingmessage {
@@ -57,6 +61,7 @@
 
 /* Score Screen */
 #scorescreen  {
+    visibility: hidden;
     height:60px;
     font: 32px Comic Sans MS;
     text-shadow: 0 0 2px #000;
@@ -73,8 +78,8 @@
 
 #scorescreen #score {
     position:absolute;
-    top:5px;
-    right:20px;
+    top:75px;
+    right:450px;
 }
 
 /* Ending Screen */
@@ -83,28 +88,54 @@ endingscreen {
 }
 
 #endingscreen div {
-    height:430px;
+    height:64px;
+    width:64px;
     padding-top:50px;
     border:1px;
-    background:rgba(1,1,1,0.5);
     text-align:left;
     padding-left:100px;
 }
 
-#endingscreen p  {    
+
+#endingscreen p  {
     font: 20px Comic Sans MS;
     text-shadow: 0 0 2px #000;
     color:white;
 }
 
 #endingscreen p img{
-    top:10px;
-    position:relative;
     cursor:pointer;
 }
 
-#endingscreen #endingmessage  {    
+#endingscreen #endingmessage  {
+    position:absolute;
+    left: 50px;
+    top: 10px;
     font: 32px Comic Sans MS;
     text-shadow: 0 0 2px #000;
     color:white;
+}
+
+#endingmessage {
+    position:absolute;
+    left: 50px;
+    top: 60px;
+}
+
+#playcurrentlevel {
+    position:absolute;
+    left: 50px;
+    top: 110px;
+}
+
+#playnextlevel {
+    position:absolute;
+    left: 50px;
+    top: 160px;
+}
+
+#returntolevelscreen{
+    position:absolute;
+    left: 50px;
+    top: 210px;
 }
