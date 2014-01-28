@@ -228,6 +228,7 @@
 		var Ficha3 = PruebaItera("mur2c", 0);
 		Tablero[1][3]= Ficha3;
 		
+	
 		var resultado= ColocarSeguidorCastillo(Tablero, 6, 1, 1);
 		console.log("¿Puedo poner el seguidor? >>>>>> " + resultado);
 	};
