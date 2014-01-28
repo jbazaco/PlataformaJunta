@@ -180,7 +180,7 @@ ColocarSeguidorCastillo = function(Tablero, cuadrado, X, Y){
         console.log("                                ");
 	    if (Tablero[X][Y]!=0){
 	        console.log("LA FICHA: " + Ficha.nombre + " Coordenadas: X= " + X + "||| Y= " + Y);
-	        if ((Ficha.szona=="ciudad") || (Ficha.szona=="ciudad2")){
+	        if ((Ficha.szona!="ciudad") || (Ficha.szona!="ciudad2")){
 	        	Flag = true;
 			    if (fichasLadoCastilloConexos.indexOf(Ficha.nombre)!=-1){    //si la ficha esta en este array
 			        console.log("la ficha "+ Ficha.nombre + " está en el array conexo | CX: " + X + "||| CY: " + Y);
@@ -249,9 +249,13 @@ ColocarSeguidorCastillo = function(Tablero, cuadrado, X, Y){
 			        	PuedesPonerSeguidor = true;
 			        	return PuedesPonerSeguidor;
 			        }
-			        MeteDirec(X,Y);               
-			        //console.log("los puntos intermedios en la ficha inconexa " + Ficha.nombre + " son: " + puntos);
+			        MeteDirec(X,Y);
 			    }
+	        }
+	        else {
+	        	//si la ficha tiene el campo szona= ciudad o ciudad2 no puedo dejar que ponga el seguidor en la ficha que me pasan inicialmente
+	        	PuedesPonerSeguidor= false;
+	        	return PuedesPonerSeguidor;
 	        }
 	        
 	    }
