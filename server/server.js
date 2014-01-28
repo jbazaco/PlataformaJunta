@@ -40,19 +40,6 @@ Meteor.setTimeout(ActualizarEstado,1000);
 
 //Función que devuelve una Ficha aleatoria
 
-/*Aleatorio = function(){
-	var decision = false
-	var a = Math.floor(Math.random()*24);
-	var Ficha = { 
-		nombre: "nada"
-	};
-	Ficha.nombre = ArFi[a].nombre;
-	if (decision = false)
-		decision = true;
-	else
-		decision
-	return Ficha;
-};*/
 
 // Al terminar una partida se debe llamar a este método para todos y cada uno de los jugadores de esa
 // partida y comprobar si han conseguido un nuevo record.
@@ -251,7 +238,7 @@ Meteor.methods({
 
   ActualizaFicha : function(id,ficha){
     var Partida = Partidas.findOne(id);
-	//var ficha = Aleatorio();
+	var ficha = Aleatorio(id);
     Partidas.update(id,{$set:{ultimaficha: ficha}});		
   },
 

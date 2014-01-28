@@ -54,12 +54,11 @@ ArFi = _.toArray(FichaPropiedades); //Convertimos lo que tenemos en un Array par
 
 var Tableros = []; //Array de [ID | Tablero correspondiente a ese ID] 
 
-var ParJugadas = [];
 
-ContadorJugadas = 0;
-CuentaTableros = 0;
+var ContadorJugadas = 0;
+var CuentaTableros = 0;
 
-Aleatorio = function(){
+Aleatorio = function(id){
 	var decision = false
 	var a = Math.floor(Math.random()*24);
 	var Ficha = { 
@@ -184,6 +183,9 @@ CrearArJug = function(id){
 	//console.log("CREAMOS TABLERO DE PARTIDA");
 	Tableros.push(partida);
 	CuentaTableros++;  
+	//for (i = 0; i < CuentaTableros; i++){
+	//	console.log("El id de cada Tableros es: " + Tableros[i].id);
+	//}
 	//console.log("CrearArJug(2) CuentaTableros: " + CuentaTableros);
 }
 
@@ -749,3 +751,4 @@ CierraCastillo = function(Tablero, Ficha, PosSeguidor, X, Y){
 		return puntos;
 	}
 };
+
