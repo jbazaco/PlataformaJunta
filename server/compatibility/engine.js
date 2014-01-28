@@ -1,23 +1,4 @@
 
-//       1
-//    -------
-//  4 |     | 2
-//    |     |
-//    -------
-//       3
-
-/*
-seguidores
-
-			1   2   3
-		12	---------  4
-			|		|
-		11	|		|  5
-			|		|
-		10	---------  6
-			9	8	7
-variable seguid = posicion del seguidor dentro de la ficha entre las 12 posibles.
-*/
 
 var CASTILLO = 'castillo';
 var CAMINO = 'camino';
@@ -110,7 +91,6 @@ PruebaItera = function(Ficha,rotacion){
 			FichaDev.r = ArFi[i].r;
 			FichaDev.d = ArFi[i].d;
 			FichaDev.l = ArFi[i].l;
-			//console.log("Rotacion: " + rotacion); //Comprobamos la rotación que se nos pasa
 			if (rotacion == 0)
 				FichaDev.gir = 0;
 			if (rotacion == 90)
@@ -119,7 +99,6 @@ PruebaItera = function(Ficha,rotacion){
 				FichaDev.gir = 2;
 			if (rotacion == 270)
 				FichaDev.gir = 3;
-			//console.log("AGF FichaDev.u: " + FichaDev.u + " FichaDev.r: " + FichaDev.r + " FichaDev.d: " + FichaDev.d + " FichaDev.l: " + FichaDev.l);
 			return FichaDev;
 		}
 	}
@@ -130,7 +109,6 @@ PruebaItera = function(Ficha,rotacion){
 GirarFicha = function(Ficha){
 	var aux = 0;
 	var gira = Ficha.gir;
-	//console.log("giro inicial de: " + Ficha.gir);
 	while (Ficha.gir != 0){
 		aux = Ficha.l;
 		Ficha.l = Ficha.d;
@@ -167,23 +145,13 @@ CrearArJug = function(id){
 	Tablero[0][0] = Prueba(14);
 
 	ContadorJugadas = ContadorJugadas + 1;;
-	//console.log("CrearArJug(1) ContadorJugadas: " + ContadorJugadas);
-
-	//console.log("--------");
-	//console.log("CrearArJug: " + ParJugadas[0].id);
-	//console.log("--------"); 
 
 	var partida = {
 		id: id,
 		Tablero: Tablero
 	}
-	//console.log("CREAMOS TABLERO DE PARTIDA");
 	Tableros.push(partida);
 	CuentaTableros++;  
-	//for (i = 0; i < CuentaTableros; i++){
-	//	console.log("El id de cada Tableros es: " + Tableros[i].id);
-	//}
-	//console.log("CrearArJug(2) CuentaTableros: " + CuentaTableros);
 }
 
 //SEGUNDA FUNCIÓN AUTORUN JUGADAS
@@ -193,14 +161,10 @@ CrearTabJug = function(id, x, y, ficha, rota, user, cuadrado, zona){
 	Ficha1.nomjug = user;
 	Ficha1.scuadrado = cuadrado;
 	Ficha1.szona = zona;
-	//console.log("COMPROBACION GENERAL DE COMO INSERTO LA FICHA EN TABLERO");
-	//console.log("AGF Ficha1.u: " + Ficha1.u + " Ficha1.r: " + Ficha1.r + " Ficha1.d: " + Ficha1.d + " Ficha1.l: " + Ficha1.l + "Ficha.gir" + Ficha1.gir);
+
 	Ficha1 = GirarFicha(Ficha1);
-	//console.log("AGF Ficha1.u: " + Ficha1.u + " Ficha1.r: " + Ficha1.r + " Ficha1.d: " + Ficha1.d + " Ficha1.l: " + Ficha1.l + "Ficha.gir" + Ficha1.gir);
 	for(i=0; i<= CuentaTableros - 1;i++){
 		if (Tableros[i].id == id){
-			//console.log("INSERTA FICHA EN TABLERO");
-			//console.log("CrearTabJug(1). Tableros[i].id: " + Tableros[i].id + " id: " + id);
 			Tableros[i].Tablero[x][y] = Ficha1;	
 		}
 	}
@@ -214,14 +178,8 @@ RegMov = function(id, jugador, m){
 //Procedimiento que mira las posiciones del tablero para ver si se puede colocar la ficha
 //Terminología: U: Up, R:Right, D: Down, L:Left. 
 colocarficha = function(id_part, Ficha, X, Y, rotacion){
-		//console.log("                                           ");
-		//console.log("                   JUGADA NUEVA            ");
-		//console.log("MIRANDO ROTACION");
-		//console.log("Rotacion que nos pasan: " + rotacion);
 		Ficha = PruebaItera(Ficha,rotacion);
-		//console.log("Gira que tenemos: " + Ficha.gir);
 		Ficha = GirarFicha(Ficha);
-		//console.log("Gira que tenemos: " + Ficha.gir);
 		
 		var encontrado = false;
 		var colocado = true;
@@ -231,10 +189,8 @@ colocarficha = function(id_part, Ficha, X, Y, rotacion){
 				Tablero = Tableros[i].Tablero;
 			}
 		}
-
-		//console.log("Pos X: " + X + " Pos Y: " + Y);		
+	
 		if (Tablero[X][Y] == 0){
-			//if ((X != 0 && Y != 0) || (X != 72 && Y != 0) || (Y != 0)){ //En cada una comprobamos las esquinas y los bordes(L-U,U,R-A)
 			if (Tablero[X][(Y+1)] != 0){//Arriba
 				console.log("----------------------------------------------------------------------------");
 				console.log("Tablero[X][(Y+1)].u: " + Tablero[X][(Y+1)].u + " Tablero[X][(Y+1)].r: " + Tablero[X][(Y+1)].r);
@@ -329,7 +285,6 @@ CierraClaustro = function(Tablero,X,Y){
 		puntos++;
 	}
 	
-	//alert("el valor del contador es: " + contador);
 	if (contador == 8){
 		return [true,puntos]
 	}else{
@@ -392,13 +347,10 @@ CuentaPCamino = function(Tablero, Ficha, Num, X, Y){
 
 	//Funcion recursiva a la que le voy pasando la ficha siguiente (a partir de la ficha inicial)
 	Recursiva = function(Tablero, prohibido, flag, X, Y){
-		//console.log("Entra en Recursiva");
-		//console.log("La ficha es: " + Tablero[X][Y].nombre + " Posicion: " + X + "," + Y);
 		if ((Tablero[X][Y] != 0) && (flag != 2)){ 		// Caso en el que tenemos ficha en esa dirección y todavía no hemos finalizado camino
 			puntos = puntos + 1; 						// Si hay ficha, tiene que ser camino y por tanto sumamos puntos
 			if (fincamino.indexOf(Tablero[X][Y].nombre) != -1){ 		// Si la ficha está en fincamino ya hemos finalizado el camino
 				puntos = puntos + 1; 						
-				//console.log("Recursiva Fincamino, Ficha: " + Tablero[X][Y].nombre);
 				flag = flag + 1;
 			}
 			else if(contcamino.indexOf(Tablero[X][Y].nombre) != -1){ // Si la ficha está en contcamino seguimos haciendo recursiva
@@ -435,25 +387,21 @@ CuentaPCamino = function(Tablero, Ficha, Num, X, Y){
 		puntos = puntos + 1;		
 		if (Ficha.u == 'camino'){
 			Y1 = Y + 1;
-			//alert("Cont Ficha arriba: " + Tablero[X][Y1].nombre);
 			MeteDirec(X,Y);
 			Recursiva(Tablero, "abajo", flag, X, Y1);	
 		}
 		if (Ficha.r == 'camino') {			
 			X1 = X + 1;
-			//alert("Cont Ficha derecha: " + Tablero[X1][Y].nombre);
 			MeteDirec(X,Y);
 			Recursiva(Tablero, "izquierda", flag, X1, Y);
 		}
 		if (Ficha.d == 'camino') {		
 			Y2 = Y - 1;
-			//alert("Cont Ficha abajo: " + Tablero[X][Y2].nombre);
 			MeteDirec(X,Y);
 			Recursiva(Tablero, "arriba", flag, X, Y2);
 		}
 		if (Ficha.l == 'camino'){			
 			X2 = X - 1;
-			//alert("Cont Ficha izquierda: " + Tablero[X2][Y].nombre);
 			MeteDirec(X,Y);
 			Recursiva(Tablero, "derecha", flag, X2, Y);
 		}
@@ -469,8 +417,7 @@ CuentaPCamino = function(Tablero, Ficha, Num, X, Y){
 			MeteDirec(X,Y);
 			Recursiva(Tablero, "abajo", flag, X, Y1); 		// Llamamos a la funcion Recursiva pasandole la siguiente ficha y donde tiene que ir	
 		}
-		else if (contcamino.indexOf(Ficha.nombre) != -1){ 	//Aquí le diremos para donde tiene que tirar cada camino
-			//alert("Num = 1 contcamino Ficha: " + Ficha.nombre);						
+		else if (contcamino.indexOf(Ficha.nombre) != -1){ 	//Aquí le diremos para donde tiene que tirar cada camino						
 			Continua(Tablero, Ficha, X, Y);
 		}		
 	}	
@@ -513,10 +460,6 @@ CuentaPCamino = function(Tablero, Ficha, Num, X, Y){
 	}
 	else
 		console.log("El Num es incorrecto");
-	/*for (i = 0; i <= puntos; i++){
-		alert("ArrayPosX: " + arr[i].x);
-		alert("ArrayPosY: " + arr[i].y);
-	}*/
 	arr = [];
 	return puntos;
 };
@@ -564,9 +507,6 @@ CierraCastillo = function(Tablero, Ficha, PosSeguidor, X, Y){
 		
 	var arr = [];	//Array con todas las direcciones por las que ya hemos pasado
 	var constante = 0; //Con esta constante sabremos cuantas fichas hemos investigado en MeteDirec
-	//resultado = TipoCastillo(Ficha.nombre);
-	//console.log("Estoy dentro de CierraCastillo");
-	//return resultado;
 	var Entrar = 0;
 	MeteDirec = function(X, Y){         // Diccionario de las posiciones que ha tenido ese camino, para comprobar si hemos retornado al inicio.
 		console.log("Metemos direccion: " + X + "," + Y);
@@ -597,25 +537,19 @@ CierraCastillo = function(Tablero, Ficha, PosSeguidor, X, Y){
 	
 	DarPuntos= function(puntos, Ficha){
 		if (fichasConEscudo.indexOf(Ficha.nombre)!=-1){
-			//console.log("entro en ficha con escudo");
 			puntos= puntos + 4;
 			console.log("los puntos intermedios CE son: " + puntos);
 		}
 		else{
-			//console.log("entro en ficha sin escudo");
 			puntos=puntos+2;
 			console.log("los puntos intermedios SE son: " + puntos);
 		}
 		return puntos;
 	};
 	RecursivaCastillo= function(Ficha, Prohibido,X,Y){
-		console.log("                                ");
 		if (Tablero[X][Y]!=0){
-			console.log("LA FICHA: " + Ficha.nombre + " Coordenadas: X= " + X + "||| Y= " + Y);
 			Points = true;
 			if (fichasLadoCastilloConexos.indexOf(Ficha.nombre)!=-1){	//si la ficha esta en este array
-				console.log("la ficha "+ Ficha.nombre + " está en el array conexo | CX: " + X + "||| CY: " + Y);
-				console.log("DarDirec es: " + DarDirec(X,Y));
 				if (DarDirec(X,Y)){
 					if ((Ficha.u == "castillo") && (Prohibido != "arriba")){
 						Y1=Y+1;						
@@ -654,22 +588,18 @@ CierraCastillo = function(Tablero, Ficha, PosSeguidor, X, Y){
 				}
 			}
 			else if (DarDirec(X,Y)){
-				console.log("la ficha "+ Ficha.nombre + " está en el array inconexo.");
 				puntos= DarPuntos(puntos, Ficha);;
 				MeteDirec(X,Y);				
-				//console.log("los puntos intermedios en la ficha inconexa " + Ficha.nombre + " son: " + puntos);
 			}
 		}
 		else{
 			console.log("El tablero está vacío.");
-			//puntos=0;
 		}
 	};
 	
 	//tratamos el caso de que llega una ficha con seguidor
 	//entramos en el caso de las fichas inconexas
 	if (fichas2LadosCierranCastillo.indexOf(Ficha.nombre)!=-1){
-		console.log("x e y iniciales "+X+"   "+ Y);
 		//tengo que ver las 4 posiciones del seguidor
 		if (PosSeguidor==2){
 			Y1=Y+1;
@@ -678,21 +608,18 @@ CierraCastillo = function(Tablero, Ficha, PosSeguidor, X, Y){
 			RecursivaCastillo(Tablero[X][Y1], "abajo", X, Y1);
 		}
 		else if (PosSeguidor==6){
-			//console.log("posicion del seguidor es: " + PosSeguidor);
 			X1=X+1;
 			puntos= DarPuntos(puntos,Ficha);
 			MeteDirec(X,Y);
 			RecursivaCastillo(Tablero[X1][Y], "izquierda", X1, Y);
 		}
 		else if (PosSeguidor==8){
-			//console.log("posicion del seguidor es: " + PosSeguidor);
 			Y2=Y-1;
 			puntos= DarPuntos(puntos, Ficha);
 			MeteDirec(X,Y);
 			RecursivaCastillo(Tablero[X][Y2], "arriba", X, Y2);
 		}
 		else if (PosSeguidor==4){
-			//console.log("posicion del seguidor es: " + PosSeguidor);
 			X2=X-1;
 			puntos= DarPuntos(puntos, Ficha);
 			MeteDirec(X,Y);
@@ -700,18 +627,15 @@ CierraCastillo = function(Tablero, Ficha, PosSeguidor, X, Y){
 		}
 	}
 	else{
-		console.log("La ficha inicial es conexa");
 		MeteDirec(X,Y);
 		Points = true;
 		if (Ficha.u == "castillo"){
-			console.log("Entra Arriba");
 			Y1=Y+1;
 			puntos= DarPuntos(puntos, Ficha);
 			RecursivaCastillo(Tablero[X][Y1],"abajo",X,Y1);
 			Points = false;
 		}
 		if ((Ficha.r=="castillo")){
-			console.log("Entra Derecha");
 			X1=X+1;
 			if (Points)
 				puntos= DarPuntos(puntos, Ficha);
@@ -719,8 +643,6 @@ CierraCastillo = function(Tablero, Ficha, PosSeguidor, X, Y){
 			Points = false;
 		}
 		if ((Ficha.d=="castillo")){
-			console.log("Ficha.nombre: " + Ficha.nombre);
-			console.log("Entra Abajo");
 			Y2=Y-1;
 			if (Points)			
 				puntos= DarPuntos(puntos, Ficha);
@@ -728,7 +650,6 @@ CierraCastillo = function(Tablero, Ficha, PosSeguidor, X, Y){
 			Points = false;
 		}
 		if ((Ficha.l=="castillo")){
-			console.log("Entra Izquierda");
 			X2=X-1;
 			if (Points)
 				puntos= DarPuntos(puntos, Ficha);
@@ -736,9 +657,6 @@ CierraCastillo = function(Tablero, Ficha, PosSeguidor, X, Y){
 		}
 		
 	}
-
-	for (i = 0; i <= constante-1; i++)
-		console.log("PosX: " + arr[i].x + " PosY: " + arr[i].y);
 
 	if (puntos==4){
 		puntos= 2;
