@@ -1,65 +1,7 @@
 /*
 //Función para comprobar donde esta el seguidor
 PosSeg = function(){
-
-
-
-};
-
-//Descriptor de fichas dada la posicion del seguidor
-var FichaPAmp = {
-/*0*/                murcam: {nombre:"murcam", si:"campo", sc:"campo", sd:"campo",
-                                                ci:"ciudad", cc:"no", cd:"campo", ii:"ciudad", ic:"ciudad", id:"campo"}, //media ficha muralla media ficha campo
-/*1*/                c3mur:          {nombre:"c3mur", si:"campo", sc:"camino", sd:"campo2",
-                                                ci:"ciudad", cc:"no", cd:"camino2", ii:"campo", ic:"camino3", id:"campo3"}, //cruce de 3 caminos con muralla al lado
-/*2*/                mur2:          {nombre:"mur2", si:"campo", sc:"campo", sd:"campo",
-                                                ci:"ciudad", cc:"campo", cd:"ciudad2", ii:"campo", ic:"campo", id:"campo"}, //una muralla a cada lado de la ficha
-/*3*/                m:                  {nombre:"m", si:"campo", sc:"campo", sd:"campo",
-                                                ci:"campo", cc:"monasterio", cd:"campo", ii:"campo", ic:"campo", id:"campo"}, //monasterio
-/*4*/                 mc:          {nombre:"mc", si:"campo", sc:"campo", sd:"campo",
-                                                ci:"campo", cc:"monasterio", cd:"camino", ii:"campo", ic:"campo", id:"campo"}, //monasterio con camino
-/*5*/                c4:          {nombre:"c4", si:"campo", sc:"camino", sd:"campo2",
-                                                ci:"camino2", cc:"no", cd:"camino3", ii:"campo3", ic:"camino4", id:"campo4"}, //cruce de 4 caminos
-/*6*/                cc:          {nombre:"cc", si:"campo", sc:"camino", sd:"campo2",
-                                                ci:"campo", cc:"camino", cd:"camino", ii:"campo", ic:"campo", id:"campo"}, //camino curva
-/*7*/                 cr:          {nombre:"cr", si:"campo", sc:"campo", sd:"campo",
-                                                ci:"camino", cc:"camino", cd:"camino", ii:"campo2", ic:"campo2", id:"campo2"}, //camino recto
-/*8*/                 c3:          {nombre:"c3", si:"campo", sc:"camino", sd:"campo2",
-                                                ci:"campo", cc:"no", cd:"camino2", ii:"campo", ic:"camino3", id:"campo3"}, //cruce de 3 caminos
-/*9*/                ciudad: {nombre:"ciudad", si:"ciudad", sc:"ciudad", sd:"ciudad",
-                                                ci:"ciudad", cc:"ciudad", cd:"ciudad", ii:"ciudad", ic:"ciudad", id:"ciudad"}, //todo ciudad con escudo
-/*10*/                ciucam: {nombre:"ciucam", si:"ciudad", sc:"ciudad", sd:"campo",
-                                                ci:"ciudad", cc:"ciudad", cd:"campo", ii:"ciudad", ic:"ciudad", id:"campo"}, //ciudad con un lado de campo
-/*11*/                chmur:          {nombre:"chmur", si:"ciudad", sc:"ciudad", sd:"campo",
-                                                ci:"ciudad", cc:"ciudad", cd:"camino", ii:"ciudad", ic:"ciudad", id:"campo2"},          //camino hacia muralla
-/*12*/                mur2c:          {nombre:"mur2c", si:"campo", sc:"ciudad", sd:"campo",
-                                                ci:"ciudad2", cc:"campo", cd:"campo", ii:"campo", ic:"campo", id:"campo"}, //2 murallas en lados contiguos
-/*13*/                mur1:          {nombre:"mur1", si:"campo", sc:"campo", sd:"campo",
-                                                ci:"ciudad", cc:"campo", cd:"campo", ii:"campo", ic:"campo", id:"campo"}, //1 muralla en un lado y el resto campo
-/*14*/                cmur:          {nombre:"cmur", si:"campo", sc:"camino", sd:"campo2",
-                                                ci:"ciudad", cc:"camino", cd:"campo2", ii:"campo", ic:"camino", id:"campo2"}, //camino recto con muralla al lado(ini)
-/*15*/                 ccmur:          {nombre:"ccmur", si:"campo", sc:"camino", sd:"campo2",
-                                                ci:"ciudad", cc:"campo", cd:"camino", ii:"campo", ic:"campo", id:"campo"}, //camino con curva y con muralla al lado
-/*16*/                ccmur3: {nombre:"ccmur3", si:"campo", sc:"campo", sd:"campo",
-                                                ci:"ciudad", cc:"camino", cd:"camino", ii:"campo", ic:"camino", id:"campo2"}, //camino con curva y muralla al lado(otro)
-/*17*/                ciucam2: {nombre:"ciucam2", si:"campo", sc:"ciudad", sd:"campo",
-                                                ci:"campo", cc:"ciudad", cd:"campo", ii:"campo", ic:"ciudad", id:"campo"}, //ciudad con 2 lados opuestos de campo
-/*18*/                ccmur2: {nombre:"ccmur2", si:"campo", sc:"camino", sd:"campo2",
-                                                ci:"ciudad", cc:"camino", cd:"camino", ii:"ciudad", ic:"ciudad", id:"campo"},                  //camino con curva con 2 lados de ciudad seg
-/*19*/                 chmure: {nombre:"chmure", si:"ciudad", sc:"ciudad", sd:"campo",
-                                                ci:"ciudad", cc:"ciudad", cd:"camino", ii:"ciudad", ic:"ciudad", id:"campo2"},          //camino hacia muralla con escudo
-/*20*/         ccmur2e: {nombre:"ccmur2e", si:"campo", sc:"camino", sd:"campo2",
-                                                ci:"ciudad", cc:"camino", cd:"camino", ii:"ciudad", ic:"ciudad", id:"campo"}, //camino con curva con 2 lados de ciudad,escudo
-/*21*/         murcame: {nombre:"murcame", si:"campo", sc:"campo", sd:"campo",
-                                                ci:"ciudad", cc:"no", cd:"campo", ii:"ciudad", ic:"ciudad", id:"campo"}, //media ficha muralla media ficha campo con escudo
-/*22*/         ciucame: {nombre:"ciucame", si:"ciudad", sc:"ciudad", sd:"campo",
-                                                ci:"ciudad", cc:"ciudad", cd:"campo", ii:"ciudad", ic:"ciudad", id:"campo"}, //ciudad con un lado de campo con escudo
-/*23*/         ciucam2e:{nombre:"ciucam2e", si:"campo", sc:"ciudad", sd:"campo",
-                                                ci:"campo", cc:"ciudad", cd:"campo", ii:"campo", ic:"ciudad", id:"campo"}
-};
-
-ArFiAmp = _.toArray(FichaPAmp);
-
+*/
 
 //Funcion para girar ficha de fichas ampliadas
 GirarFichaAmp = function (F){
@@ -451,11 +393,8 @@ ColocarSeguidorCastillo = function(Tablero, cuadrado, X, Y){
 		        console.log("Entra Izquierda");
 		        X2=X-1;
 		        RecursivaSeguidor(Tablero[X2][Y],"derecha",X2,Y);
-		    }
-		   
+		    }	   
 		}
-		PuedesPonerSeguidor= 
-    }
-    
-	
+		return PuedesPonerSeguidor;
+    }	
 };
