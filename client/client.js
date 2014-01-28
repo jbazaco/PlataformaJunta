@@ -256,9 +256,9 @@ Template.gamesList.imIn = function(){
 }
 
 function abrir(url) {
-	alert(url)
-	open(url,'','top=300,left=300,width=300,height=300') ;
+	open(url,'') ;
 }
+
 
 Template.ajustes.events={
 	'click a#fondo0':function(){
@@ -275,8 +275,8 @@ Template.ajustes.events={
 		$("#container").css("border","3px solid black")
 		$("#container2").css({"background-color":"#20B2AA","opacity":"0.6"})
 		$("#container3").css({"background-color":"#20B2AA","opacity":"0.6"})
-		$("#container4").css("background-color","white")
-		$("#container5").css({"background-color":"#ADD8E6","border":"2px solid black"})
+		$("#container4").css("background-color","#20B2AA")
+		$("#container5").css({"background-color":"#20B2AA","border":"2px solid black"})
 		$('.bienvenida').css("color","black")
 		return false;
 	},
@@ -314,7 +314,14 @@ Template.ajustes.events={
 		return false;
 	},
 	'click a#abrir':function(){
-		abrir('privacidad/PoliticaPrivacidad.html')
+		abrir('http://www.defensacentral.com/')
+		return false;
+	},
+
+	'click a#abrirterminos':function(){
+		$(function() {
+    		$("#terminos").dialog();
+  		});
 		return false;
 	},
 }
