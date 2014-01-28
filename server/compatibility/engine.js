@@ -61,7 +61,10 @@ Prueba = function(A){
 		r: CAMINO,
 		d: CAMINO,
 		l: CAMINO,
-		gir:0
+		gir:0,
+		nomjug:"nada",
+		scuadrado: 0,
+		szona: "nada"
 	};
 	Ficha.nombre = ArFi[A].nombre;
 	Ficha.u = ArFi[A].u;
