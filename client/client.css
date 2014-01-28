@@ -109,7 +109,7 @@ table {
 
 #container3 {
 	width:25.5%;
-	height:52%;
+	height:50%;
 	background-color:#CBAD48;
 	float:right;
 	margin-right: 2%;
@@ -229,5 +229,10 @@ textarea
 	border-color:#f3f3f3 #bbb #bbb #f3f3f3;
 	margin:0;
 	padding:.5em;
+}
+
+#juego_descripcion{
+	
+	font-family: fantasy;
 }
 

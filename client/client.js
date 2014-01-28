@@ -33,6 +33,39 @@ Meteor.startup(function(){
 	$("#pop_up").on('mouseleave', '.datos', function(){
 		$(".datos").remove();
 	});
+	$(".games").mouseover(function(){
+
+		if (this.id==="game_1") {
+			logo = document.getElementById("alien");
+			//logo.src="imagenes/alienInvasion.png"
+		}
+		else if (this.id==="game_2") {
+			logo = document.getElementById("angry");
+			//logo.src="imagenes/agryfruits.png"
+		}
+		else if (this.id==="game_3") {
+			logo = document.getElementById("carca");
+			//logo.src="imagenes/carcassonne-logo.jpg"
+		}
+  		logo.width = 100;
+  		logo.height = 80;
+	});
+	$(".games").mouseout(function(){
+		if (this.id==="game_1") {
+			logo = document.getElementById("alien");
+			logo.src="alienInvasion.png"
+		}
+		else if (this.id==="game_2") {
+			logo = document.getElementById("angry");
+			logo.src="agryfruits.png"
+		}
+		else if (this.id==="game_3") {
+			logo = document.getElementById("carca");
+			logo.src="carcassonne-logo.jpg"
+		}
+  		logo.width = 60;
+  		logo.height = 41;
+	});
 /*
 	$("#fondoPantalla").click(function(){
 		$(".fondos").toggle();
@@ -163,6 +196,9 @@ Template.options.events={
 		if($('#tablero').is(':checked')){
 			$('#tablero').prop('checked', false);
 		}		
+	},
+	'click .close_Div': function () {	
+		$("#opciones").hide()
 	}
       
 }
@@ -453,6 +489,36 @@ Template.popup.events={
 				alert('Debes estar registrado para unirte a una partida');
 		}
 		return false;
+	},
+	'click a.leave_match':function(){
+		partida=Partidas.findOne(Session.get('Game_Data_id'))._id;
+		
+		var usuid = Meteor.userId();
+		var usu = Meteor.users.findOne(usuid);
+		
+		Meteor.call('AbandonarPartida',usu.username,partida)/*,function(err,res){
+					if(! err){
+						alert("hey")
+					}else{
+						console.log(err);
+					}
+		})*/
+		/*var usu = Meteor.users.findOne(usuid);
+			if (usu){
+				Meteor.call('IncluirJugador',Session.get('Game_Data_id'),usu.username,function(err,res){
+					if(! err){
+						Meteor.subscribe(res)
+						$('.canvas').hide()
+						$("#container").append("<canvas id='Canvas_"+res+"' class='canvas' width='1070' height='650'></canvas>");
+						Session.set("Current_Game",res)
+						$("#"+Session.get('Game_Data_id')+"_datos").remove()
+					}
+				})
+			}
+		}else{
+				alert('Debes estar registrado para unirte a una partida');
+		}*/
+		return false;
 	}
 }
 
@@ -469,8 +535,12 @@ Template.gamesList.events={
 			var usu = Meteor.users.findOne(usuid);
  			if (usu){
  				if ((Partida.jugadores.indexOf(usu.username)!=(-1)) || (Partida.estado != "Lobby")){
- 					cadena = "<a class='watch_match' href=''>Observar partida<a></br>"
- 				}else{
+					if ((Partida.jugadores.indexOf(usu.username)>=0)){
+						cadena = "<a class='watch_match' href=''>Observar partida<a></br><a class='leave_match' href=''>Abandonar<a></br>"
+					}else{
+						cadena = "<a class='watch_match' href=''>Observar partida<a></br>"
+					}
+				}else{
 					cadena = "<a class='join_match' href=''>Unirse a partida </a></br><a class='watch_match' href=''>Observar partida<a></br>"
  				}
  			}
