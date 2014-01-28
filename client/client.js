@@ -219,13 +219,17 @@ Template.gamesList.imIn = function(){
 	};
 }
 
+function abrir(url) {
+	alert(url)
+	open(url,'','top=300,left=300,width=300,height=300') ;
+}
 
 Template.ajustes.events={
 	'click a#fondo0':function(){
 		$("#containermain").css("background-image",'url(../imagenes/fondo3.jpg)');
 		$("#container").css("border","3px solid black")
-		$("#container2").css("background-color","#CBAD48")
-		$("#container3").css("background-color","#CBAD48")
+		$("#container2").css({"background-color":"#CBAD48","opacity":"0.6"})
+		$("#container3").css({"background-color":"#CBAD48","opacity":"0.6"})
 		$("#container4").css("background-color","#CBAD48")
 		$("#container5").css({"background-color":"#CBAD48","border":"2px solid black"})
 		return false;
@@ -233,8 +237,8 @@ Template.ajustes.events={
 	'click a#fondo1':function(){
 		$("#containermain").css("background-image",'url(../imagenes/papel.jpg)');
 		$("#container").css("border","3px solid black")
-		$("#container2").css("background-color","#20B2AA")
-		$("#container3").css("background-color","#20B2AA")
+		$("#container2").css({"background-color":"#20B2AA","opacity":"0.6"})
+		$("#container3").css({"background-color":"#20B2AA","opacity":"0.6"})
 		$("#container4").css("background-color","white")
 		$("#container5").css({"background-color":"#ADD8E6","border":"2px solid black"})
 		$('.bienvenida').css("color","black")
@@ -243,8 +247,8 @@ Template.ajustes.events={
 	'click a#fondo2':function(){
 		$("#containermain").css("background-image",'url(../imagenes/negro.jpg)');
 		$("#container").css("border","3px solid white")
-		$("#container2").css("background-color","#DCDCDC")
-		$("#container3").css("background-color","#DCDCDC")
+		$("#container2").css({"background-color":"#DCDCDC","opacity":"0.6"})
+		$("#container3").css({"background-color":"#DCDCDC","opacity":"0.6"})
 		$("#container4").css("background-color","#C0C0C0")
 		$("#container5").css({"background-color":"#C0C0C0","border":"2px solid white"})
 		$('.bienvenida').css("color","white")
@@ -254,8 +258,8 @@ Template.ajustes.events={
 	'click a#fondo3':function(){
 		$("#containermain").css("background-image",'url(../imagenes/lluvia.jpg)');
 		$("#container").css("border","3px solid white")
-		$("#container2").css("background-color","#20B2AA")
-		$("#container3").css("background-color","#20B2AA")
+		$("#container2").css({"background-color":"#F5FFFA","opacity":"1"})
+		$("#container3").css({"background-color":"#F5FFFA","opacity":"1"})
 		$("#container4").css("background-color","#C0C0C0")
 		$("#container5").css({"background-color":"#C0C0C0","border":"2px solid white"})
 		$('.bienvenida').css("color","black")
@@ -265,12 +269,16 @@ Template.ajustes.events={
 	'click a#fondo4':function(){
 		$("#containermain").css("background-image",'url(../imagenes/nieve.jpg)');
 		$("#container").css("border","3px solid white")
-		$("#container2").css("background-color","#7B68EE")
-		$("#container3").css("background-color","#7B68EE")
+		$("#container2").css({"background-color":"#7B68EE","opacity":"1"})
+		$("#container3").css({"background-color":"#7B68EE","opacity":"1"})
 		$("#container4").css("background-color","#7B68EE")
 		$("#container5").css({"background-color":"#7B68EE","border":"2px solid white"})
 		$('.bienvenida').css("color","black")
 		//$("#input").css("background-color","green")
+		return false;
+	},
+	'click a#abrir':function(){
+		abrir('privacidad/PoliticaPrivacidad.html')
 		return false;
 	},
 }
