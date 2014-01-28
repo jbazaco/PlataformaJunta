@@ -230,4 +230,8 @@ textarea
 	margin:0;
 	padding:.5em;
 }
+#juego_descripcion{
+	
+	font: oblique bold 120% cursive;
+}
 

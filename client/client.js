@@ -33,6 +33,39 @@ Meteor.startup(function(){
 	$("#pop_up").on('mouseleave', '.datos', function(){
 		$(".datos").remove();
 	});
+	$(".games").mouseover(function(){
+
+		if (this.id==="game_1") {
+			logo = document.getElementById("alien");
+			logo.src="imagenes/alienInvasion.png"
+		}
+		else if (this.id==="game_2") {
+			logo = document.getElementById("angry");
+			logo.src="imagenes/agryfruits.png"
+		}
+		else if (this.id==="game_3") {
+			logo = document.getElementById("carca");
+			logo.src="imagenes/carcassonne-logo.jpg"
+		}
+  		logo.width = 100;
+  		logo.height = 80;
+	});
+	$(".games").mouseout(function(){
+		if (this.id==="game_1") {
+			logo = document.getElementById("alien");
+			logo.src="alienInvasion.png"
+		}
+		else if (this.id==="game_2") {
+			logo = document.getElementById("angry");
+			logo.src="agryfruits.png"
+		}
+		else if (this.id==="game_3") {
+			logo = document.getElementById("carca");
+			logo.src="carcassonne-logo.jpg"
+		}
+  		logo.width = 60;
+  		logo.height = 41;
+	});
 /*
 	$("#fondoPantalla").click(function(){
 		$(".fondos").toggle();
