@@ -109,7 +109,7 @@ table {
 
 #container3 {
 	width:25.5%;
-	height:52%;
+	height:50%;
 	background-color:#CBAD48;
 	float:right;
 	margin-right: 2%;
@@ -230,6 +230,7 @@ textarea
 	margin:0;
 	padding:.5em;
 }
+
 #juego_descripcion{
 	
 	font: oblique bold 120% cursive;

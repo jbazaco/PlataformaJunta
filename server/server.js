@@ -131,6 +131,17 @@ Meteor.methods({
 		return EliminarJugador(jugador);
 	},
 	
+	
+	AbandonarPartida : function(jugador,idpartida){
+		partida=Partidas.findOne(idpartida)
+		partida.jugadores[partida.jugadores.indexOf(jugador)]="";
+		Partidas.update(idpartida,{$set:{jugadores:partida.jugadores}})
+		AgregarPenalizacion(jugador,1);
+		if (partida.jugadores.length==1){	//si no quedan jugadores humanos
+			Partidas.remove(idpartida);
+		}
+		//document.getElementById("Canvas_"+idpartida).remove();
+	},
 	// Actualiza el estado de todos los usuarios registrados cada vez que hay
 	// un cambio en la colección users.
 	ActualizarEstado: function(){
