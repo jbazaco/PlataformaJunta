@@ -13,54 +13,54 @@ const FICHA_W = 62;
 const MAX_JUGADORES = 5;
 
 C_sprites = {
-	m: { sx: 253, sy: 44, w: FICHA_W, h: FICHA_H, si:"campo", sc:"campo", sd:"campo",
-		ci:"campo", cc:"monasterio", cd:"campo", ii:"campo", ic:"campo", id:"campo"},		//monasterio
-	mc: { sx: 331, sy: 44, w: FICHA_W, h: FICHA_H, si:"campo", sc:"campo", sd:"campo",
-		ci:"campo", cc:"monasterio", cd:"camino", ii:"campo", ic:"campo", id:"campo"},		//monasterio con camino
-	cr: { sx: 563, sy: 44, w: FICHA_W, h: FICHA_H, si:"campo", sc:"campo", sd:"campo",
+	m: { sx: 253, sy: 44, w: FICHA_W, h: FICHA_H, si:"campo1", sc:"campo1", sd:"campo1",
+		ci:"campo1", cc:"monasterio", cd:"campo1", ii:"campo1", ic:"campo1", id:"campo1"},		//monasterio
+	mc: { sx: 331, sy: 44, w: FICHA_W, h: FICHA_H, si:"campo1", sc:"campo1", sd:"campo1",
+		ci:"campo1", cc:"monasterio", cd:"camino", ii:"campo1", ic:"campo1", id:"campo1"},		//monasterio con camino
+	cr: { sx: 563, sy: 44, w: FICHA_W, h: FICHA_H, si:"campo1", sc:"campo1", sd:"campo1",
 		ci:"camino", cc:"camino", cd:"camino", ii:"campo2", ic:"campo2", id:"campo2"},		//camino recto
-	cc: { sx: 485, sy: 44, w: FICHA_W, h: FICHA_H, si:"campo", sc:"camino", sd:"campo2",
-		ci:"campo", cc:"camino", cd:"camino", ii:"campo", ic:"campo", id:"campo"},		//camino curva
-	c3: { sx: 640, sy: 44, w: FICHA_W, h: FICHA_H, si:"campo", sc:"camino", sd:"campo2",
-		ci:"campo", cc:"no", cd:"camino2", ii:"campo", ic:"camino3", id:"campo3"},		//cruce de 3 caminos
-	c4: { sx: 408, sy: 44, w: FICHA_W, h: FICHA_H, si:"campo", sc:"camino", sd:"campo2",
+	cc: { sx: 485, sy: 44, w: FICHA_W, h: FICHA_H, si:"campo1", sc:"camino", sd:"campo2",
+		ci:"campo1", cc:"camino", cd:"camino", ii:"campo1", ic:"campo1", id:"campo1"},		//camino curva
+	c3: { sx: 640, sy: 44, w: FICHA_W, h: FICHA_H, si:"campo1", sc:"camino", sd:"campo2",
+		ci:"campo1", cc:"no", cd:"camino2", ii:"campo1", ic:"camino3", id:"campo3"},		//cruce de 3 caminos
+	c4: { sx: 408, sy: 44, w: FICHA_W, h: FICHA_H, si:"campo1", sc:"camino", sd:"campo2",
 		ci:"camino2", cc:"no", cd:"camino3", ii:"campo3", ic:"camino4", id:"campo4"},		//cruce de 4 caminos
-	cmur: { sx: 408, sy: 137, w: FICHA_W, h: FICHA_H, si:"campo", sc:"camino", sd:"campo2",
-		ci:"ciudad", cc:"camino", cd:"campo2", ii:"campo", ic:"camino", id:"campo2"},	//camino recto con muralla al 												lado(una de las fichas es la inicial)
-	ccmur: { sx: 485, sy: 137, w: FICHA_W, h: FICHA_H, si:"campo", sc:"camino", sd:"campo2",
-		ci:"ciudad", cc:"campo", cd:"camino", ii:"campo", ic:"campo", id:"campo"},	//camino con curva(de sc a cd) y 													con muralla al lado
-	chmur: { sx: 175, sy: 137, w: FICHA_W, h: FICHA_H, si:"ciudad", sc:"ciudad", sd:"campo",
+	cmur: { sx: 408, sy: 137, w: FICHA_W, h: FICHA_H, si:"campo1", sc:"camino", sd:"campo2",
+		ci:"ciudad", cc:"camino", cd:"campo2", ii:"campo1", ic:"camino", id:"campo2"},	//camino recto con muralla al 												lado(una de las fichas es la inicial)
+	ccmur: { sx: 485, sy: 137, w: FICHA_W, h: FICHA_H, si:"campo1", sc:"camino", sd:"campo2",
+		ci:"ciudad", cc:"campo1", cd:"camino", ii:"campo1", ic:"campo1", id:"campo1"},	//camino con curva(de sc a cd) y 													con muralla al lado
+	chmur: { sx: 175, sy: 137, w: FICHA_W, h: FICHA_H, si:"ciudad", sc:"ciudad", sd:"campo1",
 		ci:"ciudad", cc:"ciudad", cd:"camino", ii:"ciudad", ic:"ciudad", id:"campo2"},	//camino hacia muralla
-	chmure: { sx: 21, sy: 230, w: FICHA_W, h: FICHA_H, si:"ciudad", sc:"ciudad", sd:"campo",
+	chmure: { sx: 21, sy: 230, w: FICHA_W, h: FICHA_H, si:"ciudad", sc:"ciudad", sd:"campo1",
 		ci:"ciudad", cc:"ciudad", cd:"camino", ii:"ciudad", ic:"ciudad", id:"campo2"},	//camino hacia muralla con escudo
-	c3mur: { sx: 98, sy: 44, w: FICHA_W, h: FICHA_H, si:"campo", sc:"camino", sd:"campo2",
-		ci:"ciudad", cc:"no", cd:"camino2", ii:"campo", ic:"camino3", id:"campo3"},		//cruce de 3 caminos con 														muralla al lado
-	ccmur2: { sx: 717, sy: 137, w: FICHA_W, h: FICHA_H, si:"campo", sc:"camino", sd:"campo2",
-		ci:"ciudad", cc:"camino", cd:"camino", ii:"ciudad", ic:"ciudad", id:"campo"},	//camino con curva con 2 lados de 													ciudad contiguos
-	ccmur2e: { sx: 98, sy: 230, w: FICHA_W, h: FICHA_H, si:"campo", sc:"camino", sd:"campo2",
-		ci:"ciudad", cc:"camino", cd:"camino", ii:"ciudad", ic:"ciudad", id:"campo"},	//camino con curva con 2 lados de 												ciudad contiguos con escudo
-	ccmur3: { sx: 562, sy: 137, w: FICHA_W, h: FICHA_H, si:"campo", sc:"campo", sd:"campo",
-		ci:"ciudad", cc:"camino", cd:"camino", ii:"campo", ic:"camino", id:"campo2"},	//camino con curva(de ic a cd) y 													muralla al lado(otro)
-	murcam: { sx: 21, sy: 44, w: FICHA_W, h: FICHA_H, si:"campo", sc:"campo", sd:"campo",
-		ci:"ciudad", cc:"no", cd:"campo", ii:"ciudad", ic:"ciudad", id:"campo"},	//media ficha muralla media ficha 													campo
-	murcame: { sx: 176, sy: 230, w: FICHA_W, h: FICHA_H, si:"campo", sc:"campo", sd:"campo",
-		ci:"ciudad", cc:"no", cd:"campo", ii:"ciudad", ic:"ciudad", id:"campo"},	//media ficha muralla media ficha 													campo con escudo
-	mur2: { sx: 176, sy: 44, w: FICHA_W, h: FICHA_H, si:"campo", sc:"campo", sd:"campo",
-		ci:"ciudad", cc:"campo", cd:"ciudad2", ii:"campo", ic:"campo", id:"campo"},		//una muralla a cada lado 														de la ficha
-	mur2c: { sx: 253, sy: 137, w: FICHA_W, h: FICHA_H, si:"campo", sc:"ciudad", sd:"campo",
-		ci:"ciudad2", cc:"campo", cd:"campo", ii:"campo", ic:"campo", id:"campo"},	//2 murallas en lados contiguos
-	mur1: { sx: 330, sy: 137, w: FICHA_W, h: FICHA_H, si:"campo", sc:"campo", sd:"campo",
-		ci:"ciudad", cc:"campo", cd:"campo", ii:"campo", ic:"campo", id:"campo"},	//1 muralla en un lado y el resto 													campo
+	c3mur: { sx: 98, sy: 44, w: FICHA_W, h: FICHA_H, si:"campo1", sc:"camino", sd:"campo2",
+		ci:"ciudad", cc:"no", cd:"camino2", ii:"campo1", ic:"camino3", id:"campo3"},		//cruce de 3 caminos con 														muralla al lado
+	ccmur2: { sx: 717, sy: 137, w: FICHA_W, h: FICHA_H, si:"campo1", sc:"camino", sd:"campo2",
+		ci:"ciudad", cc:"camino", cd:"camino", ii:"ciudad", ic:"ciudad", id:"campo1"},	//camino con curva con 2 lados de 													ciudad contiguos
+	ccmur2e: { sx: 98, sy: 230, w: FICHA_W, h: FICHA_H, si:"campo1", sc:"camino", sd:"campo2",
+		ci:"ciudad", cc:"camino", cd:"camino", ii:"ciudad", ic:"ciudad", id:"campo1"},	//camino con curva con 2 lados de 												ciudad contiguos con escudo
+	ccmur3: { sx: 562, sy: 137, w: FICHA_W, h: FICHA_H, si:"campo1", sc:"campo1", sd:"campo1",
+		ci:"ciudad", cc:"camino", cd:"camino", ii:"campo1", ic:"camino", id:"campo2"},	//camino con curva(de ic a cd) y 													muralla al lado(otro)
+	murcam: { sx: 21, sy: 44, w: FICHA_W, h: FICHA_H, si:"campo1", sc:"campo1", sd:"campo1",
+		ci:"ciudad", cc:"no", cd:"campo1", ii:"ciudad", ic:"ciudad", id:"campo1"},	//media ficha muralla media ficha 													campo
+	murcame: { sx: 176, sy: 230, w: FICHA_W, h: FICHA_H, si:"campo1", sc:"campo1", sd:"campo1",
+		ci:"ciudad", cc:"no", cd:"campo1", ii:"ciudad", ic:"ciudad", id:"campo1"},	//media ficha muralla media ficha 													campo con escudo
+	mur2: { sx: 176, sy: 44, w: FICHA_W, h: FICHA_H, si:"campo1", sc:"campo1", sd:"campo1",
+		ci:"ciudad", cc:"campo1", cd:"ciudad2", ii:"campo1", ic:"campo1", id:"campo1"},		//una muralla a cada lado 														de la ficha
+	mur2c: { sx: 253, sy: 137, w: FICHA_W, h: FICHA_H, si:"campo1", sc:"ciudad", sd:"campo1",
+		ci:"ciudad2", cc:"campo1", cd:"campo1", ii:"campo1", ic:"campo1", id:"campo1"},	//2 murallas en lados contiguos
+	mur1: { sx: 330, sy: 137, w: FICHA_W, h: FICHA_H, si:"campo1", sc:"campo1", sd:"campo1",
+		ci:"ciudad", cc:"campo1", cd:"campo1", ii:"campo1", ic:"campo1", id:"campo1"},	//1 muralla en un lado y el resto 													campo
 	ciudad: { sx: 21, sy: 137, w: FICHA_W, h: FICHA_H, si:"ciudad", sc:"ciudad", sd:"ciudad",
 		ci:"ciudad", cc:"ciudad", cd:"ciudad", ii:"ciudad", ic:"ciudad", id:"ciudad"},	//todo ciudad con escudo
-	ciucam: { sx: 98, sy: 137, w: FICHA_W, h: FICHA_H, si:"ciudad", sc:"ciudad", sd:"campo",
-		ci:"ciudad", cc:"ciudad", cd:"campo", ii:"ciudad", ic:"ciudad", id:"campo"},	//ciudad con un lado de campo
-	ciucame: { sx: 331, sy: 230, w: FICHA_W, h: FICHA_H, si:"ciudad", sc:"ciudad", sd:"campo",
-		ci:"ciudad", cc:"ciudad", cd:"campo", ii:"ciudad", ic:"ciudad", id:"campo"},	//ciudad con un lado de campo con 													escudo
-	ciucam2: { sx: 640, sy: 137, w: FICHA_W, h: FICHA_H, si:"campo", sc:"ciudad", sd:"campo",
-		ci:"campo", cc:"ciudad", cd:"campo", ii:"campo", ic:"ciudad", id:"campo"},	//ciudad con 2 lados opuestos de 													campo
-	ciucam2e: { sx: 408, sy: 230, w: FICHA_W, h: FICHA_H, si:"campo", sc:"ciudad", sd:"campo",
-		ci:"campo", cc:"ciudad", cd:"campo", ii:"campo", ic:"ciudad", id:"campo"},	//ciudad con 2 lados opuestos de 													campo con escudo
+	ciucam: { sx: 98, sy: 137, w: FICHA_W, h: FICHA_H, si:"ciudad", sc:"ciudad", sd:"campo1",
+		ci:"ciudad", cc:"ciudad", cd:"campo1", ii:"ciudad", ic:"ciudad", id:"campo1"},	//ciudad con un lado de campo
+	ciucame: { sx: 331, sy: 230, w: FICHA_W, h: FICHA_H, si:"ciudad", sc:"ciudad", sd:"campo1",
+		ci:"ciudad", cc:"ciudad", cd:"campo1", ii:"ciudad", ic:"ciudad", id:"campo1"},	//ciudad con un lado de campo con 													escudo
+	ciucam2: { sx: 640, sy: 137, w: FICHA_W, h: FICHA_H, si:"campo1", sc:"ciudad", sd:"campo1",
+		ci:"campo1", cc:"ciudad", cd:"campo1", ii:"campo1", ic:"ciudad", id:"campo1"},	//ciudad con 2 lados opuestos de 													campo
+	ciucam2e: { sx: 408, sy: 230, w: FICHA_W, h: FICHA_H, si:"campo1", sc:"ciudad", sd:"campo1",
+		ci:"campo1", cc:"ciudad", cd:"campo1", ii:"campo1", ic:"ciudad", id:"campo1"},	//ciudad con 2 lados opuestos de 													campo con escudo
 	interrogante: { sx: 253, sy: 230, w: FICHA_W, h: FICHA_H},	//ficha con un interrogante
 	s1: { sx: 532, sy: 245, w: 23, h: 23},			//seguidor amarillo
 	s2: { sx: 558, sy: 245, w: 23, h: 23},			//seguidor rosa

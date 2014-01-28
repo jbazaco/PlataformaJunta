@@ -36,6 +36,7 @@ var FieldPointers={
 	LC:{id:"LC",points:"RC"	},
 	LR:{id:"LR",points:"RL"	}
 }
+
 var CASTILLO = 'castillo';
 var CAMINO = 'camino';
 var CAMPO = 'campo';
@@ -266,7 +267,8 @@ GirarFicha = function(Ficha){
         
 //Creamos tablero multidimensional
 CrearTablero = function(){
-        var iMax = 50;
+//         var iMax = 50;
+var iMax = 5;
         f = new Array();
 
         for(i = -iMax; i < iMax ; i++){
@@ -310,7 +312,6 @@ CrearTabJug = function(id, x, y, ficha, rota, user, cuadrado, zona){
         Ficha1.nomjug = user;
         Ficha1.scuadrado = cuadrado;
         Ficha1.szona = zona;
-		Ficha1.rotacion = rota;
         //console.log("COMPROBACION GENERAL DE COMO INSERTO LA FICHA EN TABLERO");
         //console.log("AGF Ficha1.u: " + Ficha1.u + " Ficha1.r: " + Ficha1.r + " Ficha1.d: " + Ficha1.d + " Ficha1.l: " + Ficha1.l + "Ficha.gir" + Ficha1.gir);
         Ficha1 = GirarFicha(Ficha1);
@@ -870,27 +871,32 @@ CierraCastillo = function(Tablero, Ficha, PosSeguidor, X, Y){
 CierraCampo = function(id){
 	
 	//Rotate the tile, 90deg clockwise
-	_rotate=function(t){
-		switch(tile.id){
-			case "UL": return RL; break;
-			case "UC": return RC; break;
-			case "UR": return RR; break;
-			case "RL": return DL; break;
-			case "RC": return DC; break;
-			case "RR": return DR; break;
-			case "DL": return LL; break;
-			case "DC": return LC; break;
-			case "DR": return LR; break;
-			case "LL": return UL; break;
-			case "LC": return UC; break;
-			case "LR": return UR; break;
-		};
+	_rotate=function(tile){
+		console.log(tile.fieldMap)
+		for(i in tile.fieldMap){
+			for(j=0; j<tile.fieldMap[i].fieldPointers.length; j++){
+				switch(tile.fieldMap[i].fieldPointers[j].id){
+					case "UL": tile.fieldMap[i].fieldPointers[j]= RL; break;
+					case "UC": tile.fieldMap[i].fieldPointers[j]= RC; break;
+					case "UR": tile.fieldMap[i].fieldPointers[j]= RR; break;
+					case "RL": tile.fieldMap[i].fieldPointers[j]= DL; break;
+					case "RC": tile.fieldMap[i].fieldPointers[j]= DC; break;
+					case "RR": tile.fieldMap[i].fieldPointers[j]= DR; break;
+					case "DL": tile.fieldMap[i].fieldPointers[j]= LL; break;
+					case "DC": tile.fieldMap[i].fieldPointers[j]= LC; break;
+					case "DR": tile.fieldMap[i].fieldPointers[j]= LR; break;
+					case "LL": tile.fieldMap[i].fieldPointers[j]= UL; break;
+					case "LC": tile.fieldMap[i].fieldPointers[j]= UC; break;
+					case "LR": tile.fieldMap[i].fieldPointers[j]= UR; break;
+				};
+			}
+		}
+		return tile
 	};
 	
 	//Rotate the tile n times.
-	Rotate = function(tile){
+	Rotate = function(tile, times){
 		var tmp = tile;
-		var times = tile.rotacion/90;
 		for (var i = 0; i<times; i++){
 			tmp = this._rotate(tmp);
 		};
@@ -899,61 +905,82 @@ CierraCampo = function(id){
 	
 	
 	RecursiveChecker = function(board,xpos,ypos,from,owner,id){
+		console.log("RecursiveChecker args:"+xpos+","+ypos+","+from+","+owner+","+id)
 		var tile = board[xpos][ypos];
-		if (! tile.fielded){
-			//first time to be fielded
-			tile.fielded=[];
-			board[xpos][ypos].fielded=[];
-		}
-		if (! id in tile.fielded){
-			//we have not fielded this tile before
-			board[xpos][ypos].fielded.push(id);	//push our id, next time we wont field it again
-			if (from == ""){
-				//initial growing point tile
-				tile= this.Rotate(tile);
-				console.log(tile.scuadrado)
-				var fieldId = 0;
-				var owner = 0;
-			}else{
-				//find the field id
-				for(field in tile.fieldMap){
-					if (from in field.fieldPointers){
-						var fieldId = field.id;
-						break;
+		console.log(tile.fieldMap)
+		if (tile != 0){		//there is a tile?
+			if (! tile.fielded){
+				console.log("FirstField")
+				//first time to be fielded
+				tile.fielded=[];
+				board[xpos][ypos].fielded=[];
+			}
+			console.log("tile.fielded: "+tile.fielded)
+			if (tile.fielded.reduce(function(m,v){if(id==v){return(false)}else{return(m)}},true)){
+				console.log("NotFielded")
+				//we have not fielded this tile before
+				board[xpos][ypos].fielded.push(id);	//push our id, next time we wont field it again
+				if (from == ""){
+					console.log("InitialGrowingPoint")
+					//initial growing point tile
+					tile= this.Rotate(tile,tile.gir);
+					console.log(tile.szona)
+					var fieldId = tile.szona.substr(5,6);
+					var owner = tile.nomjug;
+					console.log("fieldId: "+fieldId)
+					console.log("owner: "+owner)
+				}else{
+					console.log("Navigating through tile: "+xpos+","+ypos+". From : "+from)
+					//find the field id
+					for(field in tile.fieldMap){
+						if (from in field.fieldPointers){
+							var fieldId = field.id;
+							break;
+						}
 					}
 				}
-			}
-			board[xpos][ypos].fieldMap[fieldId].fieldOwner.push(owner)		//push the owner
-			for (pointer in tile.fieldMap[fieldId].fieldPointers){			//each new direction in the same field
-				if (pointer.id != from){
-					// except the direction from where i came
-					switch(pointer.points[SIDE]){
-						case "U": RecursiveChecker(board,xpos,ypos-1,dir.points,owner);break;
-						case "R": RecursiveChecker(board,xpos+1,ypos,dir.points,owner);break;
-						case "D": RecursiveChecker(board,xpos,ypos+1,dir.points,owner);break;
-						case "L": RecursiveChecker(board,xpos-1,ypos,dir.points,owner);break;
+				/*
+				* Here i need a way to check who get points
+				*/
+				board[xpos][ypos].fieldMap[Number(fieldId)].fieldOwner.push(owner)		//push the owner
+				console.log("owner pushed");
+				for (pointer in tile.fieldMap[fieldId].fieldPointers){			//each new direction in the same field
+					if (pointer.id != from){
+						// except the direction from where i came
+						switch(pointer.points[SIDE]){
+							case "U": RecursiveChecker(board,xpos,ypos+1,pointer.points,owner,id);break;
+							case "R": RecursiveChecker(board,xpos+1,ypos,pointer.points,owner,id);break;
+							case "D": RecursiveChecker(board,xpos,ypos-1,pointer.points,owner,id);break;
+							case "L": RecursiveChecker(board,xpos-1,ypos,pointer.points,owner,id);break;
+						}
 					}
 				}
-			}
+			}else{console.log("AlreadyFielded")}
 		}
 	};
 	
+
 	//First, find the board.
-	for (var tmp in Tableros){
-		if (tmp.id==id){
-			var board=tml.Tablero;
+	for (var i=0; i<Tableros.length; i++){
+		if (Tableros[i].id==id){
+			var board=Tableros[i].Tablero;
 			break;
 		}
-	}	
+	}
+	var fid=0
 	//Main loop.
 	if (board){
-		var i = 0;
-		for (i in board.length){
-			for (j in board[i].length){
+		console.log(board)
+		for (var i = -5; i<5; i++){
+			for (var j = -5; j<5; j++){
 				var tile = board[i][j];
-				if (tile.szona=='campo'){
-					RecursiveChecker(board,i,j,tile,"","",i);
-					i++;
+				console.log(i+","+j+"::"+tile)
+				if (tile.szona){
+					if (tile.szona.substr(0,5)=='campo'){
+						console.log("RecursiveChecker")
+						RecursiveChecker(board,i,j,"","",fid++);  //The id increases each growing point tile.
+						
+					}
 				}
 			}
 		}
