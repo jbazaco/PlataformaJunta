@@ -58,7 +58,7 @@ ArFiAmp = _.toArray(FichaPAmp);
 
 
 //Funcion para girar ficha de fichas ampliadas
-GirarFichaAmp = function (F){
+/*GirarFichaAmp = function (F){
 	var Gir = F.gir;
 	while (F.gir != 0){	
 		auxe = F.si;
@@ -123,7 +123,7 @@ ColocarLadron = function(Tablero, cuadrado, zona, X, Y){
 	//Funcion para transformar ficha de modelo simple a compuesto
 	Transforma = function(Tablero, X, Y){
 		var F = {
-			nombre = "nada",
+			nombre : "nada",
 			si: "nada",
 			sc: "nada",
 			sd: "nada",
@@ -170,12 +170,14 @@ ColocarLadron = function(Tablero, cuadrado, zona, X, Y){
 
 };
 
-
+*/
 
 
 //Función que mira si se puede poner el seguidor en la ficha, teniendo en cuenta los caminos
 //Pos = posicion del seguidor dentro de la ficha
 PonerSeguidorCamino = function(Tablero, Pos, X, Y){
+
+	console.log("========================");
 	var fincamino = [ //Fichas que cierran camino
 		'c3mur',
 		'mc',
@@ -196,10 +198,14 @@ PonerSeguidorCamino = function(Tablero, Pos, X, Y){
 
 	var seguidores = 0;
 	var flag = 0;
-	var colocar_seguidor = false;
+	var colocar_seguidor = true;
 	var Ficha_Inicio = Tablero[X][Y];
+	console.log("la ficha donde quiero poner seguidor es:   " + Ficha_Inicio.nombre);
 	var direcciones = [];
 	var z = 0;
+	var jugador = Ficha_Inicio.nomjug;
+
+	console.log("el nombre del jugador es:   " + Ficha_Inicio.nombre);
 
 	MeteDirec = function(X, Y){ 	
 		var posicion = {
@@ -222,25 +228,43 @@ PonerSeguidorCamino = function(Tablero, Pos, X, Y){
 
 	Recursiva = function(Tablero,banner,flag,X,Y) {
 
-		if ((Tablero[X][Y] != 0) && (flag != 1)){ 	// Caso en el que tenemos ficha en esa dirección y todavía no hemos finalizado camino 	
+		//console.log("la ficha ahoraaa es:  ->>>>>>>>>>>>>>>> " + Tablero[X][Y].nombre);
+
+		if ((Tablero[X][Y] != 0) && (flag != 2) && (colocar_seguidor != false)){ 	// Caso en el que tenemos ficha en esa dirección y todavía no hemos finalizado camino 	
 
 
 			if (fincamino.indexOf(Tablero[X][Y].nombre) != -1){ 		// Si la ficha está en fincamino ya hemos finalizado el camino 		
 				if (banner == "abajo"){	
 					if (Tablero[X][Y].scuadrado != 8){
-						coloca_seguidor == true;
+						//coloca_seguidor == true;
+						seguidores = seguidores + 1;
+						console.log("incremento seguidores a ---> " + seguidores);
+					}else{
+						colocar_seguidor = false;
 					}
 				}else if (banner == "izquierda"){
 					if (Tablero[X][Y].scuadrado != 4){
-						coloca_seguidor == true;
+						//coloca_seguidor == true;
+						seguidores = seguidores + 1;
+						console.log("incremento seguidores a ---> " + seguidores);
+					}else{
+						colocar_seguidor = false;
 					}
 				}else if (banner == "arriba"){
 					if (Tablero[X][Y].scuadrado != 2){
-						coloca_seguidor == true;
+						//coloca_seguidor == true;
+						seguidores = seguidores + 1;
+						console.log("incremento seguidores a ---> " + seguidores);
+					}else{
+						colocar_seguidor = false;
 					}
 				}else if (banner == "derecha"){
 					if (Tablero[X][Y].scuadrado != 6){
-						coloca_seguidor == true;
+						//coloca_seguidor == true;
+						seguidores = seguidores + 1;
+						console.log("incremento seguidores a ---> " + seguidores);
+					}else{
+						colocar_seguidor = false;
 					}
 				}			
 				flag = flag + 1;
@@ -248,56 +272,67 @@ PonerSeguidorCamino = function(Tablero, Pos, X, Y){
 			}
 			else if(contcamino.indexOf(Tablero[X][Y].nombre) != -1){ // Si la ficha está en contcamino seguimos haciendo recursiva
 
+				console.log("DENTRO DE RECURSIVA: es cont camino");
+
 				if (banner == "abajo"){	
-					if (Tablero[X][Y].scuadrado == 8){
-						coloca_seguidor == false;
+					if ((Tablero[X][Y].scuadrado == 8) || (Tablero[X][Y].scuadrado == 5)){
+						flag = flag + 1;
+						colocar_seguidor = false;
 					}
 				}else if (banner == "izquierda"){
-					if (Tablero[X][Y].scuadrado == 4){
-						coloca_seguidor == false;
+					if ((Tablero[X][Y].scuadrado == 4) || (Tablero[X][Y].scuadrado == 5)){
+						flag = flag + 1;
+						colocar_seguidor = false;
 					}
 				}else if (banner == "arriba"){
-					if (Tablero[X][Y].scuadrado == 2){
-						coloca_seguidor == false;
+					if ((Tablero[X][Y].scuadrado == 2) || (Tablero[X][Y].scuadrado == 5)){
+						console.log("hay seguidor arriba. Cambio valor de colocar_seguidor");
+						flag = flag + 1;
+						colocar_seguidor = false;
 					}
 				}else if (banner == "derecha"){
-					if (Tablero[X][Y].scuadrado == 6){
-						coloca_seguidor == false;
+					if ((Tablero[X][Y].scuadrado == 6) || (Tablero[X][Y].scuadrado == 5)){
+						flag = flag + 1;
+						colocar_seguidor = false; 
 					}
 				}
 			
 				if ((Tablero[X][Y].u == 'camino') && (banner != 'arriba') && DarDirec(X,Y)){	
-					if (Tablero[X][Y] == 2){
+					if (Tablero[X][Y].scuadrado == 2){ 
 						flag = flag + 1;
-						coloca_seguidor = false;
+						colocar_seguidor = false;
 					}			
+					console.log("camino arriba.");
 					Y1 = Y + 1;	
 					MeteDirec(X,Y);				
 					Recursiva(Tablero, 'abajo', flag, X, Y1);
 				}
 				if ((Tablero[X][Y].r == 'camino') && (banner != 'derecha') && DarDirec(X,Y)){			
-					if (Tablero[X][Y] == 6){
+					if (Tablero[X][Y].scuadrado == 6){
 						flag = flag + 1;
-						coloca_seguidor = false;
+						colocar_seguidor = false;
 					}		
+					console.log("camino a la dcha.");
 					X1 = X + 1;
 					MeteDirec(X,Y);
 					Recursiva(Tablero, 'izquierda', flag, X1, Y);
 				}
 				if ((Tablero[X][Y].d == 'camino') && (banner != 'abajo') && DarDirec(X,Y)){		
-					if (Tablero[X][Y] == 8){
+					if (Tablero[X][Y].scuadrado == 8){
 						flag = flag + 1;
-						coloca_seguidor = false;
+						colocar_seguidor = false;
 					}
+					console.log("camino abajo. ");
 					Y2 = Y - 1;
 					MeteDirec(X,Y);
 					Recursiva(Tablero, 'arriba', flag, X, Y2);
 				}
 				if ((Tablero[X][Y].l == 'camino') && (banner != 'izquierda') && DarDirec(X,Y)){ 	
-					if (Tablero[X][Y] == 4){
+					if (Tablero[X][Y].scuadrado == 4){
 						flag = flag + 1;
-						coloca_seguidor = false;
-					}					
+						colocar_seguidor = false;
+					}			
+					console.log("camino izqda.  ");		
 					X2 = X - 1;
 					MeteDirec(X,Y);
 					Recursiva(Tablero, 'derecha', flag, X2, Y);
@@ -308,22 +343,27 @@ PonerSeguidorCamino = function(Tablero, Pos, X, Y){
 
 	SigueCamino = function(Tablero,Ficha,X,Y){		
 		if (Ficha.u == 'camino'){
+			console.log("hay camino arriba...me voy arriba");	
 			Y1 = Y + 1;
 			MeteDirec(X,Y);
 			Recursiva(Tablero, "abajo", flag, X, Y1);	
 		}
-		if (Ficha.r == 'camino') {			
+		if (Ficha.r == 'camino') {		
+			console.log("hay camino a la derecha...me voy a la derecha");	
 			X1 = X + 1;
 			MeteDirec(X,Y);
 			Recursiva(Tablero, "izquierda", flag, X1, Y);
 		}
-		if (Ficha.d == 'camino') {		
+		if (Ficha.d == 'camino') {	
+			console.log("hay camino abajo..me voy abajo");		
 			Y2 = Y - 1;
 			MeteDirec(X,Y);
 			Recursiva(Tablero, "arriba", flag, X, Y2);
 		}
-		if (Ficha.l == 'camino'){			
-			X2 = X - 1;
+		if (Ficha.l == 'camino'){	
+			console.log("hay camino a la izqda...me voy a la izquierda");			
+			X2 = X - 1;	
+			//console.log("la pos de X es ---> " + X2);
 			MeteDirec(X,Y);
 			Recursiva(Tablero, "derecha", flag, X2, Y);
 		}
@@ -334,44 +374,50 @@ PonerSeguidorCamino = function(Tablero, Pos, X, Y){
 	if (Pos == 2){  //miro arriba de la ficha
 		if (fincamino.indexOf(Ficha_Inicio.nombre) != -1){  // Si la ficha esta en fincamino	
 			//flag = flag + 1; 								// Le sumamos uno porque va a ser un extremo del cierra camino(Va a haber dos)
+			seguidores = seguidores + 1;
 			Y1 = Y + 1; 									// Vamos para arriba
 			MeteDirec(X,Y);
 			Recursiva(Tablero, "abajo", flag, X, Y1); 		// Llamamos a la funcion Recursiva pasandole la siguiente ficha y donde tiene que ir	
 		}
-		else if (contcamino.indexOf(Ficha.nombre) != -1){ 	//Aquí le diremos para donde tiene que tirar cada camino					
+		else if (contcamino.indexOf(Ficha_Inicio.nombre) != -1){ 	//Aquí le diremos para donde tiene que tirar cada camino					
 			SigueCamino(Tablero, Ficha_Inicio, X, Y);
 		}		
 	}	
 	else if (Pos == 6){ //Miro Derecha
 		if (fincamino.indexOf(Ficha_Inicio.nombre) != -1){
+			console.log("es una ficha de fin camino");
 			//flag = flag + 1;
+			seguidores = seguidores + 1;
 			X1 = X + 1; //Vamos para la derecha
 			MeteDirec(X,Y);
 			Recursiva(Tablero, "izquierda", flag, X1, Y);
 		}
-		else if (contcamino.indexOf(Ficha.nombre) != -1){
+		else if (contcamino.indexOf(Ficha_Inicio.nombre) != -1){
+			console.log("es una ficha de contcamino");
 			SigueCamino(Tablero, Ficha_Inicio, X, Y);
 		}
 	}
 	else if (Pos == 8){ //Miro Abajo
 		if (fincamino.indexOf(Ficha_Inicio.nombre) != -1){
 			//flag = flag + 1;
+			seguidores = seguidores + 1;
 			Y2 = Y - 1; //Vamos para abajo
 			MeteDirec(X,Y);
 			Recursiva(Tablero, "arriba", flag, X, Y2);
 		}
-		else if (contcamino.indexOf(Ficha.nombre) != -1){
+		else if (contcamino.indexOf(Ficha_Inicio.nombre) != -1){
 			SigueCamino(Tablero, Ficha_Inicio, X, Y);
 		}			
 	}
 	else if (Pos == 4){ //Miro Izquierda
 		if (fincamino.indexOf(Ficha_Inicio.nombre) != -1){
 			//flag = flag + 1;
+			seguidores = seguidores + 1;
 			X2 = X - 1; //Vamos para la izquierda
 			MeteDirec(X,Y);	
 			Recursiva(Tablero, "derecha", flag, X2, Y);		
 		}
-		else if (contcamino.indexOf(Ficha.nombre) != -1){
+		else if (contcamino.indexOf(Ficha_Inicio.nombre) != -1){
 			SigueCamino(Tablero, Ficha_Inicio, X, Y);
 		}	
 	}
@@ -381,7 +427,18 @@ PonerSeguidorCamino = function(Tablero, Pos, X, Y){
 	
 	direcciones = [];
 
-	return colocar_seguidor;;
+	console.log("---------------------");
+	console.log("los seguidores son: " + seguidores);
+	console.log("colocar seguidor es:  " + colocar_seguidor);
+	console.log("---------------------");
+
+	if ((seguidores == 2) || (colocar_seguidor == true)){
+		return true;
+	}else{
+		return false;
+	}
+
+	//return colocar_seguidor;;
 		
 };
 

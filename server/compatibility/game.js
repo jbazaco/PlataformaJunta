@@ -124,7 +124,7 @@
 		
 		/////////TESTEAR CIERRACASTILLO/////////
 		
-		Tablero= CrearTablero();
+		//Tablero= CrearTablero();
 		
 		/*var Ficha1= Prueba(2);	//mur2
 		Tablero[1][1]= Ficha1;
@@ -144,7 +144,7 @@
 		*/
 		
 		
-		var Ficha11 = Prueba(0);	//murcam
+		/*var Ficha11 = Prueba(0);	//murcam
 		Ficha11.gir= 3;
 		Ficha11 = GirarFicha(Ficha11);
 		Tablero[1][1]= Ficha11;
@@ -215,8 +215,8 @@
 		Tablero[3][1]= Ficha3;
 		*/
 		
-		var puntoscastillo = CierraCastillo(Tablero, Ficha11, 2, 1, 1);
-		console.log("la puntuacion total es: " + puntoscastillo);
+		//var puntoscastillo = CierraCastillo(Tablero, Ficha11, 2, 1, 1);
+		//console.log("la puntuacion total es: " + puntoscastillo);
 		
 		/*
 		var Ficha0 = Prueba(10);	//ciucam
@@ -256,6 +256,150 @@
 		Ficha3 = GirarFicha(Ficha3);
 		console.log("con giro 3 >>>>>>>> " + "arriba: " + Ficha3.u + "|| derecha: " + Ficha3.r + " ||abajo: " + Ficha3.d + " ||izquierda: " + Ficha3.l);
 		*/
+
+		// ===================
+
+		// Prueba del Poner Seguidor en camino
+
+
+		console.log("prueba seguidor camino (1)");
+
+		/*var Ficha1 = Prueba(7)   									//camino recto  cr
+		console.log("la primera ficha es:  " + Ficha1.nombre); 
+		Ficha1.gir = 0;
+		Ficha1.nomjug = "jug1";
+		Ficha1.scuadrado = 0;
+		Ficha1.szona = "nada";
+
+		var Ficha2 = Prueba(6);  								 	//camino curvo girado dos a la derecha  cc
+		console.log("la segunda ficha es:  " + Ficha2.nombre); 
+		//console.log("lo que hay arriba de la ficha es: " + Ficha2.u);
+		//console.log("lo que hay dcha de la ficha es: " + Ficha2.r);
+		//console.log("lo que hay abajo de la ficha es: " + Ficha2.l);
+		//console.log("lo que hay izq de la ficha es: " + Ficha2.d);
+		Ficha2.gir = 2;
+		Ficha2.nomjug = "jug1";
+		Ficha2.scuadrado = 0;
+		Ficha2.szona = "nada";
+		GirarFicha(Ficha2);
+
+		var Ficha3 = Prueba(6);  									//camino curvo   cc
+		console.log("la tercera ficha es:  " + Ficha3.nombre); 
+		Ficha3.gir = 0;
+		Ficha3.nomjug = "jug1";
+		Ficha3.scuadrado = 0;
+		Ficha3.szona = "nada";
+
+		var Ficha4 = Prueba(4);  									//monasterio girado dos veces     mc
+		console.log("la cuarta ficha es:  " + Ficha4.nombre); 
+		Ficha4.gir = 2;
+		Ficha4.nomjug = "jug1";
+		Ficha4.scuadrado = 0;
+		Ficha4.szona = "nada";
+		GirarFicha(Ficha4);
+
+		var Ficha5 = Prueba(6);  									//camino girado uno   cc
+		console.log("la quinta ficha es:  " + Ficha5.nombre); 
+		Ficha5.gir = 1;
+		Ficha5.nomjug = "jug1";
+		Ficha5.scuadrado = 0;
+		Ficha5.szona = "nada";
+		GirarFicha(Ficha5);
+
+		var Ficha6 = Prueba(8);  									//cruce de tres caminos     c3
+		console.log("la sexta ficha es:  " + Ficha6.nombre); 
+		Ficha6.gir = 3;
+		Ficha6.nomjug = "jug1";
+		Ficha6.scuadrado = 0;
+		Ficha6.szona = "nada";
+		GirarFicha(Ficha6);
+
+
+
+
+		/*var Ficha1 = Prueba(8)   									//camino tres camino     c3
+		console.log("la primera ficha es:  " + Ficha1.nombre); 
+		Ficha1.gir = 0;
+		Ficha1.nomjug = "jug1";
+		Ficha1.scuadrado = 0;
+		Ficha1.szona = "nada";
+
+		var Ficha2 = Prueba(7)   									//camino recto  cr
+		console.log("la segunda ficha es:  " + Ficha2.nombre); 
+		Ficha2.gir = 0;
+		Ficha2.nomjug = "jug1";
+		Ficha2.scuadrado = 0;
+		Ficha2.szona = "nada";
+
+		var Ficha3 = Prueba(6)   									//camino curva girado dos    cc
+		console.log("la primera ficha es:  " + Ficha3.nombre); 
+		Ficha3.gir = 2;
+		Ficha3.nomjug = "jug1";
+		Ficha3.scuadrado = 0;
+		Ficha3.szona = "nada";
+		GirarFicha(Ficha3);
+
+		var Ficha4 = Prueba(5)   									//cruce de cuatro caminos c4
+		console.log("la primera ficha es:  " + Ficha4.nombre); 
+		Ficha4.gir = 0;
+		Ficha4.nomjug = "jug1";
+		Ficha4.scuadrado = 0;
+		Ficha4.szona = "nada";*/
+
+
+
+		/*var Ficha1 = Prueba(4);  									//monasterio girado dos veces     mc
+		console.log("la cuarta ficha es:  " + Ficha1.nombre); 
+		Ficha1.gir = 2;
+		Ficha1.nomjug = "jug1";
+		Ficha1.scuadrado = 0;
+		Ficha1.szona = "nada";
+
+		var Ficha2 = Prueba(7)   									//camino recto  cr
+		console.log("la segunda ficha es:  " + Ficha2.nombre); 
+		Ficha2.gir = 0;
+		Ficha2.nomjug = "jug1";
+		Ficha2.scuadrado = 0;
+		Ficha2.szona = "nada";
+		
+		var Ficha3 = Prueba(5)   									//cruce de cuatro caminos c4
+		console.log("la primera ficha es:  " + Ficha3.nombre); 
+		Ficha3.gir = 0;
+		Ficha3.nomjug = "jug1";
+		Ficha3.scuadrado = 4;
+		Ficha3.szona = "nada";*/
+
+		/*Tablero = CrearTablero();
+
+		Tablero[10][10] = Ficha1;
+		Tablero[9][10] = Ficha5;
+		Tablero[9][9] = Ficha6;
+		Tablero[11][10] = Ficha2;
+		Tablero[11][9] = Ficha3;
+		Tablero[12][9] = Ficha4;
+
+
+		/*Tablero[10][10] = Ficha1;
+		Tablero[11][10] = Ficha2;
+		Tablero[12][10] = Ficha3;*/
+
+
+ 		//console.log("pruebaaa");
+		
+		//valor = PonerSeguidorCamino(Tablero,6,10,10)
+		
+		//console.log("¿se puede poder seguidor ahi? --> " + valor);
+
+
+
+		//==================================
+
+
+
+
+
+
+
 	};
 
 
