@@ -531,15 +531,7 @@ FichaActual = new function() {
 	this.pulsado = function(x,y) {
 		
 		if(!Terminada){
-			if (this.sprite === 'interrogante' && esMiTurno) {
-				Meteor.call('DevuelveFicha', function(err, results){
-					if(err){
-	      					console.log(err.reason);
-	   				}else{
-						FichaActual.sprite=results.nombre;
-	    				}});		
-				return true;
-			}
+			
 
 			if (this.sprite === 'interrogante' && esMiTurno) {
 				Meteor.call('ActualizaFicha', Session.get("Current_Game"));		
@@ -584,7 +576,7 @@ FichaActual = new function() {
 	this.moviendo = false;
 	this.mover = function(x,y) {
 		this.moviendo = true;
-		if (this.sprite !== 'interrogante') {
+		if (this.sprite !== 'interrogante' && esMiTurno) {
 			this.x = x - this.w/2;
 			this.y = y - this.h/2;
 			if (this.seguidor){	
@@ -595,7 +587,7 @@ FichaActual = new function() {
 	}
 
 	this.soltar = function(x,y) {
-		if (this.sprite !== "interrogante") {
+		if (this.sprite !== "interrogante" && esMiTurno) {
 			//CAMBIAR cuando se coloquen las fichas
 			var debajo = C_elemInPos(x,y, this.nextBoard);
 		//aqui seria para ver si se puede o no colocar la ficha?	
@@ -988,7 +980,7 @@ var desplazarTablero = function(difx, dify) {
 	 for(var i=0; i<C_Game.boards.length; i++) {
 		if (C_Game.boards[i]){
 			if (C_Game.boards[i] instanceof Ficha || 
-					(C_Game.boards[i] instanceof Seguidor && C_Game.boards[i].seHaMovido())) {
+					(C_Game.boards[i] instanceof C_Seguidor && C_Game.boards[i].seHaMovido())) {
 				C_Game.boards[i].x += difx;
 				C_Game.boards[i].y += dify;
 			}
