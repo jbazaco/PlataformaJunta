@@ -649,7 +649,7 @@ FichaActual = new function() {
 				if(results) {
 					console.log("results:" +results);
 					if (results === "findeljuego") {
-						if (Partidas.findOne(idpartida).estado !== "Finalizada")
+						if (Partidas.findOne(idpartida).estado !== "Terminada")
 							Meteor.call("TerminarPartida", Session.get("Current_Game"));
 					} else {
 						FichaActual.sprite = results;
