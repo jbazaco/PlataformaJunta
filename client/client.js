@@ -122,6 +122,7 @@ Template.input.events={
 						time:Date.now(),
 						sala:Session.get("Chat_Selector")
 					});
+          Session.set("Change_Pestaña",false);
 				}
 				else{
 					alert('Debes estar registrado para poder mandar mensages')
@@ -331,7 +332,7 @@ Template.games.events={
 	'click a#game_1':function(){
 		Session.set('Current_Game_id',1);
 		Session.set("Chat_Selector",1);
-		$('#chat_salas li').css('background-color','#eee');
+		$('.boton').css('background-color','#eee');
 		$('#sala_juego').css('background-color','#ccc');
 		$(".canvas").hide();
 		$(".gamelayer").hide();
@@ -345,7 +346,7 @@ Template.games.events={
 	'click a#game_2':function(){
 		Session.set('Current_Game_id',2)
 		Session.set("Chat_Selector",2);
-		$('#chat_salas li').css('background-color','#eee');
+		$('.boton').css('background-color','#eee');
 		$('#sala_juego').css('background-color','#ccc');
 		$(".canvas").hide();
 		game.showLevelScreen();
@@ -358,7 +359,7 @@ Template.games.events={
 	'click a#game_3':function(){
 		Session.set('Current_Game_id',3)
 		Session.set("Chat_Selector",3);
-		$('#chat_salas li').css('background-color','#eee');
+		$('.boton').css('background-color','#eee');
 		$('#sala_juego').css('background-color','#ccc');
 		$(".canvas").hide();
 		$('#tablero').show(500);
@@ -547,44 +548,51 @@ Template.gamesList.events={
 	}
 }
 
-Template.chat.events={
+Template.salas.events={
 	'click #sala_general':function(){
+    var Cambio = false;
 		console.log('1')
 		if (Session.get("Chat_Selector") != "General"){
 			console.log('11')
-			$('#chat_salas li').css('background-color','#eee');
+      Cambio = true;
+			$('.boton').css('background-color','#eee');
 			$('#sala_general').css('background-color','#ccc');
 			$('#container5').show();
 			Session.set("Chat_Selector","General");
-			Clear_Chat();
+			Clear_Chat(Cambio);
 		}		
 	},
 	'click #sala_juego':function(){
 		console.log('2')
+    var Cambio = false;
 		if (Session.get("Chat_Selector") != Session.get("Current_Game_id")){
 			console.log('22')
-			$('#chat_salas li').css('background-color','#eee');
+      Cambio = true;
+			$('.boton').css('background-color','#eee');
 			$('#sala_juego').css('background-color','#ccc');
 			$('#container5').show();
 			Session.set("Chat_Selector",Session.get("Current_Game_id"));
-			Clear_Chat();
+			Clear_Chat(Cambio);
 		}
 	},
 	'click #sala_privada':function(){
+    var Cambio = false;
 		console.log('3')
 		if (Session.get("Chat_Selector") != "Privada"){
 			console.log('33')
-			$('#chat_salas li').css('background-color','#eee');
+      Cambio = true;
+			$('.boton').css('background-color','#eee');
 			$('#sala_privada').css('background-color','#ccc');
 			$('#container5').hide();
 			Session.set("Chat_Selector","Privada");
-			Clear_Chat();
+			Clear_Chat(Cambio);
 		}
 	}
 }
 
-Clear_Chat = function(){
-	$('#ChatArea').html('<tr id="firstRow"><td></td><td></td></tr>');
+Clear_Chat = function(Cambio){
+  Session.set("Change_Pestaña",Cambio)
+	$('#ChatArea').html('<tr id="firstRow"></tr>');
 	console.log('cleared')
 	msgs_autorun._compute()
 }
@@ -596,9 +604,19 @@ Accounts.ui.config({
 msgs_autorun = Deps.autorun(function(){
 	console.log('filling')
 	var chatArea = $('#firstRow');
-	var msgs = Messages.find({sala:Session.get("Chat_Selector")},{sort:{time:-1}, limit:10});	
+  var Cambio = Session.get("Change_Pestaña");
+  if (Cambio){
+    var msgs = Messages.find({sala:Session.get("Chat_Selector")},{sort:{time:-1}, limit:10});
+  }else{
+    var msgs = Messages.find({sala:Session.get("Chat_Selector")},{sort:{time:-1}, limit:1});
+  }
 	msgs.forEach(function(message){
-		chatArea.prepend("<tr><td><strong>"+message['name']+"</strong>:</td><td><a>"+message['message']+"</a></td>");
+    if (Cambio){
+     chatArea.append("<tr><td><strong>"+message['name']+"</strong>:</td><td><a>"+message['message']+"</a></td></tr>");
+		 //chatArea.append("<tr><td><strong>"+message['name']+"</strong>:</td><td><a>"+message['message']+"</a></td></tr>");
+    }else{
+     chatArea.prepend("<tr style='align:center'><td><strong>"+message['name']+"</strong>:</td><td><a>"+message['message']+"</a></td></tr>"); 
+    }
 	});
 });
 

@@ -60,6 +60,7 @@
 				{{>RankingJuego}}
 			</div>
 		</div>
+    {{>salas}}
 		<div id='container4' class="chatAreadiv">
 			{{>chat}}
 		</div>
@@ -71,19 +72,24 @@
 	{{>popup}}
 </body>
 
-<template name='chat'>
+<template name='salas'>
 	<table>
-		<td id='chat_salas' style='width:15%'>
+		<td id='chat_salas'>
 			<ul>
-				<li id='sala_general'><a>Sala General</a></li>
-				<li id='sala_juego'><a>Juego</a></li>
-				<li id='sala_privada'><a>Privados</a></li>
+				<td id='sala_general' class="boton"><a>Sala General</a></td>
+				<td id='sala_juego' class="boton"><a>Juego</a></td>
+				<td id='sala_privada' class="boton"><a>Privados</a></td>
 			</ul>
 		</td>
-		<td style='width:85%'>
+  </table>
+</template>
+
+<template name='chat'>
+	<table>
+		<td>
 			<div>
 				<table class="chatAreaTable" id ="ChatArea">
-					<tr id="firstRow"><td></td><td></td></tr>
+					<tr id="firstRow"></tr>
 				</table>
 			</div>
 		</td>
