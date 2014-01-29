@@ -319,7 +319,7 @@ ColocaSeguidor = function(Id, X, Y, cuadrado, zona){
 	return puede;	
 };
 
-ColocarLadron = function(Tablero, cuadrado, zona, X, Y){
+ColocarGranjero = function(Tablero, cuadrado, zona, X, Y){
 	//Rotate the tile, 90deg clockwise
 	_rotate=function(t){
 		switch(tile.id){

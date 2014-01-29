@@ -1,5 +1,4 @@
 
-
 var CASTILLO = 'castillo';
 var CAMINO = 'camino';
 var CAMPO = 'campo';
