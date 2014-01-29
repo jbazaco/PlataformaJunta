@@ -12,7 +12,7 @@ Meteor.startup(function(){
 	Session.set("Chat_Selector","General");
 	$('#sala_general').css('background-color','#ccc');
     $("#opciones").hide();
-<<<<<<< HEAD
+
 	$(".priv").hide();
 	$("#abrir").click(function() {
 		$(".priv").fadeToggle( "slow", "linear" );
@@ -21,13 +21,11 @@ Meteor.startup(function(){
 	$("#abrirterminos").click(function() {
 		$(".term").fadeToggle( "slow", "linear" );
 	})
-=======
 	$("#progressbar").hide()
->>>>>>> progressbar
 	$( "#container3" ).tabs({ hide: { effect: "slide",direction:'up', duration: 100 }, show:{ effect: "slide",direction:'up', duration: 100 }  });
 	$(".subtab").hide();	//Esconde los subtans que se encuentran en la segunda pestaña del acordeon
 	$(".canvas").hide();	//Esconde todos los canvas
-  $("#twitter").click(function(){open("http://twitter.com/home?status=jugando%20en%20http://carcassonline.meteor.com","")});
+  	$("#twitter").click(function(){open("http://twitter.com/home?status=jugando%20en%20http://carcassonline.meteor.com","")});
 	$('.escenario').attr("disabled",true);
   	$('.gamelayer').hide();
 	$( ".startgame" ).click(function() {
