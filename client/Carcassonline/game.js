@@ -646,9 +646,16 @@ FichaActual = new function() {
 			if(err){
 				console.log(err.reason);
 			}else{
-				if(results) FichaActual.sprite = results;		
+				if(results) {
+					console.log("results:" +results);
+					if (results === "findeljuego") {
+						if (Partidas.findOne(idpartida).estado !== "Finalizada")
+							Meteor.call("TerminarPartida", Session.get("Current_Game"));
+					} else {
+						FichaActual.sprite = results;
+					}
+				}		
 			}
-			
 		});
 	}
 	

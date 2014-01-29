@@ -167,8 +167,8 @@ Meteor.methods({
 		console.log("Registrar Movimientos, ID: " + id);
 		//if(jugadorpermitido)
 		Partidas.update(id,{$push:{jugadas:movimiento}});
-		RegMov(id,jugador,movimiento);
-		Partidas.update(id,{$set:{ultimaficha: "interrogante"}});	
+		Partidas.update(id,{$set:{ultimaficha: "interrogante"}});
+		RegMov(id,jugador,movimiento);	
 	},
 
 	// Esta función devuelve el ultimo movimiento jugado en la partida
