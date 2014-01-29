@@ -13,7 +13,14 @@ Meteor.startup(function(){
 	Session.set("Chat_Selector","General");
 	$('#sala_general').css('background-color','#ccc');
     $("#opciones").hide();
-
+	$(".priv").hide();
+	$("#abrir").click(function() {
+		$(".priv").fadeToggle( "slow", "linear" );
+	})
+	$(".term").hide();
+	$("#abrirterminos").click(function() {
+		$(".term").fadeToggle( "slow", "linear" );
+	})
 	$( "#container3" ).tabs({ hide: { effect: "slide",direction:'up', duration: 100 }, show:{ effect: "slide",direction:'up', duration: 100 }  });
 	$(".subtab").hide();	//Esconde los subtans que se encuentran en la segunda pestaña del acordeon
 	$(".canvas").hide();	//Esconde todos los canvas
@@ -48,7 +55,7 @@ Meteor.startup(function(){
 			//logo.src="imagenes/carcassonne-logo.jpg"
 		}
   		logo.width = 100;
-  		logo.height = 80;
+  		logo.height = 75;
 	});
 	$(".games").mouseout(function(){
 		if (this.id==="game_1") {
@@ -265,10 +272,11 @@ Template.ajustes.events={
 	'click a#fondo0':function(){
 		$("#containermain").css("background-image",'url(../imagenes/fondo3.jpg)');
 		$("#container").css("border","3px solid black")
-		$("#container2").css({"background-color":"#CBAD48","opacity":"0.6"})
-		$("#container3").css({"background-color":"#CBAD48","opacity":"0.6"})
+		$("#container2").css({"background-color":"#CBAD48","opacity":"0.8"})
+		$("#container3").css({"background-color":"#CBAD48","opacity":"0.8"})
 		$("#container4").css("background-color","#CBAD48")
 		$("#container5").css({"background-color":"#CBAD48","border":"2px solid black"})
+		$('.bienvenida').css("color","black")
 		return false;
 	},
 	'click a#fondo1':function(){
@@ -299,7 +307,7 @@ Template.ajustes.events={
 		$("#container3").css({"background-color":"#F5FFFA","opacity":"1"})
 		$("#container4").css("background-color","#C0C0C0")
 		$("#container5").css({"background-color":"#C0C0C0","border":"2px solid white"})
-		$('.bienvenida').css("color","black")
+		$('.bienvenida').css("color","white")
 		//$("#input").css("background-color","green")
 		return false;
 	},
@@ -310,23 +318,23 @@ Template.ajustes.events={
 		$("#container3").css({"background-color":"#7B68EE","opacity":"1"})
 		$("#container4").css("background-color","#7B68EE")
 		$("#container5").css({"background-color":"#7B68EE","border":"2px solid white"})
-		$('.bienvenida').css("color","black")
+		$('.bienvenida').css("color","white")
 		//$("#input").css("background-color","green")
-		return false;
-	},
-	'click a#abrir':function(){
-		abrir('http://www.defensacentral.com/')
-		return false;
-	},
-
-	'click a#abrirterminos':function(){
-		$(function() {
-    		$("#terminos").dialog();
-  		});
 		return false;
 	},
 }
 
+Template.privacidad.events={
+	'click .close_priv': function () {	
+		$("#privado").hide()
+	}
+}
+
+Template.terminos.events={
+	'click .close_term': function () {	
+		$("#termino").hide()
+	}
+}
 
 Template.games.events={
 	'click a#game_1':function(){
