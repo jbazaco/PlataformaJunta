@@ -31,6 +31,36 @@ Meteor.startup(function(){
 	$("#pop_up").on('mouseleave', '.datos', function(){
 		$(".datos").remove();
 	});
+	$("#game_1").mouseover(function(){
+		logo = document.getElementById("alien");
+  		logo.width = 100;
+  		logo.height = 100;
+	});
+	$("#game_1").mouseout(function(){
+		logo = document.getElementById("alien");
+  		logo.width = 60;
+  		logo.height = 41;
+	});
+	$("#game_2").mouseover(function(){
+		logo = document.getElementById("angry");
+  		logo.width = 100;
+  		logo.height = 100;
+	});
+	$("#game_2").mouseout(function(){
+		logo = document.getElementById("angry");
+  		logo.width = 60;
+  		logo.height = 41;
+	});
+	$("#game_3").mouseover(function(){
+		logo = document.getElementById("carca");
+  		logo.width = 100;
+  		logo.height = 100;
+	});
+	$("#game_3").mouseout(function(){
+		logo = document.getElementById("carca");
+  		logo.width = 60;
+  		logo.height = 41;
+	});
 });
 
 var screenauto= function(){
