@@ -249,7 +249,8 @@ Meteor.methods({
   // Metodo para actualizar la ultima ficha que se ha utilizado
   ActualizaFicha : function(id){
     var Partida = Partidas.findOne(id);
-    var ficha = Aleatorio(id);
+	console.log("se llama a aleatorio");
+    var ficha = Aleatorio2(id);
     Partidas.update(id,{$set:{ultimaficha: ficha["nombre"]}});	
   },
 
@@ -321,7 +322,8 @@ Meteor.methods({
 	// Cambia el estado de una partida a "Empezada" dado su identificador.
 	EmpezarPartida:function(id){
 		Partidas.update(id,{$set:{estado:"Empezada"}});
-		CrearArJug(id); 
+		console.log("EMPEZAMOS PARTIDA");
+		CrearArJug2(id); 
 	},
 	
 	// Cambia el estado de una partida a "Terminada" dado su identificador.
