@@ -244,7 +244,7 @@ textarea
 .match
 {
 	margin: 0.2em;
-	//padding:0.2em;
+	padding:0.2em;
 }
 #twitter{
   background-image: url(../tweet_redimensionado.jpeg);
