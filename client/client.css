@@ -63,13 +63,15 @@ table {
 
 .bienvenida {
 	color:black;
-	margin: 0.5em;
-	padding-left: 3em;
+	margin: 1em;
+	padding-left: 10em;
+	font-size: 20px
+	
 }
 
 #accordionGeneral {
 	padding: 10px;
-	height: 140%;
+	height: 115%;
 }
 
 #accordion1,{
@@ -80,7 +82,26 @@ table {
 	height: 31px;
 	background-image: url(../imagenes/fondo3.jpg)
 }
-
+.priv {
+	background-color:white;
+	position:absolute;
+	width:700px;
+	height:400px;
+	right:400px;
+	top:100px;
+	overflow-y: scroll;
+	overflow-x: visible;
+}
+.term {
+	background-color:white;
+	position:absolute;
+	width:700px;
+	height:400px;
+	right:400px;
+	top:100px;
+	overflow-y: scroll;
+	overflow-x: visible;
+}
 #container {
 	width:69%;
 	height:65%;
@@ -99,7 +120,7 @@ table {
   	margin-right: 2%;
 	overflow:auto;
 	border-radius:20px;
-    opacity:0.6;
+    opacity:0.8;
 }
 
 .tabs{
@@ -110,14 +131,14 @@ table {
 
 #container3 {
 	width:25.5%;
-	height:50%;
+	height:52%;
 	background-color:#CBAD48;
 	float:right;
 	margin-right: 2%;
 	margin-top: 20px;
 	overflow:auto;
 	border-radius:20px;
-	opacity:0.6;
+	opacity:0.8;
 }
 
 #container4 {

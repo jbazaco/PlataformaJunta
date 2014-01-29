@@ -585,9 +585,7 @@ FichaActual = new function() {
 
 	this.soltar = function(x,y) {
 		if (this.sprite !== "interrogante" && esMiTurno) {
-			//CAMBIAR cuando se coloquen las fichas
 			var debajo = C_elemInPos(x,y, this.nextBoard);
-		//aqui seria para ver si se puede o no colocar la ficha?	
 			if (debajo instanceof Ficha && debajo.sprite === "interrogante"){
 				var id = Session.get("Current_Game");
 				Meteor.call('ColocaFicha',id,this.sprite,debajo.coordenadas.x, 
@@ -648,9 +646,16 @@ FichaActual = new function() {
 			if(err){
 				console.log(err.reason);
 			}else{
-				if(results) FichaActual.sprite = results;		
+				if(results) {
+					console.log("results:" +results);
+					if (results === "findeljuego") {
+						if (Partidas.findOne(idpartida).estado !== "Finalizada")
+							Meteor.call("TerminarPartida", Session.get("Current_Game"));
+					} else {
+						FichaActual.sprite = results;
+					}
+				}		
 			}
-			
 		});
 	}
 	
@@ -1069,7 +1074,7 @@ C_Game.autorun = Deps.autorun(function(){
 			nmov = 0;
 			FichaActual.resetear();
 			idcanvas = canv;
-			C_Game.initialize(canv,C_sprites,C_startGame);//NO DIFERENCIA SI OBSERVA PARTIDA O LA JUEGA POR AHORA/TODO/
+			C_Game.initialize(canv,C_sprites,C_startGame);
 			
 		} else if (nmov > 0) {
 			//Actualiza las fichas segun los movimientos registrados

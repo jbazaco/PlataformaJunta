@@ -1,6 +1,6 @@
 <head>
     <title> Plataforma Juegos </title>
-	<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0" />
+	<meta name="viewport" content="charset=utf-8, width=device-width, minimum-scale=1.0, maximum-scale=1.0" />
 	<link rel="stylesheet" type="text/css" href="client.css" title="style" />
 </head>
 
@@ -20,7 +20,6 @@
 		            {{loginButtons align="right"}}<br>
 		    </div>
 			<h1 class="bienvenida">Plataforma de juegos</h1>
-			{{>welcome}}
 		</div>
 		<div id='container'>
 			<canvas id='game' class='canvas' width='1150' height='1150'></canvas>
@@ -71,9 +70,37 @@
 	</div>
 	{{>options}}
 	{{>popup}}
+	{{>privacidad}}
+	{{>terminos}}
 </body>
 
+<<<<<<< HEAD
 <template name='salas'>
+=======
+<template name='privacidad'>
+	<div id="privado" class="priv">
+	<button class="close_priv" style="float: right">x</button>
+		<p style="text-align:center;margin:2em">Política de privacidad</p>
+
+<p style="margin:2em">Antes de pasar a ser un usuario de Minijuegos.com, titularidad de Moosite S.L., debes leer esta Política de Privacidad y Protección de Datos Personales (en adelante, "Política de Privacidad") y aceptarla. Nuestra Política de Privacidad afecta tanto a la información personal que nos proporcionas al registrarte como a todos los datos que nos facilites al acceder a cualquiera de los servicios disponibles en Minijuegos.com. Los datos que aportas a Minijuegos.com son incluidos en nuestros ficheros registrados ante la Agencia Española de Protección de Datos (en adelante, “AEPD”). La AEPD se encarga de velar por el cumplimiento de las leyes españolas sobre privacidad y protección de datos y de garantizar la seguridad y privacidad de tus datos personales. En Minijuegos.com recopilamos los siguientes datos personales al registrarse el usuario y utilizar nuestros servicios: Nombre, apellidos, email, sexo, fecha de nacimiento, dirección IP y algunos otros no personales como datos locales de flash e información estadística como tipo de navegador, sistema operativo, URL que le dirigió a nuestro sitio web, fecha y hora. Utilizamos tus datos para que puedas utilizar los servicios de la web. Podrás loguearte en la web después de haberte registrado. La finalidad de dicho tratamiento es permitir la identificación como usuario del Servicio para el acceso a los servicios y aplicaciones móviles que ponemos a tu disposición, para el cumplimiento y el pago de nuestros servicios, para mejorar nuestras ofertas adaptándolas a tus necesidades, para remitir información sobre cambios y actualizaciones relacionadas con Minijuegos.com, así como para la remisión de comunicaciones publicitarias de productos y servicios propios o de terceros que pudieran ser de tu interés. Puedes rectificar cualquier error en tus datos si ves que no son correctos o exactos e incluso podrás eliminar tu perfil desde las preferencias de tu perfil si quieres dejar de ser usuario de MIINIJUEGOS.COM, puedes, también, oponerte en cualquier momento a recibir comunicaciones de Minijuegos.com para fines comerciales y promocionales, incluyendo por medios electrónicos, contactándonos a través de las preferencias de tu perfil. Te informamos de que para realizar cualquiera de las acciones indicadas, deberás remitirnos una copia de tu documento oficial de identidad (D.N.I., N.I.E. o Pasaporte) de modo que podamos verificar la identidad de la persona que se pone en contacto con nosotros Trataremos tus datos de forma estrictamente confidencial y, por tanto, no se los transmitiremos a terceros, a menos que hayas manifestado tu consentimiento expreso a la transmisión de tus datos a terceros. Sin embargo, en ciertas ocasiones podemos estar obligados por ley a la transmisión de tus datos sin tu consentimiento, por ejemplo, a las autoridades públicas. </p></br>
+		<p style="margin:2em">Saludos. Atentamente</p>
+	</div>
+</template>
+
+<template name='terminos'>
+	<div id="termino" class="term">
+	<button class="close_term" style="float: right">x</button>
+		<p style="text-align:center;margin:2em">Términos de Uso</p>
+
+		<p style="margin:2em">Los usuarios deberán leer y aceptar las Condiciones Generales y la Política de Privacidad de la presente página. El uso o acceso a esta página implica el conocimiento y la plena aceptación de las advertencias legales y condiciones que a continuación se detallan. Las presentes condiciones podrán ser modificadas, entre otras cosas, para su mejora o la previsión de aspectos y servicios no ofrecidos inicialmente o adaptación a modificaciones legislativas, sin necesidad de previo aviso al usuario, entrando en vigor dichas condiciones desde el momento de su publicación. Si no aceptas las nuevas condiciones que se publiquen deberás dar de baja el servicio.
+
+		Las presentes Condiciones Generales sustituyen a todos los Condiciones Generales que se declararan aplicables en la celebración de un acuerdo anterior. Si no estás conforme, no deberás hacer uso del contenido y de los Servicios.
+
+		Te recomendamos que imprimas el presente documento para futuras referencias.</p></br>
+	</div>
+</template>
+<template name='chat'>
+>>>>>>> Arreglos_Ajustes
 	<table>
 		<td id='chat_salas'>
 			<ul>
@@ -121,17 +148,22 @@
 				<a id="fondo1" class="fondos" href="">Papel arrugado</a><br /> 
 				<a id="fondo2" class="fondos" href="">Agujero Negro</a><br /> 
 				<a id="fondo3" class="fondos" href="">Móstoles lluvioso</a><br />
-				<a id="fondo4" class="fondos" href="">Invierno saharaui</a><br />
+				<a id="fondo4" class="fondos" href="">Invierno saharaui</a><br /><br />
+			</div>
+			<h3><p style="font-weight:bold" color=black>Redes sociales</p></h3>
+			<div id="redes">
+				<p>¡Comparte tu experiencia con tus amigos en las redes sociales! </p>
+				
 			</div>
 			<h3><p style="font-weight:bold" color=black>Política de privacidad</p></h3>
 			<div id="privacidad">
-				<p>Para ver la política de privacidad de la plataforma de juegos pulse aquí: </p><br />
-				<a id="abrir" href="" target="_blank">Privacidad</a> 
+				<p>Para ver la política de privacidad de la plataforma de juegos pulse aquí: </p>
+				<a id="abrir"><u>Privacidad</u></a> 
 			</div>
 			<h3><p style="font-weight:bold" color=black>Términos de uso y condiciones</p></h3>
 			<div id="terminos">
-				<p>Para ver los términos de uso y condiciones de la plataforma de juegos pulse aquí: </p><br />
-				<a id="abrirterminos" href="" target="_blank">Términos</a> 
+				<p>Para ver los términos de uso y condiciones de la plataforma de juegos pulse aquí: </p>
+				<a id="abrirterminos"><u>Términos</u></a> 
 			</div>
 		</div>
 	</div>
