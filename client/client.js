@@ -378,7 +378,7 @@ Template.games.events={
 		return false;
 	},
 	'mouseenter a#game_3':function(){
-		$('#juego_descripcion').html('Haz click en la imagen y empieza a jugar ya a este juego sin nombre!');
+		$('#juego_descripcion').html('Haz click en la imagen y empieza a jugar ya a este juego CarcassOnline!');
 		return false;
 	},
 	'mouseleave':function(){
@@ -504,28 +504,8 @@ Template.popup.events={
 		var usuid = Meteor.userId();
 		var usu = Meteor.users.findOne(usuid);
 		
-		Meteor.call('AbandonarPartida',usu.username,partida)/*,function(err,res){
-					if(! err){
-						alert("hey")
-					}else{
-						console.log(err);
-					}
-		})*/
-		/*var usu = Meteor.users.findOne(usuid);
-			if (usu){
-				Meteor.call('IncluirJugador',Session.get('Game_Data_id'),usu.username,function(err,res){
-					if(! err){
-						Meteor.subscribe(res)
-						$('.canvas').hide()
-						$("#container").append("<canvas id='Canvas_"+res+"' class='canvas' width='1070' height='650'></canvas>");
-						Session.set("Current_Game",res)
-						$("#"+Session.get('Game_Data_id')+"_datos").remove()
-					}
-				})
-			}
-		}else{
-				alert('Debes estar registrado para unirte a una partida');
-		}*/
+		Meteor.call('AbandonarPartida',usu.username,partida);
+		Meteor.call('ActualizarHistorial',usu.username,"Carcassonne",1,0,0,1);
 		return false;
 	}
 }
