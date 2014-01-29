@@ -140,6 +140,7 @@ Meteor.methods({
 		if (partida.jugadores.length==1){	//si no quedan jugadores humanos
 			Partidas.remove(idpartida);
 		}
+		
 		//document.getElementById("Canvas_"+idpartida).remove();
 	},
 	// Actualiza el estado de todos los usuarios registrados cada vez que hay
