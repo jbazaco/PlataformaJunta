@@ -245,7 +245,7 @@ colocarficha1 = function(id_part, Ficha, X, Y, rotacion){
 		var encontrado = false;
 		var colocado = true;
    
-		for(i=0; i<= CuentaTableros - 1;i++){
+		for(i=0; i < Tableros.length ; i++){
 			if(Tableros[i].id == id_part){
 				Tablero = Tableros[i].Tablero;
 			}
