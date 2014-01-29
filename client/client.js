@@ -224,12 +224,13 @@ Template.ListaEstados.ColorEstado = function(){
 Template.ListaEstados.events={
 	'mouseover .NombreUsuario':function(){
 		$(".datos").hide();
+console.log(this)
 		cadena="";
 		cadena+="<div id='"+this.username+"_datos' class='datos' style='display:none'>"+this.username +": "+ this.estado+"</br>"
 		switch (Session.get("Current_Game_id")){
-			case 1 : cadena+=this.puntuacion[0].juego+" </br>Puntos totales: "+ this.puntuacion[0].total+" Record: "+this.puntuacion[0].record+"</br>"; break;
-			case 2 : cadena+=this.puntuacion[1].juego+" </br>Puntos totales: "+ this.puntuacion[1].total+" Record: "+this.puntuacion[1].record+"</br>"; break;
-			case 3 : cadena+=this.puntuacion[2].juego+" </br>Puntos totales: "+ this.puntuacion[2].total+" Record: "+this.puntuacion[2].record; break;
+			case 1 : cadena+=this.puntuacion[0].juego+" </br>Puntos totales: "+ this.puntuacion[0].total+" Record: "+this.puntuacion[0].record+"</br> Penalizacion: "+this.penalizacion+"</br>"; break;
+			case 2 : cadena+=this.puntuacion[1].juego+" </br>Puntos totales: "+ this.puntuacion[1].total+" Record: "+this.puntuacion[1].record+"</br> Penalizacion: "+this.penalizacion+"</br>"; break;
+			case 3 : cadena+=this.puntuacion[2].juego+" </br>Puntos totales: "+ this.puntuacion[2].total+" Record: "+this.puntuacion[2].record+"</br> Penalizacion: "+this.penalizacion; break;
 			default: console.log(Session.get("Current_Game_id"))
 		}
 		cadena+="</div>"
