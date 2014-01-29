@@ -120,11 +120,8 @@ table {
   	margin-right: 2%;
 	overflow:auto;
 	border-radius:20px;
-<<<<<<< HEAD
-    opacity:0.8;
-=======
-    	opacity:0.8;
->>>>>>> progressbar
+	opacity:0.8;
+
 }
 
 .tabs{
