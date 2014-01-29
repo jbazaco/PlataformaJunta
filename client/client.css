@@ -235,7 +235,11 @@ textarea
 {
 	color:black;
 }
-
+#twitter{
+  background-image: url(../tweet_redimensionado.jpeg);
+  width:96px;
+  height:96px;
+}
 .datos {
 	padding: 2ex;
 	position: absolute;
