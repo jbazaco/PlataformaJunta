@@ -54,22 +54,40 @@ ArFi = _.toArray(FichaPropiedades); //Convertimos lo que tenemos en un Array par
 
 var Tableros = []; //Array de [ID | Tablero correspondiente a ese ID] 
 
-var ParJugadas = [];
-
 ContadorJugadas = 0;
 CuentaTableros = 0;
 
-Aleatorio = function(){
-	var decision = false
+Aleatorio2 = function(id){
+	//Buscamos el tablero con las fichas que le quedan
+	//console.log(Tableros[0]);
+	//console.log("Entra en Aleatorio");
 	var a = Math.floor(Math.random()*24);
+	for(i=0; i < CuentaTableros ;i++){
+		console.log("Dentro del FOR");
+		//console.log(Tableros[i].id);
+		//console.log(id);
+		if(Tableros[i].id == id){
+			var estavacio = true;
+			//console.log("Hago el if");
+			//console.log(Tableros[i].Fichas);
+			for (j=0;j < Tableros[i].Fichas.length; j++){
+				if (Tableros[i].Fichas[j] > 0)
+					estavacio = false;
+			}
+			if (estavacio)
+				return {nombre: "findeljuego"}
+			while(Tableros[i].Fichas[a] < 1){
+				a = Math.floor(Math.random()*24);
+				console.log("Hago el while");	
+			}
+			Tableros[i].Fichas[a] = Tableros[i].Fichas[a] - 1;
+		}
+	}
 	var Ficha = { 
 		nombre: "nada"
 	};
+	console.log("Nombre aleatorio: " + a);
 	Ficha.nombre = ArFi[a].nombre;
-	if (decision = false)
-		decision = true;
-	else
-		decision
 	return Ficha;
 }
 
@@ -163,22 +181,25 @@ CrearTablero = function(){
 // le pase y los mete en un array.
 
 //PRIMERA FUNCION: AUTORUN PARTIDAS
-CrearArJug = function(id){
+CrearArJug2 = function(id){
+	console.log("Entramos en CrearTAblero");
+	FichasNum = [5,3,3,4,2,1,9,8,4,1,4,3,2,5,4,3,3,3,5,2,2,2,1,1];
+	var bar = [];
+	var l = FichasNum.length;
+  	for ( var i = 0;i < l; i++ ){
+   		bar[i] = FichasNum[i];
+	}
 	var Tablero = CrearTablero();
 	Tablero[0][0] = Prueba(14);
 
-	ContadorJugadas = ContadorJugadas + 1;;
-	//console.log("CrearArJug(1) ContadorJugadas: " + ContadorJugadas);
-
-	//console.log("--------");
-	//console.log("CrearArJug: " + ParJugadas[0].id);
-	//console.log("--------"); 
-
+	ContadorJugadas = ContadorJugadas + 1;; 
+	
 	var partida = {
 		id: id,
-		Tablero: Tablero
+		Tablero: Tablero,
+		Fichas: bar
 	}
-	//console.log("CREAMOS TABLERO DE PARTIDA");
+	console.log("CREAMOS TABLERO DE PARTIDA");
 	Tableros.push(partida);
 	CuentaTableros++;  
 	//console.log("CrearArJug(2) CuentaTableros: " + CuentaTableros);
@@ -210,11 +231,12 @@ RegMov = function(id, jugador, m){
 
 //Procedimiento que mira las posiciones del tablero para ver si se puede colocar la ficha
 //Terminología: U: Up, R:Right, D: Down, L:Left. 
-colocarficha = function(id_part, Ficha, X, Y, rotacion){
-		//console.log("                                           ");
-		//console.log("                   JUGADA NUEVA            ");
+colocarficha1 = function(id_part, Ficha, X, Y, rotacion){
+		console.log("                                           ");
+		console.log("                   JUGADA NUEVA            ");
 		//console.log("MIRANDO ROTACION");
 		//console.log("Rotacion que nos pasan: " + rotacion);
+		console.log("Ek id es: " + id_part);
 		Ficha = PruebaItera(Ficha,rotacion);
 		//console.log("Gira que tenemos: " + Ficha.gir);
 		Ficha = GirarFicha(Ficha);

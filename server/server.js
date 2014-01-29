@@ -38,22 +38,6 @@ ActualizarEstado = function(){
 Meteor.setTimeout(ActualizarEstado,1000);
 
 
-//Función que devuelve una Ficha aleatoria
-
-Aleatorio = function(){
-	var decision = false
-	var a = Math.floor(Math.random()*24);
-	var Ficha = { 
-		nombre: "nada"
-	};
-	Ficha.nombre = ArFi[a].nombre;
-	if (decision = false)
-		decision = true;
-	else
-		decision
-	return Ficha;
-};
-
 // Al terminar una partida se debe llamar a este método para todos y cada uno de los jugadores de esa
 // partida y comprobar si han conseguido un nuevo record.
 PuntuacionRecord = function(jugador,punt,juego){
@@ -140,6 +124,7 @@ Meteor.methods({
 		if (partida.jugadores.length==1){	//si no quedan jugadores humanos
 			Partidas.remove(idpartida);
 		}
+		
 		//document.getElementById("Canvas_"+idpartida).remove();
 	},
 	// Actualiza el estado de todos los usuarios registrados cada vez que hay
@@ -179,7 +164,7 @@ Meteor.methods({
 	//  está autorizado (está en la lista de jugadores), despues se almacena la 
 	//  jugada en la lista de jugadas de la partida.
 	RegistrarMovimiento : function(id,jugador,movimiento){
-		console.log("Registrar Movimientos");
+		console.log("Registrar Movimientos, ID: " + id);
 		//if(jugadorpermitido)
 		Partidas.update(id,{$push:{jugadas:movimiento}});
 		RegMov(id,jugador,movimiento);
@@ -265,8 +250,9 @@ Meteor.methods({
   // Metodo para actualizar la ultima ficha que se ha utilizado
   ActualizaFicha : function(id){
     var Partida = Partidas.findOne(id);
-    var ficha = Aleatorio();
-    Partidas.update(id,{$set:{ultimaficha: ficha["nombre"]}});		
+	console.log("se llama a aleatorio");
+    var ficha = Aleatorio2(id);
+    Partidas.update(id,{$set:{ultimaficha: ficha["nombre"]}});	
   },
 
 	// Al terminar una partida se debe llamar a este método para todos y cada uno de los jugadores de esa
@@ -337,7 +323,8 @@ Meteor.methods({
 	// Cambia el estado de una partida a "Empezada" dado su identificador.
 	EmpezarPartida:function(id){
 		Partidas.update(id,{$set:{estado:"Empezada"}});
-		CrearArJug(id); 
+		console.log("EMPEZAMOS PARTIDA");
+		CrearArJug2(id); 
 	},
 	
 	// Cambia el estado de una partida a "Terminada" dado su identificador.
@@ -361,7 +348,8 @@ Meteor.methods({
 
 	//Hay que pasar una Tablero dado de momento, hare que nosotros cojamos el tablero de plataforma
 	ColocaFicha:function(Id, Ficha, x, y, rotacion){  // Dado una ficha y dos posiciones, se devuelve un booleano para si se puede o no colocar esa ficha
-		return colocarficha(Id,Ficha,x,y, rotacion);
+		console.log("Comprueba si la ficha se puede colocar");		
+		return colocarficha1(Id,Ficha,x,y, rotacion);
 	},
 	
 	ColocarSeguidor:function(ficha, campoficha, rotacion, x, y){
