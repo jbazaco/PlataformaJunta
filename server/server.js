@@ -164,7 +164,7 @@ Meteor.methods({
 	//  está autorizado (está en la lista de jugadores), despues se almacena la 
 	//  jugada en la lista de jugadas de la partida.
 	RegistrarMovimiento : function(id,jugador,movimiento){
-		console.log("Registrar Movimientos");
+		console.log("Registrar Movimientos, ID: " + id);
 		//if(jugadorpermitido)
 		Partidas.update(id,{$push:{jugadas:movimiento}});
 		RegMov(id,jugador,movimiento);
@@ -348,7 +348,8 @@ Meteor.methods({
 
 	//Hay que pasar una Tablero dado de momento, hare que nosotros cojamos el tablero de plataforma
 	ColocaFicha:function(Id, Ficha, x, y, rotacion){  // Dado una ficha y dos posiciones, se devuelve un booleano para si se puede o no colocar esa ficha
-		return colocarficha(Id,Ficha,x,y, rotacion);
+		console.log("Comprueba si la ficha se puede colocar");		
+		return colocarficha1(Id,Ficha,x,y, rotacion);
 	},
 	
 	ColocarSeguidor:function(ficha, campoficha, rotacion, x, y){

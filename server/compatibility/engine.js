@@ -231,11 +231,12 @@ RegMov = function(id, jugador, m){
 
 //Procedimiento que mira las posiciones del tablero para ver si se puede colocar la ficha
 //Terminología: U: Up, R:Right, D: Down, L:Left. 
-colocarficha = function(id_part, Ficha, X, Y, rotacion){
-		//console.log("                                           ");
-		//console.log("                   JUGADA NUEVA            ");
+colocarficha1 = function(id_part, Ficha, X, Y, rotacion){
+		console.log("                                           ");
+		console.log("                   JUGADA NUEVA            ");
 		//console.log("MIRANDO ROTACION");
 		//console.log("Rotacion que nos pasan: " + rotacion);
+		console.log("Ek id es: " + id_part);
 		Ficha = PruebaItera(Ficha,rotacion);
 		//console.log("Gira que tenemos: " + Ficha.gir);
 		Ficha = GirarFicha(Ficha);
