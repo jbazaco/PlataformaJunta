@@ -272,8 +272,8 @@ Template.ajustes.events={
 		$("#container").css("border","3px solid black")
 		$("#container2").css({"background-color":"#CBAD48","opacity":"0.8"})
 		$("#container3").css({"background-color":"#CBAD48","opacity":"0.8"})
-		$("#container4").css("background-color","#CBAD48")
-		$("#container5").css({"background-color":"#CBAD48","border":"2px solid black"})
+		$("#container4").css({"background-color":"#CBAD48","opacity":"0.8"})
+		$("#container5").css({"background-color":"#CBAD48","border":"2px solid black","opacity":"0.8"})
 		$('.bienvenida').css("color","black")
 		return false;
 	},
@@ -282,8 +282,8 @@ Template.ajustes.events={
 		$("#container").css("border","3px solid black")
 		$("#container2").css({"background-color":"#20B2AA","opacity":"0.6"})
 		$("#container3").css({"background-color":"#20B2AA","opacity":"0.6"})
-		$("#container4").css("background-color","#20B2AA")
-		$("#container5").css({"background-color":"#20B2AA","border":"2px solid black"})
+		$("#container4").css({"background-color":"#20B2AA","opacity":"1"})
+		$("#container5").css({"background-color":"#20B2AA","border":"2px solid black","opacity":"1"})
 		$('.bienvenida').css("color","black")
 		return false;
 	},
@@ -292,8 +292,8 @@ Template.ajustes.events={
 		$("#container").css("border","3px solid white")
 		$("#container2").css({"background-color":"#DCDCDC","opacity":"0.6"})
 		$("#container3").css({"background-color":"#DCDCDC","opacity":"0.6"})
-		$("#container4").css("background-color","#C0C0C0")
-		$("#container5").css({"background-color":"#C0C0C0","border":"2px solid white"})
+		$("#container4").css({"background-color":"#C0C0C0","opacity":"1"})
+		$("#container5").css({"background-color":"#C0C0C0","border":"2px solid white","opacity":"1"})
 		$('.bienvenida').css("color","white")
 		//$("#input").css("background-color","green")
 		return false;
@@ -303,8 +303,8 @@ Template.ajustes.events={
 		$("#container").css("border","3px solid white")
 		$("#container2").css({"background-color":"#F5FFFA","opacity":"1"})
 		$("#container3").css({"background-color":"#F5FFFA","opacity":"1"})
-		$("#container4").css("background-color","#C0C0C0")
-		$("#container5").css({"background-color":"#C0C0C0","border":"2px solid white"})
+		$("#container4").css({"background-color":"#C0C0C0","opacity":"1"})
+		$("#container5").css({"background-color":"#C0C0C0","border":"2px solid white","opacity":"1"})
 		$('.bienvenida').css("color","white")
 		//$("#input").css("background-color","green")
 		return false;
@@ -314,8 +314,8 @@ Template.ajustes.events={
 		$("#container").css("border","3px solid white")
 		$("#container2").css({"background-color":"#7B68EE","opacity":"1"})
 		$("#container3").css({"background-color":"#7B68EE","opacity":"1"})
-		$("#container4").css("background-color","#7B68EE")
-		$("#container5").css({"background-color":"#7B68EE","border":"2px solid white"})
+		$("#container4").css({"background-color":"#7B68EE","opacity":"1"})
+		$("#container5").css({"background-color":"#7B68EE","border":"2px solid white","opacity":"1"})
 		$('.bienvenida').css("color","white")
 		//$("#input").css("background-color","green")
 		return false;

@@ -71,7 +71,7 @@ table {
 
 #accordionGeneral {
 	padding: 10px;
-	height: 115%;
+	height: 155%;
 }
 
 #accordion1,{
@@ -120,11 +120,9 @@ table {
   	margin-right: 2%;
 	overflow:auto;
 	border-radius:20px;
-<<<<<<< HEAD
     opacity:0.8;
-=======
-    	opacity:0.8;
->>>>>>> progressbar
+
+
 }
 
 .tabs{
@@ -135,7 +133,7 @@ table {
 
 #container3 {
 	width:25.5%;
-	height:52%;
+	height:58%;
 	background-color:#CBAD48;
 	float:right;
 	margin-right: 2%;
@@ -151,6 +149,7 @@ table {
 	margin-left:2.3%;
 	background-color:#CBAD48;
 	border-radius:20px;
+	opacity:0.8;
 }
 
 #container5 {
@@ -161,6 +160,7 @@ table {
 	margin-left:2.3%;
 	border:2px solid black;
 	background-color:#CBAD48;
+	opacity:0.8;
 }
 
 #message {
