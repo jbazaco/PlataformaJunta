@@ -271,10 +271,11 @@ Template.ajustes.events={
 	'click a#fondo0':function(){
 		$("#containermain").css("background-image",'url(../imagenes/fondo3.jpg)');
 		$("#container").css("border","3px solid black")
-		$("#container2").css({"background-color":"#CBAD48","opacity":"0.6"})
-		$("#container3").css({"background-color":"#CBAD48","opacity":"0.6"})
+		$("#container2").css({"background-color":"#CBAD48","opacity":"0.8"})
+		$("#container3").css({"background-color":"#CBAD48","opacity":"0.8"})
 		$("#container4").css("background-color","#CBAD48")
 		$("#container5").css({"background-color":"#CBAD48","border":"2px solid black"})
+		$('.bienvenida').css("color","black")
 		return false;
 	},
 	'click a#fondo1':function(){
@@ -305,7 +306,7 @@ Template.ajustes.events={
 		$("#container3").css({"background-color":"#F5FFFA","opacity":"1"})
 		$("#container4").css("background-color","#C0C0C0")
 		$("#container5").css({"background-color":"#C0C0C0","border":"2px solid white"})
-		$('.bienvenida').css("color","black")
+		$('.bienvenida').css("color","white")
 		//$("#input").css("background-color","green")
 		return false;
 	},
@@ -316,7 +317,7 @@ Template.ajustes.events={
 		$("#container3").css({"background-color":"#7B68EE","opacity":"1"})
 		$("#container4").css("background-color","#7B68EE")
 		$("#container5").css({"background-color":"#7B68EE","border":"2px solid white"})
-		$('.bienvenida').css("color","black")
+		$('.bienvenida').css("color","white")
 		//$("#input").css("background-color","green")
 		return false;
 	},
