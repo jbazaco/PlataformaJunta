@@ -1,4 +1,4 @@
-Game = new function() {																  
+C_Game = new function() {																  
 	this.anularClick=false;
 	this.moviendoRaton=false;
 	this.selec_elem = null;
@@ -14,18 +14,18 @@ Game = new function() {
 		this.loop(); 
 
 		var getClickX = function(event) {
-			return (event.pageX - Game.canvas.offsetLeft) * (Game.canvas.width/Game.canvas.clientWidth);
+			return (event.pageX - C_Game.canvas.offsetLeft) * (C_Game.canvas.width/C_Game.canvas.clientWidth);
 		}
 
 		var getClickY = function(event) {
-			return (event.pageY - Game.canvas.offsetTop) * (Game.canvas.height/Game.canvas.clientHeight);
+			return (event.pageY - C_Game.canvas.offsetTop) * (C_Game.canvas.height/C_Game.canvas.clientHeight);
 		}
 
 		this.canvas.addEventListener('mousedown', function(event) {
 			var x = getClickX(event);
 			var y = getClickY(event);
 			
-			this.selec_elem = elemInPos(x,y);
+			this.selec_elem = C_elemInPos(x,y);
 			this.anularClick=false;
 			this.moviendoRaton=false;
 		}, false);
@@ -61,7 +61,7 @@ Game = new function() {
 				this.selec_elem = null;
 			}
 		}, false);
-		SpriteSheet.load (sprite_data,callback);
+		C_SpriteSheet.load (sprite_data,callback);
 	};
 	
 
@@ -70,22 +70,22 @@ Game = new function() {
 	
 	this.loop = function() { 
 
-		for(var i=0,len = Game.boards.length;i<len;i++) {
-			if(Game.boards[len - 1- i]) { 
-				Game.boards[len - 1- i].draw(Game.ctx);
+		for(var i=0,len = C_Game.boards.length;i<len;i++) {
+			if(C_Game.boards[len - 1- i]) { 
+				C_Game.boards[len - 1- i].draw(C_Game.ctx);
 			}
 		}
 
 		// Ejecutar dentro de 30 ms
-		setTimeout(Game.loop,30);
+		setTimeout(C_Game.loop,30);
 	};
 	// Para cambiar el panel activo en el juego.
 	// Son capas: se dibujan de menor num a mayor
 	// Cada capa tiene que tener en su interfaz draw()
-	this.setBoard = function(num,board) { Game.boards[num] = board; };
+	this.setBoard = function(num,board) { C_Game.boards[num] = board; };
 };
 
-SpriteSheet = new function() {
+C_SpriteSheet = new function() {
 
 	// Almacena nombre_de_sprite: rectángulo para que sea mas facil
 	// gestionar los sprites del fichero public/fichas_carssonline.jpg

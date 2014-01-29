@@ -1,6 +1,6 @@
 var nfich = 0; //numero de fichas en el tablero
 var esMiTurno=false;
-
+var Terminada=false;
 var nmov = 0; //numero de movimientos procesados
 
 Meteor.startup(function(){
@@ -12,7 +12,7 @@ const FICHA_H = 62;
 const FICHA_W = 62;
 const MAX_JUGADORES = 5;
 
-sprites = {
+C_sprites = {
 	m: { sx: 253, sy: 44, w: FICHA_W, h: FICHA_H, si:"campo", sc:"campo", sd:"campo",
 		ci:"campo", cc:"monasterio", cd:"campo", ii:"campo", ic:"campo", id:"campo"},		//monasterio
 	mc: { sx: 331, sy: 44, w: FICHA_W, h: FICHA_H, si:"campo", sc:"campo", sd:"campo",
@@ -81,58 +81,59 @@ var seguidores = {
 		}
 };
 
-startGame = function() {
-	Game.setBoard(0,new TitleScreen("Carcassonline.",
-				"Haga click para empezar sin esperar a más jugadores.",playGame));
-	Game.autorun2._compute();
+C_startGame = function() {
+	C_Game.setBoard(0,new C_TitleScreen("Carcassonline.", "Haga click para empezar sin esperar a más jugadores.", C_playGame));
+	C_Game.autorun2._compute();
 }
 
 
 
-playGame = function(){
-	Game.boards.length = 0;
-	Game.setBoard(Game.boards.length, BotonAyuda);
-	var jugadores = Partidas.findOne(Session.get("Current_Game")).jugadores;
-	var jugadores = Partidas.findOne(Session.get("Current_Game")).jugadores;
-	var numjugadores = jugadores.length <= MAX_JUGADORES ? jugadores.length:MAX_JUGADORES;
-	var numseg;
-	var nick;
-	for (i=1;i<=numjugadores;i++){
-		numseg = new NumSeguidores(i);
-		Game.setBoard(Game.boards.length, numseg);
-		nick = jugadores[i-1]||"Maquina"+i;
-		Game.setBoard(Game.boards.length, new GamePoints(i, nick));
+var puntuaciones;
+ 
+C_playGame = function(){
+    puntuaciones = [];
+    C_Game.boards.length = 0;
+    C_Game.setBoard(C_Game.boards.length, BotonAyuda);
+    var jugadores = Partidas.findOne(Session.get("Current_Game")).jugadores;
+    var numjugadores = jugadores.length <= MAX_JUGADORES ? jugadores.length:MAX_JUGADORES;
+    var numseg;
+    var nick;
+    for (i=1;i<=numjugadores;i++){
+        numseg = new C_NumSeguidores(i);
+        C_Game.setBoard(C_Game.boards.length, numseg);
+        nick = jugadores[i-1]||"Maquina"+i;
+        puntuaciones[nick]= new C_GamePoints(i, nick);
+        C_Game.setBoard(C_Game.boards.length, puntuaciones[nick]);
 		seguidores[nick] = [];
 		for (k=1;k<=7;k++){
-			seguidores[nick][k-1] = new Seguidor("s"+i, i, numseg, nick);
-			Game.setBoard(Game.boards.length, seguidores[nick][k-1]);
+			seguidores[nick][k-1] = new C_Seguidor("s"+i, i, numseg, nick);
+			C_Game.setBoard(C_Game.boards.length, seguidores[nick][k-1]);
 		}
 	}
-	Game.setBoard(Game.boards.length,FichaActual);
-	FichaActual.nextBoard = Game.boards.length;
-
-	Game.setBoard(Game.boards.length, BotonReset);
-	Game.setBoard(Game.boards.length,BotonFinTurno);
-	Game.setBoard(Game.boards.length, new BotonMoverTablero(1000, 570, 0));
-	Game.setBoard(Game.boards.length, new BotonMoverTablero(950, 600, 90));
-	Game.setBoard(Game.boards.length, new BotonMoverTablero(900, 570, 180));
-	Game.setBoard(Game.boards.length, new BotonMoverTablero(950, 540, 270));
+	C_Game.setBoard(C_Game.boards.length,FichaActual);
+	FichaActual.nextBoard = C_Game.boards.length;
+	C_Game.setBoard(C_Game.boards.length, Turno);
+	C_Game.setBoard(C_Game.boards.length, BotonReset);
+	C_Game.setBoard(C_Game.boards.length,BotonFinTurno);
+	C_Game.setBoard(C_Game.boards.length, new BotonMoverTablero(1000, 570, 0));
+	C_Game.setBoard(C_Game.boards.length, new BotonMoverTablero(950, 600, 90));
+	C_Game.setBoard(C_Game.boards.length, new BotonMoverTablero(900, 570, 180));
+	C_Game.setBoard(C_Game.boards.length, new BotonMoverTablero(950, 540, 270));
 	
 
 
 	ficha_inicial = new Ficha(394, 263,"cmur");
-	Game.setBoard(Game.boards.length, ficha_inicial);
-	Game.setBoard(Game.boards.length,Fondo);
+	C_Game.setBoard(C_Game.boards.length, ficha_inicial);
+	C_Game.setBoard(C_Game.boards.length,Fondo);
 	ficha_inicial.buscar_huecos();
 	nmov = 1;
-	Game.autorun._compute();
+	C_Game.autorun._compute();
 
 	var idpartida=Session.get("Current_Game");
 	Meteor.call("VerTurno", idpartida, function(err, results){
 		if(err){
 			console.log(err.reason);
 		}else{
-		console.log("Resultado: " + results);
 		if (Meteor.user().username==results){
 			esMiTurno=true;
 		}
@@ -143,7 +144,7 @@ playGame = function(){
 
 
 gestionarMov = function(m) {
-	var debajo = elemInPos(ficha_inicial.x+m.x*ficha_inicial.w+ficha_inicial.w/2,
+	var debajo = C_elemInPos(ficha_inicial.x+m.x*ficha_inicial.w+ficha_inicial.w/2,
 						ficha_inicial.y-m.y*ficha_inicial.h+ficha_inicial.h/2, 
 						FichaActual.nextBoard);
 	if (m.esjugada) {
@@ -186,7 +187,7 @@ BotonMoverTablero = function(x, y, rotacion) {
 		}
 	}
 	this.draw = function(ctx) {
-		SpriteSheet.draw(ctx,this.sprite,this.x, this.y, 0, 0, rotacion);
+		C_SpriteSheet.draw(ctx,this.sprite,this.x, this.y, 0, 0, rotacion);
 	}    
 }
 
@@ -199,11 +200,11 @@ BotonAyuda = new function() {
 	this.mover = function(x,y) {	}
 	this.soltar = function(x,y) {	}
 	this.pulsado = function() {	
-		Game.setBoard(0, MenuAyuda);
+		C_Game.setBoard(0, MenuAyuda);
 	}
         this.draw = function(ctx) {
-		Game.ctx.fillStyle = "#44cbff";
-		Game.ctx.fillRect(this.x,this.y,this.w,this.h);
+		C_Game.ctx.fillStyle = "#44cbff";
+		C_Game.ctx.fillRect(this.x,this.y,this.w,this.h);
 
 		ctx.fillStyle= "#000000";
 	    	ctx.font = "bold 13px arial";
@@ -211,6 +212,28 @@ BotonAyuda = new function() {
 	}    
 }
 
+Turno = new function() {
+	this.name="";
+	this.mover = function(x,y) {	}
+	this.soltar = function(x,y) {	}
+	this.pulsado = function() {	}
+	this.draw = function(ctx) {
+		if(esMiTurno){
+			ctx.fillStyle= "#ffffff";
+			ctx.font = "bold 16px arial";
+			ctx.fillText("Es tu turno", 900, 40);
+		}else{
+			ctx.font = "bold 16px arial";
+			ctx.fillStyle= "#ffffff";
+			ctx.fillText("Es el turno de", 880, 40);
+			ctx.fillText(this.name, 880, 55);
+		}
+	}
+	this.cambiarNick = function(nick){
+		this.name=nick;
+	}
+
+}
 MenuAyuda = new function(){
 	this.x = 0;
 	this.y = 0;
@@ -219,17 +242,17 @@ MenuAyuda = new function(){
 	this.sprite = "";
 	this.mover = function(x,y) {	}
 	this.soltar = function(x,y) {	}
-	this.pulsado = function() {Game.setBoard(0, BotonAyuda);}
+	this.pulsado = function() {C_Game.setBoard(0, BotonAyuda);}
         this.draw = function(ctx) {
 			ctx.fillStyle = "#FFFFFF";
 			ctx.textAlign = "center";
 	
-			Game.ctx.fillStyle = "#000000";
-			Game.ctx.fillRect(0,0,1070,650);
+			C_Game.ctx.fillStyle = "#000000";
+			C_Game.ctx.fillRect(0,0,1070,650);
 
 			ctx.fillStyle= "#c9c9c9";
 			ctx.font = "bold 40px arial";
-			ctx.fillText("Menú de ayuda", Game.width/2, 50);
+			ctx.fillText("Menú de ayuda", C_Game.width/2, 50);
 
 			ctx.textAlign = "left";
 			ctx.font = "bold 22px arial";
@@ -245,7 +268,7 @@ MenuAyuda = new function(){
 
 }
 
-TitleScreen = function TitleScreen(title,subtitle,callback) {
+C_TitleScreen = function C_TitleScreen(title,subtitle,callback) {
     
 	this.x = 0;
 	this.y = 0;
@@ -259,8 +282,11 @@ TitleScreen = function TitleScreen(title,subtitle,callback) {
 	this.soltar = function(x,y) {	}
 
 	this.pulsado = function() {
-		Meteor.call("EmpezarPartida", Session.get("Current_Game"));
-		callback();
+		//Si esta observando la partida o si solo hay un jugador no puede empezar
+		if (this.jugadores.indexOf(Meteor.user().username) >= 0 && this.jugadores.length > 1) {
+			Meteor.call("EmpezarPartida", Session.get("Current_Game"));
+			callback();
+		}
 	}
 	
 	//Si estan todos los jugadores se empieza (para el caso de todos jugadores maquina)
@@ -272,15 +298,15 @@ TitleScreen = function TitleScreen(title,subtitle,callback) {
 		ctx.fillStyle = "#FFFFFF";
 		ctx.textAlign = "center";
 
-		Game.ctx.fillStyle = "#000000";
-		Game.ctx.fillRect(0,0,Game.width,Game.height);
+		C_Game.ctx.fillStyle = "#000000";
+		C_Game.ctx.fillRect(0,0,C_Game.width,C_Game.height);
 		ctx.fillStyle= "#c9c9c9";
 		ctx.font = "bold 100px arial";
-		ctx.fillText(title,Game.width/2, 150);
+		ctx.fillText(title,C_Game.width/2, 150);
 		ctx.font = "bold 40px arial";
 
 		ctx.textAlign = "left";
-		ctx.fillText(subtitle,20, 230);
+		if (this.jugadores.length > 1) ctx.fillText(subtitle,20, 230);
 		ctx.font = "bold 40px arial";
 		
 		ctx.fillText("Jugadores actuales:", 20, 300);
@@ -312,7 +338,7 @@ BotonReset = new function() {
 	}
 
 	this.draw = function(ctx) {
-		SpriteSheet.draw(ctx,this.sprite,this.x, this.y);
+		C_SpriteSheet.draw(ctx,this.sprite,this.x, this.y);
 	}	
 }
 
@@ -329,7 +355,7 @@ BotonFinTurno = new function() {
 
 	this.pulsado = function() {
 		if (FichaActual.seHaMovido()) {
-			var debajo = elemInPos(FichaActual.x+FichaActual.w/2, 
+			var debajo = C_elemInPos(FichaActual.x+FichaActual.w/2, 
 						FichaActual.y+FichaActual.h/2, FichaActual.nextBoard);
 			if (debajo instanceof Ficha && debajo.sprite === "interrogante"){
 				var scuadrado = null;
@@ -345,7 +371,8 @@ BotonFinTurno = new function() {
 									x: debajo.coordenadas.x , y: debajo.coordenadas.y, 
 									scuadrado: scuadrado, szona: szona, esjugada:true});
 				FichaActual.resetear();
-
+			
+				
 				
 
 			}
@@ -353,7 +380,7 @@ BotonFinTurno = new function() {
 	}
 
 	this.draw = function(ctx) {
-		SpriteSheet.draw(ctx,this.sprite,this.x, this.y);
+		C_SpriteSheet.draw(ctx,this.sprite,this.x, this.y);
 	}	
 }
 
@@ -374,16 +401,16 @@ Fondo = new function() {
 	this.pulsado = function() {	}
 	this.draw = function(){
 		// Dibujar rectangulo azul
-		Game.ctx.fillStyle = "#44cbff";
-		Game.ctx.fillRect(0,0,this.tablero_w,this.h);
+		C_Game.ctx.fillStyle = "#44cbff";
+		C_Game.ctx.fillRect(0,0,this.tablero_w,this.h);
 
 		//Dibujar barra separadora
-		Game.ctx.fillStyle = "#c9c9c9";
-		Game.ctx.fillRect(this.tablero_w,0,this.separacion,this.h);
+		C_Game.ctx.fillStyle = "#c9c9c9";
+		C_Game.ctx.fillRect(this.tablero_w,0,this.separacion,this.h);
 
 		//Dibujar barra-menu
-		Game.ctx.fillStyle = "#000000";
-		Game.ctx.fillRect(this.tablero_w+this.separacion,0,this.menu_w,this.h); 
+		C_Game.ctx.fillStyle = "#000000";
+		C_Game.ctx.fillRect(this.tablero_w+this.separacion,0,this.menu_w,this.h); 
 	}
 }
 
@@ -405,33 +432,33 @@ Ficha = function(x, y, sprite) {
 	//pone la ficha "interrogante".
 	this.buscar_huecos = function(){
 		
-		var derecha = elemInPos(this.x+3/2*this.w, this.y +this.h/2,
+		var derecha = C_elemInPos(this.x+3/2*this.w, this.y +this.h/2,
 								FichaActual.nextBoard);
 		
 		if(derecha === null || derecha === Fondo){
 			var ficha = new Ficha(this.x+this.w, this.y, "interrogante");
-			Game.setBoard(Game.boards.length-1,ficha);
-			Game.setBoard(Game.boards.length,Fondo);
+			C_Game.setBoard(C_Game.boards.length-1,ficha);
+			C_Game.setBoard(C_Game.boards.length,Fondo);
 		}	
 		
-		var izquierda = elemInPos(this.x-this.w/2, this.y+this.h/2);
+		var izquierda = C_elemInPos(this.x-this.w/2, this.y+this.h/2);
 		if(izquierda === null || izquierda === Fondo){
 			var ficha = new Ficha(this.x-this.w, this.y, "interrogante");
-			Game.setBoard(Game.boards.length-1,ficha);
-			Game.setBoard(Game.boards.length,Fondo);
+			C_Game.setBoard(C_Game.boards.length-1,ficha);
+			C_Game.setBoard(C_Game.boards.length,Fondo);
 		}
 		
-		var arriba = elemInPos(this.x+this.w/2, this.y-this.h/2);
+		var arriba = C_elemInPos(this.x+this.w/2, this.y-this.h/2);
 		if(arriba === null || arriba === Fondo){
 			var ficha = new Ficha(this.x, this.y-this.h, "interrogante");
-			Game.setBoard(Game.boards.length-1,ficha);
-			Game.setBoard(Game.boards.length,Fondo);
+			C_Game.setBoard(C_Game.boards.length-1,ficha);
+			C_Game.setBoard(C_Game.boards.length,Fondo);
 		}
-		var abajo = elemInPos(this.x+this.w/2, this.y+3/2*this.h);
+		var abajo = C_elemInPos(this.x+this.w/2, this.y+3/2*this.h);
 		if(abajo === null || abajo === Fondo  || abajo===FichaActual){
 			var ficha = new Ficha(this.x, this.y+this.h, "interrogante");
-			Game.setBoard(Game.boards.length-1,ficha);
-			Game.setBoard(Game.boards.length,Fondo);
+			C_Game.setBoard(C_Game.boards.length-1,ficha);
+			C_Game.setBoard(C_Game.boards.length,Fondo);
 		}
 	}
 	
@@ -475,7 +502,7 @@ Ficha = function(x, y, sprite) {
 			}
 			
 		}
-		if(dibujar) SpriteSheet.draw(ctx,this.sprite,this.x, this.y, sw,0,this.rotacion);
+		if(dibujar) C_SpriteSheet.draw(ctx,this.sprite,this.x, this.y, sw,0,this.rotacion);
 	}
 
 	this.establecer = function(sprite, rotacion, seguidor, scuadrado, szona) {
@@ -503,31 +530,27 @@ FichaActual = new function() {
 	//Devuelve true si se gira la ficha
 	this.pulsado = function(x,y) {
 		
+		if(!Terminada){
+			
 
-		if (this.sprite === 'interrogante' && esMiTurno) {
-			Meteor.call('DevuelveFicha', function(err, results){
-				if(err){
-      					console.log(err.reason);
-   				}else{
-					FichaActual.sprite=results.nombre;
-    				}});		
-			return true;
+			if (this.sprite === 'interrogante' && esMiTurno) {
+				Meteor.call('ActualizaFicha', Session.get("Current_Game"));		
+				return true;
+			}
+
+			if (!this.seHaMovido() && esMiTurno){
+				if (this.rotacion === 270)
+					this.rotacion = 0;
+				else
+					this.rotacion+=90;
+			} else {
+				//Si se pulsa sobre la ficha actual colocada se coloca un seguidor
+				var seg = this.seguidor || seguidores.buscarLibre(Meteor.user().username);
+				if (seg) seg.soltar(x,y);
+
+			}
+			return false;
 		}
-
-		console.log("turno : " + esMiTurno);
-
-
-		if (!this.seHaMovido() && esMiTurno){
-			if (this.rotacion === 270)
-				this.rotacion = 0;
-			else
-				this.rotacion+=90;
-		} else {
-			//Si se pulsa sobre la ficha actual colocada se coloca un seguidor
-			var seg = this.seguidor || seguidores.buscarLibre(Meteor.user().username);
-			if (seg) seg.soltar(x,y);
-		}
-		return false;
 	}
 	//tendra que informar al resto de clientes que ficha le ha salido a este jugador
 	//tiene que comprobar que el que hace click es el jugador al que le toca jugar, si no no puede mover
@@ -550,7 +573,7 @@ FichaActual = new function() {
 	this.moviendo = false;
 	this.mover = function(x,y) {
 		this.moviendo = true;
-		if (this.sprite !== 'interrogante') {
+		if (this.sprite !== 'interrogante' && esMiTurno) {
 			this.x = x - this.w/2;
 			this.y = y - this.h/2;
 			if (this.seguidor){	
@@ -561,9 +584,9 @@ FichaActual = new function() {
 	}
 
 	this.soltar = function(x,y) {
-		if (this.sprite !== "interrogante") {
+		if (this.sprite !== "interrogante" && esMiTurno) {
 			//CAMBIAR cuando se coloquen las fichas
-			var debajo = elemInPos(x,y, this.nextBoard);
+			var debajo = C_elemInPos(x,y, this.nextBoard);
 		//aqui seria para ver si se puede o no colocar la ficha?	
 			if (debajo instanceof Ficha && debajo.sprite === "interrogante"){
 				var id = Session.get("Current_Game");
@@ -607,7 +630,7 @@ FichaActual = new function() {
 				sw = dif;
 			}	
 		}
-		if (dibujar) SpriteSheet.draw(ctx,this.sprite,this.x,this.y,sw,0,this.rotacion);
+		if (dibujar) C_SpriteSheet.draw(ctx,this.sprite,this.x,this.y,sw,0,this.rotacion);
 	}
 	
 	this.resetear = function() {
@@ -619,33 +642,45 @@ FichaActual = new function() {
 		this.rotacion=0;	
 	}
 	
+	this.actualizar = function(){
+		var idpartida=Session.get("Current_Game");
+		Meteor.call("UltimaFicha", idpartida, function(err, results){
+			if(err){
+				console.log(err.reason);
+			}else{
+				if(results) FichaActual.sprite = results;		
+			}
+			
+		});
+	}
+	
 	this.pintarRejilla = function(){
 		
-		Game.ctx.fillStyle = "#000000";
-		Game.ctx.strokeRect(this.x,this.y,this.h/3,this.w/3);
-		Game.ctx.fillStyle = "#000000";
-		Game.ctx.strokeRect(this.x+this.h/3,this.y,this.h/3,this.w/3);
-		Game.ctx.fillStyle = "#000000";
-		Game.ctx.strokeRect(this.x+2*this.h/3,this.y,this.h/3,this.w/3);
-		Game.ctx.fillStyle = "#000000";
-		Game.ctx.strokeRect(this.x,this.y+this.w/3,this.h/3,this.w/3);
-		Game.ctx.fillStyle = "#000000";
-		Game.ctx.strokeRect(this.x+this.h/3,this.y+this.w/3,this.h/3,this.w/3);
-		Game.ctx.fillStyle = "#000000";
-		Game.ctx.strokeRect(this.x+2*this.h/3,this.y+this.w/3,this.h/3,this.w/3);
-		Game.ctx.fillStyle = "#000000";
-		Game.ctx.strokeRect(this.x,this.y+2*this.w/3,this.h/3,this.w/3);
-		Game.ctx.fillStyle = "#000000";
-		Game.ctx.strokeRect(this.x+this.h/3,this.y+2*this.w/3,this.h/3,this.w/3);
-		Game.ctx.fillStyle = "#000000";
-		Game.ctx.strokeRect(this.x+2*this.h/3,this.y+2*this.w/3,this.h/3,this.w/3);
+		C_Game.ctx.fillStyle = "#000000";
+		C_Game.ctx.strokeRect(this.x,this.y,this.h/3,this.w/3);
+		C_Game.ctx.fillStyle = "#000000";
+		C_Game.ctx.strokeRect(this.x+this.h/3,this.y,this.h/3,this.w/3);
+		C_Game.ctx.fillStyle = "#000000";
+		C_Game.ctx.strokeRect(this.x+2*this.h/3,this.y,this.h/3,this.w/3);
+		C_Game.ctx.fillStyle = "#000000";
+		C_Game.ctx.strokeRect(this.x,this.y+this.w/3,this.h/3,this.w/3);
+		C_Game.ctx.fillStyle = "#000000";
+		C_Game.ctx.strokeRect(this.x+this.h/3,this.y+this.w/3,this.h/3,this.w/3);
+		C_Game.ctx.fillStyle = "#000000";
+		C_Game.ctx.strokeRect(this.x+2*this.h/3,this.y+this.w/3,this.h/3,this.w/3);
+		C_Game.ctx.fillStyle = "#000000";
+		C_Game.ctx.strokeRect(this.x,this.y+2*this.w/3,this.h/3,this.w/3);
+		C_Game.ctx.fillStyle = "#000000";
+		C_Game.ctx.strokeRect(this.x+this.h/3,this.y+2*this.w/3,this.h/3,this.w/3);
+		C_Game.ctx.fillStyle = "#000000";
+		C_Game.ctx.strokeRect(this.x+2*this.h/3,this.y+2*this.w/3,this.h/3,this.w/3);
 		
 	}
 
 };
 
 
-Seguidor = function(sprite, numjugador, contador, nick) {
+C_Seguidor = function(sprite, numjugador, contador, nick) {
 	
 	this.inicialx=900;
 	this.inicialy=200;
@@ -675,110 +710,110 @@ Seguidor = function(sprite, numjugador, contador, nick) {
 			this.x=ficha.x;
 			this.y=ficha.y;
 			if (!ficha.rotacion)
-				this.zona=sprites[ficha.sprite].si;
+				this.zona=C_sprites[ficha.sprite].si;
 			else if (ficha.rotacion === 90)
-				this.zona=sprites[ficha.sprite].ii;
+				this.zona=C_sprites[ficha.sprite].ii;
 			else if (ficha.rotacion === 180)
-				this.zona=sprites[ficha.sprite].id;
+				this.zona=C_sprites[ficha.sprite].id;
 			else if (ficha.rotacion === 270)
-				this.zona=sprites[ficha.sprite].sd;
+				this.zona=C_sprites[ficha.sprite].sd;
 			break;
 
 		case 2:
 			this.x=ficha.x+ficha.h/3;
 			this.y=ficha.y;
 			if (!ficha.rotacion)
-				this.zona=sprites[ficha.sprite].sc;
+				this.zona=C_sprites[ficha.sprite].sc;
 			else if (ficha.rotacion === 90)
-				this.zona=sprites[ficha.sprite].ci;
+				this.zona=C_sprites[ficha.sprite].ci;
 			else if (ficha.rotacion === 180)
-				this.zona=sprites[ficha.sprite].ic;
+				this.zona=C_sprites[ficha.sprite].ic;
 			else if (ficha.rotacion === 270)
-				this.zona=sprites[ficha.sprite].cd;
+				this.zona=C_sprites[ficha.sprite].cd;
 			break;	
 		
 		case 3:
 			this.x=ficha.x+2*ficha.h/3;
 			this.y=ficha.y;
 			if (!ficha.rotacion)
-				this.zona=sprites[ficha.sprite].sd;
+				this.zona=C_sprites[ficha.sprite].sd;
 			else if (ficha.rotacion === 90)
-				this.zona=sprites[ficha.sprite].si;
+				this.zona=C_sprites[ficha.sprite].si;
 			else if (ficha.rotacion === 180)
-				this.zona=sprites[ficha.sprite].ii;
+				this.zona=C_sprites[ficha.sprite].ii;
 			else if (ficha.rotacion === 270)
-				this.zona=sprites[ficha.sprite].id;
+				this.zona=C_sprites[ficha.sprite].id;
 			break;
 
 		case 4:
 			this.x=ficha.x;
 			this.y=ficha.y+ficha.w/3;
 			if (!ficha.rotacion)
-				this.zona=sprites[ficha.sprite].ci;
+				this.zona=C_sprites[ficha.sprite].ci;
 			else if (ficha.rotacion === 90)
-				this.zona=sprites[ficha.sprite].ic;
+				this.zona=C_sprites[ficha.sprite].ic;
 			else if (ficha.rotacion === 180)
-				this.zona=sprites[ficha.sprite].cd;
+				this.zona=C_sprites[ficha.sprite].cd;
 			else if (ficha.rotacion === 270)
-				this.zona=sprites[ficha.sprite].sc;
+				this.zona=C_sprites[ficha.sprite].sc;
 			break;
 
 		case 5:
 			this.x=ficha.x+ficha.h/3;
 			this.y=ficha.y+ficha.w/3;
-			this.zona=sprites[ficha.sprite].cc;
+			this.zona=C_sprites[ficha.sprite].cc;
 			break;
 			
 		case 6:
 			this.x=ficha.x+2*ficha.h/3;
 			this.y=ficha.y+ficha.w/3;
 			if (!ficha.rotacion)
-				this.zona=sprites[ficha.sprite].cd;
+				this.zona=C_sprites[ficha.sprite].cd;
 			else if (ficha.rotacion === 90)
-				this.zona=sprites[ficha.sprite].sc;
+				this.zona=C_sprites[ficha.sprite].sc;
 			else if (ficha.rotacion === 180)
-				this.zona=sprites[ficha.sprite].ci;
+				this.zona=C_sprites[ficha.sprite].ci;
 			else if (ficha.rotacion === 270)
-				this.zona=sprites[ficha.sprite].ic;
+				this.zona=C_sprites[ficha.sprite].ic;
 			break;	
 
 		case 7:
 			this.x=ficha.x;
 			this.y=ficha.y+2*ficha.w/3;
 			if (!ficha.rotacion)
-				this.zona=sprites[ficha.sprite].ii;
+				this.zona=C_sprites[ficha.sprite].ii;
 			else if (ficha.rotacion === 90)
-				this.zona=sprites[ficha.sprite].id;
+				this.zona=C_sprites[ficha.sprite].id;
 			else if (ficha.rotacion === 180)
-				this.zona=sprites[ficha.sprite].sd;
+				this.zona=C_sprites[ficha.sprite].sd;
 			else if (ficha.rotacion === 270)
-				this.zona=sprites[ficha.sprite].si;
+				this.zona=C_sprites[ficha.sprite].si;
 			break;	
 
 		case 8:
 			this.x=ficha.x+ficha.h/3;
 			this.y=ficha.y+2*ficha.w/3;
 			if (!ficha.rotacion)
-				this.zona=sprites[ficha.sprite].ic;
+				this.zona=C_sprites[ficha.sprite].ic;
 			else if (ficha.rotacion === 90)
-				this.zona=sprites[ficha.sprite].cd;
+				this.zona=C_sprites[ficha.sprite].cd;
 			else if (ficha.rotacion === 180)
-				this.zona=sprites[ficha.sprite].sc;
+				this.zona=C_sprites[ficha.sprite].sc;
 			else if (ficha.rotacion === 270)
-				this.zona=sprites[ficha.sprite].ci;
+				this.zona=C_sprites[ficha.sprite].ci;
 			break;
 
 		case 9:
 			this.x=ficha.x+2*ficha.h/3;
 			this.y=ficha.y+2*ficha.w/3;
 			if (!ficha.rotacion)
-				this.zona=sprites[ficha.sprite].id;
+				this.zona=C_sprites[ficha.sprite].id;
 			else if (ficha.rotacion === 90)
-				this.zona=sprites[ficha.sprite].sd;
+				this.zona=C_sprites[ficha.sprite].sd;
 			else if (ficha.rotacion === 180)
-				this.zona=sprites[ficha.sprite].si;
+				this.zona=C_sprites[ficha.sprite].si;
 			else if (ficha.rotacion === 270)
-				this.zona=sprites[ficha.sprite].ii;
+				this.zona=C_sprites[ficha.sprite].ii;
 			break;
 		}
 	}
@@ -849,7 +884,6 @@ Seguidor = function(sprite, numjugador, contador, nick) {
 					if (this.zona==="no"){
 						this.resetear();
 					}else{
-						console.log(this.zona);
 						alert("Has situado seguidor en: '"+this.zona+"'. Puede cambiarlo si lo desea.");
 						FichaActual.seguidor=this;
 						if (!this.restado){
@@ -908,7 +942,7 @@ Seguidor = function(sprite, numjugador, contador, nick) {
 			}	
 		}
 		if (dibujar) {
-			SpriteSheet.draw(ctx,this.sprite,this.x,this.y,sw);
+			C_SpriteSheet.draw(ctx,this.sprite,this.x,this.y,sw);
 		}
 	}
 
@@ -925,14 +959,14 @@ Seguidor = function(sprite, numjugador, contador, nick) {
 
 //Devuelve el elemento dibujado en (x,y) a partir del board n
 //El elemento debe tener una funcion pulsado, mover y soltar
-elemInPos = function(x, y, n) {
+C_elemInPos = function(x, y, n) {
 	if (!n || n < 0) n = 0;
 
-	for(var i=n,len = Game.boards.length;i<len;i++) {
-		if (Game.boards[i]){
-			if (y >= Game.boards[i].y && y <= Game.boards[i].y+Game.boards[i].h 
-					&& x >= Game.boards[i].x && x <= Game.boards[i].x+Game.boards[i].w) {
-				return Game.boards[i];
+	for(var i=n,len = C_Game.boards.length;i<len;i++) {
+		if (C_Game.boards[i]){
+			if (y >= C_Game.boards[i].y && y <= C_Game.boards[i].y+C_Game.boards[i].h 
+					&& x >= C_Game.boards[i].x && x <= C_Game.boards[i].x+C_Game.boards[i].w) {
+				return C_Game.boards[i];
 			}
 		}
 	}
@@ -940,12 +974,12 @@ elemInPos = function(x, y, n) {
 }
 
 var desplazarTablero = function(difx, dify) {
-	 for(var i=0; i<Game.boards.length; i++) {
-		if (Game.boards[i]){
-			if (Game.boards[i] instanceof Ficha || 
-					(Game.boards[i] instanceof Seguidor && Game.boards[i].seHaMovido())) {
-				Game.boards[i].x += difx;
-				Game.boards[i].y += dify;
+	 for(var i=0; i<C_Game.boards.length; i++) {
+		if (C_Game.boards[i]){
+			if (C_Game.boards[i] instanceof Ficha || 
+					(C_Game.boards[i] instanceof C_Seguidor && C_Game.boards[i].seHaMovido())) {
+				C_Game.boards[i].x += difx;
+				C_Game.boards[i].y += dify;
 			}
 		}
 	}
@@ -959,7 +993,7 @@ var desplazarTablero = function(difx, dify) {
 }
 
 
-NumSeguidores = function(numjugador) {
+C_NumSeguidores = function(numjugador) {
 	this.num = 7;
 	this.x = 890;
 	this.y = 220 +numjugador*60;
@@ -993,7 +1027,7 @@ NumSeguidores = function(numjugador) {
 	};
 };
 
-GamePoints = function(numjugador, nick) {
+C_GamePoints = function(numjugador, nick) {
 	this.points = 0;
 	this.x = 940;
 	this.y = 220 +numjugador*60;
@@ -1025,7 +1059,7 @@ GamePoints = function(numjugador, nick) {
 };
 
 var idcanvas = null;
-Game.autorun = Deps.autorun(function(){
+C_Game.autorun = Deps.autorun(function(){
 	var idpartida = Session.get("Current_Game");
 	if (idpartida){
 		var partida = Partidas.findOne(idpartida);
@@ -1035,57 +1069,70 @@ Game.autorun = Deps.autorun(function(){
 			nmov = 0;
 			FichaActual.resetear();
 			idcanvas = canv;
-			Game.initialize(canv,sprites,startGame);//NO DIFERENCIA SI OBSERVA PARTIDA O LA JUEGA POR AHORA/TODO/
+			C_Game.initialize(canv,C_sprites,C_startGame);//NO DIFERENCIA SI OBSERVA PARTIDA O LA JUEGA POR AHORA/TODO/
 			
 		} else if (nmov > 0) {
 			//Actualiza las fichas segun los movimientos registrados
 			var movs = partida.jugadas;
-			//console.log(movs.length);
 			for (i = nmov-1; i < movs.length; i++) { 
 				nmov++;
 				gestionarMov(movs[i]);
 			}
+
+			//Actualiza las puntuaciones de los jugadores
+			partida.jugadores.forEach(function(nick){
+				var jug = partida.jugadores.indexOf(nick);
+				puntuaciones[nick].points = partida.puntuacion[jug];
+		   	});
+
+			FichaActual.actualizar();
+
 			var idpartida=Session.get("Current_Game");
 			Meteor.call("VerTurno", idpartida, function(err, results){
 				if(err){
 					console.log(err.reason);
 				}else{
-				console.log("Resultado: " + results);
-				if (Meteor.user().username==results){
-					esMiTurno=true;
-				}else{
-					esMiTurno=false;
+					Turno.cambiarNick(results);
+					if (Meteor.user().username==results){
+						esMiTurno=true;
+					}else{
+						esMiTurno=false;
+					}
 				}
+			});
+			if (partida.estado==="Terminada"){
+				Terminada=true;
+
+				var mayor = _.max(partida.jugadores, function(nick){
+					var jug = partida.jugadores.indexOf(nick);
+					return partida.puntuacion[jug];
+				});
+
+				alert("La partida ha finalizado. El ganador es " + mayor);
+			}
 			
-			}});
 		}
 	}
+
 });
 
 
 //Si esta en la pantalla de inicio se encarga de añadir jugadores nuevos
 //o ejecuta playGame si la partida ya está empezada o ha acabado
-Game.autorun2 = Deps.autorun(function(){
+C_Game.autorun2 = Deps.autorun(function(){
 	var idpartida = Session.get("Current_Game");
-	console.log('esta es la id de la partida:             '+idpartida);
 	if (idpartida){
 		var partida = Partidas.findOne(idpartida);
-		var board1 = Game.boards[0];
-		console.log('este es el estado de la partida:   '+partida.estado)
-		if (board1 instanceof TitleScreen) {
-			console.log("dentro 1");
+		var board1 = C_Game.boards[0];
+		if (board1 instanceof C_TitleScreen) {
 			if (partida.estado === "Lobby") {
-				console.log("dentro 2");
 				board1.jugadores = partida.jugadores;
 				if(partida.jugadores.length >= MAX_JUGADORES) {
 					board1.pulsado();
 				}
 			} else {
-				console.log("ya empezada");
-				playGame();
+				C_playGame();
 			}
 		}
 	}
 });
-
-

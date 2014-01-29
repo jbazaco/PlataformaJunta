@@ -10,20 +10,22 @@ Meteor.subscribe("DatosUsuarios");
 
 
 Meteor.startup(function(){
-	screenauto();
+	Session.set("Chat_Selector","General");
+	$('#sala_general').css('background-color','#ccc');
     $("#opciones").hide();
-	screenauto();	//Refresh automatico de la pantalla aunque el tamaño cambie
+
 	$( "#container3" ).tabs({ hide: { effect: "slide",direction:'up', duration: 100 }, show:{ effect: "slide",direction:'up', duration: 100 }  });
 	$(".subtab").hide();	//Esconde los subtans que se encuentran en la segunda pestaña del acordeon
 	$(".canvas").hide();	//Esconde todos los canvas
 	$('.escenario').attr("disabled",true);
+  $('.gamelayer').hide();
 	$( ".startgame" ).click(function() {
 		$( "#opciones" ).fadeToggle( "slow", "linear" );
 	});
 	
-	Session.setDefault('Current_Game_id',0);
+	Session.setDefault('Current_Game_id',0);	
 
-	
+	$(".ajust").accordion();
 	$("#pop_up").on('mouseenter', '.datos', function(){
 		var id = Session.get("id_pop_up");
 		Meteor.clearTimeout(id);
@@ -31,35 +33,56 @@ Meteor.startup(function(){
 	$("#pop_up").on('mouseleave', '.datos', function(){
 		$(".datos").remove();
 	});
-	$("#game_1").mouseover(function(){
-		logo = document.getElementById("alien");
+	$(".games").mouseover(function(){
+
+		if (this.id==="game_1") {
+			logo = document.getElementById("alien");
+			//logo.src="imagenes/alienInvasion.png"
+		}
+		else if (this.id==="game_2") {
+			logo = document.getElementById("angry");
+			//logo.src="imagenes/agryfruits.png"
+		}
+		else if (this.id==="game_3") {
+			logo = document.getElementById("carca");
+			//logo.src="imagenes/carcassonne-logo.jpg"
+		}
   		logo.width = 100;
-  		logo.height = 100;
+  		logo.height = 80;
 	});
-	$("#game_1").mouseout(function(){
-		logo = document.getElementById("alien");
+	$(".games").mouseout(function(){
+		if (this.id==="game_1") {
+			logo = document.getElementById("alien");
+			logo.src="alienInvasion.png"
+		}
+		else if (this.id==="game_2") {
+			logo = document.getElementById("angry");
+			logo.src="agryfruits.png"
+		}
+		else if (this.id==="game_3") {
+			logo = document.getElementById("carca");
+			logo.src="carcassonne-logo.jpg"
+		}
   		logo.width = 60;
   		logo.height = 41;
 	});
-	$("#game_2").mouseover(function(){
-		logo = document.getElementById("angry");
-  		logo.width = 100;
-  		logo.height = 100;
+/*
+	$("#fondoPantalla").click(function(){
+		$(".fondos").toggle();
 	});
-	$("#game_2").mouseout(function(){
-		logo = document.getElementById("angry");
-  		logo.width = 60;
-  		logo.height = 41;
+*/
+	$(function() {
+		$( "#accordion1" ).accordion({
+		heightStyle: "fill"
+		});
 	});
-	$("#game_3").mouseover(function(){
-		logo = document.getElementById("carca");
-  		logo.width = 100;
-  		logo.height = 100;
-	});
-	$("#game_3").mouseout(function(){
-		logo = document.getElementById("carca");
-  		logo.width = 60;
-  		logo.height = 41;
+
+	$(function() {
+		$( "#accordionGeneral" ).resizable({
+			resize: function() {
+				$( "#accordion1" ).accordion( "refresh" );
+			}
+		});
 	});
 });
 
@@ -86,17 +109,18 @@ Template.input.events={
 		if (event.which==13){
 			var message=$("#message");
 			if (message.val()!=""){
-				var msg=Clip(message.val(),50);
+				var msg=Clip(message.val(),30);
 				if (Meteor.user()){
 					var name = Meteor.user().username;
 				}else{
-					var name="Anon";
+					var name="Anonymous";
 				}
 				if(Meteor.users.findOne(Meteor.userId) != undefined){
 					Messages.insert({
 						name:name,
 						message:message.val(),
-						time:Date.now()
+						time:Date.now(),
+						sala:Session.get("Chat_Selector")
 					});
 				}
 				else{
@@ -172,6 +196,9 @@ Template.options.events={
 		if($('#tablero').is(':checked')){
 			$('#tablero').prop('checked', false);
 		}		
+	},
+	'click .close_Div': function () {	
+		$("#opciones").hide()
 	}
       
 }
@@ -195,14 +222,13 @@ Template.ListaEstados.events={
 		cadena="";
 		cadena+="<div id='"+this.username+"_datos' class='datos' style='display:none'>"+this.username +": "+ this.estado+"</br>"
 		switch (Session.get("Current_Game_id")){
-			case 1 : cadena+=this.puntuacion[0].juego+" </br>Puntos: "+ this.puntuacion[0].total+" Record: "+this.puntuacion[0].record+"</br>"; break;
-			case 2 : cadena+=this.puntuacion[1].juego+" </br>Puntos: "+ this.puntuacion[1].total+" Record: "+this.puntuacion[1].record+"</br>"; break;
-			case 3 : cadena+=this.puntuacion[2].juego+" </br>Puntos: "+ this.puntuacion[2].total+" Record: "+this.puntuacion[2].record; break;
+			case 1 : cadena+=this.puntuacion[0].juego+" </br>Puntos totales: "+ this.puntuacion[0].total+" Record: "+this.puntuacion[0].record+"</br>"; break;
+			case 2 : cadena+=this.puntuacion[1].juego+" </br>Puntos totales: "+ this.puntuacion[1].total+" Record: "+this.puntuacion[1].record+"</br>"; break;
+			case 3 : cadena+=this.puntuacion[2].juego+" </br>Puntos totales: "+ this.puntuacion[2].total+" Record: "+this.puntuacion[2].record; break;
 			default: console.log(Session.get("Current_Game_id"))
 		}
 		cadena+="</div>"
 		$("#pop_up").append(cadena);
-		//La chapuza sin sentido es premeditada, no funciona si no le pasas la variable username aunque luego no la utilices. Dunno y.
 		username= this.username
 		var id = Meteor.setTimeout(function(username){$("#"+this.username+"_datos").show()},500);
 		Session.set("id_pop_up",id);
@@ -229,34 +255,117 @@ Template.gamesList.imIn = function(){
 	};
 }
 
+function abrir(url) {
+	open(url,'') ;
+}
+
+
+Template.ajustes.events={
+	'click a#fondo0':function(){
+		$("#containermain").css("background-image",'url(../imagenes/fondo3.jpg)');
+		$("#container").css("border","3px solid black")
+		$("#container2").css({"background-color":"#CBAD48","opacity":"0.6"})
+		$("#container3").css({"background-color":"#CBAD48","opacity":"0.6"})
+		$("#container4").css("background-color","#CBAD48")
+		$("#container5").css({"background-color":"#CBAD48","border":"2px solid black"})
+		return false;
+	},
+	'click a#fondo1':function(){
+		$("#containermain").css("background-image",'url(../imagenes/papel.jpg)');
+		$("#container").css("border","3px solid black")
+		$("#container2").css({"background-color":"#20B2AA","opacity":"0.6"})
+		$("#container3").css({"background-color":"#20B2AA","opacity":"0.6"})
+		$("#container4").css("background-color","#20B2AA")
+		$("#container5").css({"background-color":"#20B2AA","border":"2px solid black"})
+		$('.bienvenida').css("color","black")
+		return false;
+	},
+	'click a#fondo2':function(){
+		$("#containermain").css("background-image",'url(../imagenes/negro.jpg)');
+		$("#container").css("border","3px solid white")
+		$("#container2").css({"background-color":"#DCDCDC","opacity":"0.6"})
+		$("#container3").css({"background-color":"#DCDCDC","opacity":"0.6"})
+		$("#container4").css("background-color","#C0C0C0")
+		$("#container5").css({"background-color":"#C0C0C0","border":"2px solid white"})
+		$('.bienvenida').css("color","white")
+		//$("#input").css("background-color","green")
+		return false;
+	},
+	'click a#fondo3':function(){
+		$("#containermain").css("background-image",'url(../imagenes/lluvia.jpg)');
+		$("#container").css("border","3px solid white")
+		$("#container2").css({"background-color":"#F5FFFA","opacity":"1"})
+		$("#container3").css({"background-color":"#F5FFFA","opacity":"1"})
+		$("#container4").css("background-color","#C0C0C0")
+		$("#container5").css({"background-color":"#C0C0C0","border":"2px solid white"})
+		$('.bienvenida').css("color","black")
+		//$("#input").css("background-color","green")
+		return false;
+	},
+	'click a#fondo4':function(){
+		$("#containermain").css("background-image",'url(../imagenes/nieve.jpg)');
+		$("#container").css("border","3px solid white")
+		$("#container2").css({"background-color":"#7B68EE","opacity":"1"})
+		$("#container3").css({"background-color":"#7B68EE","opacity":"1"})
+		$("#container4").css("background-color","#7B68EE")
+		$("#container5").css({"background-color":"#7B68EE","border":"2px solid white"})
+		$('.bienvenida').css("color","black")
+		//$("#input").css("background-color","green")
+		return false;
+	},
+	'click a#abrir':function(){
+		abrir('http://www.defensacentral.com/')
+		return false;
+	},
+
+	'click a#abrirterminos':function(){
+		$(function() {
+    		$("#terminos").dialog();
+  		});
+		return false;
+	},
+}
+
 
 Template.games.events={
 	'click a#game_1':function(){
 		Session.set('Current_Game_id',1);
+		Session.set("Chat_Selector",1);
+		$('#chat_salas li').css('background-color','#eee');
+		$('#sala_juego').css('background-color','#ccc');
 		$(".canvas").hide();
 		$(".gamelayer").hide();
 		$('#game').show(500);
 		
 		$("#selectedgame").html("Alien Invasion");
 		$("#container3").tabs( "option", "active", 1 );
+		Clear_Chat();
 		return false;
 	},
 	'click a#game_2':function(){
 		Session.set('Current_Game_id',2)
+		Session.set("Chat_Selector",2);
+		$('#chat_salas li').css('background-color','#eee');
+		$('#sala_juego').css('background-color','#ccc');
 		$(".canvas").hide();
-		$('#gamecanvas').show(500);
-		
+		game.showLevelScreen();
+
 		$("#selectedgame").html("Angry Fruits");
 		$("#container3").tabs( "option", "active", 1 );
+		Clear_Chat();
 		return false;
 	},
 	'click a#game_3':function(){
 		Session.set('Current_Game_id',3)
+		Session.set("Chat_Selector",3);
+		$('#chat_salas li').css('background-color','#eee');
+		$('#sala_juego').css('background-color','#ccc');
 		$(".canvas").hide();
 		$('#tablero').show(500);
-
+    $(".gamelayer").hide();
 		$("#selectedgame").html("Carcassonne");	
 		$("#container3").tabs( "option", "active", 1);
+		Clear_Chat();
 		return false;
 	},
 	'mouseenter a#game_1':function(){
@@ -387,6 +496,36 @@ Template.popup.events={
 				alert('Debes estar registrado para unirte a una partida');
 		}
 		return false;
+	},
+	'click a.leave_match':function(){
+		partida=Partidas.findOne(Session.get('Game_Data_id'))._id;
+		
+		var usuid = Meteor.userId();
+		var usu = Meteor.users.findOne(usuid);
+		
+		Meteor.call('AbandonarPartida',usu.username,partida)/*,function(err,res){
+					if(! err){
+						alert("hey")
+					}else{
+						console.log(err);
+					}
+		})*/
+		/*var usu = Meteor.users.findOne(usuid);
+			if (usu){
+				Meteor.call('IncluirJugador',Session.get('Game_Data_id'),usu.username,function(err,res){
+					if(! err){
+						Meteor.subscribe(res)
+						$('.canvas').hide()
+						$("#container").append("<canvas id='Canvas_"+res+"' class='canvas' width='1070' height='650'></canvas>");
+						Session.set("Current_Game",res)
+						$("#"+Session.get('Game_Data_id')+"_datos").remove()
+					}
+				})
+			}
+		}else{
+				alert('Debes estar registrado para unirte a una partida');
+		}*/
+		return false;
 	}
 }
 
@@ -403,8 +542,12 @@ Template.gamesList.events={
 			var usu = Meteor.users.findOne(usuid);
  			if (usu){
  				if ((Partida.jugadores.indexOf(usu.username)!=(-1)) || (Partida.estado != "Lobby")){
- 					cadena = "<a class='watch_match' href=''>Observar partida<a></br>"
- 				}else{
+					if ((Partida.jugadores.indexOf(usu.username)>=0)){
+						cadena = "<a class='watch_match' href=''>Observar partida<a></br><a class='leave_match' href=''>Abandonar<a></br>"
+					}else{
+						cadena = "<a class='watch_match' href=''>Observar partida<a></br>"
+					}
+				}else{
 					cadena = "<a class='join_match' href=''>Unirse a partida </a></br><a class='watch_match' href=''>Observar partida<a></br>"
  				}
  			}
@@ -413,7 +556,7 @@ Template.gamesList.events={
 		for(var i=0; i<this.jugadores.length; i++){
 			jugadores = jugadores + "Jugador"+i+": "+this.jugadores[i]+"</br>";
 		};
-		$("#pop_up").append("<div id='"+this._id+"_datos' class='datos' style='display:none'>Nombre Partida: "+this.nombre+"</br>"+jugadores+"Tipo escenario:"+this.opciones.escenario +"</br>"+ "Numero jugadores maquina:" +this.opciones.jugadores_maquina+"</br> "+ "Nivel:"+this.opciones.niveles+"</br>"+ "Tablero inteligente"+ this.opciones.tablero_inteligente+"</br>"+cadena+"</br></div>");
+		$("#pop_up").append("<div id='"+this._id+"_datos' class='datos' style='display:none'>Nombre Partida: "+this.nombre+"</br>Estado: "+this.estado +"</br>Jugadores: "+jugadores+"Tipo escenario:"+this.opciones.escenario +"</br>"+ "Numero jugadores maquina:" +this.opciones.jugadores_maquina+"</br> "+ "Nivel:"+this.opciones.niveles+"</br>"+ "Tablero inteligente"+ this.opciones.tablero_inteligente+"</br>"+cadena+"</br></div>");
 		$("#"+this._id+"_datos").show(500);
 	},
 
@@ -424,15 +567,58 @@ Template.gamesList.events={
 	}
 }
 
+Template.chat.events={
+	'click #sala_general':function(){
+		console.log('1')
+		if (Session.get("Chat_Selector") != "General"){
+			console.log('11')
+			$('#chat_salas li').css('background-color','#eee');
+			$('#sala_general').css('background-color','#ccc');
+			$('#container5').show();
+			Session.set("Chat_Selector","General");
+			Clear_Chat();
+		}		
+	},
+	'click #sala_juego':function(){
+		console.log('2')
+		if (Session.get("Chat_Selector") != Session.get("Current_Game_id")){
+			console.log('22')
+			$('#chat_salas li').css('background-color','#eee');
+			$('#sala_juego').css('background-color','#ccc');
+			$('#container5').show();
+			Session.set("Chat_Selector",Session.get("Current_Game_id"));
+			Clear_Chat();
+		}
+	},
+	'click #sala_privada':function(){
+		console.log('3')
+		if (Session.get("Chat_Selector") != "Privada"){
+			console.log('33')
+			$('#chat_salas li').css('background-color','#eee');
+			$('#sala_privada').css('background-color','#ccc');
+			$('#container5').hide();
+			Session.set("Chat_Selector","Privada");
+			Clear_Chat();
+		}
+	}
+}
+
+Clear_Chat = function(){
+	$('#ChatArea').html('<tr id="firstRow"><td></td><td></td></tr>');
+	console.log('cleared')
+	msgs_autorun._compute()
+}
+
 Accounts.ui.config({
 	passwordSignupFields:"USERNAME_AND_OPTIONAL_EMAIL"
 });
 
-Deps.autorun(function(){
+msgs_autorun = Deps.autorun(function(){
+	console.log('filling')
 	var chatArea = $('#firstRow');
-	var msgs = Messages.find({},{sort:{time:-1}, limit:1});	
+	var msgs = Messages.find({sala:Session.get("Chat_Selector")},{sort:{time:-1}, limit:10});	
 	msgs.forEach(function(message){
-		chatArea.prepend("<tr><td><strong>"+message['name']+"</strong>:</td><td><div>"+message['message']+"</div></td>");
+		chatArea.prepend("<tr><td><strong>"+message['name']+"</strong>:</td><td><a>"+message['message']+"</a></td>");
 	});
 });
 
