@@ -21,6 +21,7 @@ Meteor.startup(function(){
 	$("#abrirterminos").click(function() {
 		$(".term").fadeToggle( "slow", "linear" );
 	})
+  $("#pop_up").on('click','.close_popup',function(){$(".datos").remove()});
 	$("#progressbar").hide()
 	$( "#container3" ).tabs({ hide: { effect: "slide",direction:'up', duration: 100 }, show:{ effect: "slide",direction:'up', duration: 100 }  });
 	$(".subtab").hide();	//Esconde los subtans que se encuentran en la segunda pestaña del acordeon
@@ -543,7 +544,7 @@ Template.popup.events={
 
 Template.gamesList.events={
 
-	'mouseover div.match':function(){
+	'click div.match, mouseover div.match':function(){
 		$(".datos").remove();
 		Session.set('Game_Data_id',this._id)
 		var Partida = Partidas.findOne({nombre:this.nombre});
@@ -568,11 +569,11 @@ Template.gamesList.events={
 		for(var i=0; i<this.jugadores.length; i++){
 			jugadores = jugadores + "Jugador"+i+": "+this.jugadores[i]+"</br>";
 		};
-		$("#pop_up").append("<div id='"+this._id+"_datos' class='datos' style='display:none'>Nombre Partida: "+this.nombre+"</br>Estado: "+this.estado +"</br>Jugadores: "+jugadores+"Tipo escenario:"+this.opciones.escenario +"</br>"+ "Numero jugadores maquina:" +this.opciones.jugadores_maquina+"</br> "+ "Nivel:"+this.opciones.niveles+"</br>"+ "Tablero inteligente"+ this.opciones.tablero_inteligente+"</br>"+cadena+"</br></div>");
+		$("#pop_up").append("<div id='"+this._id+"_datos' class='datos' style='display:none'><button class='close_popup' style='float: right'>x</button>Nombre Partida: "+this.nombre+"</br>Estado: "+this.estado +"</br>Jugadores: "+jugadores+"Tipo escenario:"+this.opciones.escenario +"</br>"+ "Numero jugadores maquina:" +this.opciones.jugadores_maquina+"</br> "+ "Nivel:"+this.opciones.niveles+"</br>"+ "Tablero inteligente"+ this.opciones.tablero_inteligente+"</br>"+cadena+"</br></div>");
 		$("#"+this._id+"_datos").show(500);
 	},
 
-	'mouseleave div.match':function(){
+	'click div.match, mouseleave div.match':function(){
 		var partida_id = this._id;	//Otra chapuza premeditada sin sentido.
 		var id = Meteor.setTimeout(function(partida_id){$("#"+Session.get('Game_Data_id')+"_datos").remove()},500);
 		Session.set("id_pop_up",id);
