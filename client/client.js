@@ -13,7 +13,10 @@ Meteor.startup(function(){
 	Session.set("Chat_Selector","General");
 	$('#sala_general').css('background-color','#ccc');
     $("#opciones").hide();
-
+	$(".priv").hide();
+	$("#abrir").click(function() {
+		$(".priv").fadeToggle( "slow", "linear" );
+	})
 	$( "#container3" ).tabs({ hide: { effect: "slide",direction:'up', duration: 100 }, show:{ effect: "slide",direction:'up', duration: 100 }  });
 	$(".subtab").hide();	//Esconde los subtans que se encuentran en la segunda pestaña del acordeon
 	$(".canvas").hide();	//Esconde todos los canvas
@@ -313,19 +316,20 @@ Template.ajustes.events={
 		//$("#input").css("background-color","green")
 		return false;
 	},
-	'click a#abrir':function(){
-		abrir('http://www.defensacentral.com/')
-		return false;
-	},
-
 	'click a#abrirterminos':function(){
 		$(function() {
-    		$("#terminos").dialog();
+    		$("#privado").show();
   		});
 		return false;
 	},
 }
 
+Template.privado.events={
+	'click .close_priv': function () {	
+		$("#privado").hide()
+	}
+
+}
 
 Template.games.events={
 	'click a#game_1':function(){
