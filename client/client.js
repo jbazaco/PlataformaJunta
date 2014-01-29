@@ -8,11 +8,11 @@ Meteor.subscribe("messages");
 Meteor.subscribe("partidas");
 Meteor.subscribe("DatosUsuarios");
 
-
 Meteor.startup(function(){
 	Session.set("Chat_Selector","General");
 	$('#sala_general').css('background-color','#ccc');
     $("#opciones").hide();
+<<<<<<< HEAD
 	$(".priv").hide();
 	$("#abrir").click(function() {
 		$(".priv").fadeToggle( "slow", "linear" );
@@ -21,12 +21,15 @@ Meteor.startup(function(){
 	$("#abrirterminos").click(function() {
 		$(".term").fadeToggle( "slow", "linear" );
 	})
+=======
+	$("#progressbar").hide()
+>>>>>>> progressbar
 	$( "#container3" ).tabs({ hide: { effect: "slide",direction:'up', duration: 100 }, show:{ effect: "slide",direction:'up', duration: 100 }  });
 	$(".subtab").hide();	//Esconde los subtans que se encuentran en la segunda pestaña del acordeon
 	$(".canvas").hide();	//Esconde todos los canvas
   $("#twitter").click(function(){open("http://twitter.com/home?status=jugando%20en%20http://carcassonline.meteor.com","")});
 	$('.escenario').attr("disabled",true);
-  $('.gamelayer').hide();
+  	$('.gamelayer').hide();
 	$( ".startgame" ).click(function() {
 		$( "#opciones" ).fadeToggle( "slow", "linear" );
 	});
@@ -45,15 +48,12 @@ Meteor.startup(function(){
 
 		if (this.id==="game_1") {
 			logo = document.getElementById("alien");
-			//logo.src="imagenes/alienInvasion.png"
 		}
 		else if (this.id==="game_2") {
 			logo = document.getElementById("angry");
-			//logo.src="imagenes/agryfruits.png"
 		}
 		else if (this.id==="game_3") {
 			logo = document.getElementById("carca");
-			//logo.src="imagenes/carcassonne-logo.jpg"
 		}
   		logo.width = 100;
   		logo.height = 75;
@@ -61,15 +61,12 @@ Meteor.startup(function(){
 	$(".games").mouseout(function(){
 		if (this.id==="game_1") {
 			logo = document.getElementById("alien");
-			logo.src="alienInvasion.png"
 		}
 		else if (this.id==="game_2") {
 			logo = document.getElementById("angry");
-			logo.src="agryfruits.png"
 		}
 		else if (this.id==="game_3") {
 			logo = document.getElementById("carca");
-			logo.src="carcassonne-logo.jpg"
 		}
   		logo.width = 60;
   		logo.height = 41;
@@ -92,6 +89,7 @@ Meteor.startup(function(){
 			}
 		});
 	});
+	
 });
 
 var screenauto= function(){
@@ -271,7 +269,7 @@ function abrir(url) {
 
 Template.ajustes.events={
 	'click a#fondo0':function(){
-		$("#containermain").css("background-image",'url(../imagenes/fondo3.jpg)');
+		$("#containermain").css("background-image",'url(../imagenes/fondonew.png)');
 		$("#container").css("border","3px solid black")
 		$("#container2").css({"background-color":"#CBAD48","opacity":"0.8"})
 		$("#container3").css({"background-color":"#CBAD48","opacity":"0.8"})
@@ -348,7 +346,7 @@ Template.games.events={
 		$('#game').show(500);
 		
 		$("#selectedgame").html("Alien Invasion");
-		$("#container3").tabs( "option", "active", 1 );
+		$("#container3").tabs( "option", "active", 3 );
 		Clear_Chat();
 		return false;
 	},
@@ -361,7 +359,7 @@ Template.games.events={
 		game.showLevelScreen();
 
 		$("#selectedgame").html("Angry Fruits");
-		$("#container3").tabs( "option", "active", 1 );
+		$("#container3").tabs( "option", "active", 3 );
 		Clear_Chat();
 		return false;
 	},
@@ -371,10 +369,36 @@ Template.games.events={
 		$('.boton').css('background-color','#eee');
 		$('#sala_juego').css('background-color','#ccc');
 		$(".canvas").hide();
-		$('#tablero').show(500);
-    $(".gamelayer").hide();
+
+		$("#progressbar").show()
+		var progressbar = $( "#progressbar" ),
+		progressLabel = $( ".progress-label" );
+		progressbar.progressbar({
+			value: "Loading",
+			change: function() {
+				progressLabel.text( progressbar.progressbar( "value" ) + "%" );
+			},
+			complete: function() {
+				progressLabel.text( "Complete!" );
+				$('#tablero').show(500);
+				$('#progressbar').hide()
+				$("#container3").tabs( "option", "active", 1);
+			}
+		});
+		function progress() {
+		var val = progressbar.progressbar( "value" ) || 0;
+		progressbar.progressbar( "value", val + 1 );
+		if ( val < 99 ) {
+			setTimeout( progress, 30 );
+			}
+		}
+		setTimeout( progress, 100 );
+
+
+		//$('#tablero').show(500);
+    	$(".gamelayer").hide();
 		$("#selectedgame").html("Carcassonne");	
-		$("#container3").tabs( "option", "active", 1);
+		//$("#container3").tabs( "option", "active", 1);
 		Clear_Chat();
 		return false;
 	},

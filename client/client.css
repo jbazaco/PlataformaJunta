@@ -52,7 +52,7 @@ table {
 	width:100%;
 	height:100%;
 	position: absolute;
-	background-image: url(../imagenes/fondo3.jpg)
+	background-image: url(../imagenes/fondonew.png)
 	
 }
 
@@ -120,7 +120,11 @@ table {
   	margin-right: 2%;
 	overflow:auto;
 	border-radius:20px;
+<<<<<<< HEAD
     opacity:0.8;
+=======
+    	opacity:0.8;
+>>>>>>> progressbar
 }
 
 .tabs{
@@ -266,4 +270,14 @@ textarea
 	
 	font-family: fantasy;
 }
+ .ui-progressbar {
+	position: relative;
 
+}
+.progress-label {
+	position: absolute;
+	left: 50%;
+	top: 4px;
+	font-weight: bold;
+	text-shadow: 1px 1px 0 #fff;
+}
