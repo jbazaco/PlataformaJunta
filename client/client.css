@@ -92,6 +92,16 @@ table {
 	overflow-y: scroll;
 	overflow-x: visible;
 }
+.term {
+	background-color:white;
+	position:absolute;
+	width:700px;
+	height:400px;
+	right:400px;
+	top:100px;
+	overflow-y: scroll;
+	overflow-x: visible;
+}
 #container {
 	width:69%;
 	height:65%;

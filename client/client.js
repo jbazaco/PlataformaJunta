@@ -17,6 +17,10 @@ Meteor.startup(function(){
 	$("#abrir").click(function() {
 		$(".priv").fadeToggle( "slow", "linear" );
 	})
+	$(".term").hide();
+	$("#abrirterminos").click(function() {
+		$(".term").fadeToggle( "slow", "linear" );
+	})
 	$( "#container3" ).tabs({ hide: { effect: "slide",direction:'up', duration: 100 }, show:{ effect: "slide",direction:'up', duration: 100 }  });
 	$(".subtab").hide();	//Esconde los subtans que se encuentran en la segunda pestaña del acordeon
 	$(".canvas").hide();	//Esconde todos los canvas
@@ -51,7 +55,7 @@ Meteor.startup(function(){
 			//logo.src="imagenes/carcassonne-logo.jpg"
 		}
   		logo.width = 100;
-  		logo.height = 80;
+  		logo.height = 75;
 	});
 	$(".games").mouseout(function(){
 		if (this.id==="game_1") {
@@ -316,19 +320,18 @@ Template.ajustes.events={
 		//$("#input").css("background-color","green")
 		return false;
 	},
-	'click a#abrirterminos':function(){
-		$(function() {
-    		$("#privado").show();
-  		});
-		return false;
-	},
 }
 
-Template.privado.events={
+Template.privacidad.events={
 	'click .close_priv': function () {	
 		$("#privado").hide()
 	}
+}
 
+Template.terminos.events={
+	'click .close_term': function () {	
+		$("#termino").hide()
+	}
 }
 
 Template.games.events={
