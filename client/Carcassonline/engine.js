@@ -22,12 +22,14 @@ C_Game = new function() {
 		}
 
 		this.canvas.addEventListener('mousedown', function(event) {
-			var x = getClickX(event);
-			var y = getClickY(event);
+			if (!this.selec_elem) {
+				var x = getClickX(event);
+				var y = getClickY(event);
 			
-			this.selec_elem = C_elemInPos(x,y);
-			this.anularClick=false;
-			this.moviendoRaton=false;
+				this.selec_elem = C_elemInPos(x,y);
+				this.anularClick=false;
+				this.moviendoRaton=false;
+			}
 		}, false);
 
 		this.canvas.addEventListener('mouseup', function(event) {
