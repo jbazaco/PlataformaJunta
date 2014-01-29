@@ -25,7 +25,7 @@ Meteor.startup(function(){
 	$( "#container3" ).tabs({ hide: { effect: "slide",direction:'up', duration: 100 }, show:{ effect: "slide",direction:'up', duration: 100 }  });
 	$(".subtab").hide();	//Esconde los subtans que se encuentran en la segunda pestaña del acordeon
 	$(".canvas").hide();	//Esconde todos los canvas
-  	$("#twitter").click(function(){open("http://twitter.com/home?status=jugando%20en%20http://carcassonline.meteor.com","")});
+  $("#twitter").click(function(){open("http://twitter.com/home?status=jugando%20en%20http://plataformajuntaisi.meteor.com","")});
 	$('.escenario').attr("disabled",true);
   	$('.gamelayer').hide();
 	$( ".startgame" ).click(function() {

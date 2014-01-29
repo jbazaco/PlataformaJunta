@@ -190,11 +190,13 @@ Meteor.methods({
 	VerTurno : function(id){
 		console.log("VerTurno");
 		var partida = Partidas.findOne(id);
-		if (partida.jugadas.length){
-			return partida.jugadores[partida.jugadas.length%partida.jugadores.length];
-		}else{
-			return partida.jugadores[0];
+		contador=0;
+		for (p=0;p<partida.jugadas.length;p++){
+			if(partida.jugadas[p].esjugada){
+				contador++
+			}
 		}
+		return partida.jugadores[contador%partida.jugadores.length]
 	},
 
 	//Este metodo se llama después de crearse la partida (una vez se sabe el numero de jugadores que van
