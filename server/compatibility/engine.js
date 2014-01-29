@@ -206,7 +206,7 @@ CrearArJug2 = function(id){
 }
 
 //función añadir jugada nueva en tablero
-CrearTabJug = function(id, x, y, ficha, rota, user, cuadrado, zona){
+CrearTabJug1 = function(id, x, y, ficha, rota, user, cuadrado, zona){
 	Ficha1 = PruebaItera(ficha,rota);
 	Ficha1.nomjug = user;
 	Ficha1.scuadrado = cuadrado;
@@ -225,8 +225,8 @@ CrearTabJug = function(id, x, y, ficha, rota, user, cuadrado, zona){
 };
 
 
-RegMov = function(id, jugador, m){
-	CrearTabJug(id, m.x, m.y, m.sprite, m.rotacion, m.user, m.scuadrado, m.szona);
+RegMov1 = function(id, jugador, m){
+	CrearTabJug1(id, m.x, m.y, m.sprite, m.rotacion, m.user, m.scuadrado, m.szona);
 }
 
 //Procedimiento que mira las posiciones del tablero para ver si se puede colocar la ficha
